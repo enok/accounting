@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration>
+
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<logger name="org.springframework" level="INFO" />
+	<logger name="org.springframework.jdbc.core" level="INFO" />
+
+	<logger name="br.com.accounting" level="INFO" />
+
+</configuration>
