@@ -5,29 +5,21 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class GrupoEntity {
-    private long codigo;
-    private String descricao;
+public class Parcelamento {
+    private Integer parcela;
+    private Integer parcelas;
 
-    public GrupoEntity(long codigo, String descricao) {
-        this.codigo = codigo;
-        this.descricao = descricao;
+    public Parcelamento(Integer parcela, Integer parcelas) {
+        this.parcela = parcela;
+        this.parcelas = parcelas;
     }
 
-    public GrupoEntity(String descricao) {
-        this.descricao = descricao;
+    public Integer getParcela() {
+        return parcela;
     }
 
-    public long getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(long codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getDescricao() {
-        return descricao;
+    public Integer getParcelas() {
+        return parcelas;
     }
 
     @Override

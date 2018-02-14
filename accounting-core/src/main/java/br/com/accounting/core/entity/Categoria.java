@@ -1,6 +1,6 @@
 package br.com.accounting.core.entity;
 
-public enum CategoriaEntity {
+public enum Categoria {
     ENTRADA,
     SAIDA
 }
