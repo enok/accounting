@@ -1,10 +1,8 @@
 package br.com.accounting.core.exception;
 
-import java.io.IOException;
+public class RepositoryException extends Exception {
 
-public class RepositoryException extends Throwable {
-
-    public RepositoryException(String message, IOException e) {
+    public RepositoryException(String message, Exception e) {
         super(message, e);
     }
 }

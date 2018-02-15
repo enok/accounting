@@ -23,10 +23,12 @@ public class RegistroServiceImpl implements RegistroService {
 
         try {
             registroRepository.salvar(registro);
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             String mensagem = "Nao foi possivel salvar o registro: " + registro;
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
     }
+
+
 }

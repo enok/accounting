@@ -1,6 +1,5 @@
 package br.com.accounting.core.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,11 +19,6 @@ public class Parcelamento {
 
     public Integer getParcelas() {
         return parcelas;
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        return EqualsBuilder.reflectionEquals(this, that);
     }
 
     @Override

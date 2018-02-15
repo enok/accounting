@@ -11,6 +11,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
+
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
 import static br.com.accounting.core.entity.Categoria.SAIDA;
 import static br.com.accounting.core.entity.Status.NAO_PAGO;
@@ -18,8 +26,11 @@ import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
+import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
+import static java.nio.file.StandardOpenOption.CREATE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 
 @ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,7 +46,7 @@ public class RegistroServiceTest {
         assertThat(registro, notNullValue());
         assertThat(registro.getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(registro.getTipoPagamento(), equalTo(CARTAO_CREDITO));
-        assertThat(registro.getSubTipoPagamento(), equalTo("744"));
+        assertThat(registro.getSubTipoPagamento().getDescricao(), equalTo("744"));
         assertThat(registro.getTipo(), equalTo(FIXO));
         assertThat(registro.getGrupo(), equalTo("MORADIA"));
         assertThat(registro.getSubGrupo(), equalTo("ASSINATURAS"));
@@ -48,7 +59,7 @@ public class RegistroServiceTest {
 
         registroService.salvar(registro);
 
-        assertThat(registro.getCodigo(), equalTo(1L));
+        assertThat(registro.getCodigo(), notNullValue());
     }
 
     @Test
@@ -58,7 +69,7 @@ public class RegistroServiceTest {
         assertThat(registro, notNullValue());
         assertThat(registro.getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(registro.getTipoPagamento(), equalTo(CARTAO_DEBITO));
-        assertThat(registro.getSubTipoPagamento(), equalTo("7660"));
+        assertThat(registro.getSubTipoPagamento().getDescricao(), equalTo("7660"));
         assertThat(registro.getTipo(), equalTo(VARIAVEL));
         assertThat(registro.getGrupo(), equalTo("MERCADO"));
         assertThat(registro.getSubGrupo(), equalTo("PADARIA"));
@@ -70,7 +81,7 @@ public class RegistroServiceTest {
 
         registroService.salvar(registro);
 
-        assertThat(registro.getCodigo(), equalTo(3L));
+        assertThat(registro.getCodigo(), notNullValue());
     }
 
     @Test
@@ -92,6 +103,30 @@ public class RegistroServiceTest {
 
         registroService.salvar(registro);
 
-        assertThat(registro.getCodigo(), equalTo(2L));
+        assertThat(registro.getCodigo(), notNullValue());
+    }
+
+    @Test(expected = ServiceException.class)
+    public void salvarRegistroServiceException() throws ServiceException {
+        registroService.salvar(null);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void salvarRegistroRepositoryException() throws IOException, ServiceException {
+        Path diretorio = Paths.get(DIRETORIO);
+        Files.walk(diretorio, FileVisitOption.FOLLOW_LINKS)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .peek(System.out::println)
+                .forEach(File::delete);
+
+        Registro registro = RegistroFactory.createDinheiro();
+
+        try {
+            registroService.salvar(registro);
+        } catch (ServiceException e) {
+            Files.createDirectory(Paths.get(DIRETORIO));
+            throw e;
+        }
     }
 }

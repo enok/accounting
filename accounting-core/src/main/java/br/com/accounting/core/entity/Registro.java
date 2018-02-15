@@ -1,19 +1,17 @@
 package br.com.accounting.core.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Registro implements Serializable {
+public class Registro implements Entity {
     private Long codigo;
     private LocalDate vencimento;
     private TipoPagamento tipoPagamento;
-    private String subTipoPagamento;
+    private SubTipoPagamento subTipoPagamento;
     private Tipo tipo;
     private String grupo;
     private String subGrupo;
@@ -40,7 +38,7 @@ public class Registro implements Serializable {
         return tipoPagamento;
     }
 
-    public String getSubTipoPagamento() {
+    public SubTipoPagamento getSubTipoPagamento() {
         return subTipoPagamento;
     }
 
@@ -91,7 +89,7 @@ public class Registro implements Serializable {
         return this;
     }
 
-    public Registro withSubTipoPagamento(String subTipoPagamento) {
+    public Registro withSubTipoPagamento(SubTipoPagamento subTipoPagamento) {
         this.subTipoPagamento = subTipoPagamento;
         return this;
     }
@@ -134,11 +132,6 @@ public class Registro implements Serializable {
     public Registro withStatus(Status status) {
         this.status = status;
         return this;
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        return EqualsBuilder.reflectionEquals(this, that);
     }
 
     @Override

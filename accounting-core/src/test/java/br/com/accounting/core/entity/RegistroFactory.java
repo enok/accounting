@@ -17,12 +17,12 @@ public class RegistroFactory {
     public static Registro createCartaoCredito() {
         LocalDate vencimento = LocalDate.of(2018, 1, 27);
         Parcelamento parcelamento = new Parcelamento(1, 12);
+        SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "744");
 
         Registro registro = new Registro()
-                .withCodigo(1L)
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_CREDITO)
-                .withSubTipoPagamento("744")
+                .withSubTipoPagamento(subTipoPagamento)
                 .withTipo(FIXO)
                 .withGrupo("MORADIA")
                 .withSubGrupo("ASSINATURAS")
@@ -39,7 +39,6 @@ public class RegistroFactory {
         LocalDate vencimento = LocalDate.of(2018, 1, 25);
 
         Registro registro = new Registro()
-                .withCodigo(2L)
                 .withVencimento(vencimento)
                 .withTipoPagamento(DINHEIRO)
                 .withTipo(FIXO)
@@ -55,12 +54,12 @@ public class RegistroFactory {
 
     public static Registro createCartaoDebito() {
         LocalDate vencimento = LocalDate.of(2018, 1, 15);
+        SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "7660");
 
         Registro registro = new Registro()
-                .withCodigo(3L)
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_DEBITO)
-                .withSubTipoPagamento("7660")
+                .withSubTipoPagamento(subTipoPagamento)
                 .withTipo(VARIAVEL)
                 .withGrupo("MERCADO")
                 .withSubGrupo("PADARIA")

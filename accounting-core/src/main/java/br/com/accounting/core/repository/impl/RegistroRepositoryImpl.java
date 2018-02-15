@@ -2,58 +2,47 @@ package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.Parcelamento;
 import br.com.accounting.core.entity.Registro;
-import br.com.accounting.core.exception.RepositoryException;
+import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.repository.RegistroRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
-
 @Repository
-public class RegistroRepositoryImpl implements RegistroRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(RegistroRepositoryImpl.class);
-
-    private static final String SEPARADOR = ";";
-    private static final String DIRETORIO = "arquivos";
-    private static final String ARQUIVO = DIRETORIO + "\\registros.csv";
+public class RegistroRepositoryImpl extends GenericRepository<Registro> implements RegistroRepository {
+    private static final String ARQUIVO_REGISTROS_CONTAGEM = DIRETORIO + "\\registros-contagem.csv";
+    private static final String ARQUIVO_REGISTROS = DIRETORIO + "\\registros.csv";
 
     @Override
-    public void salvar(Registro registro) throws RepositoryException {
-        LOG.info("[ salvar ] registro: " + registro);
-
-        String linha = criarLinha(registro);
-        try {
-            String caminhoArquivo = ARQUIVO;
-            Files.write(Paths.get(caminhoArquivo), linha.getBytes(), APPEND, CREATE);
-        } catch (IOException e) {
-            String message = "Nao foi possivel salvar a linha: " + linha;
-            LOG.error(message, e);
-            throw new RepositoryException(message, e);
-        }
+    public String getArquivoContagem() {
+        return ARQUIVO_REGISTROS_CONTAGEM;
     }
 
-    private String criarLinha(Registro registro) {
+    @Override
+    protected String getArquivo() {
+        return ARQUIVO_REGISTROS;
+    }
+
+    @Override
+    protected String criarLinha(Registro registro) {
 
         Parcelamento parcelamento = registro.getParcelamento();
         Integer parcela = null;
         Integer parcelas = null;
-
         if (parcelamento != null) {
             parcela = parcelamento.getParcela();
             parcelas = parcelamento.getParcelas();
+        }
+
+        SubTipoPagamento subTipoPagamento = registro.getSubTipoPagamento();
+        String subTipoPagamentoDescricao = null;
+        if (subTipoPagamento != null) {
+            subTipoPagamentoDescricao = subTipoPagamento.getDescricao();
         }
 
         StringBuilder builder = new StringBuilder()
                 .append(registro.getCodigo()).append(SEPARADOR)
                 .append(registro.getVencimentoFormatado()).append(SEPARADOR)
                 .append(registro.getTipoPagamento()).append(SEPARADOR)
-                .append(registro.getSubTipoPagamento()).append(SEPARADOR)
+                .append(subTipoPagamentoDescricao).append(SEPARADOR)
                 .append(registro.getTipo()).append(SEPARADOR)
                 .append(registro.getGrupo()).append(SEPARADOR)
                 .append(registro.getSubGrupo()).append(SEPARADOR)
