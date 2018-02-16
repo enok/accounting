@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Registro implements Entity {
+public class Contabilidade implements Entity {
     private Long codigo;
     private LocalDate vencimento;
     private TipoPagamento tipoPagamento;
@@ -74,62 +74,62 @@ public class Registro implements Entity {
         return status;
     }
 
-    public Registro withCodigo(Long codigo) {
+    public Contabilidade withCodigo(Long codigo) {
         this.codigo = codigo;
         return this;
     }
 
-    public Registro withVencimento(LocalDate vencimento) {
+    public Contabilidade withVencimento(LocalDate vencimento) {
         this.vencimento = vencimento;
         return this;
     }
 
-    public Registro withTipoPagamento(TipoPagamento tipoPagamento) {
+    public Contabilidade withTipoPagamento(TipoPagamento tipoPagamento) {
         this.tipoPagamento = tipoPagamento;
         return this;
     }
 
-    public Registro withSubTipoPagamento(SubTipoPagamento subTipoPagamento) {
+    public Contabilidade withSubTipoPagamento(SubTipoPagamento subTipoPagamento) {
         this.subTipoPagamento = subTipoPagamento;
         return this;
     }
 
-    public Registro withTipo(Tipo tipo) {
+    public Contabilidade withTipo(Tipo tipo) {
         this.tipo = tipo;
         return this;
     }
 
-    public Registro withGrupo(String grupo) {
+    public Contabilidade withGrupo(String grupo) {
         this.grupo = grupo;
         return this;
     }
 
-    public Registro withSubGrupo(String subGrupo) {
+    public Contabilidade withSubGrupo(String subGrupo) {
         this.subGrupo = subGrupo;
         return this;
     }
 
-    public Registro withDescricao(String descricao) {
+    public Contabilidade withDescricao(String descricao) {
         this.descricao = descricao;
         return this;
     }
 
-    public Registro withParcelamento(Parcelamento parcelamento) {
+    public Contabilidade withParcelamento(Parcelamento parcelamento) {
         this.parcelamento = parcelamento;
         return this;
     }
 
-    public Registro withCategoria(Categoria categoria) {
+    public Contabilidade withCategoria(Categoria categoria) {
         this.categoria = categoria;
         return this;
     }
 
-    public Registro withValor(Double valor) {
+    public Contabilidade withValor(Double valor) {
         this.valor = valor;
         return this;
     }
 
-    public Registro withStatus(Status status) {
+    public Contabilidade withStatus(Status status) {
         this.status = status;
         return this;
     }

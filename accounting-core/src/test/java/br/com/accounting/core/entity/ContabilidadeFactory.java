@@ -12,14 +12,14 @@ import static br.com.accounting.core.entity.TipoPagamento.CARTAO_CREDITO;
 import static br.com.accounting.core.entity.TipoPagamento.CARTAO_DEBITO;
 import static br.com.accounting.core.entity.TipoPagamento.DINHEIRO;
 
-public class RegistroFactory {
+public class ContabilidadeFactory {
 
-    public static Registro createCartaoCredito() {
+    public static Contabilidade createCartaoCredito() {
         LocalDate vencimento = LocalDate.of(2018, 1, 27);
         Parcelamento parcelamento = new Parcelamento(1, 12);
         SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "744");
 
-        Registro registro = new Registro()
+        Contabilidade contabilidade = new Contabilidade()
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_CREDITO)
                 .withSubTipoPagamento(subTipoPagamento)
@@ -32,13 +32,13 @@ public class RegistroFactory {
                 .withValor(26.90)
                 .withStatus(PAGO);
 
-        return registro;
+        return contabilidade;
     }
 
-    public static Registro createDinheiro() {
+    public static Contabilidade createDinheiro() {
         LocalDate vencimento = LocalDate.of(2018, 1, 25);
 
-        Registro registro = new Registro()
+        Contabilidade contabilidade = new Contabilidade()
                 .withVencimento(vencimento)
                 .withTipoPagamento(DINHEIRO)
                 .withTipo(FIXO)
@@ -49,14 +49,14 @@ public class RegistroFactory {
                 .withValor(5000.0)
                 .withStatus(NAO_PAGO);
 
-        return registro;
+        return contabilidade;
     }
 
-    public static Registro createCartaoDebito() {
+    public static Contabilidade createCartaoDebito() {
         LocalDate vencimento = LocalDate.of(2018, 1, 15);
         SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "7660");
 
-        Registro registro = new Registro()
+        Contabilidade contabilidade = new Contabilidade()
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_DEBITO)
                 .withSubTipoPagamento(subTipoPagamento)
@@ -68,6 +68,6 @@ public class RegistroFactory {
                 .withValor(18.0)
                 .withStatus(PAGO);
 
-        return registro;
+        return contabilidade;
     }
 }

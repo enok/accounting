@@ -1,8 +1,8 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.CoreConfig;
-import br.com.accounting.core.entity.Registro;
-import br.com.accounting.core.entity.RegistroFactory;
+import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.ContabilidadeFactory;
 import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.entity.SubTipoPagamentoFactory;
 import br.com.accounting.core.exception.ServiceException;
@@ -20,15 +20,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.List;
 
-import static br.com.accounting.core.entity.Categoria.ENTRADA;
 import static br.com.accounting.core.entity.Categoria.SAIDA;
-import static br.com.accounting.core.entity.Status.NAO_PAGO;
 import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
-import static br.com.accounting.core.entity.Tipo.VARIAVEL;
-import static br.com.accounting.core.entity.TipoPagamento.*;
+import static br.com.accounting.core.entity.TipoPagamento.CARTAO_CREDITO;
 import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
+import static br.com.accounting.core.service.ServiceUtils.deletarArquivosDoDiretorio;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -73,5 +72,29 @@ public class SubTipoPagamentoServiceTest {
             Files.createDirectory(Paths.get(DIRETORIO));
             throw e;
         }
+    }
+
+    @Test
+    public void buscarRegistrosSubTipoPagamento() throws ServiceException, IOException {
+        deletarArquivosDoDiretorio();
+
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactory.create();
+
+        subTipoPagamentoService.salvar(subTipoPagamento);
+
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+        assertThat(registros, notNullValue());
+
+        SubTipoPagamento subTipoPagamentoBuscado = registros.get(0);
+
+        assertThat(subTipoPagamentoBuscado, notNullValue());
+        assertThat(subTipoPagamentoBuscado.getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void buscarRegistrosSubTipoPagamentoServiceException() throws IOException, ServiceException {
+        deletarArquivosDoDiretorio();
+
+        subTipoPagamentoService.buscarRegistros();
     }
 }

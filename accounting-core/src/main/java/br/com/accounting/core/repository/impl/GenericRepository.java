@@ -1,11 +1,11 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.Entity;
-import br.com.accounting.core.entity.Registro;
 import br.com.accounting.core.exception.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -16,7 +16,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public abstract class GenericRepository<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericRepository.class);
 
-    protected static final String SEPARADOR = ";";
+    public static final String SEPARADOR = ";";
     public static final String DIRETORIO = "arquivos";
 
     public Long proximoCodigo() {
@@ -65,15 +65,31 @@ public abstract class GenericRepository<T> {
         }
     }
 
+    public List<T> buscarRegistros() throws RepositoryException {
+        LOG.info("[ buscarRegistros ]");
+
+        try {
+            List<String> linhas = Files.readAllLines(Paths.get(getArquivo()));
+            LOG.debug("linhas: " + linhas);
+            return criarRegistros(linhas);
+        } catch (IOException e) {
+            String message = "Nao foi possivel buscar os registros";
+            LOG.error(message, e);
+            throw new RepositoryException(message, e);
+        }
+    }
+
     private void setaProximoCodigo(Entity entity) throws RepositoryException {
         Long proximoCodigo = proximoCodigo();
         incrementarCodigo(proximoCodigo);
         entity.withCodigo(proximoCodigo);
     }
 
-    protected abstract String getArquivoContagem();
+    public abstract String getArquivoContagem();
 
-    protected abstract String getArquivo();
+    public abstract String getArquivo();
 
-    protected abstract String criarLinha(T entity);
+    public abstract String criarLinha(T entity);
+
+    public abstract List<T> criarRegistros(List<String> linhas);
 }
