@@ -41,6 +41,7 @@ public class ContabilidadeServiceTest {
         Contabilidade contabilidade = ContabilidadeFactory.createCartaoCredito();
 
         assertThat(contabilidade, notNullValue());
+        assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(contabilidade.getSubTipoPagamento().getDescricao(), equalTo("744"));
@@ -64,6 +65,7 @@ public class ContabilidadeServiceTest {
         Contabilidade contabilidade = ContabilidadeFactory.createCartaoDebito();
 
         assertThat(contabilidade, notNullValue());
+        assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(contabilidade.getSubTipoPagamento().getDescricao(), equalTo("7660"));
@@ -86,6 +88,7 @@ public class ContabilidadeServiceTest {
         Contabilidade contabilidade = ContabilidadeFactory.createDinheiro();
 
         assertThat(contabilidade, notNullValue());
+        assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(contabilidade.getSubTipoPagamento(), nullValue());
@@ -132,6 +135,7 @@ public class ContabilidadeServiceTest {
 
         assertThat(contabilidadeBuscada, notNullValue());
         assertThat(contabilidadeBuscada.getCodigo(), notNullValue());
+        assertThat(contabilidadeBuscada.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidadeBuscada.getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento().getDescricao(), equalTo("744"));
@@ -161,6 +165,7 @@ public class ContabilidadeServiceTest {
 
         assertThat(contabilidadeBuscada, notNullValue());
         assertThat(contabilidadeBuscada.getCodigo(), notNullValue());
+        assertThat(contabilidadeBuscada.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidadeBuscada.getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento().getDescricao(), equalTo("7660"));
@@ -189,6 +194,7 @@ public class ContabilidadeServiceTest {
 
         assertThat(contabilidadeBuscada, notNullValue());
         assertThat(contabilidadeBuscada.getCodigo(), notNullValue());
+        assertThat(contabilidadeBuscada.getDataLancamentoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidadeBuscada.getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento(), nullValue());

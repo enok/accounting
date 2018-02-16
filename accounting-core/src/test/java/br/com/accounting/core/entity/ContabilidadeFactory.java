@@ -15,11 +15,13 @@ import static br.com.accounting.core.entity.TipoPagamento.DINHEIRO;
 public class ContabilidadeFactory {
 
     public static Contabilidade createCartaoCredito() {
+        LocalDate dataLancamento = LocalDate.of(2018, 1, 1);
         LocalDate vencimento = LocalDate.of(2018, 1, 27);
         Parcelamento parcelamento = new Parcelamento(1, 12);
         SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "744");
 
         Contabilidade contabilidade = new Contabilidade()
+                .withDataLancamento(dataLancamento)
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_CREDITO)
                 .withSubTipoPagamento(subTipoPagamento)
@@ -36,9 +38,11 @@ public class ContabilidadeFactory {
     }
 
     public static Contabilidade createDinheiro() {
+        LocalDate dataLancamento = LocalDate.of(2018, 1, 1);
         LocalDate vencimento = LocalDate.of(2018, 1, 25);
 
         Contabilidade contabilidade = new Contabilidade()
+                .withDataLancamento(dataLancamento)
                 .withVencimento(vencimento)
                 .withTipoPagamento(DINHEIRO)
                 .withTipo(FIXO)
@@ -53,10 +57,12 @@ public class ContabilidadeFactory {
     }
 
     public static Contabilidade createCartaoDebito() {
+        LocalDate dataLancamento = LocalDate.of(2018, 1, 1);
         LocalDate vencimento = LocalDate.of(2018, 1, 15);
         SubTipoPagamento subTipoPagamento =  new SubTipoPagamento(1L, "7660");
 
         Contabilidade contabilidade = new Contabilidade()
+                .withDataLancamento(dataLancamento)
                 .withVencimento(vencimento)
                 .withTipoPagamento(CARTAO_DEBITO)
                 .withSubTipoPagamento(subTipoPagamento)

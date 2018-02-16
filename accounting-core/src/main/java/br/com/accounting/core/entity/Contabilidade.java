@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Contabilidade implements Entity {
     private Long codigo;
+    private LocalDate dataLancamento;
     private LocalDate vencimento;
     private TipoPagamento tipoPagamento;
     private SubTipoPagamento subTipoPagamento;
@@ -23,6 +24,15 @@ public class Contabilidade implements Entity {
 
     public Long getCodigo() {
         return codigo;
+    }
+
+    public LocalDate getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public String getDataLancamentoFormatada() {
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return getDataLancamento().format(formatador);
     }
 
     public LocalDate getVencimento() {
@@ -76,6 +86,11 @@ public class Contabilidade implements Entity {
 
     public Contabilidade withCodigo(Long codigo) {
         this.codigo = codigo;
+        return this;
+    }
+
+    public Contabilidade withDataLancamento(LocalDate dataLancamento) {
+        this.dataLancamento = dataLancamento;
         return this;
     }
 

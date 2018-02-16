@@ -52,6 +52,7 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
 
         StringBuilder builder = new StringBuilder()
                 .append(contabilidade.getCodigo()).append(SEPARADOR)
+                .append(contabilidade.getDataLancamentoFormatada()).append(SEPARADOR)
                 .append(contabilidade.getVencimentoFormatado()).append(SEPARADOR)
                 .append(contabilidade.getTipoPagamento()).append(SEPARADOR)
                 .append(subTipoPagamentoDescricao).append(SEPARADOR)
@@ -92,10 +93,11 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         Long codigo = Long.valueOf(registro.get(0));
-        LocalDate vencimento = LocalDate.parse(registro.get(1), formatter);
-        TipoPagamento tipoPagamento = TipoPagamento.valueOf(registro.get(2));
+        LocalDate dataLancamento = LocalDate.parse(registro.get(1), formatter);
+        LocalDate vencimento = LocalDate.parse(registro.get(2), formatter);
+        TipoPagamento tipoPagamento = TipoPagamento.valueOf(registro.get(3));
 
-        String subTipoPagamentoDescricao = registro.get(3);
+        String subTipoPagamentoDescricao = registro.get(4);
         SubTipoPagamento subTipoPagamento = null;
         if ((subTipoPagamentoDescricao != null) && !subTipoPagamentoDescricao.equals("null")) {
             subTipoPagamento = new SubTipoPagamento()
@@ -103,26 +105,27 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
         }
 
         Tipo tipo = Tipo
-                .valueOf(registro.get(4));
-        String grupo = registro.get(5);
-        String subGrupo = registro.get(6);
-        String descricao = registro.get(7);
+                .valueOf(registro.get(5));
+        String grupo = registro.get(6);
+        String subGrupo = registro.get(7);
+        String descricao = registro.get(8);
 
         Parcelamento parcelamento = null;
-        String parcela = registro.get(8);
+        String parcela = registro.get(9);
         if ((parcela != null) && !parcela.equals("null")) {
             parcelamento = new Parcelamento()
                     .withParcela(Integer.valueOf(parcela))
-                    .withParcelas(Integer.valueOf(registro.get(9)));
+                    .withParcelas(Integer.valueOf(registro.get(10)));
         }
         Categoria categoria = Categoria
-                .valueOf(registro.get(10));
-        Double valor = Double.valueOf(registro.get(11));
+                .valueOf(registro.get(11));
+        Double valor = Double.valueOf(registro.get(12));
         Status status = Status
-                .valueOf(registro.get(12));
+                .valueOf(registro.get(13));
 
         Contabilidade contabilidade = new Contabilidade()
                 .withCodigo(codigo)
+                .withDataLancamento(dataLancamento)
                 .withVencimento(vencimento)
                 .withTipoPagamento(tipoPagamento)
                 .withSubTipoPagamento(subTipoPagamento)
