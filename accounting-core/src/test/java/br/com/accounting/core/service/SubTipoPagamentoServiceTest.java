@@ -1,11 +1,9 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.CoreConfig;
-import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.ContabilidadeFactory;
 import br.com.accounting.core.entity.SubTipoPagamento;
-import br.com.accounting.core.entity.SubTipoPagamentoFactory;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.factory.SubTipoPagamentoFactoryMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +20,11 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 
-import static br.com.accounting.core.entity.Categoria.SAIDA;
-import static br.com.accounting.core.entity.Status.PAGO;
-import static br.com.accounting.core.entity.Tipo.FIXO;
-import static br.com.accounting.core.entity.TipoPagamento.CARTAO_CREDITO;
 import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
 import static br.com.accounting.core.service.ServiceUtils.deletarArquivosDoDiretorio;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,7 +35,7 @@ public class SubTipoPagamentoServiceTest {
 
     @Test
     public void salvarSubTipoPagamento() throws ServiceException {
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactory.create();
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
 
         assertThat(subTipoPagamento, notNullValue());
         assertThat(subTipoPagamento.getDescricao(), equalTo("744"));
@@ -64,7 +59,7 @@ public class SubTipoPagamentoServiceTest {
                 .peek(System.out::println)
                 .forEach(File::delete);
 
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactory.create();
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
 
         try {
             subTipoPagamentoService.salvar(subTipoPagamento);
@@ -78,7 +73,7 @@ public class SubTipoPagamentoServiceTest {
     public void buscarRegistrosSubTipoPagamento() throws ServiceException, IOException {
         deletarArquivosDoDiretorio();
 
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactory.create();
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
 
         subTipoPagamentoService.salvar(subTipoPagamento);
 

@@ -48,14 +48,14 @@ public abstract class GenericRepository<T> {
         }
     }
 
-    public void salvar(T entity) throws RepositoryException {
-        LOG.info("[ salvar ] entity: " + entity);
+    public void salvar(T contabilidade) throws RepositoryException {
+        LOG.info("[ salvar ] entity: " + contabilidade);
 
         String linha = null;
 
         try {
-            setaProximoCodigo((Entity) entity);
-            linha = criarLinha(entity);
+            setaProximoCodigo((Entity) contabilidade);
+            linha = criarLinha(contabilidade);
             String caminhoArquivo = getArquivo();
             Files.write(Paths.get(caminhoArquivo), linha.getBytes(), APPEND, CREATE);
         } catch (Exception e) {

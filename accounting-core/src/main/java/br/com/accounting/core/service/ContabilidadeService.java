@@ -6,7 +6,7 @@ import br.com.accounting.core.exception.ServiceException;
 import java.util.List;
 
 public interface ContabilidadeService {
-    void salvar(Contabilidade registro) throws ServiceException;
+    void salvar(Contabilidade contabilidade) throws ServiceException;
 
     List<Contabilidade> buscarRegistros() throws ServiceException;
 }

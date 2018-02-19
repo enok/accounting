@@ -10,7 +10,7 @@ public interface ContabilidadeRepository {
 
     void incrementarCodigo(Long proximoCodigo) throws RepositoryException;
 
-    void salvar(Contabilidade registro) throws RepositoryException;
+    void salvar(Contabilidade contabilidade) throws RepositoryException;
 
     List<Contabilidade> buscarRegistros() throws RepositoryException;
 }

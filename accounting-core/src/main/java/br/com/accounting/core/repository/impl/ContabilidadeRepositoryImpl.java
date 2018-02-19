@@ -1,14 +1,15 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.*;
+import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Parcelamento;
+import br.com.accounting.core.entity.SubTipoPagamento;
+import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.impl.ContabilidadeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,60 +86,28 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
     }
 
     private Contabilidade criarContabilidade(String linha) {
+        LOG.debug("[ criarContabilidade ] linha: " + linha);
+
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        Long codigo = Long.valueOf(registro.get(0));
-        LocalDate dataLancamento = LocalDate.parse(registro.get(1), formatter);
-        LocalDate vencimento = LocalDate.parse(registro.get(2), formatter);
-        TipoPagamento tipoPagamento = TipoPagamento.valueOf(registro.get(3));
-
-        String subTipoPagamentoDescricao = registro.get(4);
-        SubTipoPagamento subTipoPagamento = null;
-        if ((subTipoPagamentoDescricao != null) && !subTipoPagamentoDescricao.equals("null")) {
-            subTipoPagamento = new SubTipoPagamento()
-                    .withDescricao(subTipoPagamentoDescricao);
-        }
-
-        Tipo tipo = Tipo
-                .valueOf(registro.get(5));
-        String grupo = registro.get(6);
-        String subGrupo = registro.get(7);
-        String descricao = registro.get(8);
-
-        Parcelamento parcelamento = null;
-        String parcela = registro.get(9);
-        if ((parcela != null) && !parcela.equals("null")) {
-            parcelamento = new Parcelamento()
-                    .withParcela(Integer.valueOf(parcela))
-                    .withParcelas(Integer.valueOf(registro.get(10)));
-        }
-        Categoria categoria = Categoria
-                .valueOf(registro.get(11));
-        Double valor = Double.valueOf(registro.get(12));
-        Status status = Status
-                .valueOf(registro.get(13));
-
-        Contabilidade contabilidade = new Contabilidade()
-                .withCodigo(codigo)
-                .withDataLancamento(dataLancamento)
-                .withVencimento(vencimento)
-                .withTipoPagamento(tipoPagamento)
-                .withSubTipoPagamento(subTipoPagamento)
-                .withTipo(tipo)
-                .withGrupo(grupo)
-                .withSubGrupo(subGrupo)
-                .withDescricao(descricao)
-                .withParcelamento(parcelamento)
-                .withCategoria(categoria)
-                .withValor(valor)
-                .withStatus(status);
-
-        return contabilidade;
+        return ContabilidadeFactory
+                .begin()
+                .withCodigo(registro.get(0))
+                .withDataLancamento(registro.get(1))
+                .withVencimento(registro.get(2))
+                .withTipoPagamento(registro.get(3))
+                .withSubTipoPagamento(registro.get(4))
+                .withTipo(registro.get(5))
+                .withGrupo(registro.get(6))
+                .withSubGrupo(registro.get(7))
+                .withDescricao(registro.get(8))
+                .withParcelamento(registro.get(9), registro.get(10))
+                .withCategoria(registro.get(11))
+                .withValor(registro.get(12))
+                .withStatus(registro.get(13))
+                .build();
     }
-
 }

@@ -19,13 +19,13 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
     private ContabilidadeRepository contabilidadeRepository;
 
     @Override
-    public void salvar(Contabilidade registro) throws ServiceException {
-        LOG.info("[ salvar ] registro: " + registro);
+    public void salvar(Contabilidade contabilidade) throws ServiceException {
+        LOG.info("[ salvar ] contabilidade: " + contabilidade);
 
         try {
-            contabilidadeRepository.salvar(registro);
+            contabilidadeRepository.salvar(contabilidade);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel salvar o registro: " + registro;
+            String mensagem = "Nao foi possivel salvar o registro: " + contabilidade;
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }

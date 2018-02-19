@@ -1,6 +1,7 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.SubTipoPagamento;
+import br.com.accounting.core.factory.SubTipoPagamentoFactory;
 import br.com.accounting.core.repository.SubTipoPagamentoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,18 +56,17 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
     }
 
     private SubTipoPagamento criarSubTipoPagamento(String linha) {
+        LOG.debug("[ criarSubTipoPagamento ] linha: " + linha);
+
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)
                 .collect(Collectors.toList());
 
-        Long codigo = Long.valueOf(registro.get(0));
-        String descricao = registro.get(1);
-
-        SubTipoPagamento subTipoPagamento = new SubTipoPagamento()
-                .withCodigo(codigo)
-                .withDescricao(descricao);
-
-        return subTipoPagamento;
+        return SubTipoPagamentoFactory
+                .begin()
+                .withCodigo(registro.get(0))
+                .withDescricao(registro.get(1))
+                .build();
     }
 }

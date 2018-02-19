@@ -2,7 +2,7 @@ package br.com.accounting.core.service;
 
 import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.ContabilidadeFactory;
+import br.com.accounting.core.factory.ContabilidadeFactoryMock;
 import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class ContabilidadeServiceTest {
 
     @Test
     public void salvarContabilidadeCartaoCredito() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactory.createCartaoCredito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
@@ -62,7 +62,7 @@ public class ContabilidadeServiceTest {
 
     @Test
     public void salvarContabilidadeCartaoDebito() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactory.createCartaoDebito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
@@ -85,7 +85,7 @@ public class ContabilidadeServiceTest {
 
     @Test
     public void salvarContabilidadeDinheiro() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactory.createDinheiro();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createDinheiro();
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
@@ -110,7 +110,7 @@ public class ContabilidadeServiceTest {
     public void salvarContabilidadeServiceException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        Contabilidade registro = ContabilidadeFactory.createDinheiro();
+        Contabilidade registro = ContabilidadeFactoryMock.createDinheiro();
 
         try {
             contabilidadeService.salvar(registro);
@@ -124,7 +124,7 @@ public class ContabilidadeServiceTest {
     public void buscarRegistrosContabilidade() throws ServiceException, IOException {
         deletarArquivosDoDiretorio();
 
-        Contabilidade contabilidade = ContabilidadeFactory.createCartaoCredito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
 
         contabilidadeService.salvar(contabilidade);
 
@@ -154,7 +154,7 @@ public class ContabilidadeServiceTest {
     public void buscarRegistrosContabilidadeSemParcelamento() throws ServiceException, IOException {
         deletarArquivosDoDiretorio();
 
-        Contabilidade contabilidade = ContabilidadeFactory.createCartaoDebito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
 
         contabilidadeService.salvar(contabilidade);
 
@@ -183,7 +183,7 @@ public class ContabilidadeServiceTest {
     public void buscarRegistrosContabilidadeSemSubTipoParcelamentoSemParcelamento() throws ServiceException, IOException {
         deletarArquivosDoDiretorio();
 
-        Contabilidade contabilidade = ContabilidadeFactory.createDinheiro();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createDinheiro();
 
         contabilidadeService.salvar(contabilidade);
 
