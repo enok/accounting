@@ -5,7 +5,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
+import static br.com.accounting.core.util.Utils.FORMATTER;
 
 public class Contabilidade implements Entity {
     private Long codigo;
@@ -31,8 +32,7 @@ public class Contabilidade implements Entity {
     }
 
     public String getDataLancamentoFormatada() {
-        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return getDataLancamento().format(formatador);
+        return getDataLancamento().format(FORMATTER);
     }
 
     public LocalDate getVencimento() {
@@ -40,8 +40,7 @@ public class Contabilidade implements Entity {
     }
 
     public String getVencimentoFormatado() {
-        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return getVencimento().format(formatador);
+        return getVencimento().format(FORMATTER);
     }
 
     public TipoPagamento getTipoPagamento() {
