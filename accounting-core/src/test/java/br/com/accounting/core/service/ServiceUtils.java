@@ -12,6 +12,9 @@ import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO
 
 public final class ServiceUtils {
 
+    private ServiceUtils() {
+    }
+
     public static void deletarDiretorioEArquivos() throws IOException {
         Path diretorio = Paths.get(DIRETORIO);
         Files.walk(diretorio, FileVisitOption.FOLLOW_LINKS)

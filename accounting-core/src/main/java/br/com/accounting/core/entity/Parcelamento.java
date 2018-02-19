@@ -8,9 +8,6 @@ public class Parcelamento {
     private Integer parcela;
     private Integer parcelas;
 
-    public Parcelamento() {
-    }
-
     public Parcelamento(Integer parcela, Integer parcelas) {
         this.parcela = parcela;
         this.parcelas = parcelas;
@@ -22,16 +19,6 @@ public class Parcelamento {
 
     public Integer getParcelas() {
         return parcelas;
-    }
-
-    public Parcelamento withParcela(Integer parcela) {
-        this.parcela = parcela;
-        return this;
-    }
-
-    public Parcelamento withParcelas(Integer parcelas) {
-        this.parcelas = parcelas;
-        return this;
     }
 
     @Override
