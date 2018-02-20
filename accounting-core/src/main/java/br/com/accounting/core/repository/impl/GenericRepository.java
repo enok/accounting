@@ -16,7 +16,6 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public abstract class GenericRepository<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericRepository.class);
 
-    public static final String SEPARADOR = ";";
     public static final String DIRETORIO = "arquivos";
 
     public Long proximoCodigo() {
@@ -36,7 +35,7 @@ public abstract class GenericRepository<T> {
     }
 
     public void incrementarCodigo(Long proximoCodigo) throws RepositoryException {
-        LOG.info("[ incrementarCodigo ]");
+        LOG.info("[ incrementarCodigo ] proximoCodigo: " + proximoCodigo);
 
         try {
             String linha = String.valueOf(++proximoCodigo);
@@ -48,14 +47,14 @@ public abstract class GenericRepository<T> {
         }
     }
 
-    public void salvar(T contabilidade) throws RepositoryException {
-        LOG.info("[ salvar ] entity: " + contabilidade);
+    public void salvar(T entity) throws RepositoryException {
+        LOG.info("[ salvar ] entity: " + entity);
 
         String linha = null;
 
         try {
-            setaProximoCodigo((Entity) contabilidade);
-            linha = criarLinha(contabilidade);
+            setaProximoCodigo((Entity) entity);
+            linha = criarLinha(entity);
             String caminhoArquivo = getArquivo();
             Files.write(Paths.get(caminhoArquivo), linha.getBytes(), APPEND, CREATE);
         } catch (Exception e) {
@@ -80,6 +79,8 @@ public abstract class GenericRepository<T> {
     }
 
     private void setaProximoCodigo(Entity entity) throws RepositoryException {
+        LOG.debug("[ setaProximoCodigo ] entity: " + entity);
+
         Long proximoCodigo = proximoCodigo();
         incrementarCodigo(proximoCodigo);
         entity.withCodigo(proximoCodigo);

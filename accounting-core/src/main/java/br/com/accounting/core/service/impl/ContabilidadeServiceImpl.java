@@ -2,6 +2,7 @@ package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.filter.CampoFiltro;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.ContabilidadeService;
 import org.slf4j.Logger;
@@ -39,6 +40,33 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
             return contabilidadeRepository.buscarRegistros();
         } catch (Exception e) {
             String mensagem = "Nao foi possivel buscar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades);
+
+        try {
+            return campoFiltro.filtrar(contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrar(CampoFiltro campoFiltro) throws ServiceException {
+        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro);
+
+        try {
+            List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
+            return campoFiltro.filtrar(contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }

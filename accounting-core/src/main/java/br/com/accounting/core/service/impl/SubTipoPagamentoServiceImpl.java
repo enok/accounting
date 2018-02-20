@@ -1,9 +1,8 @@
 package br.com.accounting.core.service.impl;
 
-import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.SubTipoPagamento;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.filter.CampoFiltro;
 import br.com.accounting.core.repository.SubTipoPagamentoRepository;
 import br.com.accounting.core.service.SubTipoPagamentoService;
 import org.slf4j.Logger;
@@ -22,6 +21,8 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
 
     @Override
     public void salvar(SubTipoPagamento subTipoPagamento) throws ServiceException {
+        LOG.info("[ salvar ] subTipoPagamento: " + subTipoPagamento);
+
         try {
             subTipoPagamentoRepository.salvar(subTipoPagamento);
         } catch (Exception e) {
@@ -42,5 +43,15 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
+    }
+
+    @Override
+    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities) throws ServiceException {
+        return null;
+    }
+
+    @Override
+    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro) throws ServiceException {
+        return null;
     }
 }

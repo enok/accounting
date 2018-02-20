@@ -32,4 +32,8 @@ public final class ServiceUtils {
                 .peek(System.out::println)
                 .forEach(File::delete);
     }
+
+    public static void criarDiretorio() throws IOException {
+        Files.createDirectory(Paths.get(DIRETORIO));
+    }
 }

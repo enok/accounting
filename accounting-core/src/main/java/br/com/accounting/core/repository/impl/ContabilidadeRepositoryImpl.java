@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static br.com.accounting.core.util.Utils.SEPARADOR;
+
 @Repository
 public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade> implements ContabilidadeRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ContabilidadeServiceImpl.class);

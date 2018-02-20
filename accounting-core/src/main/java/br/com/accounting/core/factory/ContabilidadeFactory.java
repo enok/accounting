@@ -4,7 +4,7 @@ import br.com.accounting.core.entity.*;
 
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.FORMATTER;
+import static br.com.accounting.core.util.Utils.getDateFromString;
 import static br.com.accounting.core.util.Utils.isEmpty;
 
 public final class ContabilidadeFactory {
@@ -29,7 +29,7 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withDataLancamento(String dataLancamento) {
         if (!isEmpty(dataLancamento)) {
-            LocalDate dataLancamentoObject = LocalDate.parse(dataLancamento, FORMATTER);
+            LocalDate dataLancamentoObject = getDateFromString(dataLancamento);
             contabilidade.withDataLancamento(dataLancamentoObject);
         }
         return this;
@@ -37,7 +37,7 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withVencimento(String vencimento) {
         if (!isEmpty(vencimento)) {
-            LocalDate vencimentoObj = LocalDate.parse(vencimento, FORMATTER);
+            LocalDate vencimentoObj = getDateFromString(vencimento);
             contabilidade.withVencimento(vencimentoObj);
         }
         return this;

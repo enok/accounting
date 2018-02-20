@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static br.com.accounting.core.util.Utils.SEPARADOR;
+
 @Repository
 public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPagamento> implements SubTipoPagamentoRepository {
     private static final Logger LOG = LoggerFactory.getLogger(SubTipoPagamentoRepositoryImpl.class);
@@ -32,6 +34,7 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
 
     @Override
     public String criarLinha(SubTipoPagamento subTipoPagamento) {
+        LOG.info("[ criarLinha ] subTipoPagamento: " + subTipoPagamento);
 
         StringBuilder builder = new StringBuilder()
                 .append(subTipoPagamento.getCodigo()).append(SEPARADOR)
