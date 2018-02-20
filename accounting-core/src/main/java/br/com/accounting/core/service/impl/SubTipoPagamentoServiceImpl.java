@@ -1,5 +1,6 @@
 package br.com.accounting.core.service.impl;
 
+import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.CampoFiltro;
@@ -52,6 +53,16 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
 
     @Override
     public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro) throws ServiceException {
+        return null;
+    }
+
+    @Override
+    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities, Order order) throws ServiceException {
+        return null;
+    }
+
+    @Override
+    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, Order order) throws ServiceException {
         return null;
     }
 }

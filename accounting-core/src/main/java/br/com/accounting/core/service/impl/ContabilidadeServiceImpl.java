@@ -1,6 +1,7 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.CampoFiltro;
 import br.com.accounting.core.repository.ContabilidadeRepository;
@@ -64,7 +65,34 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
         try {
             List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
-            return campoFiltro.filtrar(contabilidades);
+            return filtrar(campoFiltro, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades, Order order) throws ServiceException {
+        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades + ", order: " + order);
+
+        try {
+            return campoFiltro.filtrar(contabilidades, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, Order order) throws ServiceException {
+        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", order: " + order);
+
+        try {
+            List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
+            return filtrar(campoFiltro, contabilidades, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);

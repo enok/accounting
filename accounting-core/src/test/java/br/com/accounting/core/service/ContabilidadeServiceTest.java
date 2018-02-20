@@ -18,6 +18,8 @@ import java.util.List;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
 import static br.com.accounting.core.entity.Categoria.SAIDA;
+import static br.com.accounting.core.entity.Order.ASC;
+import static br.com.accounting.core.entity.Order.DESC;
 import static br.com.accounting.core.entity.Status.NAO_PAGO;
 import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
@@ -315,7 +317,6 @@ public class ContabilidadeServiceTest {
             criarDiretorio();
             throw e;
         }
-
     }
 
     @Test
@@ -337,5 +338,169 @@ public class ContabilidadeServiceTest {
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(1));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorIntervaloDeVencimentosEOrdenacaoAscendenteException() throws ServiceException, IOException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorIntervaloDeVencimentosEOrdenacaoAscendente() throws ServiceException, IOException {
+        deletarArquivosDoDiretorio();
+
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createDinheiro();
+        contabilidadeService.salvar(contabilidade);
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("15/01/2018"));
+        assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
+        assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("27/01/2018"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimentosEOrdenacaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = null;
+        try {
+            registros = contabilidadeService.buscarRegistros();
+        } catch (ServiceException e) {
+        }
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, registros, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimentosEOrdenacaoAscendente() throws ServiceException, IOException {
+        deletarArquivosDoDiretorio();
+
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createDinheiro();
+        contabilidadeService.salvar(contabilidade);
+
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("15/01/2018"));
+        assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
+        assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("27/01/2018"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorIntervaloDeVencimentosEOrdenacaoDecrescenteException() throws ServiceException, IOException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorIntervaloDeVencimentosEOrdenacaoDecrescente() throws ServiceException, IOException {
+        deletarArquivosDoDiretorio();
+
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createDinheiro();
+        contabilidadeService.salvar(contabilidade);
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("27/01/2018"));
+        assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
+        assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("15/01/2018"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimentosEOrdenacaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = null;
+        try {
+            registros = contabilidadeService.buscarRegistros();
+        } catch (ServiceException e) {
+        }
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, registros, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimentosEOrdenacaoDescendente() throws ServiceException, IOException {
+        deletarArquivosDoDiretorio();
+
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createDinheiro();
+        contabilidadeService.salvar(contabilidade);
+
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("27/01/2018"));
+        assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
+        assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("15/01/2018"));
     }
 }
