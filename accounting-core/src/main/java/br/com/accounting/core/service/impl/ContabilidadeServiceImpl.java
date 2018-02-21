@@ -22,7 +22,8 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public void salvar(Contabilidade contabilidade) throws ServiceException {
-        LOG.info("[ salvar ] contabilidade: " + contabilidade);
+        LOG.info("[ salvar ]");
+        LOG.debug("contabilidade: " + contabilidade);
 
         try {
             contabilidadeRepository.salvar(contabilidade);
@@ -48,12 +49,14 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades) throws ServiceException {
-        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades);
+        LOG.info("[ filtrar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("contabilidades: " + contabilidades);
 
         try {
             return campoFiltro.filtrar(contabilidades);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel ordenar os registros";
+            String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -61,13 +64,14 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> filtrar(CampoFiltro campoFiltro) throws ServiceException {
-        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro);
+        LOG.info("[ filtrar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
 
         try {
             List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
             return filtrar(campoFiltro, contabilidades);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel ordenar os registros";
+            String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -75,7 +79,10 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> ordenar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades, Order order) throws ServiceException {
-        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades + ", order: " + order);
+        LOG.info("[ ordenar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("contabilidades: " + contabilidades);
+        LOG.debug("order: " + order);
 
         try {
             return campoFiltro.ordenar(contabilidades, order);
@@ -88,7 +95,9 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException {
-        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", order: " + order);
+        LOG.info("[ ordenar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("order: " + order);
 
         try {
             List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();

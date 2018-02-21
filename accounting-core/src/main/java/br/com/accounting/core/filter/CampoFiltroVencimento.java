@@ -4,6 +4,8 @@ import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -14,6 +16,8 @@ import static br.com.accounting.core.util.Utils.entreDatas;
 import static br.com.accounting.core.util.Utils.getDateFromString;
 
 public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroVencimento.class);
+
     private LocalDate vencimentoInicial;
     private LocalDate vencimentoFinal;
 
@@ -27,6 +31,8 @@ public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> filtrar(List<Contabilidade> entities) {
+        LOG.info("[ filtrar ] entities: " + entities);
+
         return entities
                 .stream()
                 .filter(c -> entreDatas(c.getVencimento(), vencimentoInicial, vencimentoFinal))
@@ -35,6 +41,8 @@ public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
+        LOG.info("[ ordenar ] entities: " + entities + ", order: " + order);
+
         switch (order) {
             case DESC:
                 return entities

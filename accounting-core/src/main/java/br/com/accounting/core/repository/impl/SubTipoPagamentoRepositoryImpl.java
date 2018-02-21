@@ -34,7 +34,8 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
 
     @Override
     public String criarLinha(SubTipoPagamento subTipoPagamento) {
-        LOG.info("[ criarLinha ] subTipoPagamento: " + subTipoPagamento);
+        LOG.info("[ criarLinha ]");
+        LOG.debug("subTipoPagamento: " + subTipoPagamento);
 
         StringBuilder builder = new StringBuilder()
                 .append(subTipoPagamento.getCodigo()).append(SEPARADOR)
@@ -45,7 +46,8 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
 
     @Override
     public List<SubTipoPagamento> criarRegistros(List<String> linhas) {
-        LOG.info("[ criarRegistros ] linhas: " + linhas);
+        LOG.info("[ criarRegistros ]");
+        LOG.debug("linhas: " + linhas);
 
         List<SubTipoPagamento> subTipoPagamentoList = new ArrayList<>();
 
@@ -59,7 +61,8 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
     }
 
     private SubTipoPagamento criarSubTipoPagamento(String linha) {
-        LOG.debug("[ criarSubTipoPagamento ] linha: " + linha);
+        LOG.debug("[ criarSubTipoPagamento ]");
+        LOG.debug("linha: " + linha);
 
         List<String> registro = Stream
                 .of(linha)

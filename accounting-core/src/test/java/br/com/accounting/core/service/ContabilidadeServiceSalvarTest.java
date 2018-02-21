@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
@@ -20,21 +21,23 @@ import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
-import static br.com.accounting.core.service.ServiceUtils.criarDiretorio;
-import static br.com.accounting.core.service.ServiceUtils.deletarDiretorioEArquivos;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ContabilidadeServiceSalvarTest {
-
+public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
     @Autowired
     private ContabilidadeService contabilidadeService;
 
+    @PostConstruct
+    public void posConstrucao() {
+        setContabilidadeService(contabilidadeService);
+    }
+
     @Test
     public void salvarContabilidadeCartaoCredito() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
@@ -58,7 +61,7 @@ public class ContabilidadeServiceSalvarTest {
 
     @Test
     public void salvarContabilidadeCartaoDebito() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito7660();
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));

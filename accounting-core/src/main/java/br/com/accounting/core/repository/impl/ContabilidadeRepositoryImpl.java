@@ -37,7 +37,8 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
 
     @Override
     public String criarLinha(Contabilidade contabilidade) {
-        LOG.info("[ criarLinha ] contabilidade: " + contabilidade);
+        LOG.info("[ criarLinha ]");
+        LOG.debug("contabilidade: " + contabilidade);
 
         Parcelamento parcelamento = contabilidade.getParcelamento();
         Integer parcela = null;
@@ -74,7 +75,8 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
 
     @Override
     public List<Contabilidade> criarRegistros(List<String> linhas) {
-        LOG.info("[ criarRegistros ] linhas: " + linhas);
+        LOG.info("[ criarRegistros ]");
+        LOG.debug("linhas: " + linhas);
 
         List<Contabilidade> contabilidadeList = new ArrayList<>();
 
@@ -88,7 +90,8 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
     }
 
     private Contabilidade criarContabilidade(String linha) {
-        LOG.debug("[ criarContabilidade ] linha: " + linha);
+        LOG.debug("[ criarContabilidade ]");
+        LOG.debug("linha: " + linha);
 
         List<String> registro = Stream
                 .of(linha)

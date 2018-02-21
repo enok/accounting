@@ -4,6 +4,8 @@ import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactoryMock;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,22 +24,33 @@ import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
-import static br.com.accounting.core.service.ServiceUtils.deletarArquivosDoDiretorio;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ContabilidadeServiceBuscarTest {
-
+public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
     @Autowired
     private ContabilidadeService contabilidadeService;
 
-    @Test
-    public void buscarRegistrosContabilidade() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
+    @PostConstruct
+    public void posConstrucao() {
+        setContabilidadeService(contabilidadeService);
+    }
 
-        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
+    @Before
+    public void setUp() throws IOException {
+        deletarArquivosDoDiretorio();
+    }
+
+    @After
+    public void after() throws IOException {
+        deletarArquivosDoDiretorio();
+    }
+
+    @Test
+    public void buscarRegistrosContabilidade() throws ServiceException {
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
 
         contabilidadeService.salvar(contabilidade);
 
@@ -63,10 +77,8 @@ public class ContabilidadeServiceBuscarTest {
     }
 
     @Test
-    public void buscarRegistrosContabilidadeSemParcelamento() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
-        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
+    public void buscarRegistrosContabilidadeSemParcelamento() throws ServiceException {
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito7660();
 
         contabilidadeService.salvar(contabilidade);
 
@@ -93,8 +105,6 @@ public class ContabilidadeServiceBuscarTest {
 
     @Test
     public void buscarRegistrosContabilidadeSemSubTipoParcelamentoSemParcelamento() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
         Contabilidade contabilidade = ContabilidadeFactoryMock.createDinheiro();
 
         contabilidadeService.salvar(contabilidade);
@@ -122,8 +132,6 @@ public class ContabilidadeServiceBuscarTest {
 
     @Test(expected = ServiceException.class)
     public void buscarRegistrosContabilidadeServiceException() throws IOException, ServiceException {
-        deletarArquivosDoDiretorio();
-
         contabilidadeService.buscarRegistros();
     }
 }

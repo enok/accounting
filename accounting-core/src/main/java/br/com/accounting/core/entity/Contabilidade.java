@@ -55,6 +55,10 @@ public class Contabilidade implements Entity {
         return subTipoPagamento;
     }
 
+    public String getSubTipoPagamentoString() {
+        return subTipoPagamento.getDescricao();
+    }
+
     public Tipo getTipo() {
         return tipo;
     }

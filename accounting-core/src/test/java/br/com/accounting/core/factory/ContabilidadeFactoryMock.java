@@ -4,13 +4,31 @@ import br.com.accounting.core.entity.Contabilidade;
 
 public class ContabilidadeFactoryMock {
 
-    public static Contabilidade createCartaoCredito() {
+    public static Contabilidade createCartaoCredito744() {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
                 .withVencimento("27/01/2018")
                 .withTipoPagamento("CARTAO_CREDITO")
                 .withSubTipoPagamento("1", "744")
+                .withTipo("FIXO")
+                .withGrupo("MORADIA")
+                .withSubGrupo("ASSINATURAS")
+                .withDescricao("spotify")
+                .withParcelamento("1", "12")
+                .withCategoria("SAIDA")
+                .withValor("26.90")
+                .withStatus("PAGO")
+                .build();
+    }
+
+    public static Contabilidade createCartaoCredito7660() {
+        return ContabilidadeFactory
+                .begin()
+                .withDataLancamento("01/01/2018")
+                .withVencimento("27/01/2018")
+                .withTipoPagamento("CARTAO_CREDITO")
+                .withSubTipoPagamento("1", "7660")
                 .withTipo("FIXO")
                 .withGrupo("MORADIA")
                 .withSubGrupo("ASSINATURAS")
@@ -38,7 +56,7 @@ public class ContabilidadeFactoryMock {
                 .build();
     }
 
-    public static Contabilidade createCartaoDebito() {
+    public static Contabilidade createCartaoDebito7660() {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")

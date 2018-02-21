@@ -10,12 +10,13 @@ import java.util.Comparator;
 
 import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
 
-public final class ServiceUtils {
+public abstract class GenericTest {
 
-    private ServiceUtils() {
+    protected void criarDiretorio() throws IOException {
+        Files.createDirectory(Paths.get(DIRETORIO));
     }
 
-    public static void deletarDiretorioEArquivos() throws IOException {
+    protected void deletarDiretorioEArquivos() throws IOException {
         Path diretorio = Paths.get(DIRETORIO);
         Files.walk(diretorio, FileVisitOption.FOLLOW_LINKS)
                 .sorted(Comparator.reverseOrder())
@@ -24,16 +25,12 @@ public final class ServiceUtils {
                 .forEach(File::delete);
     }
 
-    public static void deletarArquivosDoDiretorio() throws IOException {
+    protected void deletarArquivosDoDiretorio() throws IOException {
         Path diretorio = Paths.get(DIRETORIO);
         Files.walk(diretorio, FileVisitOption.FOLLOW_LINKS)
                 .filter(Files::isRegularFile)
                 .map(Path::toFile)
                 .peek(System.out::println)
                 .forEach(File::delete);
-    }
-
-    public static void criarDiretorio() throws IOException {
-        Files.createDirectory(Paths.get(DIRETORIO));
     }
 }

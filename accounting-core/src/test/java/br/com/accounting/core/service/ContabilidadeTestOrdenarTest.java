@@ -3,10 +3,12 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.factory.ContabilidadeFactoryMock;
 import br.com.accounting.core.filter.CampoFiltro;
+import br.com.accounting.core.filter.CampoFiltroSubTipoPagamento;
 import br.com.accounting.core.filter.CampoFiltroTipoPagamento;
 import br.com.accounting.core.filter.CampoFiltroVencimento;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +16,40 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Order.ASC;
 import static br.com.accounting.core.entity.Order.DESC;
-import static br.com.accounting.core.entity.TipoPagamento.CARTAO_CREDITO;
-import static br.com.accounting.core.entity.TipoPagamento.CARTAO_DEBITO;
-import static br.com.accounting.core.entity.TipoPagamento.DINHEIRO;
-import static br.com.accounting.core.service.ServiceUtils.*;
+import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ContabilidadeServiceOrdenarTest {
-
+public class ContabilidadeTestOrdenarTest extends ContabilidadeGenericTest {
     @Autowired
     private ContabilidadeService contabilidadeService;
 
+    @PostConstruct
+    public void posConstrucao() {
+        setContabilidadeService(contabilidadeService);
+    }
+
+    @Before
+    public void setUp() throws IOException {
+        deletarArquivosDoDiretorio();
+    }
+
+    @After
+    public void after() throws IOException {
+        deletarArquivosDoDiretorio();
+    }
+
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorIntervaloDeVencimentoAscendenteException() throws ServiceException, IOException {
+    public void ordenarRegistrosPorIntervaloDeVencimentoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
         CampoFiltro campoFiltro = new CampoFiltroVencimento();
@@ -49,9 +63,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosPorIntervaloDeVencimentoAscendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosPorIntervaloDeVencimentoAscendente() throws ServiceException {
         criarVariasContabilidades();
 
         CampoFiltro campoFiltro = new CampoFiltroVencimento();
@@ -59,6 +71,7 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, ASC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("27/01/2018"));
@@ -81,9 +94,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorIntervaloDeVencimentoAscendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosBuscadosPorIntervaloDeVencimentoAscendente() throws ServiceException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -93,13 +104,14 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, ASC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("27/01/2018"));
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescenteException() throws ServiceException, IOException {
+    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
         CampoFiltro campoFiltro = new CampoFiltroVencimento();
@@ -113,9 +125,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescente() throws ServiceException {
         criarVariasContabilidades();
 
         CampoFiltro campoFiltro = new CampoFiltroVencimento();
@@ -123,6 +133,7 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, DESC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("15/01/2018"));
@@ -145,9 +156,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorIntervaloDeVencimentoDescendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosBuscadosPorIntervaloDeVencimentoDescendente() throws ServiceException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -157,14 +166,14 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, DESC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(registrosFiltradros.get(1).getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(registrosFiltradros.get(2).getVencimentoFormatado(), equalTo("15/01/2018"));
     }
 
-
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorTipoDePagamentoAscendenteException() throws ServiceException, IOException {
+    public void ordenarRegistrosPorTipoDePagamentoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
         CampoFiltro campoFiltro = new CampoFiltroTipoPagamento();
@@ -178,9 +187,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosPorTipoDePagamentoAscendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosPorTipoDePagamentoAscendente() throws ServiceException {
         criarVariasContabilidades();
 
         CampoFiltro campoFiltro = new CampoFiltroTipoPagamento();
@@ -188,6 +195,7 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, ASC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(registrosFiltradros.get(1).getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(registrosFiltradros.get(2).getTipoPagamento(), equalTo(DINHEIRO));
@@ -210,9 +218,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoDePagamentoAscendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosBuscadosPorTipoDePagamentoAscendente() throws ServiceException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -222,13 +228,14 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, ASC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(registrosFiltradros.get(1).getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(registrosFiltradros.get(2).getTipoPagamento(), equalTo(DINHEIRO));
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorTipoDePagamentoDecrescenteException() throws ServiceException, IOException {
+    public void ordenarRegistrosPorTipoDePagamentoDecrescenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
         CampoFiltro campoFiltro = new CampoFiltroTipoPagamento();
@@ -242,9 +249,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosPorTipoDePagamentoDecrescente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosPorTipoDePagamentoDecrescente() throws ServiceException {
         criarVariasContabilidades();
 
         CampoFiltro campoFiltro = new CampoFiltroTipoPagamento();
@@ -252,6 +257,7 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, DESC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(registrosFiltradros.get(1).getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(registrosFiltradros.get(2).getTipoPagamento(), equalTo(CARTAO_CREDITO));
@@ -274,9 +280,7 @@ public class ContabilidadeServiceOrdenarTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoDePagamentoDescendente() throws ServiceException, IOException {
-        deletarArquivosDoDiretorio();
-
+    public void ordenarRegistrosBuscadosPorTipoDePagamentoDescendente() throws ServiceException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -286,29 +290,127 @@ public class ContabilidadeServiceOrdenarTest {
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, DESC);
 
         assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(registrosFiltradros.get(1).getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(registrosFiltradros.get(2).getTipoPagamento(), equalTo(CARTAO_CREDITO));
     }
 
-    private List<Contabilidade> getContabilidades() {
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorSubTipoDePagamentoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
 
-        List<Contabilidade> registros = null;
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+
         try {
-            registros = contabilidadeService.buscarRegistros();
+            contabilidadeService.ordenar(campoFiltro, ASC);
         } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
         }
-        return registros;
     }
 
-    private void criarVariasContabilidades() throws ServiceException {
-        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito();
-        contabilidadeService.salvar(contabilidade);
+    @Test
+    public void ordenarRegistrosPorSubTipoDePagamentoAscendente() throws ServiceException {
+        criarVariasContabilidades();
 
-        contabilidade = ContabilidadeFactoryMock.createCartaoDebito();
-        contabilidadeService.salvar(contabilidade);
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
 
-        contabilidade = ContabilidadeFactoryMock.createDinheiro();
-        contabilidadeService.salvar(contabilidade);
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getSubTipoPagamento().getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getSubTipoPagamento().getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = getContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, registros, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoAscendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getSubTipoPagamento().getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getSubTipoPagamento().getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorSubTipoDePagamentoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorSubTipoDePagamentoDescendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getSubTipoPagamento().getDescricao(), equalTo("7660"));
+        assertThat(registrosFiltradros.get(1).getSubTipoPagamento().getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = getContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, registros, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoDescendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento();
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getSubTipoPagamento().getDescricao(), equalTo("7660"));
+        assertThat(registrosFiltradros.get(1).getSubTipoPagamento().getDescricao(), equalTo("744"));
     }
 }

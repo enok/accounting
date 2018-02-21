@@ -3,12 +3,16 @@ package br.com.accounting.core.filter;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.TipoPagamento;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroTipoPagamento.class);
+
     private TipoPagamento tipoPagamento;
 
     public CampoFiltroTipoPagamento() {
@@ -20,6 +24,8 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> filtrar(List<Contabilidade> entities) {
+        LOG.info("[ filtrar ] entities: " + entities);
+
         return entities
                 .stream()
                 .filter(c -> c.getTipoPagamento().equals(tipoPagamento))
@@ -28,6 +34,8 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
+        LOG.info("[ ordenar ] entities: " + entities + ", order: " + order);
+
         switch (order) {
             case DESC:
                 return entities

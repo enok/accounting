@@ -22,7 +22,8 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
 
     @Override
     public void salvar(SubTipoPagamento subTipoPagamento) throws ServiceException {
-        LOG.info("[ salvar ] subTipoPagamento: " + subTipoPagamento);
+        LOG.info("[ salvar ]");
+        LOG.debug("subTipoPagamento: " + subTipoPagamento);
 
         try {
             subTipoPagamentoRepository.salvar(subTipoPagamento);
@@ -48,21 +49,37 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
 
     @Override
     public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities) throws ServiceException {
+        LOG.info("[ filtrar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("entities: " + entities);
+
         return null;
     }
 
     @Override
     public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro) throws ServiceException {
+        LOG.info("[ filtrar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+
         return null;
     }
 
     @Override
     public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities, Order order) throws ServiceException {
+        LOG.info("[ ordenar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("entities: " + entities);
+        LOG.debug("order: " + order);
+
         return null;
     }
 
     @Override
     public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException {
+        LOG.info("[ ordenar ]");
+        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("order: " + order);
+
         return null;
     }
 }
