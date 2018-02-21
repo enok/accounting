@@ -17,6 +17,9 @@ public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
     private LocalDate vencimentoInicial;
     private LocalDate vencimentoFinal;
 
+    public CampoFiltroVencimento() {
+    }
+
     public CampoFiltroVencimento(String vencimentoInicial, String vencimentoFinal) {
         this.vencimentoInicial = getDateFromString(vencimentoInicial);
         this.vencimentoFinal = getDateFromString(vencimentoFinal);
@@ -26,44 +29,29 @@ public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
     public List<Contabilidade> filtrar(List<Contabilidade> entities) {
         return entities
                 .stream()
-                .filter(c -> entreDatas(c.getVencimento(), getVencimentoInicial(), getVencimentoFinal()))
+                .filter(c -> entreDatas(c.getVencimento(), vencimentoInicial, vencimentoFinal))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Contabilidade> filtrar(List<Contabilidade> entities, Order order) {
+    public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
         switch (order) {
             case DESC:
                 return entities
                         .stream()
-                        .sorted(new VencimentoComparator().reversed())
+                        .sorted(Comparator.comparing(Contabilidade::getVencimento).reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(new VencimentoComparator())
+                        .sorted(Comparator.comparing(Contabilidade::getVencimento))
                         .collect(Collectors.toList());
         }
-    }
-
-    public LocalDate getVencimentoInicial() {
-        return vencimentoInicial;
-    }
-
-    public LocalDate getVencimentoFinal() {
-        return vencimentoFinal;
     }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
-
-    class VencimentoComparator implements Comparator<Contabilidade> {
-        @Override
-        public int compare(Contabilidade o1, Contabilidade o2) {
-            return o1.getVencimento().compareTo(o2.getVencimento());
-        }
     }
 }

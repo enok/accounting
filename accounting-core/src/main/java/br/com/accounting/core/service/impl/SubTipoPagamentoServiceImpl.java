@@ -57,12 +57,12 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
     }
 
     @Override
-    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities, Order order) throws ServiceException {
+    public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities, Order order) throws ServiceException {
         return null;
     }
 
     @Override
-    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, Order order) throws ServiceException {
+    public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException {
         return null;
     }
 }

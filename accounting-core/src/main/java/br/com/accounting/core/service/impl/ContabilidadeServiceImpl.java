@@ -48,12 +48,12 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades) throws ServiceException {
-        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades);
+        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades);
 
         try {
             return campoFiltro.filtrar(contabilidades);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
+            String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -61,40 +61,40 @@ public class ContabilidadeServiceImpl implements ContabilidadeService {
 
     @Override
     public List<Contabilidade> filtrar(CampoFiltro campoFiltro) throws ServiceException {
-        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro);
+        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro);
 
         try {
             List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
             return filtrar(campoFiltro, contabilidades);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
+            String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
     }
 
     @Override
-    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades, Order order) throws ServiceException {
-        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades + ", order: " + order);
+    public List<Contabilidade> ordenar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades, Order order) throws ServiceException {
+        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", contabilidades: " + contabilidades + ", order: " + order);
 
         try {
-            return campoFiltro.filtrar(contabilidades, order);
+            return campoFiltro.ordenar(contabilidades, order);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
+            String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
     }
 
     @Override
-    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, Order order) throws ServiceException {
-        LOG.info("[ filtrar ] campoFiltro: " + campoFiltro + ", order: " + order);
+    public List<Contabilidade> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException {
+        LOG.info("[ ordenar ] campoFiltro: " + campoFiltro + ", order: " + order);
 
         try {
             List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
-            return filtrar(campoFiltro, contabilidades, order);
+            return ordenar(campoFiltro, contabilidades, order);
         } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
+            String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }

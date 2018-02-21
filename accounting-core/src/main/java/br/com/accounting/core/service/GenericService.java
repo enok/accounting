@@ -15,7 +15,7 @@ public interface GenericService<T> {
 
     List<T> filtrar(CampoFiltro campoFiltro) throws ServiceException;
 
-    List<T> filtrar(CampoFiltro campoFiltro, List<T> entities, Order order) throws ServiceException;
+    List<T> ordenar(CampoFiltro campoFiltro, List<T> entities, Order order) throws ServiceException;
 
-    List<T> filtrar(CampoFiltro campoFiltro, Order order) throws ServiceException;
+    List<T> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException;
 }

@@ -7,5 +7,5 @@ import java.util.List;
 public interface CampoFiltro<T> {
     List<T> filtrar(List<T> entities);
 
-    List<T> filtrar(List<T> entities, Order order);
+    List<T> ordenar(List<T> entities, Order order);
 }
