@@ -3,10 +3,7 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroSubTipoPagamento;
-import br.com.accounting.core.filter.CampoFiltroTipoPagamento;
-import br.com.accounting.core.filter.CampoFiltroVencimento;
+import br.com.accounting.core.filter.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +19,8 @@ import java.util.List;
 
 import static br.com.accounting.core.entity.Order.ASC;
 import static br.com.accounting.core.entity.Order.DESC;
+import static br.com.accounting.core.entity.Tipo.FIXO;
+import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -412,5 +411,125 @@ public class ContabilidadeTestOrdenarTest extends ContabilidadeGenericTest {
         assertThat(registrosFiltradros.size(), equalTo(2));
         assertThat(registrosFiltradros.get(0).getSubTipoPagamento().getDescricao(), equalTo("7660"));
         assertThat(registrosFiltradros.get(1).getSubTipoPagamento().getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorTipoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorTipoAscendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(1).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(2).getTipo(), equalTo(VARIAVEL));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorTipoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, registros, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorTipoAscendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(1).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(2).getTipo(), equalTo(VARIAVEL));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorTipoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorTipoDescendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getTipo(), equalTo(VARIAVEL));
+        assertThat(registrosFiltradros.get(1).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(2).getTipo(), equalTo(FIXO));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorTipoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.ordenar(campoFiltro, registros, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorTipoDescendente() throws ServiceException {
+        criarVariasContabilidades();
+
+        CampoFiltro campoFiltro = new CampoFiltroTipo();
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.ordenar(campoFiltro, registros, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getTipo(), equalTo(VARIAVEL));
+        assertThat(registrosFiltradros.get(1).getTipo(), equalTo(FIXO));
+        assertThat(registrosFiltradros.get(2).getTipo(), equalTo(FIXO));
     }
 }

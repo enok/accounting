@@ -63,6 +63,10 @@ public class Contabilidade implements Entity {
         return tipo;
     }
 
+    public String getTipoString() {
+        return tipo.toString();
+    }
+
     public String getGrupo() {
         return grupo;
     }
