@@ -1,35 +1,28 @@
 package br.com.accounting.core.service;
 
-import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.SubTipoPagamentoFactoryMock;
+import br.com.accounting.core.filter.CampoFiltro;
+import br.com.accounting.core.filter.CampoFiltroDescricao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 
+import static br.com.accounting.core.entity.Order.ASC;
+import static br.com.accounting.core.entity.Order.DESC;
 import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-@ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
-@RunWith(SpringJUnit4ClassRunner.class)
 public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     @Autowired
     private SubTipoPagamentoService subTipoPagamentoService;
@@ -51,7 +44,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
     @Test
     public void salvarSubTipoPagamento() throws ServiceException {
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
 
         assertThat(subTipoPagamento, notNullValue());
         assertThat(subTipoPagamento.getDescricao(), equalTo("744"));
@@ -68,14 +61,9 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
     @Test(expected = ServiceException.class)
     public void salvarSubTipoPagamentoRepositoryException() throws IOException, ServiceException {
-        Path diretorio = Paths.get(DIRETORIO);
-        Files.walk(diretorio, FileVisitOption.FOLLOW_LINKS)
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .peek(System.out::println)
-                .forEach(File::delete);
+        deletarDiretorioEArquivos();
 
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
 
         try {
             subTipoPagamentoService.salvar(subTipoPagamento);
@@ -86,8 +74,8 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test
-    public void buscarRegistrosSubTipoPagamento() throws ServiceException, IOException {
-        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create();
+    public void buscarRegistrosSubTipoPagamento() throws ServiceException {
+        SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
 
         subTipoPagamentoService.salvar(subTipoPagamento);
 
@@ -101,7 +89,201 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void buscarRegistrosSubTipoPagamentoServiceException() throws IOException, ServiceException {
+    public void buscarRegistrosSubTipoPagamentoServiceException() throws ServiceException {
         subTipoPagamentoService.buscarRegistros();
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao("744");
+
+        List<SubTipoPagamento> registros = getSubTipoPagamentos();
+
+        try {
+            subTipoPagamentoService.filtrar(campoFiltro, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorDescricao744() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao("744");
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorDescricao7660() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao("7660");
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao("744");
+
+        try {
+            subTipoPagamentoService.filtrar(campoFiltro);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorDescricao744() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao("744");
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+
+        try {
+            subTipoPagamentoService.ordenar(campoFiltro, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoFiltro, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+        List<SubTipoPagamento> registros = getSubTipoPagamentos();
+
+        try {
+            subTipoPagamentoService.ordenar(campoFiltro, registros, ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoFiltro, registros, ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+
+        try {
+            subTipoPagamentoService.ordenar(campoFiltro, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoFiltro, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("7660"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+        List<SubTipoPagamento> registros = getSubTipoPagamentos();
+
+        try {
+            subTipoPagamentoService.ordenar(campoFiltro, registros, DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        CampoFiltro campoFiltro = new CampoFiltroDescricao();
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoFiltro, registros, DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("7660"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("744"));
     }
 }

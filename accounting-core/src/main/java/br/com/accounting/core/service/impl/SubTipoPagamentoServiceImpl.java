@@ -48,12 +48,18 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
     }
 
     @Override
-    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities) throws ServiceException {
+    public List<SubTipoPagamento> filtrar(CampoFiltro campoFiltro, List<SubTipoPagamento> subTipoPagamentos) throws ServiceException {
         LOG.info("[ filtrar ]");
         LOG.debug("campoFiltro: " + campoFiltro);
-        LOG.debug("entities: " + entities);
+        LOG.debug("subTipoPagamentos: " + subTipoPagamentos);
 
-        return null;
+        try {
+            return campoFiltro.filtrar(subTipoPagamentos);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
     }
 
     @Override
@@ -61,17 +67,30 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
         LOG.info("[ filtrar ]");
         LOG.debug("campoFiltro: " + campoFiltro);
 
-        return null;
+        try {
+            List<SubTipoPagamento> subTipoPagamentos = subTipoPagamentoRepository.buscarRegistros();
+            return filtrar(campoFiltro, subTipoPagamentos);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
     }
 
     @Override
-    public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, List<SubTipoPagamento> entities, Order order) throws ServiceException {
+    public List<SubTipoPagamento> ordenar(CampoFiltro campoFiltro, List<SubTipoPagamento> subTipoPagamentos, Order order) throws ServiceException {
         LOG.info("[ ordenar ]");
         LOG.debug("campoFiltro: " + campoFiltro);
-        LOG.debug("entities: " + entities);
+        LOG.debug("subTipoPagamentos: " + subTipoPagamentos);
         LOG.debug("order: " + order);
 
-        return null;
+        try {
+            return campoFiltro.ordenar(subTipoPagamentos, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
     }
 
     @Override
@@ -80,6 +99,13 @@ public class SubTipoPagamentoServiceImpl implements SubTipoPagamentoService {
         LOG.debug("campoFiltro: " + campoFiltro);
         LOG.debug("order: " + order);
 
-        return null;
+        try {
+            List<SubTipoPagamento> subTipoPagamentos = subTipoPagamentoRepository.buscarRegistros();
+            return ordenar(campoFiltro, subTipoPagamentos, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
     }
 }

@@ -1,5 +1,11 @@
 package br.com.accounting.core.service;
 
+import br.com.accounting.core.CoreConfig;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -10,6 +16,8 @@ import java.util.Comparator;
 
 import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
 
+@ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public abstract class GenericTest {
 
     protected void criarDiretorio() throws IOException {

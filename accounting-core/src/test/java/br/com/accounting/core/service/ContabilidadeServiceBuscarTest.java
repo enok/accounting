@@ -1,17 +1,12 @@
 package br.com.accounting.core.service;
 
-import br.com.accounting.core.CoreConfig;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactoryMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -27,8 +22,6 @@ import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@ContextConfiguration(classes = CoreConfig.class, loader = AnnotationConfigContextLoader.class)
-@RunWith(SpringJUnit4ClassRunner.class)
 public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
     @Autowired
     private ContabilidadeService contabilidadeService;
