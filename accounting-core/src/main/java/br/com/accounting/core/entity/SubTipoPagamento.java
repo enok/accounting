@@ -1,5 +1,6 @@
 package br.com.accounting.core.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -35,8 +36,23 @@ public class SubTipoPagamento implements Entity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SubTipoPagamento that = (SubTipoPagamento) o;
+
+        return new EqualsBuilder()
+                .append(descricao, that.descricao)
+                .isEquals();
+    }
+
+    @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return new HashCodeBuilder(17, 37)
+                .append(descricao)
+                .toHashCode();
     }
 
     @Override

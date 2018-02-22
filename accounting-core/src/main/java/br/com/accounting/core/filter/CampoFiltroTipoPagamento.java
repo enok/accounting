@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
+public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade, Contabilidade> {
     private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroTipoPagamento.class);
 
     private TipoPagamento tipoPagamento;

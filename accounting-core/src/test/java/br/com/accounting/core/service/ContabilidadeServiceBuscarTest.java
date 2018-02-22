@@ -31,16 +31,6 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         setContabilidadeService(contabilidadeService);
     }
 
-    @Before
-    public void setUp() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
-    @After
-    public void after() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
     @Test
     public void buscarRegistrosContabilidade() throws ServiceException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
@@ -60,7 +50,7 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getSubTipoPagamento().getDescricao(), equalTo("744"));
         assertThat(contabilidadeBuscada.getTipo(), equalTo(FIXO));
         assertThat(contabilidadeBuscada.getGrupo(), equalTo("MORADIA"));
-        assertThat(contabilidadeBuscada.getSubGrupo(), equalTo("ASSINATURAS"));
+        assertThat(contabilidadeBuscada.getSubGrupo(), equalTo("ASSINATURA"));
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("spotify"));
         assertThat(contabilidadeBuscada.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidadeBuscada.getParcelamento().getParcelas(), equalTo(12));

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static br.com.accounting.core.util.Utils.entreDatas;
 import static br.com.accounting.core.util.Utils.getDateFromString;
 
-public class CampoFiltroVencimento implements CampoFiltro<Contabilidade> {
+public class CampoFiltroVencimento implements CampoFiltro<Contabilidade, Contabilidade> {
     private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroVencimento.class);
 
     private LocalDate vencimentoInicial;

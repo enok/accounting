@@ -3,8 +3,6 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.*;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,16 +26,6 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     @PostConstruct
     public void posConstrucao() {
         setContabilidadeService(contabilidadeService);
-    }
-
-    @Before
-    public void setUp() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
-    @After
-    public void after() throws IOException {
-        deletarArquivosDoDiretorio();
     }
 
     @Test(expected = ServiceException.class)

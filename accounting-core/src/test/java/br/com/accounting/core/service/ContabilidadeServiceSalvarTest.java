@@ -39,7 +39,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
         assertThat(contabilidade.getSubTipoPagamento().getDescricao(), equalTo("744"));
         assertThat(contabilidade.getTipo(), equalTo(FIXO));
         assertThat(contabilidade.getGrupo(), equalTo("MORADIA"));
-        assertThat(contabilidade.getSubGrupo(), equalTo("ASSINATURAS"));
+        assertThat(contabilidade.getSubGrupo(), equalTo("ASSINATURA"));
         assertThat(contabilidade.getDescricao(), equalTo("spotify"));
         assertThat(contabilidade.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidade.getParcelamento().getParcelas(), equalTo(12));

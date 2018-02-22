@@ -5,16 +5,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class SubGrupo implements Entity {
+public class Grupo implements Entity {
     private Long codigo;
     private String descricao;
+    private SubGrupo subGrupo;
 
-    public SubGrupo() {
-    }
-
-    public SubGrupo(Long codigo, String descricao) {
-        this.codigo = codigo;
-        this.descricao = descricao;
+    public Grupo() {
     }
 
     public Long getCodigo() {
@@ -25,33 +21,48 @@ public class SubGrupo implements Entity {
         return descricao;
     }
 
-    public SubGrupo withCodigo(Long codigo) {
+    public SubGrupo getSubGrupo() {
+        return subGrupo;
+    }
+
+    public String getSubGrupoDescricao() {
+        return subGrupo.getDescricao();
+    }
+
+    public Grupo withCodigo(Long codigo) {
         this.codigo = codigo;
         return this;
     }
 
-    public SubGrupo withDescricao(String descricao) {
+    public Grupo withDescricao(String descricao) {
         this.descricao = descricao;
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SubGrupo subGrupo = (SubGrupo) o;
-
-        return new EqualsBuilder()
-                .append(descricao, subGrupo.descricao)
-                .isEquals();
+    public Grupo withSubGrupo(SubGrupo subGrupo) {
+        this.subGrupo = subGrupo;
+        return this;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        Grupo grupo = (Grupo) o;
+//
+//        return new EqualsBuilder()
+//                .append(descricao, grupo.descricao)
+//                .append(subGrupo, grupo.subGrupo)
+//                .isEquals();
+//    }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(descricao)
+                .append(subGrupo)
                 .toHashCode();
     }
 

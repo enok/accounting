@@ -4,8 +4,8 @@ import br.com.accounting.core.entity.Order;
 
 import java.util.List;
 
-public interface CampoFiltro<T> {
-    List<T> filtrar(List<T> entities);
+public interface CampoFiltro<E, T> {
+    List<E> filtrar(List<T> entities);
 
-    List<T> ordenar(List<T> entities, Order order);
+    List<E> ordenar(List<T> entities, Order order);
 }

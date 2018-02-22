@@ -32,16 +32,6 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
         setSubTipoPagamentoService(subTipoPagamentoService);
     }
 
-    @Before
-    public void setUp() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
-    @After
-    public void after() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
     @Test
     public void salvarSubTipoPagamento() throws ServiceException {
         SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
@@ -120,9 +110,8 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
         List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro, registros);
 
         assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.size(), equalTo(1));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
     }
 
     @Test
@@ -162,9 +151,8 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
         List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro);
 
         assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.size(), equalTo(1));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
     }
 
     @Test(expected = ServiceException.class)

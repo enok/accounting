@@ -28,16 +28,6 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
         setContabilidadeService(contabilidadeService);
     }
 
-    @Before
-    public void setUp() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
-    @After
-    public void after() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
     @Test(expected = ServiceException.class)
     public void filtrarRegistrosBuscadosPorIntervaloDeVencimentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();

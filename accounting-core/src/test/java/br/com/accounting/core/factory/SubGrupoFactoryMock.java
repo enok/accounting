@@ -3,17 +3,17 @@ package br.com.accounting.core.factory;
 import br.com.accounting.core.entity.SubGrupo;
 
 public class SubGrupoFactoryMock {
-    public static SubGrupo createAssinaturas() {
+    public static SubGrupo createAssinatura() {
         return SubGrupoFactory
                 .begin()
-                .withDescricao("ASSINATURAS")
+                .withDescricao("ASSINATURA")
                 .build();
     }
 
-    public static SubGrupo createAssinaturas_2() {
+    public static SubGrupo createAssinatura_2() {
         return SubGrupoFactory
                 .begin()
-                .withDescricao("ASSINATURAS")
+                .withDescricao("ASSINATURA")
                 .build();
     }
 

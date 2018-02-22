@@ -32,22 +32,12 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
         setSubGrupoService(subGrupoService);
     }
 
-    @Before
-    public void setUp() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
-    @After
-    public void after() throws IOException {
-        deletarArquivosDoDiretorio();
-    }
-
     @Test
     public void salvarGrupo() throws ServiceException {
-        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinaturas();
+        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinatura();
 
         assertThat(subGrupo, notNullValue());
-        assertThat(subGrupo.getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(subGrupo.getDescricao(), equalTo("ASSINATURA"));
 
         subGrupoService.salvar(subGrupo);
 
@@ -63,7 +53,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void salvarGrupoRepositoryException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinaturas();
+        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinatura();
 
         try {
             subGrupoService.salvar(subGrupo);
@@ -75,7 +65,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
     @Test
     public void buscarRegistrosGrupo() throws ServiceException {
-        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinaturas();
+        SubGrupo subGrupo = SubGrupoFactoryMock.createAssinatura();
 
         subGrupoService.salvar(subGrupo);
 
@@ -85,7 +75,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
         SubGrupo grupoBuscado = registros.get(0);
 
         assertThat(grupoBuscado, notNullValue());
-        assertThat(grupoBuscado.getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(grupoBuscado.getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test(expected = ServiceException.class)
@@ -97,7 +87,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURAS");
+        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURA");
 
         List<SubGrupo> registros = getSubGrupos();
 
@@ -115,14 +105,13 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         List<SubGrupo> registros = subGrupoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURAS");
+        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURA");
 
         List<SubGrupo> registrosFiltradros = subGrupoService.filtrar(campoFiltro, registros);
 
         assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test
@@ -143,7 +132,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURAS");
+        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURA");
 
         try {
             subGrupoService.filtrar(campoFiltro);
@@ -157,14 +146,13 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void filtrarRegistrosPorDescricaoAssinaturas() throws ServiceException {
         criarVariosSubGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURAS");
+        CampoFiltro campoFiltro = new CampoFiltroDescricaoSubGrupo("ASSINATURA");
 
         List<SubGrupo> registrosFiltradros = subGrupoService.filtrar(campoFiltro);
 
         assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test(expected = ServiceException.class)
@@ -191,8 +179,8 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
         assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
     }
 
@@ -222,8 +210,8 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
         assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
     }
 
@@ -252,8 +240,8 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("PADARIA"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test(expected = ServiceException.class)
@@ -283,7 +271,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("PADARIA"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURAS"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ASSINATURAS"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ASSINATURA"));
     }
 }

@@ -1,7 +1,7 @@
 package br.com.accounting.core.filter;
 
+import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.entity.SubTipoPagamento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,33 +11,33 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CampoFiltroDescricaoSubTipoPagamento implements CampoFiltro<SubTipoPagamento, SubTipoPagamento> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricaoSubTipoPagamento.class);
+public class CampoFiltroDescricaoGrupo implements CampoFiltro<Grupo, Grupo> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricaoGrupo.class);
 
     private String descricao;
 
-    public CampoFiltroDescricaoSubTipoPagamento() {
+    public CampoFiltroDescricaoGrupo() {
     }
 
-    public CampoFiltroDescricaoSubTipoPagamento(String descricao) {
+    public CampoFiltroDescricaoGrupo(String descricao) {
         this.descricao = descricao;
     }
 
     @Override
-    public List<SubTipoPagamento> filtrar(List<SubTipoPagamento> entities) {
+    public List<Grupo> filtrar(List<Grupo> entities) {
         LOG.info("[ filtrar ]");
         LOG.debug("entities: " + entities);
 
-        Set<SubTipoPagamento> subTipoPagamentos = entities
+        Set<Grupo> grupos = entities
                 .stream()
                 .filter(c -> c.getDescricao().equals(descricao))
                 .collect(Collectors.toSet());
 
-        return new ArrayList<>(subTipoPagamentos);
+        return new ArrayList<>(grupos);
     }
 
     @Override
-    public List<SubTipoPagamento> ordenar(List<SubTipoPagamento> entities, Order order) {
+    public List<Grupo> ordenar(List<Grupo> entities, Order order) {
         LOG.info("[ ordenar ]");
         LOG.debug("entities: " + entities);
         LOG.debug("order: " + order);
@@ -46,13 +46,15 @@ public class CampoFiltroDescricaoSubTipoPagamento implements CampoFiltro<SubTipo
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(SubTipoPagamento::getDescricao).reversed())
+                        .sorted(Comparator.comparing(Grupo::getDescricao).reversed()
+                                .thenComparing(Comparator.comparing(Grupo::getSubGrupoDescricao).reversed()))
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(SubTipoPagamento::getDescricao))
+                        .sorted(Comparator.comparing(Grupo::getDescricao)
+                                .thenComparing(Comparator.comparing(Grupo::getSubGrupoDescricao)))
                         .collect(Collectors.toList());
         }
     }

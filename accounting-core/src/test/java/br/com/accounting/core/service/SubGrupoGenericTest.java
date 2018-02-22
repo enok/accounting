@@ -23,10 +23,10 @@ public abstract class SubGrupoGenericTest extends GenericTest {
     }
 
     protected void criarVariosSubGrupos() throws ServiceException {
-        SubGrupo grupo = SubGrupoFactoryMock.createAssinaturas();
+        SubGrupo grupo = SubGrupoFactoryMock.createAssinatura();
         subGrupoService.salvar(grupo);
 
-        grupo = SubGrupoFactoryMock.createAssinaturas_2();
+        grupo = SubGrupoFactoryMock.createAssinatura_2();
         subGrupoService.salvar(grupo);
 
         grupo = SubGrupoFactoryMock.createPadaria();
