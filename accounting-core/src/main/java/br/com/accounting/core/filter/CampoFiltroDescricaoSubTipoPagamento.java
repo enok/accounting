@@ -9,21 +9,22 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoFiltroDescricao implements CampoFiltro<SubTipoPagamento> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricao.class);
+public class CampoFiltroDescricaoSubTipoPagamento implements CampoFiltro<SubTipoPagamento> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricaoSubTipoPagamento.class);
 
     private String descricao;
 
-    public CampoFiltroDescricao() {
+    public CampoFiltroDescricaoSubTipoPagamento() {
     }
 
-    public CampoFiltroDescricao(String descricao) {
+    public CampoFiltroDescricaoSubTipoPagamento(String descricao) {
         this.descricao = descricao;
     }
 
     @Override
     public List<SubTipoPagamento> filtrar(List<SubTipoPagamento> entities) {
-        LOG.info("[ filtrar ] entities: " + entities);
+        LOG.info("[ filtrar ]");
+        LOG.debug("entities: " + entities);
 
         return entities
                 .stream()
@@ -33,7 +34,9 @@ public class CampoFiltroDescricao implements CampoFiltro<SubTipoPagamento> {
 
     @Override
     public List<SubTipoPagamento> ordenar(List<SubTipoPagamento> entities, Order order) {
-        LOG.info("[ ordenar ] entities: " + entities + ", order: " + order);
+        LOG.info("[ ordenar ]");
+        LOG.debug("entities: " + entities);
+        LOG.debug("order: " + order);
 
         switch (order) {
             case DESC:

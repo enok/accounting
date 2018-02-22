@@ -26,10 +26,10 @@ public abstract class SubTipoPagamentoGenericTest extends GenericTest {
         SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create7660();
         subTipoPagamentoService.salvar(subTipoPagamento);
 
-        subTipoPagamento = SubTipoPagamentoFactoryMock.create744_2();
+        subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
         subTipoPagamentoService.salvar(subTipoPagamento);
 
-        subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
+        subTipoPagamento = SubTipoPagamentoFactoryMock.create744_2();
         subTipoPagamentoService.salvar(subTipoPagamento);
     }
 }

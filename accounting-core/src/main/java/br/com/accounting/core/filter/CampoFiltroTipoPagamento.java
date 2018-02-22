@@ -24,7 +24,8 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> filtrar(List<Contabilidade> entities) {
-        LOG.info("[ filtrar ] entities: " + entities);
+        LOG.info("[ filtrar ]");
+        LOG.debug("entities: " + entities);
 
         return entities
                 .stream()
@@ -34,7 +35,9 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade> {
 
     @Override
     public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
-        LOG.info("[ ordenar ] entities: " + entities + ", order: " + order);
+        LOG.info("[ ordenar ]");
+        LOG.debug("entities: " + entities);
+        LOG.debug("order: " + order);
 
         switch (order) {
             case DESC:
