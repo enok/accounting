@@ -90,6 +90,10 @@ public class Contabilidade implements Entity {
         return categoria;
     }
 
+    public String getCategoriaValue() {
+        return categoria.toString();
+    }
+
     public Double getValor() {
         return valor;
     }
