@@ -76,16 +76,17 @@ public final class ContabilidadeFactory {
         return this;
     }
 
-    public ContabilidadeFactory withGrupo(String grupo) {
+    public ContabilidadeFactory withGrupoSubGrupo(String grupo, String subGrupo) {
         if (!isEmpty(grupo)) {
-            contabilidade.withGrupo(grupo);
-        }
-        return this;
-    }
-
-    public ContabilidadeFactory withSubGrupo(String subGrupo) {
-        if (!isEmpty(subGrupo)) {
-            contabilidade.withSubGrupo(subGrupo);
+            SubGrupo subGrupoObj = SubGrupoFactory
+                    .begin()
+                    .withDescricao(subGrupo)
+                    .build();
+            Grupo grupoObj = GrupoFactory
+                    .begin()
+                    .withDescricao(grupo)
+                    .withSubGrupo(subGrupoObj).build();
+            contabilidade.withGrupo(grupoObj);
         }
         return this;
     }

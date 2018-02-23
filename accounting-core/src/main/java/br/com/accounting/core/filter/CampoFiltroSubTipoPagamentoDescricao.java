@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CampoFiltroDescricaoSubTipoPagamento implements CampoFiltro<SubTipoPagamento, SubTipoPagamento> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricaoSubTipoPagamento.class);
+public class CampoFiltroSubTipoPagamentoDescricao implements CampoFiltro<SubTipoPagamento, SubTipoPagamento> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroSubTipoPagamentoDescricao.class);
 
     private String descricao;
 
-    public CampoFiltroDescricaoSubTipoPagamento() {
+    public CampoFiltroSubTipoPagamentoDescricao() {
     }
 
-    public CampoFiltroDescricaoSubTipoPagamento(String descricao) {
+    public CampoFiltroSubTipoPagamentoDescricao(String descricao) {
         this.descricao = descricao;
     }
 

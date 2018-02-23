@@ -44,6 +44,11 @@ public class GrupoFactory {
         return this;
     }
 
+    public GrupoFactory withSubGrupo(SubGrupo subGrupo) {
+        grupo.withSubGrupo(subGrupo);
+        return this;
+    }
+
     public Grupo build() {
         return grupo;
     }

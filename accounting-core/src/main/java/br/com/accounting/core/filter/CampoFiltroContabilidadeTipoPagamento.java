@@ -2,7 +2,7 @@ package br.com.accounting.core.filter;
 
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.entity.SubTipoPagamento;
+import br.com.accounting.core.entity.TipoPagamento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,16 +10,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoFiltroSubTipoPagamento implements CampoFiltro<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroSubTipoPagamento.class);
+public class CampoFiltroContabilidadeTipoPagamento implements CampoFiltro<Contabilidade, Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroContabilidadeTipoPagamento.class);
 
-    private String descricao;
+    private TipoPagamento tipoPagamento;
 
-    public CampoFiltroSubTipoPagamento() {
+    public CampoFiltroContabilidadeTipoPagamento() {
     }
 
-    public CampoFiltroSubTipoPagamento(String descricao) {
-        this.descricao = descricao;
+    public CampoFiltroContabilidadeTipoPagamento(TipoPagamento tipoPagamento) {
+        this.tipoPagamento = tipoPagamento;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CampoFiltroSubTipoPagamento implements CampoFiltro<Contabilidade, C
 
         return entities
                 .stream()
-                .filter(c -> descricaoEhIgual(c))
+                .filter(c -> c.getTipoPagamento().equals(tipoPagamento))
                 .collect(Collectors.toList());
     }
 
@@ -43,24 +43,14 @@ public class CampoFiltroSubTipoPagamento implements CampoFiltro<Contabilidade, C
             case DESC:
                 return entities
                         .stream()
-                        .filter(c -> (c.getSubTipoPagamento() != null))
-                        .sorted(Comparator.comparing(Contabilidade::getSubTipoPagamentoString).reversed())
+                        .sorted(Comparator.comparing(Contabilidade::getTipoPagamentoValue).reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .filter(c -> (c.getSubTipoPagamento() != null))
-                        .sorted(Comparator.comparing(Contabilidade::getSubTipoPagamentoString))
+                        .sorted(Comparator.comparing(Contabilidade::getTipoPagamentoValue))
                         .collect(Collectors.toList());
         }
-    }
-
-    private boolean descricaoEhIgual(Contabilidade c) {
-        SubTipoPagamento subTipoPagamento = c.getSubTipoPagamento();
-        if (subTipoPagamento == null) {
-            return false;
-        }
-        return subTipoPagamento.getDescricao().equals(descricao);
     }
 }

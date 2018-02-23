@@ -2,7 +2,7 @@ package br.com.accounting.core.filter;
 
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.entity.TipoPagamento;
+import br.com.accounting.core.entity.Tipo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,16 +10,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroTipoPagamento.class);
+public class CampoFiltroContabilidadeTipo implements CampoFiltro<Contabilidade, Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroContabilidadeTipo.class);
 
-    private TipoPagamento tipoPagamento;
+    private Tipo tipo;
 
-    public CampoFiltroTipoPagamento() {
+    public CampoFiltroContabilidadeTipo() {
     }
 
-    public CampoFiltroTipoPagamento(TipoPagamento tipoPagamento) {
-        this.tipoPagamento = tipoPagamento;
+    public CampoFiltroContabilidadeTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade, Cont
 
         return entities
                 .stream()
-                .filter(c -> c.getTipoPagamento().equals(tipoPagamento))
+                .filter(c -> c.getTipo().equals(tipo))
                 .collect(Collectors.toList());
     }
 
@@ -43,13 +43,13 @@ public class CampoFiltroTipoPagamento implements CampoFiltro<Contabilidade, Cont
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoPagamentoString).reversed())
+                        .sorted(Comparator.comparing(Contabilidade::getTipoValue).reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoPagamentoString))
+                        .sorted(Comparator.comparing(Contabilidade::getTipoValue))
                         .collect(Collectors.toList());
         }
     }

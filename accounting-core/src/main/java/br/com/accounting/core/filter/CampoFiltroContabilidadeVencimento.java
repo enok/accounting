@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 import static br.com.accounting.core.util.Utils.entreDatas;
 import static br.com.accounting.core.util.Utils.getDateFromString;
 
-public class CampoFiltroVencimento implements CampoFiltro<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroVencimento.class);
+public class CampoFiltroContabilidadeVencimento implements CampoFiltro<Contabilidade, Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroContabilidadeVencimento.class);
 
     private LocalDate vencimentoInicial;
     private LocalDate vencimentoFinal;
 
-    public CampoFiltroVencimento() {
+    public CampoFiltroContabilidadeVencimento() {
     }
 
-    public CampoFiltroVencimento(String vencimentoInicial, String vencimentoFinal) {
+    public CampoFiltroContabilidadeVencimento(String vencimentoInicial, String vencimentoFinal) {
         this.vencimentoInicial = getDateFromString(vencimentoInicial);
         this.vencimentoFinal = getDateFromString(vencimentoFinal);
     }

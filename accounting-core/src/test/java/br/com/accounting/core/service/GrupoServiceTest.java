@@ -5,9 +5,9 @@ import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.GrupoFactoryMock;
 import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroDescricaoGrupo;
-import br.com.accounting.core.filter.CampoFiltroGrupoSubGrupos;
-import br.com.accounting.core.filter.CampoFiltroSubGrupo;
+import br.com.accounting.core.filter.CampoFiltroGrupoDescricao;
+import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupo;
+import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupoDescricao;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -90,7 +90,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
         List<Grupo> registros = getGrupos();
 
         try {
@@ -107,7 +107,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
 
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo("MERCADO");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MERCADO");
 
         List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
 
@@ -122,7 +122,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
 
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
 
         List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
 
@@ -140,7 +140,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo("MORADIA", "ASSINATURA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
         List<Grupo> registros = getGrupos();
 
         try {
@@ -155,7 +155,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoMoradiaSubGrupoAssinatura() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo("MORADIA", "ASSINATURA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
@@ -171,7 +171,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
         List<Grupo> registros = getGrupos();
 
         try {
@@ -186,7 +186,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupo() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGrupos(campoFiltro, registros);
@@ -194,15 +194,15 @@ public class GrupoServiceTest extends GrupoGenericTest {
         assertThat(subGruposFiltrados, notNullValue());
         assertThat(subGruposFiltrados.size(), equalTo(2));
 
-        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ASSINATURA"));
-        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test(expected = ServiceException.class)
     public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
 
         try {
             grupoService.filtrar(campoFiltro);
@@ -216,7 +216,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradia() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
 
         List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro);
 
@@ -234,7 +234,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo("MORADIA", "ASSINATURA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
 
         try {
             grupoService.filtrar(campoFiltro);
@@ -248,7 +248,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradiaSubGrupoAssinatura() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo("MORADIA", "ASSINATURA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
 
         List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro);
 
@@ -263,7 +263,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradiaGrupoSubGrupoAssinaturaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
 
         try {
             grupoService.filtrarSubGrupos(campoFiltro);
@@ -277,22 +277,22 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradiaGrupoSubGrupoAssinatura() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos("MORADIA");
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
 
         List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGrupos(campoFiltro);
 
         assertThat(subGruposFiltrados, notNullValue());
         assertThat(subGruposFiltrados.size(), equalTo(2));
 
-        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ASSINATURA"));
-        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ASSINATURA"));
     }
 
     @Test(expected = ServiceException.class)
     public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
 
         try {
             grupoService.ordenar(campoFiltro, ASC);
@@ -306,7 +306,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, ASC);
 
@@ -327,7 +327,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosSubGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
 
         try {
             grupoService.ordenar(campoFiltro, ASC);
@@ -341,7 +341,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosSubGrupoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, ASC);
 
@@ -362,7 +362,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
 
         try {
             grupoService.ordenarSubGrupos(campoFiltro, ASC);
@@ -376,7 +376,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
 
         List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoFiltro, ASC);
 
@@ -391,7 +391,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
         List<Grupo> registros = getGrupos();
 
         try {
@@ -406,7 +406,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, registros, ASC);
@@ -428,7 +428,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosSubGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         try {
@@ -443,7 +443,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosSubGrupoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, registros, ASC);
@@ -465,7 +465,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = getGrupos();
 
         try {
@@ -480,7 +480,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoFiltro, registros, ASC);
@@ -496,7 +496,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
 
         try {
             grupoService.ordenar(campoFiltro, DESC);
@@ -510,7 +510,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, DESC);
 
@@ -531,7 +531,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosSubGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
 
         try {
             grupoService.ordenar(campoFiltro, DESC);
@@ -545,7 +545,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosSubGrupoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, DESC);
 
@@ -566,7 +566,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = getGrupos();
 
         try {
@@ -581,7 +581,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoFiltro, registros, DESC);
@@ -597,7 +597,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
         List<Grupo> registros = getGrupos();
 
         try {
@@ -612,7 +612,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroDescricaoGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, registros, DESC);
@@ -634,7 +634,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosSubGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         try {
@@ -649,7 +649,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosSubGrupoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubGrupo();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<Grupo> registrosFiltradros = grupoService.ordenar(campoFiltro, registros, DESC);
@@ -671,7 +671,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = getGrupos();
 
         try {
@@ -686,7 +686,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoSubGrupos();
+        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo();
         List<Grupo> registros = grupoService.buscarRegistros();
 
         List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoFiltro, registros, DESC);

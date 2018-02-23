@@ -3,8 +3,6 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.*;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,7 +30,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorIntervaloDeVencimentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("26/01/2018", "31/01/2018");
 
         List<Contabilidade> registros = getContabilidades();
 
@@ -50,7 +48,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("26/01/2018", "31/01/2018");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -64,7 +62,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("25/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("25/01/2018", "31/01/2018");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -78,7 +76,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("01/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("01/01/2018", "31/01/2018");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -90,7 +88,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorIntervaloDeVencimentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("26/01/2018", "31/01/2018");
 
         try {
             contabilidadeService.filtrar(campoFiltro);
@@ -104,7 +102,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorIntervaloDeVencimento1Resultado() throws ServiceException {
         criarVariasContabilidades();
 
-        CampoFiltro campoFiltro = new CampoFiltroVencimento("26/01/2018", "31/01/2018");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento("26/01/2018", "31/01/2018");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
 
@@ -116,7 +114,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(DINHEIRO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(DINHEIRO);
 
         List<Contabilidade> registros = getContabilidades();
 
@@ -134,7 +132,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(DINHEIRO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(DINHEIRO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -149,7 +147,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(CARTAO_CREDITO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(CARTAO_CREDITO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -164,7 +162,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(CARTAO_DEBITO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(CARTAO_DEBITO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -177,7 +175,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(DINHEIRO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(DINHEIRO);
 
         try {
             contabilidadeService.filtrar(campoFiltro);
@@ -191,7 +189,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoDePagamentoDinheiro() throws ServiceException {
         criarVariasContabilidades();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipoPagamento(DINHEIRO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(DINHEIRO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
 
@@ -204,7 +202,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorSubTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("7660");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("7660");
 
         List<Contabilidade> registros = getContabilidades();
 
@@ -220,9 +218,8 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorSubTipoDePagamentoValorNulo() throws ServiceException {
         criarVariasContabilidades();
 
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("7660");
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
-
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("7660");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -235,9 +232,8 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorSubTipoDePagamento7660() throws ServiceException {
         criarVariasContabilidades2();
 
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("7660");
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
-
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("7660");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -251,9 +247,8 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorSubTipoDePagamento744() throws ServiceException {
         criarVariasContabilidades2();
 
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("744");
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
-
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("744");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -266,7 +261,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorSubTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("7660");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("7660");
 
         try {
             contabilidadeService.filtrar(campoFiltro);
@@ -280,7 +275,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorSubTipoDePagamento7660() throws ServiceException {
         criarVariasContabilidades2();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamento("7660");
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao("7660");
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
 
@@ -294,8 +289,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorTipoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipo(FIXO);
-
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(FIXO);
         List<Contabilidade> registros = getContabilidades();
 
         try {
@@ -310,9 +304,8 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorTipoFixo() throws ServiceException {
         criarVariasContabilidades();
 
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(FIXO);
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
-
-        CampoFiltro campoFiltro = new CampoFiltroTipo(FIXO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -326,9 +319,8 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosBuscadosPorTipo744() throws ServiceException {
         criarVariasContabilidades();
 
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(VARIAVEL);
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
-
-        CampoFiltro campoFiltro = new CampoFiltroTipo(VARIAVEL);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
 
@@ -340,7 +332,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipo(FIXO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(FIXO);
 
         try {
             contabilidadeService.filtrar(campoFiltro);
@@ -354,7 +346,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoFixo() throws ServiceException {
         criarVariasContabilidades();
 
-        CampoFiltro campoFiltro = new CampoFiltroTipo(FIXO);
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(FIXO);
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
 
@@ -362,5 +354,78 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
         assertThat(registrosFiltradros.size(), equalTo(2));
         assertThat(registrosFiltradros.get(0).getTipo(), equalTo(FIXO));
         assertThat(registrosFiltradros.get(1).getTipo(), equalTo(FIXO));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorGrupoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao("MORADIA");
+
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorGrupoMoradia() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao("MORADIA");
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getGrupo().getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getGrupo().getDescricao(), equalTo("MORADIA"));
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorGrupoMercado() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao("MERCADO");
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getGrupo().getDescricao(), equalTo("MERCADO"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorGrupoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao("MORADIA");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorGrupoMoradia() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao("MORADIA");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getGrupo().getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getGrupo().getDescricao(), equalTo("MORADIA"));
     }
 }

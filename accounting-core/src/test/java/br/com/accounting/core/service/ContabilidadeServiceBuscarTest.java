@@ -49,8 +49,8 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento().getDescricao(), equalTo("744"));
         assertThat(contabilidadeBuscada.getTipo(), equalTo(FIXO));
-        assertThat(contabilidadeBuscada.getGrupo(), equalTo("MORADIA"));
-        assertThat(contabilidadeBuscada.getSubGrupo(), equalTo("ASSINATURA"));
+        assertThat(contabilidadeBuscada.getGrupo().getDescricao(), equalTo("MORADIA"));
+        assertThat(contabilidadeBuscada.getGrupo().getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("spotify"));
         assertThat(contabilidadeBuscada.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidadeBuscada.getParcelamento().getParcelas(), equalTo(12));
@@ -77,8 +77,8 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento().getDescricao(), equalTo("7660"));
         assertThat(contabilidadeBuscada.getTipo(), equalTo(VARIAVEL));
-        assertThat(contabilidadeBuscada.getGrupo(), equalTo("MERCADO"));
-        assertThat(contabilidadeBuscada.getSubGrupo(), equalTo("PADARIA"));
+        assertThat(contabilidadeBuscada.getGrupo().getDescricao(), equalTo("MERCADO"));
+        assertThat(contabilidadeBuscada.getGrupo().getSubGrupo().getDescricao(), equalTo("PADARIA"));
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("pão"));
         assertThat(contabilidadeBuscada.getParcelamento(), nullValue());
         assertThat(contabilidadeBuscada.getCategoria(), equalTo(SAIDA));
@@ -104,8 +104,8 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(contabilidadeBuscada.getSubTipoPagamento(), nullValue());
         assertThat(contabilidadeBuscada.getTipo(), equalTo(FIXO));
-        assertThat(contabilidadeBuscada.getGrupo(), equalTo("RENDIMENTOS"));
-        assertThat(contabilidadeBuscada.getSubGrupo(), equalTo("SALARIO"));
+        assertThat(contabilidadeBuscada.getGrupo().getDescricao(), equalTo("RENDIMENTOS"));
+        assertThat(contabilidadeBuscada.getGrupo().getSubGrupo().getDescricao(), equalTo("SALARIO"));
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("sysmap"));
         assertThat(contabilidadeBuscada.getParcelamento(), nullValue());
         assertThat(contabilidadeBuscada.getCategoria(), equalTo(ENTRADA));

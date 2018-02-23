@@ -15,8 +15,7 @@ public class Contabilidade implements Entity {
     private TipoPagamento tipoPagamento;
     private SubTipoPagamento subTipoPagamento;
     private Tipo tipo;
-    private String grupo;
-    private String subGrupo;
+    private Grupo grupo;
     private String descricao;
     private Parcelamento parcelamento;
     private Categoria categoria;
@@ -47,7 +46,7 @@ public class Contabilidade implements Entity {
         return tipoPagamento;
     }
 
-    public String getTipoPagamentoString() {
+    public String getTipoPagamentoValue() {
         return tipoPagamento.toString();
     }
 
@@ -55,7 +54,7 @@ public class Contabilidade implements Entity {
         return subTipoPagamento;
     }
 
-    public String getSubTipoPagamentoString() {
+    public String getSubTipoPagamentoDescricao() {
         return subTipoPagamento.getDescricao();
     }
 
@@ -63,16 +62,16 @@ public class Contabilidade implements Entity {
         return tipo;
     }
 
-    public String getTipoString() {
+    public String getTipoValue() {
         return tipo.toString();
     }
 
-    public String getGrupo() {
+    public Grupo getGrupo() {
         return grupo;
     }
 
-    public String getSubGrupo() {
-        return subGrupo;
+    public String getGrupoDescricao() {
+        return grupo.getDescricao();
     }
 
     public String getDescricao() {
@@ -125,13 +124,8 @@ public class Contabilidade implements Entity {
         return this;
     }
 
-    public Contabilidade withGrupo(String grupo) {
+    public Contabilidade withGrupo(Grupo grupo) {
         this.grupo = grupo;
-        return this;
-    }
-
-    public Contabilidade withSubGrupo(String subGrupo) {
-        this.subGrupo = subGrupo;
         return this;
     }
 

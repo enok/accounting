@@ -1,8 +1,8 @@
 package br.com.accounting.core.filter;
 
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.entity.Tipo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,16 +10,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoFiltroTipo implements CampoFiltro<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroTipo.class);
+public class CampoFiltroContabilidadeGrupoDescricao implements CampoFiltro<Contabilidade, Contabilidade> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroContabilidadeGrupoDescricao.class);
 
-    private Tipo tipo;
+    private String descricao;
 
-    public CampoFiltroTipo() {
+    public CampoFiltroContabilidadeGrupoDescricao() {
     }
 
-    public CampoFiltroTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public CampoFiltroContabilidadeGrupoDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override
@@ -29,8 +29,12 @@ public class CampoFiltroTipo implements CampoFiltro<Contabilidade, Contabilidade
 
         return entities
                 .stream()
-                .filter(c -> c.getTipo().equals(tipo))
+                .filter(c -> descricaoEhIgual(c))
                 .collect(Collectors.toList());
+    }
+
+    private boolean descricaoEhIgual(Contabilidade c) {
+        return c.getGrupo().getDescricao().equals(descricao);
     }
 
     @Override
@@ -43,13 +47,15 @@ public class CampoFiltroTipo implements CampoFiltro<Contabilidade, Contabilidade
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoString).reversed())
+                        .filter(c -> (c.getGrupo() != null))
+                        .sorted(Comparator.comparing(Contabilidade::getGrupoDescricao).reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoString))
+                        .filter(c -> (c.getGrupo() != null))
+                        .sorted(Comparator.comparing(Contabilidade::getGrupoDescricao))
                         .collect(Collectors.toList());
         }
     }

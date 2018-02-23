@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CampoFiltroDescricaoSubGrupo implements CampoFiltro<SubGrupo, SubGrupo> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroDescricaoSubGrupo.class);
+public class CampoFiltroSubGrupoDescricao implements CampoFiltro<SubGrupo, SubGrupo> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroSubGrupoDescricao.class);
 
     private String descricao;
 
-    public CampoFiltroDescricaoSubGrupo() {
+    public CampoFiltroSubGrupoDescricao() {
     }
 
-    public CampoFiltroDescricaoSubGrupo(String descricao) {
+    public CampoFiltroSubGrupoDescricao(String descricao) {
         this.descricao = descricao;
     }
 

@@ -2,7 +2,6 @@ package br.com.accounting.core.filter;
 
 import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.entity.SubTipoPagamento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,16 +12,16 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CampoFiltroSubGrupo implements CampoFiltro<Grupo, Grupo> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroSubGrupo.class);
+public class CampoFiltroGrupoDescricaoSubGrupoDescricao implements CampoFiltro<Grupo, Grupo> {
+    private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroGrupoDescricaoSubGrupoDescricao.class);
 
     private String descricao;
     private String subGrupo;
 
-    public CampoFiltroSubGrupo() {
+    public CampoFiltroGrupoDescricaoSubGrupoDescricao() {
     }
 
-    public CampoFiltroSubGrupo(String descricao, String subGrupo) {
+    public CampoFiltroGrupoDescricaoSubGrupoDescricao(String descricao, String subGrupo) {
         this.descricao = descricao;
         this.subGrupo = subGrupo;
     }
