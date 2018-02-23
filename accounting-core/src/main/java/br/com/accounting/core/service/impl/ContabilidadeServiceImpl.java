@@ -1,111 +1,16 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.Order;
-import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.ContabilidadeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class ContabilidadeServiceImpl implements ContabilidadeService {
-    private static final Logger LOG = LoggerFactory.getLogger(ContabilidadeServiceImpl.class);
+public class ContabilidadeServiceImpl extends GenericService<Contabilidade> implements ContabilidadeService {
 
     @Autowired
-    private ContabilidadeRepository contabilidadeRepository;
-
-    @Override
-    public void salvar(Contabilidade contabilidade) throws ServiceException {
-        LOG.info("[ salvar ]");
-        LOG.debug("contabilidade: " + contabilidade);
-
-        try {
-            contabilidadeRepository.salvar(contabilidade);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel salvar o registro: " + contabilidade;
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
-    public List<Contabilidade> buscarRegistros() throws ServiceException {
-        LOG.info("[ buscarRegistros ]");
-
-        try {
-            return contabilidadeRepository.buscarRegistros();
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel buscar os registros";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
-    public List<Contabilidade> filtrar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades) throws ServiceException {
-        LOG.info("[ filtrar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
-        LOG.debug("contabilidades: " + contabilidades);
-
-        try {
-            return campoFiltro.filtrar(contabilidades);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
-    public List<Contabilidade> filtrar(CampoFiltro campoFiltro) throws ServiceException {
-        LOG.info("[ filtrar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
-
-        try {
-            List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
-            return filtrar(campoFiltro, contabilidades);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
-    public List<Contabilidade> ordenar(CampoFiltro campoFiltro, List<Contabilidade> contabilidades, Order order) throws ServiceException {
-        LOG.info("[ ordenar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
-        LOG.debug("contabilidades: " + contabilidades);
-        LOG.debug("order: " + order);
-
-        try {
-            return campoFiltro.ordenar(contabilidades, order);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel ordenar os registros";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
-    public List<Contabilidade> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException {
-        LOG.info("[ ordenar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
-        LOG.debug("order: " + order);
-
-        try {
-            List<Contabilidade> contabilidades = contabilidadeRepository.buscarRegistros();
-            return ordenar(campoFiltro, contabilidades, order);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel ordenar os registros";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
+    public ContabilidadeServiceImpl(ContabilidadeRepository contabilidadeRepository) {
+        super(contabilidadeRepository);
     }
 }
