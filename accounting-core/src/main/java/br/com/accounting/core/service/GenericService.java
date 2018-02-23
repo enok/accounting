@@ -3,6 +3,7 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.CampoFiltro;
+import br.com.accounting.core.ordering.CampoOrdem;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface GenericService<T> {
 
     List<T> filtrar(CampoFiltro campoFiltro) throws ServiceException;
 
-    List<T> ordenar(CampoFiltro campoFiltro, List<T> entities, Order order) throws ServiceException;
+    List<T> ordenar(CampoOrdem campoOrdem, List<T> entities, Order order) throws ServiceException;
 
-    List<T> ordenar(CampoFiltro campoFiltro, Order order) throws ServiceException;
+    List<T> ordenar(CampoOrdem campoOrdem, Order order) throws ServiceException;
 }

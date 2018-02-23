@@ -5,6 +5,7 @@ import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.CampoFiltro;
+import br.com.accounting.core.ordering.CampoOrdem;
 import br.com.accounting.core.repository.GrupoRepository;
 import br.com.accounting.core.service.GrupoService;
 import org.slf4j.Logger;
@@ -54,14 +55,14 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
     }
 
     @Override
-    public List<SubGrupo> ordenarSubGrupos(CampoFiltro campoFiltro, List<Grupo> grupos, Order order) throws ServiceException {
+    public List<SubGrupo> ordenarSubGrupos(CampoOrdem campoOrdem, List<Grupo> grupos, Order order) throws ServiceException {
         LOG.info("[ ordenarSubGrupos ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("campoOrdem: " + campoOrdem);
         LOG.debug("grupos: " + grupos);
         LOG.debug("order: " + order);
 
         try {
-            return campoFiltro.ordenar(grupos, order);
+            return campoOrdem.ordenar(grupos, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
@@ -70,14 +71,14 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
     }
 
     @Override
-    public List<SubGrupo> ordenarSubGrupos(CampoFiltro campoFiltro, Order order) throws ServiceException {
+    public List<SubGrupo> ordenarSubGrupos(CampoOrdem campoOrdem, Order order) throws ServiceException {
         LOG.info("[ ordenar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("campoOrdem: " + campoOrdem);
         LOG.debug("order: " + order);
 
         try {
             List<Grupo> grupos = repository.buscarRegistros();
-            return ordenarSubGrupos(campoFiltro, grupos, order);
+            return ordenarSubGrupos(campoOrdem, grupos, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
