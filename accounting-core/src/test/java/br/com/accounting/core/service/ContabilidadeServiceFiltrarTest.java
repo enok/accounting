@@ -510,4 +510,77 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
         assertThat(registrosFiltradros.get(1).getGrupo().getDescricao(), equalTo("MORADIA"));
         assertThat(registrosFiltradros.get(1).getGrupo().getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
     }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao("spotify");
+
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.filtrar(campoFiltro, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorDescricaoSpotify() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao("spotify");
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("spotify"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("spotify"));
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorDescricaoPao() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao("pão");
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("pão"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao("spotify");
+
+        try {
+            contabilidadeService.filtrar(campoFiltro);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorDescricaoSpotify() throws ServiceException {
+        criarVariasContabilidades2();
+
+        CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao("spotify");
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrar(campoFiltro);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("spotify"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("spotify"));
+    }
 }
