@@ -68,4 +68,20 @@ public class ContabilidadeFactoryMock {
                 .withStatus("PAGO")
                 .build();
     }
+
+    public static Contabilidade createCartaoDebito744() {
+        return ContabilidadeFactory
+                .begin()
+                .withDataLancamento("01/01/2018")
+                .withVencimento("15/01/2018")
+                .withTipoPagamento("CARTAO_DEBITO")
+                .withSubTipoPagamento("1", "744")
+                .withTipo("VARIAVEL")
+                .withGrupoSubGrupo("MORADIA", "ALUGUEL")
+                .withDescricao("pão")
+                .withCategoria("SAIDA")
+                .withValor("18.0")
+                .withStatus("PAGO")
+                .build();
+    }
 }

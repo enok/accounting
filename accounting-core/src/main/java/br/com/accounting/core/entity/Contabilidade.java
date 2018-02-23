@@ -74,6 +74,10 @@ public class Contabilidade implements Entity {
         return grupo.getDescricao();
     }
 
+    public String getSubGrupoDescricao() {
+        return grupo.getSubGrupo().getDescricao();
+    }
+
     public String getDescricao() {
         return descricao;
     }

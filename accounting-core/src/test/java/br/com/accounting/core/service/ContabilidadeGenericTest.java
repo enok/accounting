@@ -43,6 +43,17 @@ public abstract class ContabilidadeGenericTest extends GenericTest {
         contabilidadeService.salvar(contabilidade);
     }
 
+    protected void criarVariasContabilidades3() throws ServiceException {
+        Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito7660();
+        contabilidadeService.salvar(contabilidade);
+
+        contabilidade = ContabilidadeFactoryMock.createCartaoDebito744();
+        contabilidadeService.salvar(contabilidade);
+    }
+
     protected void setContabilidadeService(ContabilidadeService contabilidadeService) {
         this.contabilidadeService = contabilidadeService;
     }

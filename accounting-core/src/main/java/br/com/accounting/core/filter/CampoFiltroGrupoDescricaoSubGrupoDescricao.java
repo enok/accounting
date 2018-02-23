@@ -9,21 +9,20 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class CampoFiltroGrupoDescricaoSubGrupoDescricao implements CampoFiltro<Grupo, Grupo> {
     private static final Logger LOG = LoggerFactory.getLogger(CampoFiltroGrupoDescricaoSubGrupoDescricao.class);
 
-    private String descricao;
-    private String subGrupo;
+    private String descricaoGrupo;
+    private String descricaoSubGrupo;
 
     public CampoFiltroGrupoDescricaoSubGrupoDescricao() {
     }
 
-    public CampoFiltroGrupoDescricaoSubGrupoDescricao(String descricao, String subGrupo) {
-        this.descricao = descricao;
-        this.subGrupo = subGrupo;
+    public CampoFiltroGrupoDescricaoSubGrupoDescricao(String descricaoGrupo, String descricaoSubGrupo) {
+        this.descricaoGrupo = descricaoGrupo;
+        this.descricaoSubGrupo = descricaoSubGrupo;
     }
 
     @Override
@@ -33,16 +32,15 @@ public class CampoFiltroGrupoDescricaoSubGrupoDescricao implements CampoFiltro<G
 
         Set<Grupo> subTipoPagamentos = entities
                 .stream()
-                .filter(getGrupoPredicate())
+                .filter(c -> descricaoEhIgual(c))
                 .collect(Collectors.toSet());
 
         return new ArrayList<>(subTipoPagamentos);
     }
 
-    private Predicate<Grupo> getGrupoPredicate() {
-        return c ->
-                (c.getDescricao().equals(descricao) &&
-                        c.getSubGrupo().getDescricao().equals(subGrupo));
+    private boolean descricaoEhIgual(Grupo c) {
+        return c.getDescricao().equals(descricaoGrupo) &&
+                c.getSubGrupo().getDescricao().equals(descricaoSubGrupo);
     }
 
     @Override
