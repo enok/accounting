@@ -83,31 +83,13 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
         subTipoPagamentoService.buscarRegistros();
     }
 
-    @Test(expected = ServiceException.class)
-    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao("744");
-
-        List<SubTipoPagamento> registros = getSubTipoPagamentos();
-
-        try {
-            subTipoPagamentoService.filtrar(campoFiltro, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
     @Test
     public void filtrarRegistrosBuscadosPorDescricao744() throws ServiceException {
         criarVariasSubTipoPagamentos();
 
         List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao("744");
-
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro, registros);
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrarPorDescricao("744", registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(1));
@@ -120,22 +102,20 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
         List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao("7660");
-
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro, registros);
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrarPorDescricao("7660", registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("7660"));
     }
 
     @Test(expected = ServiceException.class)
-    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
+    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao("744");
+        List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
         try {
-            subTipoPagamentoService.filtrar(campoFiltro);
+            subTipoPagamentoService.filtrarPorDescricao("744", registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -146,9 +126,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void filtrarRegistrosPorDescricao744() throws ServiceException {
         criarVariasSubTipoPagamentos();
 
-        CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao("744");
-
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrar(campoFiltro);
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.filtrarPorDescricao("744");
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(1));
@@ -156,13 +134,11 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
+    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-
         try {
-            subTipoPagamentoService.ordenar(campoOrdem, ASC);
+            subTipoPagamentoService.filtrarPorDescricao("744");
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -170,12 +146,12 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test
-    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
         criarVariasSubTipoPagamentos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
+        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
 
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoOrdem, ASC);
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenarPorDescricao(ASC, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
@@ -188,11 +164,10 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
         List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
         try {
-            subTipoPagamentoService.ordenar(campoOrdem, registros, ASC);
+            subTipoPagamentoService.ordenarPorDescricao(ASC, registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -200,42 +175,12 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
         criarVariasSubTipoPagamentos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
         List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
 
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoOrdem, registros, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("7660"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-
-        try {
-            subTipoPagamentoService.ordenar(campoOrdem, DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
-        criarVariasSubTipoPagamentos();
-
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoOrdem, DESC);
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenarPorDescricao(DESC, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
@@ -248,11 +193,10 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
         List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
         try {
-            subTipoPagamentoService.ordenar(campoOrdem, registros, DESC);
+            subTipoPagamentoService.ordenarPorDescricao(DESC, registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -260,18 +204,52 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
         criarVariasSubTipoPagamentos();
 
-        CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-        List<SubTipoPagamento> registros = subTipoPagamentoService.buscarRegistros();
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenarPorDescricao(ASC);
 
-        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenar(campoOrdem, registros, DESC);
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("7660"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            subTipoPagamentoService.ordenarPorDescricao(ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
+        criarVariasSubTipoPagamentos();
+
+        List<SubTipoPagamento> registrosFiltradros = subTipoPagamentoService.ordenarPorDescricao(DESC);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("7660"));
         assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("744"));
         assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("744"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            subTipoPagamentoService.ordenarPorDescricao(DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
     }
 }

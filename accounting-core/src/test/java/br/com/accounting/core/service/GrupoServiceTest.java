@@ -4,14 +4,6 @@ import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.GrupoFactoryMock;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricao;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupo;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupoDescricao;
-import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricao;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricaoSubGrupo;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricaoSubGrupoDescricao;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -90,34 +82,31 @@ public class GrupoServiceTest extends GrupoGenericTest {
         grupoService.buscarRegistros();
     }
 
-    @Test(expected = ServiceException.class)
-    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
-        List<Grupo> registros = getGrupos();
-
-        try {
-            grupoService.filtrar(campoFiltro, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
     @Test
     public void filtrarRegistrosBuscadosPorDescricaoMercado() throws ServiceException {
         criarVariosGrupos();
 
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MERCADO");
-
-        List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
+        List<Grupo> registrosFiltradros = grupoService.filtrarPorDescricao("MERCADO", registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
         assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorDescricaoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.filtrarPorDescricao("MERCADO", registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
     }
 
     @Test
@@ -126,9 +115,23 @@ public class GrupoServiceTest extends GrupoGenericTest {
 
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
+        List<Grupo> registrosFiltradros = grupoService.filtrarPorDescricao("MORADIA", registros);
 
-        List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+    }
+
+    @Test
+    public void filtrarRegistrosPorDescricaoMoradia() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registrosFiltradros = grupoService.filtrarPorDescricao("MORADIA");
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
@@ -141,14 +144,11 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void filtrarRegistrosBuscadosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
+    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
-        List<Grupo> registros = getGrupos();
-
         try {
-            grupoService.filtrar(campoFiltro, registros);
+            grupoService.filtrarPorDescricao("MORADIA");
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -159,10 +159,9 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosBuscadosPorDescricaoMoradiaSubGrupoAssinatura() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro, registros);
+        List<Grupo> registrosFiltradros = grupoService.filtrarPorDescricaoESubGrupo("MORADIA", "ASSINATURA", registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(1));
@@ -172,76 +171,13 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void filtrarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoException() throws IOException, ServiceException {
+    public void filtrarRegistrosBuscadosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
         List<Grupo> registros = getGrupos();
 
         try {
-            grupoService.filtrarSubGrupos(campoFiltro, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void filtrarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupo() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGrupos(campoFiltro, registros);
-
-        assertThat(subGruposFiltrados, notNullValue());
-        assertThat(subGruposFiltrados.size(), equalTo(2));
-
-        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ALUGUEL"));
-        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ASSINATURA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
-
-        try {
-            grupoService.filtrar(campoFiltro);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void filtrarRegistrosPorDescricaoMoradia() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao("MORADIA");
-
-        List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(2));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void filtrarRegistrosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
-
-        try {
-            grupoService.filtrar(campoFiltro);
+            grupoService.filtrarPorDescricaoESubGrupo("MORADIA", "ASSINATURA", registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -252,9 +188,7 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void filtrarRegistrosPorDescricaoMoradiaSubGrupoAssinatura() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao("MORADIA", "ASSINATURA");
-
-        List<Grupo> registrosFiltradros = grupoService.filtrar(campoFiltro);
+        List<Grupo> registrosFiltradros = grupoService.filtrarPorDescricaoESubGrupo("MORADIA", "ASSINATURA");
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(1));
@@ -264,13 +198,11 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void filtrarRegistrosPorDescricaoMoradiaGrupoSubGrupoAssinaturaException() throws IOException, ServiceException {
+    public void filtrarRegistrosPorDescricaoMoradiaSubGrupoAssinaturaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
-
         try {
-            grupoService.filtrarSubGrupos(campoFiltro);
+            grupoService.filtrarPorDescricaoESubGrupo("MORADIA", "ASSINATURA");
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -278,12 +210,12 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorDescricaoMoradiaGrupoSubGrupoAssinatura() throws ServiceException {
+    public void filtrarSubGruposBuscadosPorGrupoDescricaoMoradia() throws ServiceException {
         criarVariosGrupos();
 
-        CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo("MORADIA");
+        List<Grupo> registros = grupoService.buscarRegistros();
 
-        List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGrupos(campoFiltro);
+        List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGruposPorGrupoDescricao("MORADIA", registros);
 
         assertThat(subGruposFiltrados, notNullValue());
         assertThat(subGruposFiltrados.size(), equalTo(2));
@@ -293,113 +225,38 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
+    public void filtrarSubGruposBuscadosPorGrupoDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-
-        try {
-            grupoService.ordenar(campoOrdem, ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosSubGrupoAscendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-
-        try {
-            grupoService.ordenar(campoOrdem, ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosSubGrupoAscendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoAscendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-
-        try {
-            grupoService.ordenarSubGrupos(campoOrdem, ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoAscendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-
-        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoOrdem, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ALUGUEL"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosPorDescricaoAscendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
         List<Grupo> registros = getGrupos();
 
         try {
-            grupoService.ordenar(campoOrdem, registros, ASC);
+            grupoService.filtrarSubGruposPorGrupoDescricao("MORADIA", registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarSubGruposPorGrupoDescricaoMoradia() throws ServiceException {
+        criarVariosGrupos();
+
+        List<SubGrupo> subGruposFiltrados = grupoService.filtrarSubGruposPorGrupoDescricao("MORADIA");
+
+        assertThat(subGruposFiltrados, notNullValue());
+        assertThat(subGruposFiltrados.size(), equalTo(2));
+
+        assertThat(subGruposFiltrados.get(0).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(subGruposFiltrados.get(1).getDescricao(), equalTo("ASSINATURA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarSubGruposPorGrupoDescricaoMoradiaException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.filtrarSubGruposPorGrupoDescricao("MORADIA");
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -410,10 +267,9 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, registros, ASC);
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricao(ASC, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
@@ -429,183 +285,13 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosSubGrupoAscendenteException() throws IOException, ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        try {
-            grupoService.ordenar(campoOrdem, registros, ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosBuscadosSubGrupoAscendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, registros, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoAscendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
         List<Grupo> registros = getGrupos();
 
         try {
-            grupoService.ordenarSubGrupos(campoOrdem, registros, ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoAscendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoOrdem, registros, ASC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ALUGUEL"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-
-        try {
-            grupoService.ordenar(campoOrdem, DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, DESC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosSubGrupoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-
-        try {
-            grupoService.ordenar(campoOrdem, DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosSubGrupoDescendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, DESC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-        List<Grupo> registros = getGrupos();
-
-        try {
-            grupoService.ordenarSubGrupos(campoOrdem, registros, DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosPorDescricaoMoradiaGrupoSubGrupoDescendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoOrdem, registros, DESC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("PADARIA"));
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ALUGUEL"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosPorDescricaoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-        List<Grupo> registros = getGrupos();
-
-        try {
-            grupoService.ordenar(campoOrdem, registros, DESC);
+            grupoService.ordenarPorDescricao(ASC, registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -616,10 +302,9 @@ public class GrupoServiceTest extends GrupoGenericTest {
     public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, registros, DESC);
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricao(DESC, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
@@ -635,51 +320,13 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosSubGrupoDescendenteException() throws IOException, ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        try {
-            grupoService.ordenar(campoOrdem, registros, DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
-    }
-
-    @Test
-    public void ordenarRegistrosBuscadosSubGrupoDescendente() throws ServiceException {
-        criarVariosGrupos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-        List<Grupo> registros = grupoService.buscarRegistros();
-
-        List<Grupo> registrosFiltradros = grupoService.ordenar(campoOrdem, registros, DESC);
-
-        assertThat(registrosFiltradros, notNullValue());
-        assertThat(registrosFiltradros.size(), equalTo(3));
-
-        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
-
-        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
-        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
-
-        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
-        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoDescendenteException() throws IOException, ServiceException {
-        deletarDiretorioEArquivos();
-
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
         List<Grupo> registros = getGrupos();
 
         try {
-            grupoService.ordenarSubGrupos(campoOrdem, registros, DESC);
+            grupoService.ordenarPorDescricao(DESC, registros);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;
@@ -687,18 +334,308 @@ public class GrupoServiceTest extends GrupoGenericTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorDescricaoMoradiaGrupoSubGrupoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
         criarVariosGrupos();
 
-        CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricao(ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.ordenarPorDescricao(ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricao(DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.ordenarPorDescricao(DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorDescricaoESubGrupoAscendente() throws ServiceException {
+        criarVariosGrupos();
+
         List<Grupo> registros = grupoService.buscarRegistros();
 
-        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGrupos(campoOrdem, registros, DESC);
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricaoESubGrupo(ASC, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorDescricaoESubGrupoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.ordenarPorDescricaoESubGrupo(ASC, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosBuscadosPorDescricaoESubGrupoDescendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registros = grupoService.buscarRegistros();
+
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricaoESubGrupo(DESC, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosBuscadosPorDescricaoESubGrupoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.ordenarPorDescricaoESubGrupo(DESC, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoESubGrupoAscendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricaoESubGrupo(ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoESubGrupoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.ordenarPorDescricaoESubGrupo(ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarRegistrosPorDescricaoESubGrupoDescendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registrosFiltradros = grupoService.ordenarPorDescricaoESubGrupo(DESC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(0).getSubGrupo().getDescricao(), equalTo("ASSINATURA"));
+
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("MORADIA"));
+        assertThat(registrosFiltradros.get(1).getSubGrupo().getDescricao(), equalTo("ALUGUEL"));
+
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("MERCADO"));
+        assertThat(registrosFiltradros.get(2).getSubGrupo().getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarRegistrosPorDescricaoESubGrupoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.ordenarPorDescricaoESubGrupo(DESC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarSubGruposBuscadosPorGrupoDescricaoAscendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registros = grupoService.buscarRegistros();
+
+        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGruposPorGrupoDescricao(ASC, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarSubGruposBuscadosPorGrupoDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.ordenarSubGruposPorGrupoDescricao(ASC, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarSubGruposBuscadosPorGrupoDescricaoDescendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registros = grupoService.buscarRegistros();
+
+        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGruposPorGrupoDescricao(DESC, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(3));
         assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("PADARIA"));
         assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
         assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ALUGUEL"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarSubGruposBuscadosPorGrupoDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.ordenarSubGruposPorGrupoDescricao(DESC, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarSubGruposPorGrupoDescricaoAscendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGruposPorGrupoDescricao(ASC);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("ALUGUEL"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("PADARIA"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarSubGruposPorGrupoDescricaoAscendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            grupoService.ordenarSubGruposPorGrupoDescricao(ASC);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void ordenarSubGruposPorGrupoDescricaoDescendente() throws ServiceException {
+        criarVariosGrupos();
+
+        List<Grupo> registros = grupoService.buscarRegistros();
+
+        List<SubGrupo> registrosFiltradros = grupoService.ordenarSubGruposPorGrupoDescricao(DESC, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(3));
+        assertThat(registrosFiltradros.get(0).getDescricao(), equalTo("PADARIA"));
+        assertThat(registrosFiltradros.get(1).getDescricao(), equalTo("ASSINATURA"));
+        assertThat(registrosFiltradros.get(2).getDescricao(), equalTo("ALUGUEL"));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void ordenarSubGruposPorGrupoDescricaoDescendenteException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Grupo> registros = getGrupos();
+
+        try {
+            grupoService.ordenarSubGruposPorGrupoDescricao(DESC, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
     }
 }

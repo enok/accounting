@@ -72,7 +72,7 @@ public abstract class GenericService<T> {
         }
     }
 
-    public List<T> ordenar(CampoOrdem campoOrdem, List<T> entitys, Order order) throws ServiceException {
+    public List<T> ordenar(CampoOrdem campoOrdem, Order order, List<T> entitys) throws ServiceException {
         LOG.info("[ ordenar ]");
         LOG.debug("campoFiltro: " + campoOrdem);
         LOG.debug("entitys: " + entitys);
@@ -94,7 +94,7 @@ public abstract class GenericService<T> {
 
         try {
             List<T> entitys = repository.buscarRegistros();
-            return ordenar(campoOrdem, entitys, order);
+            return ordenar(campoOrdem, order, entitys);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
