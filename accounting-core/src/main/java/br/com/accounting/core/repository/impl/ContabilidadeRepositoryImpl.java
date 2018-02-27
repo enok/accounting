@@ -43,9 +43,11 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
         Parcelamento parcelamento = contabilidade.getParcelamento();
         Integer parcela = null;
         Integer parcelas = null;
+        Long codigoParcelamentoPai = null;
         if (parcelamento != null) {
             parcela = parcelamento.getParcela();
             parcelas = parcelamento.getParcelas();
+            codigoParcelamentoPai = parcelamento.getCodigoPai();
         }
 
         SubTipoPagamento subTipoPagamento = contabilidade.getSubTipoPagamento();
@@ -66,6 +68,7 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
                 .append(contabilidade.getDescricao()).append(SEPARADOR)
                 .append(parcela).append(SEPARADOR)
                 .append(parcelas).append(SEPARADOR)
+                .append(codigoParcelamentoPai).append(SEPARADOR)
                 .append(contabilidade.getCategoria()).append(SEPARADOR)
                 .append(contabilidade.getValor()).append(SEPARADOR)
                 .append(contabilidade.getStatus()).append("\n");
@@ -108,10 +111,10 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
                 .withTipo(registro.get(5))
                 .withGrupoSubGrupo(registro.get(6), registro.get(7))
                 .withDescricao(registro.get(8))
-                .withParcelamento(registro.get(9), registro.get(10))
-                .withCategoria(registro.get(11))
-                .withValor(registro.get(12))
-                .withStatus(registro.get(13))
+                .withParcelamento(registro.get(9), registro.get(10), registro.get(11))
+                .withCategoria(registro.get(12))
+                .withValor(registro.get(13))
+                .withStatus(registro.get(14))
                 .build();
     }
 }

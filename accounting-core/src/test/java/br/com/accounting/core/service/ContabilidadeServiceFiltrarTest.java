@@ -11,6 +11,8 @@ import java.util.List;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
 import static br.com.accounting.core.entity.Categoria.SAIDA;
+import static br.com.accounting.core.entity.Status.NAO_PAGO;
+import static br.com.accounting.core.entity.Status.PAGO;
 import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
@@ -522,6 +524,58 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
+    public void filtrarRegistrosBuscadosPorParcelamentoPai() throws ServiceException {
+        criarVariasContabilidades2();
+
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(-1L, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorParcelamentoPaiException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.filtrarPorParcelamentoPai(-1L, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorParcelamentoPai() throws ServiceException {
+        criarVariasContabilidades2();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(-1L);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorParcelamentoPaiException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            contabilidadeService.filtrarPorParcelamentoPai(-1L);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
     public void filtrarRegistrosBuscadosPorCategoriaEntrada() throws ServiceException {
         criarVariasContabilidades();
 
@@ -579,6 +633,82 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.filtrarPorCategoria(ENTRADA);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorStatusPago() throws ServiceException {
+        criarVariasContabilidades();
+
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(PAGO, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getStatus(), equalTo(PAGO));
+        assertThat(registrosFiltradros.get(1).getStatus(), equalTo(PAGO));
+    }
+
+    @Test
+    public void filtrarRegistrosBuscadosPorStatusNaoPago() throws ServiceException {
+        criarVariasContabilidades();
+
+        List<Contabilidade> registros = contabilidadeService.buscarRegistros();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(NAO_PAGO, registros);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getStatus(), equalTo(NAO_PAGO));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorStatusException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = getContabilidades();
+
+        try {
+            contabilidadeService.filtrarPorStatus(PAGO, registros);
+        } catch (ServiceException e) {
+            criarDiretorio();
+            throw e;
+        }
+    }
+
+    @Test
+    public void filtrarRegistrosPorStatusPago() throws ServiceException {
+        criarVariasContabilidades();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(PAGO);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(2));
+        assertThat(registrosFiltradros.get(0).getStatus(), equalTo(PAGO));
+        assertThat(registrosFiltradros.get(1).getStatus(), equalTo(PAGO));
+    }
+
+    @Test
+    public void filtrarRegistrosPorStatusNaoPago() throws ServiceException {
+        criarVariasContabilidades();
+
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(NAO_PAGO);
+
+        assertThat(registrosFiltradros, notNullValue());
+        assertThat(registrosFiltradros.size(), equalTo(1));
+        assertThat(registrosFiltradros.get(0).getStatus(), equalTo(NAO_PAGO));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosPorStatusException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        try {
+            contabilidadeService.filtrarPorStatus(PAGO);
         } catch (ServiceException e) {
             criarDiretorio();
             throw e;

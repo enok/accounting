@@ -43,6 +43,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
         assertThat(contabilidade.getDescricao(), equalTo("spotify"));
         assertThat(contabilidade.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidade.getParcelamento().getParcelas(), equalTo(12));
+        assertThat(contabilidade.getParcelamento().getCodigoPai(), equalTo(-1L));
         assertThat(contabilidade.getCategoria(), equalTo(SAIDA));
         assertThat(contabilidade.getValor(), equalTo(26.90));
         assertThat(contabilidade.getStatus(), equalTo(PAGO));

@@ -86,6 +86,10 @@ public class Contabilidade implements Entity {
         return parcelamento;
     }
 
+    public Long getParcelamentoCodigoPai() {
+        return parcelamento.getCodigoPai();
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -100,6 +104,10 @@ public class Contabilidade implements Entity {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String getStatusValue() {
+        return status.toString();
     }
 
     public Contabilidade withCodigo(Long codigo) {

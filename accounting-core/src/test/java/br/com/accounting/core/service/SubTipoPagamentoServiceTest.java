@@ -3,10 +3,6 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.SubTipoPagamentoFactoryMock;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroSubTipoPagamentoDescricao;
-import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemSubTipoPagamentoDescricao;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

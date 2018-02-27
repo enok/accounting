@@ -3,8 +3,6 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactoryMock;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,6 +52,7 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("spotify"));
         assertThat(contabilidadeBuscada.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidadeBuscada.getParcelamento().getParcelas(), equalTo(12));
+        assertThat(contabilidadeBuscada.getParcelamento().getCodigoPai(), equalTo(-1L));
         assertThat(contabilidadeBuscada.getCategoria(), equalTo(SAIDA));
         assertThat(contabilidadeBuscada.getValor(), equalTo(26.90));
         assertThat(contabilidadeBuscada.getStatus(), equalTo(PAGO));

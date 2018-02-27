@@ -98,9 +98,9 @@ public final class ContabilidadeFactory {
         return this;
     }
 
-    public ContabilidadeFactory withParcelamento(String parcela, String parcelas) {
+    public ContabilidadeFactory withParcelamento(String parcela, String parcelas, String codigoParcelamentoPai) {
         if (!isEmpty(parcela) && !isEmpty(parcelas)) {
-            Parcelamento parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas));
+            Parcelamento parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas), Long.parseLong(codigoParcelamentoPai));
             contabilidade.withParcelamento(parcelamento);
         }
         return this;

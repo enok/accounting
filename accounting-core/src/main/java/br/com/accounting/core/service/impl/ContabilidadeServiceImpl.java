@@ -244,6 +244,37 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
     }
 
     @Override
+    public List<Contabilidade> filtrarPorParcelamentoPai(Long codigoPai, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ filtrarPorParcelamentoPai ]");
+        LOG.debug("codigoPai: " + codigoPai);
+        LOG.debug("contabilidades: " + contabilidades);
+
+        try {
+            CampoFiltro campoFiltro = new CampoFiltroContabilidadeParcelamentoPai(codigoPai);
+            return filtrar(campoFiltro, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrarPorParcelamentoPai(Long codigoPai) throws ServiceException {
+        LOG.info("[ filtrarPorParcelamentoPai ]");
+        LOG.debug("codigoPai: " + codigoPai);
+
+        try {
+            CampoFiltro campoFiltro = new CampoFiltroContabilidadeParcelamentoPai(codigoPai);
+            return filtrar(campoFiltro);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
     public List<Contabilidade> filtrarPorCategoria(Categoria categoria, List<Contabilidade> contabilidades) throws ServiceException {
         LOG.info("[ filtrarPorCategoria ]");
         LOG.debug("categoria: " + categoria);
@@ -269,6 +300,37 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
             return filtrar(campoFiltro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por categoria";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrarPorStatus(Status status, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ filtrarPorStatus ]");
+        LOG.debug("status: " + status);
+        LOG.debug("contabilidades: " + contabilidades);
+
+        try {
+            CampoFiltro campoFiltro = new CampoFiltroContabilidadeStatus(status);
+            return filtrar(campoFiltro, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros por status";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrarPorStatus(Status status) throws ServiceException {
+        LOG.info("[ filtrarPorStatus ]");
+        LOG.debug("status: " + status);
+
+        try {
+            CampoFiltro campoFiltro = new CampoFiltroContabilidadeStatus(status);
+            return filtrar(campoFiltro);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -491,6 +553,37 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
     }
 
     @Override
+    public List<Contabilidade> ordenarPorParcelamentoPai(Order order, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ ordenarPorParcelamentoPai ]");
+        LOG.debug("order: " + order);
+        LOG.debug("contabilidades: " + contabilidades);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeParcelamentoPai();
+            return ordenar(campoOrdem, order, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> ordenarPorParcelamentoPai(Order order) throws ServiceException {
+        LOG.info("[ ordenarPorParcelamentoPai ]");
+        LOG.debug("order: " + order);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeParcelamentoPai();
+            return ordenar(campoOrdem, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
     public List<Contabilidade> ordenarPorCategoria(Order order, List<Contabilidade> contabilidades) throws ServiceException {
         LOG.info("[ ordenarPorCategoria ]");
         LOG.debug("order: " + order);
@@ -516,6 +609,68 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
             return ordenar(campoOrdem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por categoria";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> ordenarPorValor(Order order, List<Contabilidade> registros) throws ServiceException {
+        LOG.info("[ ordenarPorValor ]");
+        LOG.debug("order: " + order);
+        LOG.debug("registros: " + registros);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeValor();
+            return ordenar(campoOrdem, order, registros);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por valor";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> ordenarPorValor(Order order) throws ServiceException {
+        LOG.info("[ ordenarPorValor ]");
+        LOG.debug("order: " + order);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeValor();
+            return ordenar(campoOrdem, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por valor";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> ordenarPorStatus(Order order, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ ordenarPorStatus ]");
+        LOG.debug("order: " + order);
+        LOG.debug("contabilidades: " + contabilidades);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeStatus();
+            return ordenar(campoOrdem, order, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por status";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> ordenarPorStatus(Order order) throws ServiceException {
+        LOG.info("[ ordenarPorStatus ]");
+        LOG.debug("order: " + order);
+
+        try {
+            CampoOrdem campoOrdem = new CampoOrdemContabilidadeStatus();
+            return ordenar(campoOrdem, order);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel ordenar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }

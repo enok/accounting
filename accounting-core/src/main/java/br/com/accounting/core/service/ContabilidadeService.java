@@ -34,9 +34,17 @@ public interface ContabilidadeService extends GenericService<Contabilidade> {
 
     List<Contabilidade> filtrarPorDescricao(String descricao) throws ServiceException;
 
+    List<Contabilidade> filtrarPorParcelamentoPai(Long codigoPai, List<Contabilidade> contabilidades) throws ServiceException;
+
+    List<Contabilidade> filtrarPorParcelamentoPai(Long codigoPai) throws ServiceException;
+
     List<Contabilidade> filtrarPorCategoria(Categoria categoria, List<Contabilidade> contabilidades) throws ServiceException;
 
     List<Contabilidade> filtrarPorCategoria(Categoria categoria) throws ServiceException;
+
+    List<Contabilidade> filtrarPorStatus(Status status, List<Contabilidade> contabilidades) throws ServiceException;
+
+    List<Contabilidade> filtrarPorStatus(Status status) throws ServiceException;
 
     List<Contabilidade> ordenarPorVencimento(Order order, List<Contabilidade> contabilidades) throws ServiceException;
 
@@ -66,7 +74,19 @@ public interface ContabilidadeService extends GenericService<Contabilidade> {
 
     List<Contabilidade> ordenarPorDescricao(Order order) throws ServiceException;
 
+    List<Contabilidade> ordenarPorParcelamentoPai(Order order, List<Contabilidade> contabilidades) throws ServiceException;
+
+    List<Contabilidade> ordenarPorParcelamentoPai(Order order) throws ServiceException;
+
     List<Contabilidade> ordenarPorCategoria(Order order, List<Contabilidade> contabilidades) throws ServiceException;
 
     List<Contabilidade> ordenarPorCategoria(Order order) throws ServiceException;
+
+    List<Contabilidade> ordenarPorValor(Order order, List<Contabilidade> registros) throws ServiceException;
+
+    List<Contabilidade> ordenarPorValor(Order order) throws ServiceException;
+
+    List<Contabilidade> ordenarPorStatus(Order order, List<Contabilidade> contabilidades) throws ServiceException;
+
+    List<Contabilidade> ordenarPorStatus(Order order) throws ServiceException;
 }
