@@ -14,7 +14,7 @@ public class FiltroGrupoDescricaoSubGrupoDescricao extends FiltroGenerico<Grupo>
     }
 
     @Override
-    public Predicate<Grupo> getFiltroPredicado() {
+    public Predicate<Grupo> getPredicate() {
         return c -> descricaoEhIgual(c);
     }
 

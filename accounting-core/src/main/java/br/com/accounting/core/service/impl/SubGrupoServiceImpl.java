@@ -5,8 +5,8 @@ import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.Filtro;
 import br.com.accounting.core.filter.FiltroSubGrupoDescricao;
-import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemSubGrupoDescricao;
+import br.com.accounting.core.ordering.Ordem;
+import br.com.accounting.core.ordering.OrdemSubGrupoDescricao;
 import br.com.accounting.core.repository.SubGrupoRepository;
 import br.com.accounting.core.service.SubGrupoService;
 import org.slf4j.Logger;
@@ -65,8 +65,8 @@ public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements Sub
         LOG.debug("subGrupos: " + subGrupos);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemSubGrupoDescricao();
-            return ordenar(campoOrdem, order, subGrupos);
+            Ordem ordem = new OrdemSubGrupoDescricao();
+            return ordenar(ordem, order, subGrupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -80,8 +80,8 @@ public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements Sub
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemSubGrupoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemSubGrupoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);

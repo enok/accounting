@@ -4,7 +4,7 @@ import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.Duplicates;
 import br.com.accounting.core.filter.Filtro;
-import br.com.accounting.core.ordering.CampoOrdem;
+import br.com.accounting.core.ordering.Ordem;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface GenericService<T> {
 
     List<T> filtrar(Filtro filtro, Duplicates duplicates) throws ServiceException;
 
-    List<T> ordenar(CampoOrdem campoOrdem, Order order, List<T> entities) throws ServiceException;
+    List<T> ordenar(Ordem ordem, Order order, List<T> entities) throws ServiceException;
 
-    List<T> ordenar(CampoOrdem campoOrdem, Order order) throws ServiceException;
+    List<T> ordenar(Ordem ordem, Order order) throws ServiceException;
 }

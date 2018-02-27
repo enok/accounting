@@ -1,6 +1,5 @@
 package br.com.accounting.core.ordering;
 
-import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +8,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CampoOrdemContabilidadeDescricao implements CampoOrdem<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoOrdemContabilidadeDescricao.class);
+public abstract class OrdemGenerica<T> {
+    private static final Logger LOG = LoggerFactory.getLogger(OrdemContabilidadeCategoria.class);
 
-    @Override
-    public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
+    public List<T> ordenar(List<T> entities, Order order) {
         LOG.info("[ ordenar ]");
         LOG.debug("entities: " + entities);
         LOG.debug("order: " + order);
@@ -22,14 +20,16 @@ public class CampoOrdemContabilidadeDescricao implements CampoOrdem<Contabilidad
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getDescricao).reversed())
+                        .sorted(getComparator().reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getDescricao))
+                        .sorted(getComparator())
                         .collect(Collectors.toList());
         }
     }
+
+    public abstract Comparator<T> getComparator();
 }

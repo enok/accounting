@@ -13,7 +13,7 @@ public class FiltroContabilidadeStatus extends FiltroGenerico<Contabilidade> imp
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> c.getStatus().equals(status);
     }
 }

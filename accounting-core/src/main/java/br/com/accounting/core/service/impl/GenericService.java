@@ -4,7 +4,7 @@ import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.Duplicates;
 import br.com.accounting.core.filter.Filtro;
-import br.com.accounting.core.ordering.CampoOrdem;
+import br.com.accounting.core.ordering.Ordem;
 import br.com.accounting.core.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,14 +85,14 @@ public abstract class GenericService<T> {
         return filtrar(filtro, KEEP);
     }
 
-    public List<T> ordenar(CampoOrdem campoOrdem, Order order, List<T> entitys) throws ServiceException {
+    public List<T> ordenar(Ordem ordem, Order order, List<T> entitys) throws ServiceException {
         LOG.info("[ ordenar ]");
-        LOG.debug("campoOrdem: " + campoOrdem);
+        LOG.debug("ordem: " + ordem);
         LOG.debug("order: " + order);
         LOG.debug("entitys: " + entitys);
 
         try {
-            return campoOrdem.ordenar(entitys, order);
+            return ordem.ordenar(entitys, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);
@@ -100,14 +100,14 @@ public abstract class GenericService<T> {
         }
     }
 
-    public List<T> ordenar(CampoOrdem campoOrdem, Order order) throws ServiceException {
+    public List<T> ordenar(Ordem ordem, Order order) throws ServiceException {
         LOG.info("[ ordenar ]");
-        LOG.debug("campoOrdem: " + campoOrdem);
+        LOG.debug("ordem: " + ordem);
         LOG.debug("order: " + order);
 
         try {
             List<T> entitys = repository.buscarRegistros();
-            return ordenar(campoOrdem, order, entitys);
+            return ordenar(ordem, order, entitys);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros";
             LOG.error(mensagem, e);

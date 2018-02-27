@@ -13,7 +13,7 @@ public class FiltroContabilidadeSubTipoPagamentoDescricao extends FiltroGenerico
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> descricaoEhIgual(c);
     }
 

@@ -13,7 +13,7 @@ public class FiltroContabilidadeTipoPagamento extends FiltroGenerico<Contabilida
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> c.getTipoPagamento().equals(tipoPagamento);
     }
 }

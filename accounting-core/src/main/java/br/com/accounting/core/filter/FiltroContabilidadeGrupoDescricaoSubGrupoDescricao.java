@@ -14,7 +14,7 @@ public class FiltroContabilidadeGrupoDescricaoSubGrupoDescricao extends FiltroGe
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> descricaoEhIgual(c);
     }
 

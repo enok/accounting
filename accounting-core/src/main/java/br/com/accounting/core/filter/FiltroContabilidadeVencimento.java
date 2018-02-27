@@ -20,7 +20,7 @@ public class FiltroContabilidadeVencimento extends FiltroGenerico<Contabilidade>
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> entreDatas(c.getVencimento(), vencimentoInicial, vencimentoFinal);
     }
 

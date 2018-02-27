@@ -12,7 +12,7 @@ public class FiltroSubTipoPagamentoDescricao extends FiltroGenerico<SubTipoPagam
     }
 
     @Override
-    public Predicate<SubTipoPagamento> getFiltroPredicado() {
+    public Predicate<SubTipoPagamento> getPredicate() {
         return c -> c.getDescricao().equals(descricao);
     }
 }

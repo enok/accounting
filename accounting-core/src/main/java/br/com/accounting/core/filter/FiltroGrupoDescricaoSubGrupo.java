@@ -6,7 +6,7 @@ import br.com.accounting.core.entity.SubGrupo;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class FiltroGrupoDescricaoSubGrupo extends FiltroMapGenerico<SubGrupo, Grupo> implements Filtro<SubGrupo, Grupo> {
+public class FiltroGrupoDescricaoSubGrupo extends FiltroMapaGenerico<SubGrupo, Grupo> implements Filtro<SubGrupo, Grupo> {
     private String descricao;
 
     public FiltroGrupoDescricaoSubGrupo(String descricao) {

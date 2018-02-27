@@ -1,19 +1,18 @@
 package br.com.accounting.core.ordering;
 
-import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CampoOrdemContabilidadeTipo implements CampoOrdem<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoOrdemContabilidadeTipo.class);
+public abstract class OrdemFiltroGenerica<T> {
+    private static final Logger LOG = LoggerFactory.getLogger(OrdemContabilidadeCategoria.class);
 
-    @Override
-    public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
+    public List<T> ordenar(List<T> entities, Order order) {
         LOG.info("[ ordenar ]");
         LOG.debug("entities: " + entities);
         LOG.debug("order: " + order);
@@ -22,14 +21,20 @@ public class CampoOrdemContabilidadeTipo implements CampoOrdem<Contabilidade, Co
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoValue).reversed())
+                        .filter(getPredicate())
+                        .sorted(getComparator().reversed())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getTipoValue))
+                        .filter(getPredicate())
+                        .sorted(getComparator())
                         .collect(Collectors.toList());
         }
     }
+
+    public abstract Predicate<T> getPredicate();
+
+    public abstract Comparator<T> getComparator();
 }

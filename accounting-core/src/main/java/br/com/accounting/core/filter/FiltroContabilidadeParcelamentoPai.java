@@ -12,7 +12,7 @@ public class FiltroContabilidadeParcelamentoPai extends FiltroGenerico<Contabili
     }
 
     @Override
-    public Predicate<Contabilidade> getFiltroPredicado() {
+    public Predicate<Contabilidade> getPredicate() {
         return c -> comparacaoCodigoPai(c);
     }
 

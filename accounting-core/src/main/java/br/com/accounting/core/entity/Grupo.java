@@ -43,20 +43,6 @@ public class Grupo implements Entity {
         return this;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        Grupo grupo = (Grupo) o;
-//
-//        return new EqualsBuilder()
-//                .append(descricao, grupo.descricao)
-//                .append(subGrupo, grupo.subGrupo)
-//                .isEquals();
-//    }
-
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)

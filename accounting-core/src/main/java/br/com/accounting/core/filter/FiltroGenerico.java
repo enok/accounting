@@ -16,6 +16,7 @@ public abstract class FiltroGenerico<T> {
     public List<T> filtrar(List<T> entities, Duplicates duplicates) {
         LOG.info("[ filtrar ]");
         LOG.debug("entities: " + entities);
+        LOG.debug("duplicates: " + duplicates);
 
         switch (duplicates) {
             case REMOVE:
@@ -26,7 +27,7 @@ public abstract class FiltroGenerico<T> {
         }
     }
 
-    public abstract Predicate<T> getFiltroPredicado();
+    public abstract Predicate<T> getPredicate();
 
     private List<T> removeDuplicates(List<T> list) {
         Set<T> set = new HashSet<>(list);
@@ -36,7 +37,7 @@ public abstract class FiltroGenerico<T> {
     private List<T> getCollect(List<T> entities) {
         return entities
                 .stream()
-                .filter(getFiltroPredicado())
+                .filter(getPredicate())
                 .collect(Collectors.toList());
     }
 }

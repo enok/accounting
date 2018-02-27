@@ -1,19 +1,18 @@
 package br.com.accounting.core.ordering;
 
-import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.entity.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CampoOrdemContabilidadeValor implements CampoOrdem<Contabilidade, Contabilidade> {
-    private static final Logger LOG = LoggerFactory.getLogger(CampoOrdemContabilidadeValor.class);
+public abstract class OrdemMapaGenerica<E, T> {
+    private static final Logger LOG = LoggerFactory.getLogger(OrdemContabilidadeCategoria.class);
 
-    @Override
-    public List<Contabilidade> ordenar(List<Contabilidade> entities, Order order) {
+    public List<E> ordenar(List<T> entities, Order order) {
         LOG.info("[ ordenar ]");
         LOG.debug("entities: " + entities);
         LOG.debug("order: " + order);
@@ -22,14 +21,20 @@ public class CampoOrdemContabilidadeValor implements CampoOrdem<Contabilidade, C
             case DESC:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getValor).reversed())
+                        .sorted(getPredicate().reversed())
+                        .map(getMap())
                         .collect(Collectors.toList());
             case ASC:
             default:
                 return entities
                         .stream()
-                        .sorted(Comparator.comparing(Contabilidade::getValor))
+                        .sorted(getPredicate())
+                        .map(getMap())
                         .collect(Collectors.toList());
         }
     }
+
+    public abstract Comparator<T> getPredicate();
+
+    public abstract Function<T, E> getMap();
 }

@@ -5,8 +5,8 @@ import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.filter.Filtro;
 import br.com.accounting.core.filter.FiltroSubTipoPagamentoDescricao;
-import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemSubTipoPagamentoDescricao;
+import br.com.accounting.core.ordering.Ordem;
+import br.com.accounting.core.ordering.OrdemSubTipoPagamentoDescricao;
 import br.com.accounting.core.repository.SubTipoPagamentoRepository;
 import br.com.accounting.core.service.SubTipoPagamentoService;
 import org.slf4j.Logger;
@@ -63,8 +63,8 @@ public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento
         LOG.debug("subTipoPagamentos: " + subTipoPagamentos);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-            return ordenar(campoOrdem, order, subTipoPagamentos);
+            Ordem ordem = new OrdemSubTipoPagamentoDescricao();
+            return ordenar(ordem, order, subTipoPagamentos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -78,8 +78,8 @@ public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemSubTipoPagamentoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemSubTipoPagamentoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);

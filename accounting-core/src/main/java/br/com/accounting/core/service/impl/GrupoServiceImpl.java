@@ -8,10 +8,9 @@ import br.com.accounting.core.filter.Filtro;
 import br.com.accounting.core.filter.FiltroGrupoDescricao;
 import br.com.accounting.core.filter.FiltroGrupoDescricaoSubGrupo;
 import br.com.accounting.core.filter.FiltroGrupoDescricaoSubGrupoDescricao;
-import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricao;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricaoSubGrupo;
-import br.com.accounting.core.ordering.CampoOrdemGrupoDescricaoSubGrupoDescricao;
+import br.com.accounting.core.ordering.*;
+import br.com.accounting.core.ordering.OrdemGrupoDescricaoSubGrupoDescricao;
+import br.com.accounting.core.ordering.Ordem;
 import br.com.accounting.core.repository.GrupoRepository;
 import br.com.accounting.core.service.GrupoService;
 import org.slf4j.Logger;
@@ -134,8 +133,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-            return ordenar(campoOrdem, order, grupos);
+            Ordem ordem = new OrdemGrupoDescricao();
+            return ordenar(ordem, order, grupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -149,8 +148,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemGrupoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemGrupoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -165,8 +164,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-            return ordenar(campoOrdem, order, grupos);
+            Ordem ordem = new OrdemGrupoDescricaoSubGrupoDescricao();
+            return ordenar(ordem, order, grupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao e subgrupo";
             LOG.error(mensagem, e);
@@ -180,8 +179,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemGrupoDescricaoSubGrupoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao e subgrupo";
             LOG.error(mensagem, e);
@@ -196,8 +195,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemGrupoDescricaoSubGrupo();
-            return campoOrdem.ordenar(grupos, order);
+            Ordem ordem = new OrdemGrupoDescricaoSubGrupo();
+            return ordem.ordenar(grupos, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os subgrupo por descricao de grupo";
             LOG.error(mensagem, e);

@@ -342,8 +342,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeVencimento();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeVencimento();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por vencimento";
             LOG.error(mensagem, e);
@@ -357,8 +357,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeVencimento();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeVencimento();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por vencimento";
             LOG.error(mensagem, e);
@@ -373,8 +373,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeTipoPagamento();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeTipoPagamento();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
@@ -388,8 +388,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeTipoPagamento();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeTipoPagamento();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
@@ -404,8 +404,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeSubTipoPagamentoDescricao();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeSubTipoPagamentoDescricao();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
@@ -419,8 +419,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeSubTipoPagamentoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeSubTipoPagamentoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
@@ -435,8 +435,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeTipo();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeTipo();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo";
             LOG.error(mensagem, e);
@@ -450,8 +450,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeTipo();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeTipo();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo";
             LOG.error(mensagem, e);
@@ -466,8 +466,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeGrupoDescricao();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeGrupoDescricao();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo";
             LOG.error(mensagem, e);
@@ -481,8 +481,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeGrupoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeGrupoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo";
             LOG.error(mensagem, e);
@@ -497,8 +497,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
@@ -512,8 +512,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
@@ -528,8 +528,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeDescricao();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeDescricao();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -543,8 +543,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeDescricao();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeDescricao();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
@@ -559,8 +559,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeParcelamentoPai();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeParcelamentoPai();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
@@ -574,8 +574,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeParcelamentoPai();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeParcelamentoPai();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
@@ -590,8 +590,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeCategoria();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeCategoria();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por categoria";
             LOG.error(mensagem, e);
@@ -605,8 +605,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeCategoria();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeCategoria();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por categoria";
             LOG.error(mensagem, e);
@@ -621,8 +621,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("registros: " + registros);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeValor();
-            return ordenar(campoOrdem, order, registros);
+            Ordem ordem = new OrdemContabilidadeValor();
+            return ordenar(ordem, order, registros);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por valor";
             LOG.error(mensagem, e);
@@ -636,8 +636,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeValor();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeValor();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por valor";
             LOG.error(mensagem, e);
@@ -652,8 +652,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeStatus();
-            return ordenar(campoOrdem, order, contabilidades);
+            Ordem ordem = new OrdemContabilidadeStatus();
+            return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por status";
             LOG.error(mensagem, e);
@@ -667,8 +667,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            CampoOrdem campoOrdem = new CampoOrdemContabilidadeStatus();
-            return ordenar(campoOrdem, order);
+            Ordem ordem = new OrdemContabilidadeStatus();
+            return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por status";
             LOG.error(mensagem, e);

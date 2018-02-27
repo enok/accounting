@@ -11,12 +11,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class FiltroMapGenerico<E, T> {
-    private static final Logger LOG = LoggerFactory.getLogger(FiltroMapGenerico.class);
+public abstract class FiltroMapaGenerico<E, T> {
+    private static final Logger LOG = LoggerFactory.getLogger(FiltroMapaGenerico.class);
 
     public List<E> filtrar(List<T> entities, Duplicates duplicates) {
         LOG.info("[ filtrar ]");
         LOG.debug("entities: " + entities);
+        LOG.debug("duplicates: " + duplicates);
 
         switch (duplicates) {
             case REMOVE:

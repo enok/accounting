@@ -4,6 +4,6 @@ import br.com.accounting.core.entity.Order;
 
 import java.util.List;
 
-public interface CampoOrdem<E, T> {
+public interface Ordem<E, T> {
     List<E> ordenar(List<T> entities, Order order);
 }

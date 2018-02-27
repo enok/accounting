@@ -12,7 +12,7 @@ public class FiltroSubGrupoDescricao extends FiltroGenerico<SubGrupo> implements
     }
 
     @Override
-    public Predicate<SubGrupo> getFiltroPredicado() {
+    public Predicate<SubGrupo> getPredicate() {
         return c -> c.getDescricao().equals(descricao);
     }
 }
