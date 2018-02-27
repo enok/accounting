@@ -4,10 +4,10 @@ import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricao;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupo;
-import br.com.accounting.core.filter.CampoFiltroGrupoDescricaoSubGrupoDescricao;
+import br.com.accounting.core.filter.Filtro;
+import br.com.accounting.core.filter.FiltroGrupoDescricao;
+import br.com.accounting.core.filter.FiltroGrupoDescricaoSubGrupo;
+import br.com.accounting.core.filter.FiltroGrupoDescricaoSubGrupoDescricao;
 import br.com.accounting.core.ordering.CampoOrdem;
 import br.com.accounting.core.ordering.CampoOrdemGrupoDescricao;
 import br.com.accounting.core.ordering.CampoOrdemGrupoDescricaoSubGrupo;
@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
 public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoService {
@@ -37,8 +39,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao(descricao);
-            return filtrar(campoFiltro, grupos);
+            Filtro filtro = new FiltroGrupoDescricao(descricao);
+            return filtrar(filtro, REMOVE, grupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -52,8 +54,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroGrupoDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroGrupoDescricao(descricao);
+            return filtrar(filtro, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -69,8 +71,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
-            return filtrar(campoFiltro, grupos);
+            Filtro filtro = new FiltroGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
+            return filtrar(filtro, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao e subgrupo";
             LOG.error(mensagem, e);
@@ -85,8 +87,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("descricaoSubGrupo: " + descricaoSubGrupo);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
+            return filtrar(filtro, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao e subgrupo";
             LOG.error(mensagem, e);
@@ -101,8 +103,8 @@ public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoServ
         LOG.debug("grupos: " + grupos);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroGrupoDescricaoSubGrupo(descricaoGrupo);
-            return campoFiltro.filtrar(grupos);
+            Filtro filtro = new FiltroGrupoDescricaoSubGrupo(descricaoGrupo);
+            return filtro.filtrar(grupos, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os subgrupo por descricao de grupo";
             LOG.error(mensagem, e);

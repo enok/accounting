@@ -3,10 +3,9 @@ package br.com.accounting.core.service.impl;
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.SubTipoPagamento;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroSubTipoPagamentoDescricao;
+import br.com.accounting.core.filter.Filtro;
+import br.com.accounting.core.filter.FiltroSubTipoPagamentoDescricao;
 import br.com.accounting.core.ordering.CampoOrdem;
-import br.com.accounting.core.ordering.CampoOrdemSubGrupoDescricao;
 import br.com.accounting.core.ordering.CampoOrdemSubTipoPagamentoDescricao;
 import br.com.accounting.core.repository.SubTipoPagamentoRepository;
 import br.com.accounting.core.service.SubTipoPagamentoService;
@@ -15,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
 public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento> implements SubTipoPagamentoService {
@@ -31,8 +32,8 @@ public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento
         LOG.debug("subTipoPagamentos: " + subTipoPagamentos);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao(descricao);
-            return filtrar(campoFiltro, subTipoPagamentos);
+            Filtro filtro = new FiltroSubTipoPagamentoDescricao(descricao);
+            return filtrar(filtro, REMOVE, subTipoPagamentos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -46,8 +47,8 @@ public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroSubTipoPagamentoDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroSubTipoPagamentoDescricao(descricao);
+            return filtrar(filtro, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);

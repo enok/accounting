@@ -2,13 +2,16 @@ package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
+import br.com.accounting.core.filter.Duplicates;
+import br.com.accounting.core.filter.Filtro;
 import br.com.accounting.core.ordering.CampoOrdem;
 import br.com.accounting.core.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import static br.com.accounting.core.filter.Duplicates.KEEP;
 
 public abstract class GenericService<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericService.class);
@@ -44,13 +47,14 @@ public abstract class GenericService<T> {
         }
     }
 
-    public List<T> filtrar(CampoFiltro campoFiltro, List<T> entitys) throws ServiceException {
+    public List<T> filtrar(Filtro filtro, Duplicates duplicates, List<T> entitys) throws ServiceException {
         LOG.info("[ filtrar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("filtro: " + filtro);
+        LOG.debug("duplicates: " + duplicates);
         LOG.debug("entitys: " + entitys);
 
         try {
-            return campoFiltro.filtrar(entitys);
+            return filtro.filtrar(entitys, duplicates);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);
@@ -58,25 +62,34 @@ public abstract class GenericService<T> {
         }
     }
 
-    public List<T> filtrar(CampoFiltro campoFiltro) throws ServiceException {
+    public List<T> filtrar(Filtro filtro, List<T> entitys) throws ServiceException {
+        return filtrar(filtro, KEEP, entitys);
+    }
+
+    public List<T> filtrar(Filtro filtro, Duplicates duplicates) throws ServiceException {
         LOG.info("[ filtrar ]");
-        LOG.debug("campoFiltro: " + campoFiltro);
+        LOG.debug("filtro: " + filtro);
+        LOG.debug("duplicates: " + duplicates);
 
         try {
             List<T> entitys = repository.buscarRegistros();
-            return filtrar(campoFiltro, entitys);
+            return filtrar(filtro, duplicates, entitys);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
+    }
+
+    public List<T> filtrar(Filtro filtro) throws ServiceException {
+        return filtrar(filtro, KEEP);
     }
 
     public List<T> ordenar(CampoOrdem campoOrdem, Order order, List<T> entitys) throws ServiceException {
         LOG.info("[ ordenar ]");
-        LOG.debug("campoFiltro: " + campoOrdem);
-        LOG.debug("entitys: " + entitys);
+        LOG.debug("campoOrdem: " + campoOrdem);
         LOG.debug("order: " + order);
+        LOG.debug("entitys: " + entitys);
 
         try {
             return campoOrdem.ordenar(entitys, order);
@@ -89,7 +102,7 @@ public abstract class GenericService<T> {
 
     public List<T> ordenar(CampoOrdem campoOrdem, Order order) throws ServiceException {
         LOG.info("[ ordenar ]");
-        LOG.debug("campoFiltro: " + campoOrdem);
+        LOG.debug("campoOrdem: " + campoOrdem);
         LOG.debug("order: " + order);
 
         try {

@@ -30,8 +30,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por intervalo de vencimento";
             LOG.error(mensagem, e);
@@ -46,8 +46,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("vencimentoFinal: " + vencimentoFinal);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por intervalo de vencimento";
             LOG.error(mensagem, e);
@@ -62,8 +62,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(tipoPagamento);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeTipoPagamento(tipoPagamento);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
@@ -77,8 +77,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("tipoPagamento: " + tipoPagamento);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipoPagamento(tipoPagamento);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeTipoPagamento(tipoPagamento);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
@@ -93,8 +93,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao(descricao);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeSubTipoPagamentoDescricao(descricao);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
@@ -108,8 +108,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeSubTipoPagamentoDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeSubTipoPagamentoDescricao(descricao);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
@@ -124,8 +124,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(tipo);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeTipo(tipo);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo";
             LOG.error(mensagem, e);
@@ -139,8 +139,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("tipo: " + tipo);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeTipo(tipo);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeTipo(tipo);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo";
             LOG.error(mensagem, e);
@@ -155,8 +155,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao(descricao);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeGrupoDescricao(descricao);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo";
             LOG.error(mensagem, e);
@@ -170,8 +170,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeGrupoDescricao(descricao);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo";
             LOG.error(mensagem, e);
@@ -187,8 +187,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
@@ -203,8 +203,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("descricaoSubGrupo: " + descricaoSubGrupo);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
@@ -219,8 +219,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao(descricao);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeDescricao(descricao);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -234,8 +234,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeDescricao(descricao);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -250,8 +250,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeParcelamentoPai(codigoPai);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeParcelamentoPai(codigoPai);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
@@ -265,8 +265,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("codigoPai: " + codigoPai);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeParcelamentoPai(codigoPai);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeParcelamentoPai(codigoPai);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
@@ -281,8 +281,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeCategoria(categoria);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeCategoria(categoria);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por categoria";
             LOG.error(mensagem, e);
@@ -296,8 +296,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("categoria: " + categoria);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeCategoria(categoria);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeCategoria(categoria);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por categoria";
             LOG.error(mensagem, e);
@@ -312,8 +312,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeStatus(status);
-            return filtrar(campoFiltro, contabilidades);
+            Filtro filtro = new FiltroContabilidadeStatus(status);
+            return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por status";
             LOG.error(mensagem, e);
@@ -327,8 +327,8 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("status: " + status);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroContabilidadeStatus(status);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroContabilidadeStatus(status);
+            return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por status";
             LOG.error(mensagem, e);

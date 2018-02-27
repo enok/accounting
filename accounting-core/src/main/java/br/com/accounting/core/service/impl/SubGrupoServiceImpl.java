@@ -3,8 +3,8 @@ package br.com.accounting.core.service.impl;
 import br.com.accounting.core.entity.Order;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.filter.CampoFiltro;
-import br.com.accounting.core.filter.CampoFiltroSubGrupoDescricao;
+import br.com.accounting.core.filter.Filtro;
+import br.com.accounting.core.filter.FiltroSubGrupoDescricao;
 import br.com.accounting.core.ordering.CampoOrdem;
 import br.com.accounting.core.ordering.CampoOrdemSubGrupoDescricao;
 import br.com.accounting.core.repository.SubGrupoRepository;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
 public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements SubGrupoService {
@@ -32,8 +34,8 @@ public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements Sub
         LOG.debug("subGrupos: " + subGrupos);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroSubGrupoDescricao(descricao);
-            return filtrar(campoFiltro, subGrupos);
+            Filtro filtro = new FiltroSubGrupoDescricao(descricao);
+            return filtrar(filtro, REMOVE, subGrupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
@@ -47,8 +49,8 @@ public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements Sub
         LOG.debug("descricao: " + descricao);
 
         try {
-            CampoFiltro campoFiltro = new CampoFiltroSubGrupoDescricao(descricao);
-            return filtrar(campoFiltro);
+            Filtro filtro = new FiltroSubGrupoDescricao(descricao);
+            return filtrar(filtro, REMOVE);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);

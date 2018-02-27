@@ -28,9 +28,6 @@ public interface GrupoService extends GenericService<Grupo> {
 
     List<Grupo> ordenarPorDescricaoESubGrupo(Order order) throws ServiceException;
 
-
-
-
     List<SubGrupo> ordenarSubGruposPorGrupoDescricao(Order order, List<Grupo> grupos) throws ServiceException;
 
     List<SubGrupo> ordenarSubGruposPorGrupoDescricao(Order order) throws ServiceException;
