@@ -11,6 +11,7 @@
 
     <modules>
         <module>accounting-core</module>
+        <module>accounting-business</module>
     </modules>
 
     <properties>
