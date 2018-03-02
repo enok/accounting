@@ -15,6 +15,11 @@ public class Parcelamento {
         this.codigoPai = codigoPai;
     }
 
+    public Parcelamento(Integer parcela, Integer parcelas) {
+        this.parcela = parcela;
+        this.parcelas = parcelas;
+    }
+
     public Integer getParcela() {
         return parcela;
     }

@@ -5,6 +5,7 @@ import br.com.accounting.core.factory.SubTipoPagamentoFactory;
 import br.com.accounting.core.repository.SubTipoPagamentoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,17 +20,17 @@ import static br.com.accounting.core.util.Utils.SEPARADOR;
 public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPagamento> implements SubTipoPagamentoRepository {
     private static final Logger LOG = LoggerFactory.getLogger(SubTipoPagamentoRepositoryImpl.class);
 
-    private static final String ARQUIVO_SUBTIPO_PAGAMENTOS_CONTAGEM = DIRETORIO + "\\subTipoPagamentos-contagem.txt";
-    private static final String ARQUIVO_SUBTIPO_PAGAMENTOS = DIRETORIO + "\\subTipoPagamentos.csv";
+    @Autowired
+    private String diretorio;
 
     @Override
     public String getArquivoContagem() {
-        return ARQUIVO_SUBTIPO_PAGAMENTOS_CONTAGEM;
+        return diretorio + "\\subtTipoPagamentos-contagem.txt";
     }
 
     @Override
     public String getArquivo() {
-        return ARQUIVO_SUBTIPO_PAGAMENTOS;
+        return diretorio + "\\subTipoPagamentos.csv";
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SubTipoPagamentoRepositoryImpl extends GenericRepository<SubTipoPag
 
         StringBuilder builder = new StringBuilder()
                 .append(subTipoPagamento.getCodigo()).append(SEPARADOR)
-                .append(subTipoPagamento.getDescricao()).append("\n");
+                .append(subTipoPagamento.getDescricao());
 
         return builder.toString();
     }

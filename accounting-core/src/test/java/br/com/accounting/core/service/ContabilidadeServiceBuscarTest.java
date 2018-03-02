@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
@@ -30,7 +31,7 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void buscarRegistrosContabilidade() throws ServiceException {
+    public void buscarRegistrosContabilidade() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
 
         contabilidadeService.salvar(contabilidade);
@@ -52,14 +53,14 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
         assertThat(contabilidadeBuscada.getDescricao(), equalTo("spotify"));
         assertThat(contabilidadeBuscada.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidadeBuscada.getParcelamento().getParcelas(), equalTo(12));
-        assertThat(contabilidadeBuscada.getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(contabilidadeBuscada.getParcelamento().getCodigoPai(), nullValue());
         assertThat(contabilidadeBuscada.getCategoria(), equalTo(SAIDA));
         assertThat(contabilidadeBuscada.getValor(), equalTo(26.90));
         assertThat(contabilidadeBuscada.getStatus(), equalTo(PAGO));
     }
 
     @Test
-    public void buscarRegistrosContabilidadeSemParcelamento() throws ServiceException {
+    public void buscarRegistrosContabilidadeSemParcelamento() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito7660();
 
         contabilidadeService.salvar(contabilidade);
@@ -86,7 +87,7 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void buscarRegistrosContabilidadeSemSubTipoParcelamentoSemParcelamento() throws ServiceException, IOException {
+    public void buscarRegistrosContabilidadeSemSubTipoParcelamentoSemParcelamento() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createDinheiro();
 
         contabilidadeService.salvar(contabilidade);
@@ -113,7 +114,7 @@ public class ContabilidadeServiceBuscarTest extends ContabilidadeGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void buscarRegistrosContabilidadeServiceException() throws IOException, ServiceException {
+    public void buscarRegistrosContabilidadeServiceException() throws ServiceException {
         contabilidadeService.buscarRegistros();
     }
 }

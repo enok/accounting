@@ -9,7 +9,7 @@ public interface Repository<T> {
 
     void incrementarCodigo(Long proximoCodigo) throws RepositoryException;
 
-    void salvar(T enitty) throws RepositoryException;
+    Long salvar(T enitty) throws RepositoryException;
 
     List<T> buscarRegistros() throws RepositoryException;
 }

@@ -17,6 +17,18 @@ public class FiltroContabilidadeParcelamentoPai extends FiltroGenerico<Contabili
     }
 
     private boolean comparacaoCodigoPai(Contabilidade c) {
-        return (c.getParcelamento() != null) && (c.getParcelamento().getCodigoPai().equals(codigoPai));
+        return parcelamentoNaoNulo(c) && (igualCodigoPai(c) || igualCodigoPaiNulo(c));
+    }
+
+    private boolean parcelamentoNaoNulo(Contabilidade c) {
+        return c.getParcelamento() != null;
+    }
+
+    private boolean igualCodigoPai(Contabilidade c) {
+        return (c.getParcelamento().getCodigoPai() != null) && c.getParcelamento().getCodigoPai().equals(codigoPai);
+    }
+
+    private boolean igualCodigoPaiNulo(Contabilidade c) {
+        return (c.getParcelamento().getCodigoPai() == null) && (codigoPai == null);
     }
 }

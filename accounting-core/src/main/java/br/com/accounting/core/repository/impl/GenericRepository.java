@@ -6,8 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -15,8 +18,6 @@ import static java.nio.file.StandardOpenOption.CREATE;
 
 public abstract class GenericRepository<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericRepository.class);
-
-    public static final String DIRETORIO = "arquivos";
 
     public Long proximoCodigo() {
         LOG.info("[ proximoCodigo ]");
@@ -47,7 +48,7 @@ public abstract class GenericRepository<T> {
         }
     }
 
-    public void salvar(T entity) throws RepositoryException {
+    public Long salvar(T entity) throws RepositoryException {
         LOG.info("[ salvar ] entity: " + entity);
 
         String linha = null;
@@ -56,7 +57,8 @@ public abstract class GenericRepository<T> {
             setaProximoCodigo((Entity) entity);
             linha = criarLinha(entity);
             String caminhoArquivo = getArquivo();
-            Files.write(Paths.get(caminhoArquivo), linha.getBytes(), APPEND, CREATE);
+            Files.write(Paths.get(caminhoArquivo), Arrays.asList(linha), StandardCharsets.UTF_8, APPEND, CREATE);
+            return ((Entity) entity).getCodigo();
         } catch (Exception e) {
             String message = "Nao foi possivel salvar a linha: " + linha;
             LOG.error(message, e);
@@ -71,7 +73,7 @@ public abstract class GenericRepository<T> {
             List<String> linhas = Files.readAllLines(Paths.get(getArquivo()));
             LOG.debug("linhas: " + linhas);
             return criarRegistros(linhas);
-        } catch (IOException e) {
+        } catch (Exception e) {
             String message = "Nao foi possivel buscar os registros";
             LOG.error(message, e);
             throw new RepositoryException(message, e);
@@ -92,5 +94,5 @@ public abstract class GenericRepository<T> {
 
     public abstract String criarLinha(T entity);
 
-    public abstract List<T> criarRegistros(List<String> linhas);
+    public abstract List<T> criarRegistros(List<String> linhas) throws ParseException;
 }

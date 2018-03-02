@@ -8,8 +8,10 @@ import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.impl.ContabilidadeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,17 +24,17 @@ import static br.com.accounting.core.util.Utils.SEPARADOR;
 public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade> implements ContabilidadeRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ContabilidadeServiceImpl.class);
 
-    private static final String ARQUIVO_REGISTROS_CONTAGEM = DIRETORIO + "\\registros-contagem.csv";
-    private static final String ARQUIVO_REGISTROS = DIRETORIO + "\\registros.csv";
+    @Autowired
+    private String diretorio;
 
     @Override
     public String getArquivoContagem() {
-        return ARQUIVO_REGISTROS_CONTAGEM;
+        return diretorio + "\\contabilidades-contagem.txt";
     }
 
     @Override
     public String getArquivo() {
-        return ARQUIVO_REGISTROS;
+        return diretorio + "\\contabilidades.csv";
     }
 
     @Override
@@ -71,13 +73,13 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
                 .append(codigoParcelamentoPai).append(SEPARADOR)
                 .append(contabilidade.getCategoria()).append(SEPARADOR)
                 .append(contabilidade.getValor()).append(SEPARADOR)
-                .append(contabilidade.getStatus()).append("\n");
+                .append(contabilidade.getStatus());
 
         return builder.toString();
     }
 
     @Override
-    public List<Contabilidade> criarRegistros(List<String> linhas) {
+    public List<Contabilidade> criarRegistros(List<String> linhas) throws ParseException {
         LOG.info("[ criarRegistros ]");
         LOG.debug("linhas: " + linhas);
 
@@ -92,7 +94,7 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
         return contabilidadeList;
     }
 
-    private Contabilidade criarContabilidade(String linha) {
+    private Contabilidade criarContabilidade(String linha) throws ParseException {
         LOG.debug("[ criarContabilidade ]");
         LOG.debug("linha: " + linha);
 

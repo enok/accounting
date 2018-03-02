@@ -4,6 +4,7 @@ import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactoryMock;
 
+import java.text.ParseException;
 import java.util.List;
 
 public abstract class ContabilidadeGenericTest extends GenericTest {
@@ -18,7 +19,7 @@ public abstract class ContabilidadeGenericTest extends GenericTest {
         return registros;
     }
 
-    protected void criarVariasContabilidades() throws ServiceException {
+    protected void criarVariasContabilidades() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
         contabilidadeService.salvar(contabilidade);
 
@@ -29,7 +30,7 @@ public abstract class ContabilidadeGenericTest extends GenericTest {
         contabilidadeService.salvar(contabilidade);
     }
 
-    protected void criarVariasContabilidades2() throws ServiceException {
+    protected void criarVariasContabilidades2() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
         contabilidadeService.salvar(contabilidade);
 
@@ -40,7 +41,7 @@ public abstract class ContabilidadeGenericTest extends GenericTest {
         contabilidadeService.salvar(contabilidade);
     }
 
-    protected void criarVariasContabilidades3() throws ServiceException {
+    protected void criarVariasContabilidades3() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
         contabilidadeService.salvar(contabilidade);
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.ParseException;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
 import static br.com.accounting.core.entity.Categoria.SAIDA;
@@ -29,7 +30,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void salvarContabilidadeCartaoCredito() throws ServiceException {
+    public void salvarContabilidadeCartaoCredito() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoCredito744();
 
         assertThat(contabilidade, notNullValue());
@@ -43,7 +44,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
         assertThat(contabilidade.getDescricao(), equalTo("spotify"));
         assertThat(contabilidade.getParcelamento().getParcela(), equalTo(1));
         assertThat(contabilidade.getParcelamento().getParcelas(), equalTo(12));
-        assertThat(contabilidade.getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(contabilidade.getParcelamento().getCodigoPai(), nullValue());
         assertThat(contabilidade.getCategoria(), equalTo(SAIDA));
         assertThat(contabilidade.getValor(), equalTo(26.90));
         assertThat(contabilidade.getStatus(), equalTo(PAGO));
@@ -54,7 +55,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void salvarContabilidadeCartaoDebito() throws ServiceException {
+    public void salvarContabilidadeCartaoDebito() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createCartaoDebito7660();
 
         assertThat(contabilidade, notNullValue());
@@ -77,7 +78,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void salvarContabilidadeDinheiro() throws ServiceException {
+    public void salvarContabilidadeDinheiro() throws ServiceException, ParseException {
         Contabilidade contabilidade = ContabilidadeFactoryMock.createDinheiro();
 
         assertThat(contabilidade, notNullValue());
@@ -100,7 +101,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void salvarContabilidadeServiceException() throws IOException, ServiceException {
+    public void salvarContabilidadeServiceException() throws IOException, ServiceException, ParseException {
         deletarDiretorioEArquivos();
 
         Contabilidade registro = ContabilidadeFactoryMock.createDinheiro();

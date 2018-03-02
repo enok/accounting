@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
@@ -19,8 +20,7 @@ import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     @Autowired
@@ -32,7 +32,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorVencimentoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorVencimentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -54,7 +54,8 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorVencimento(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
@@ -62,7 +63,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
 
     @Test
-    public void ordenarRegistrosBuscadosPorVencimentoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorVencimentoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -84,14 +85,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorVencimento(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorIntervaloDeVencimentoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorIntervaloDeVencimentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorVencimento(ASC);
@@ -109,14 +111,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorVencimento(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescente() throws ServiceException {
+    public void ordenarRegistrosPorIntervaloDeVencimentoDecrescente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorVencimento(DESC);
@@ -134,14 +137,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorVencimento(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoDePagamentoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorTipoDePagamentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -163,14 +167,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipoDePagamento(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoDePagamentoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorTipoDePagamentoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -192,14 +197,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipoDePagamento(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorTipoDePagamentoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorTipoDePagamentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorTipoDePagamento(ASC);
@@ -217,14 +223,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipoDePagamento(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorTipoDePagamentoDecrescente() throws ServiceException {
+    public void ordenarRegistrosPorTipoDePagamentoDecrescente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorTipoDePagamento(DESC);
@@ -242,14 +249,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipoDePagamento(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -270,14 +278,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarSubTipoDePagamento(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorSubTipoDePagamentoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -298,14 +307,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarSubTipoDePagamento(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorSubTipoDePagamentoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorSubTipoDePagamentoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarSubTipoDePagamento(ASC);
@@ -322,14 +332,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarSubTipoDePagamento(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorSubTipoDePagamentoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorSubTipoDePagamentoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarSubTipoDePagamento(DESC);
@@ -346,14 +357,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarSubTipoDePagamento(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorTipoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -375,14 +387,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipo(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorTipoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorTipoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -404,7 +417,8 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipo(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
@@ -412,7 +426,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
 
     @Test
-    public void ordenarRegistrosPorTipoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorTipoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorTipo(ASC);
@@ -430,14 +444,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipo(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorTipoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorTipoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorTipo(DESC);
@@ -455,14 +470,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorTipo(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorGrupoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorGrupoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -484,14 +500,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupo(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorGrupoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorGrupoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -513,14 +530,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupo(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorGrupoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorGrupoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorGrupo(ASC);
@@ -538,14 +556,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupo(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorGrupoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorGrupoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorGrupo(DESC);
@@ -563,14 +582,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupo(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorGrupoESubGrupoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorGrupoESubGrupoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -598,14 +618,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupoESubGrupo(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorGrupoESubGrupoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorGrupoESubGrupoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -633,14 +654,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupoESubGrupo(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorGrupoESubGrupoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorGrupoESubGrupoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorGrupoESubGrupo(ASC);
@@ -664,14 +686,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupoESubGrupo(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorGrupoESubGrupoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorGrupoESubGrupoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorGrupoESubGrupo(DESC);
@@ -695,14 +718,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorGrupoESubGrupo(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -724,14 +748,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorDescricao(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorDescricaoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -753,14 +778,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorDescricao(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException {
+    public void ordenarRegistrosPorDescricaoAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorDescricao(ASC);
@@ -778,14 +804,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorDescricao(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException {
+    public void ordenarRegistrosPorDescricaoDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorDescricao(DESC);
@@ -803,14 +830,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorDescricao(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorParcelamentoPaiAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorParcelamentoPaiAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -819,7 +847,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), nullValue());
         assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(1L));
     }
 
@@ -831,14 +859,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorParcelamentoPai(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorParcelamentoPaiDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorParcelamentoPaiDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -848,7 +877,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
         assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(1L));
-        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), nullValue());
     }
 
     @Test(expected = ServiceException.class)
@@ -859,21 +888,22 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorParcelamentoPai(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorParcelamentoPaiAscendente() throws ServiceException {
+    public void ordenarRegistrosPorParcelamentoPaiAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorParcelamentoPai(ASC);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), nullValue());
         assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(1L));
     }
 
@@ -883,14 +913,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorParcelamentoPai(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorParcelamentoPaiDescendente() throws ServiceException {
+    public void ordenarRegistrosPorParcelamentoPaiDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades3();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorParcelamentoPai(DESC);
@@ -898,7 +929,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
         assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(1L));
-        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), nullValue());
     }
 
     @Test(expected = ServiceException.class)
@@ -907,14 +938,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorParcelamentoPai(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorCategoriaAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorCategoriaAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -936,14 +968,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorCategoria(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorCategoriaDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorCategoriaDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -965,14 +998,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorCategoria(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorCategoriaAscendente() throws ServiceException {
+    public void ordenarRegistrosPorCategoriaAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorCategoria(ASC);
@@ -990,14 +1024,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorCategoria(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorCategoriaDecrescente() throws ServiceException {
+    public void ordenarRegistrosPorCategoriaDecrescente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorCategoria(DESC);
@@ -1015,14 +1050,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorCategoria(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorValorAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorValorAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -1044,14 +1080,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorValor(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorValorDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorValorDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -1073,14 +1110,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorValor(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorValorAscendente() throws ServiceException {
+    public void ordenarRegistrosPorValorAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorValor(ASC);
@@ -1098,14 +1136,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorValor(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorValorDescendente() throws ServiceException {
+    public void ordenarRegistrosPorValorDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorValor(DESC);
@@ -1123,14 +1162,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorValor(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorStatusAscendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorStatusAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -1152,14 +1192,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorStatus(ASC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosBuscadosPorStatusDescendente() throws ServiceException {
+    public void ordenarRegistrosBuscadosPorStatusDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -1181,14 +1222,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorStatus(DESC, registros);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorStatusAscendente() throws ServiceException {
+    public void ordenarRegistrosPorStatusAscendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorStatus(ASC);
@@ -1206,14 +1248,15 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorStatus(ASC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }
     }
 
     @Test
-    public void ordenarRegistrosPorStatusDescendente() throws ServiceException {
+    public void ordenarRegistrosPorStatusDescendente() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.ordenarPorStatus(DESC);
@@ -1231,7 +1274,8 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.ordenarPorStatus(DESC);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }

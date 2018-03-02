@@ -13,6 +13,13 @@
     <name>Accouting Business</name>
 
     <dependencies>
+        <!-- financial -->
+        <dependency>
+            <groupId>br.com.financial</groupId>
+            <artifactId>accounting-core</artifactId>
+        </dependency>
+
+        <!-- apache -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -45,6 +52,11 @@
             <version>${spring-boot.version}</version>
             <scope>test</scope>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>br.com.financial</groupId>
+            <artifactId>accounting-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

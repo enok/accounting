@@ -2,9 +2,11 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Contabilidade;
 
+import java.text.ParseException;
+
 public class ContabilidadeFactoryMock {
 
-    public static Contabilidade createCartaoCredito744() {
+    public static Contabilidade createCartaoCredito744() throws ParseException {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
@@ -14,14 +16,14 @@ public class ContabilidadeFactoryMock {
                 .withTipo("FIXO")
                 .withGrupoSubGrupo("MORADIA", "ASSINATURA")
                 .withDescricao("spotify")
-                .withParcelamento("1", "12", "-1")
+                .withParcelamento("1", "12")
                 .withCategoria("SAIDA")
                 .withValor("26.90")
                 .withStatus("PAGO")
                 .build();
     }
 
-    public static Contabilidade createCartaoCredito7660() {
+    public static Contabilidade createCartaoCredito7660() throws ParseException {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
@@ -31,14 +33,14 @@ public class ContabilidadeFactoryMock {
                 .withTipo("FIXO")
                 .withGrupoSubGrupo("MORADIA", "ASSINATURA")
                 .withDescricao("spotify")
-                .withParcelamento("1", "12", "-1")
+                .withParcelamento("1", "12")
                 .withCategoria("SAIDA")
                 .withValor("26.90")
                 .withStatus("PAGO")
                 .build();
     }
 
-    public static Contabilidade createDinheiro() {
+    public static Contabilidade createDinheiro() throws ParseException {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
@@ -53,7 +55,7 @@ public class ContabilidadeFactoryMock {
                 .build();
     }
 
-    public static Contabilidade createCartaoDebito7660() {
+    public static Contabilidade createCartaoDebito7660() throws ParseException {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
@@ -69,7 +71,7 @@ public class ContabilidadeFactoryMock {
                 .build();
     }
 
-    public static Contabilidade createCartaoDebito744() {
+    public static Contabilidade createCartaoDebito744() throws ParseException {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")

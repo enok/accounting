@@ -1,19 +1,29 @@
 package br.com.accounting.core.util;
 
-import br.com.accounting.core.entity.Entity;
-
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public final class Utils {
-    public static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     public static final String SEPARADOR = ";";
+    public static final Locale LOCALE = new Locale("pt", "BR");
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public static final String DECIMAL_PATTERN = "###,###.00";
+
+    private static DecimalFormat decimalFormat;
+
+    static {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(LOCALE);
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        decimalFormat = new DecimalFormat(DECIMAL_PATTERN, symbols);
+    }
 
     private Utils() {
     }
@@ -23,7 +33,7 @@ public final class Utils {
     }
 
     public static LocalDate getDateFromString(String date) {
-        return LocalDate.parse(date, FORMATTER);
+        return LocalDate.parse(date, DATE_FORMATTER);
     }
 
     public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
@@ -33,8 +43,32 @@ public final class Utils {
         return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
     }
 
-    public static List<? extends Entity> removeDuplicates(List<? extends Entity> list) {
-        Set<? extends Entity> set = new HashSet<>(list);
-        return new ArrayList<>(set);
+    public static String getStringFromDate(LocalDate localDate) {
+        return localDate.format(DATE_FORMATTER);
+    }
+
+    public static String getStringFromCurrentDate() {
+        return LocalDate.now().format(DATE_FORMATTER);
+    }
+
+    public static String getNextMonth(String date) {
+        LocalDate localDate = getDateFromString(date);
+        localDate = localDate.plusMonths(1L);
+        return getStringFromDate(localDate);
+    }
+
+    public static String getDoubleFormatted(Double value) {
+        if (value == null) {
+            return null;
+        }
+        return decimalFormat.format(value);
+    }
+
+    public static Double createDouble(String value) throws ParseException {
+        try {
+            return Double.parseDouble(value.replaceAll(",", "."));
+        } catch (NumberFormatException e) {
+            return decimalFormat.parse(value).doubleValue();
+        }
     }
 }

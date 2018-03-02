@@ -5,6 +5,7 @@ import br.com.accounting.core.factory.SubGrupoFactory;
 import br.com.accounting.core.repository.SubGrupoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,17 +20,17 @@ import static br.com.accounting.core.util.Utils.SEPARADOR;
 public class SubGrupoRepositoryImpl extends GenericRepository<SubGrupo> implements SubGrupoRepository {
     private static final Logger LOG = LoggerFactory.getLogger(SubGrupoRepositoryImpl.class);
 
-    private static final String ARQUIVO_SUBGRUPO_CONTAGEM = DIRETORIO + "\\subGrupos-contagem.txt";
-    private static final String ARQUIVO_SUBGRUPO = DIRETORIO + "\\subGrupos.csv";
+    @Autowired
+    private String diretorio;
 
     @Override
     public String getArquivoContagem() {
-        return ARQUIVO_SUBGRUPO_CONTAGEM;
+        return diretorio + "\\subGrupos-contagem.txt";
     }
 
     @Override
     public String getArquivo() {
-        return ARQUIVO_SUBGRUPO;
+        return diretorio + "\\subGrupos.csv";
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SubGrupoRepositoryImpl extends GenericRepository<SubGrupo> implemen
 
         StringBuilder builder = new StringBuilder()
                 .append(subGrupo.getCodigo()).append(SEPARADOR)
-                .append(subGrupo.getDescricao()).append("\n");
+                .append(subGrupo.getDescricao());
 
         return builder.toString();
     }

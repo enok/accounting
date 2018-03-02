@@ -5,6 +5,7 @@ import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.repository.GrupoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,17 +20,17 @@ import static br.com.accounting.core.util.Utils.SEPARADOR;
 public class GrupoRepositoryImpl extends GenericRepository<Grupo> implements GrupoRepository {
     private static final Logger LOG = LoggerFactory.getLogger(GrupoRepositoryImpl.class);
 
-    private static final String ARQUIVO_SUBGRUPO_CONTAGEM = DIRETORIO + "\\grupos-contagem.txt";
-    private static final String ARQUIVO_SUBGRUPO = DIRETORIO + "\\grupos.csv";
+    @Autowired
+    private String diretorio;
 
     @Override
     public String getArquivoContagem() {
-        return ARQUIVO_SUBGRUPO_CONTAGEM;
+        return diretorio + "\\grupos-contagem.txt";
     }
 
     @Override
     public String getArquivo() {
-        return ARQUIVO_SUBGRUPO;
+        return diretorio + "\\grupos.csv";
     }
 
     @Override
@@ -41,7 +42,7 @@ public class GrupoRepositoryImpl extends GenericRepository<Grupo> implements Gru
                 .append(grupo.getCodigo()).append(SEPARADOR)
                 .append(grupo.getDescricao()).append(SEPARADOR)
                 .append(grupo.getSubGrupo().getCodigo()).append(SEPARADOR)
-                .append(grupo.getSubGrupo().getDescricao()).append("\n");
+                .append(grupo.getSubGrupo().getDescricao());
 
         return builder.toString();
     }

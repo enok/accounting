@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Categoria.ENTRADA;
@@ -19,6 +20,7 @@ import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     @Autowired
@@ -30,7 +32,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento1Resultado() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento1Resultado() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -56,7 +58,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento2Resultados() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento2Resultados() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -68,7 +70,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento3Resultados() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorIntervaloDeVencimento3Resultados() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -80,7 +82,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorIntervaloDeVencimento1Resultado() throws ServiceException {
+    public void filtrarRegistrosPorIntervaloDeVencimento1Resultado() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorIntervaloDeVencimento("26/01/2018", "31/01/2018");
@@ -102,7 +104,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorTipoDePagamentoDinheiro() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorTipoDePagamentoDinheiro() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -129,7 +131,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorTipoDePagamentoCartaoDeCredito() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorTipoDePagamentoCartaoDeCredito() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -142,7 +144,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorTipoDePagamentoCartaoDeDebito() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorTipoDePagamentoCartaoDeDebito() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -155,7 +157,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorTipoDePagamentoDinheiro() throws ServiceException {
+    public void filtrarRegistrosPorTipoDePagamentoDinheiro() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorTipoDePagamento(DINHEIRO);
@@ -178,7 +180,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorSubTipoDePagamentoValorNulo() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorSubTipoDePagamentoValorNulo() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -205,7 +207,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorSubTipoDePagamento7660() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorSubTipoDePagamento7660() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -219,7 +221,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorSubTipoDePagamento744() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorSubTipoDePagamento744() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -232,7 +234,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorSubTipoDePagamento7660() throws ServiceException {
+    public void filtrarRegistrosPorSubTipoDePagamento7660() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorSubTipoDePagamento("7660");
@@ -256,7 +258,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorTipoFixo() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorTipoFixo() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -284,7 +286,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorTipo744() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorTipo744() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -296,7 +298,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorTipoFixo() throws ServiceException {
+    public void filtrarRegistrosPorTipoFixo() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorTipo(FIXO);
@@ -320,7 +322,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorGrupoMoradia() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorGrupoMoradia() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -348,7 +350,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorGrupoMercado() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorGrupoMercado() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -361,7 +363,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorGrupoMoradia() throws ServiceException {
+    public void filtrarRegistrosPorGrupoMoradia() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorGrupo("MORADIA");
@@ -385,7 +387,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorGrupoMoradiaESubGrupoAssinatura() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorGrupoMoradiaESubGrupoAssinatura() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -417,7 +419,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorGrupoMercadoESubGrupoPadaria() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorGrupoMercadoESubGrupoPadaria() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -431,7 +433,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorGrupoMoradiaESubGrupoAssinatura() throws ServiceException {
+    public void filtrarRegistrosPorGrupoMoradiaESubGrupoAssinatura() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorGrupoESubGrupo("MORADIA", "ASSINATURA");
@@ -459,7 +461,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorDescricaoSpotify() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorDescricaoSpotify() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -487,7 +489,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorDescricaoPao() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorDescricaoPao() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -500,7 +502,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorDescricaoSpotify() throws ServiceException {
+    public void filtrarRegistrosPorDescricaoSpotify() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorDescricao("spotify");
@@ -524,17 +526,17 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorParcelamentoPai() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorParcelamentoPai() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
 
-        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(-1L, registros);
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(null, registros);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
-        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), nullValue());
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), nullValue());
     }
 
     @Test(expected = ServiceException.class)
@@ -552,15 +554,15 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorParcelamentoPai() throws ServiceException {
+    public void filtrarRegistrosPorParcelamentoPai() throws ServiceException, ParseException {
         criarVariasContabilidades2();
 
-        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(-1L);
+        List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorParcelamentoPai(null);
 
         assertThat(registrosFiltradros, notNullValue());
         assertThat(registrosFiltradros.size(), equalTo(2));
-        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), equalTo(-1L));
-        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), equalTo(-1L));
+        assertThat(registrosFiltradros.get(0).getParcelamento().getCodigoPai(), nullValue());
+        assertThat(registrosFiltradros.get(1).getParcelamento().getCodigoPai(), nullValue());
     }
 
     @Test(expected = ServiceException.class)
@@ -576,7 +578,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorCategoriaEntrada() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorCategoriaEntrada() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -603,7 +605,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorCategoriaSaida() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorCategoriaSaida() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -617,7 +619,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorCategoriaEntrada() throws ServiceException {
+    public void filtrarRegistrosPorCategoriaEntrada() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorCategoria(ENTRADA);
@@ -640,7 +642,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorStatusPago() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorStatusPago() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -654,7 +656,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosBuscadosPorStatusNaoPago() throws ServiceException {
+    public void filtrarRegistrosBuscadosPorStatusNaoPago() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registros = contabilidadeService.buscarRegistros();
@@ -681,7 +683,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorStatusPago() throws ServiceException {
+    public void filtrarRegistrosPorStatusPago() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(PAGO);
@@ -693,7 +695,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     }
 
     @Test
-    public void filtrarRegistrosPorStatusNaoPago() throws ServiceException {
+    public void filtrarRegistrosPorStatusNaoPago() throws ServiceException, ParseException {
         criarVariasContabilidades();
 
         List<Contabilidade> registrosFiltradros = contabilidadeService.filtrarPorStatus(NAO_PAGO);

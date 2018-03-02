@@ -14,6 +14,6 @@ public class OrdemContabilidadeParcelamentoPai extends OrdemFiltroGenerica<Conta
 
     @Override
     public Comparator<Contabilidade> getComparator() {
-        return Comparator.comparing(Contabilidade::getParcelamentoCodigoPai);
+        return Comparator.comparing(Contabilidade::getParcelamentoCodigoPai, Comparator.nullsFirst(Long::compareTo));
     }
 }

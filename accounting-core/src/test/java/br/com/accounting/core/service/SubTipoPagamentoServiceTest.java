@@ -14,7 +14,6 @@ import java.util.List;
 
 import static br.com.accounting.core.entity.Order.ASC;
 import static br.com.accounting.core.entity.Order.DESC;
-import static br.com.accounting.core.repository.impl.GenericRepository.DIRETORIO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -54,7 +53,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
         try {
             subTipoPagamentoService.salvar(subTipoPagamento);
         } catch (ServiceException e) {
-            Files.createDirectory(Paths.get(DIRETORIO));
+            Files.createDirectory(Paths.get(diretorio));
             throw e;
         }
     }

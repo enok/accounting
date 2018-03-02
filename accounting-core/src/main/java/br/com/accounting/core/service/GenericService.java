@@ -9,7 +9,7 @@ import br.com.accounting.core.ordering.Ordem;
 import java.util.List;
 
 public interface GenericService<T> {
-    void salvar(T entity) throws ServiceException;
+    Long salvar(T entity) throws ServiceException;
 
     List<T> buscarRegistros() throws ServiceException;
 

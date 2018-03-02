@@ -6,7 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.FORMATTER;
+import static br.com.accounting.core.util.Utils.DATE_FORMATTER;
+import static br.com.accounting.core.util.Utils.getDoubleFormatted;
 
 public class Contabilidade implements Entity {
     private Long codigo;
@@ -31,7 +32,7 @@ public class Contabilidade implements Entity {
     }
 
     public String getDataLancamentoFormatada() {
-        return getDataLancamento().format(FORMATTER);
+        return getDataLancamento().format(DATE_FORMATTER);
     }
 
     public LocalDate getVencimento() {
@@ -39,7 +40,7 @@ public class Contabilidade implements Entity {
     }
 
     public String getVencimentoFormatado() {
-        return getVencimento().format(FORMATTER);
+        return getVencimento().format(DATE_FORMATTER);
     }
 
     public TipoPagamento getTipoPagamento() {
@@ -55,6 +56,9 @@ public class Contabilidade implements Entity {
     }
 
     public String getSubTipoPagamentoDescricao() {
+        if (subTipoPagamento == null) {
+            return null;
+        }
         return subTipoPagamento.getDescricao();
     }
 
@@ -86,6 +90,27 @@ public class Contabilidade implements Entity {
         return parcelamento;
     }
 
+    public String getParcela() {
+        if ((parcelamento == null) || (parcelamento.getParcela() == null)) {
+            return null;
+        }
+        return parcelamento.getParcela().toString();
+    }
+
+    public String getParcelas() {
+        if ((parcelamento == null) || (parcelamento.getParcelas() == null)) {
+            return null;
+        }
+        return parcelamento.getParcelas().toString();
+    }
+
+    public String getParcelaCodigoPai() {
+        if ((parcelamento == null) || (parcelamento.getCodigoPai() == null)) {
+            return null;
+        }
+        return parcelamento.getCodigoPai().toString();
+    }
+
     public Long getParcelamentoCodigoPai() {
         return parcelamento.getCodigoPai();
     }
@@ -100,6 +125,10 @@ public class Contabilidade implements Entity {
 
     public Double getValor() {
         return valor;
+    }
+
+    public String getValorFormatado() {
+        return getDoubleFormatted(valor);
     }
 
     public Status getStatus() {

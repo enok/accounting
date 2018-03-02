@@ -22,12 +22,12 @@ public abstract class GenericService<T> {
         this.repository = repository;
     }
 
-    public void salvar(T entity) throws ServiceException {
+    public Long salvar(T entity) throws ServiceException {
         LOG.info("[ salvar ]");
         LOG.debug("entity: " + entity);
 
         try {
-            repository.salvar(entity);
+            return repository.salvar(entity);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel salvar o registro: " + entity;
             LOG.error(mensagem, e);

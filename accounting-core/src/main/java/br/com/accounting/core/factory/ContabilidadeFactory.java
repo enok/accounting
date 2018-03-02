@@ -2,10 +2,10 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.*;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.getDateFromString;
-import static br.com.accounting.core.util.Utils.isEmpty;
+import static br.com.accounting.core.util.Utils.*;
 
 public final class ContabilidadeFactory {
     private static ContabilidadeFactory contabilidadeFactory;
@@ -31,6 +31,13 @@ public final class ContabilidadeFactory {
         if (!isEmpty(dataLancamento)) {
             LocalDate dataLancamentoObject = getDateFromString(dataLancamento);
             contabilidade.withDataLancamento(dataLancamentoObject);
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withDataLancamento(LocalDate localDate) {
+        if (localDate != null) {
+            contabilidade.withDataLancamento(localDate);
         }
         return this;
     }
@@ -100,10 +107,29 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withParcelamento(String parcela, String parcelas, String codigoParcelamentoPai) {
         if (!isEmpty(parcela) && !isEmpty(parcelas)) {
-            Parcelamento parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas), Long.parseLong(codigoParcelamentoPai));
+
+            Parcelamento parcelamento;
+
+            if (!isEmpty(codigoParcelamentoPai)) {
+                parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas), Long.parseLong(codigoParcelamentoPai));
+            }
+            else {
+                parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas));
+            }
+
             contabilidade.withParcelamento(parcelamento);
         }
         return this;
+    }
+
+    public ContabilidadeFactory withParcelamento(Integer parcela, Integer parcelas, Long codigoPai) {
+        Parcelamento parcelamento = new Parcelamento(parcela, parcelas, codigoPai);
+        contabilidade.withParcelamento(parcelamento);
+        return this;
+    }
+
+    public ContabilidadeFactory withParcelamento(String parcela, String parcelas) {
+        return withParcelamento(parcela, parcelas, null);
     }
 
     public ContabilidadeFactory withCategoria(String categoria) {
@@ -114,9 +140,9 @@ public final class ContabilidadeFactory {
         return this;
     }
 
-    public ContabilidadeFactory withValor(String valor) {
+    public ContabilidadeFactory withValor(String valor) throws ParseException {
         if (!isEmpty(valor)) {
-            contabilidade.withValor(Double.parseDouble(valor));
+            contabilidade.withValor(createDouble(valor));
         }
         return this;
     }

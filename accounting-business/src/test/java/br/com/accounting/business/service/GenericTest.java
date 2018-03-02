@@ -1,6 +1,6 @@
-package br.com.accounting.core.service;
+package br.com.accounting.business.service;
 
-import br.com.accounting.core.ConfigCore;
+import br.com.accounting.business.ConfigBusiness;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
-@ContextConfiguration(classes = ConfigCore.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = ConfigBusiness.class, loader = AnnotationConfigContextLoader.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public abstract class GenericTest {
 
