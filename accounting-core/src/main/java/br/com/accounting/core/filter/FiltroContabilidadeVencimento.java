@@ -14,6 +14,10 @@ public class FiltroContabilidadeVencimento extends FiltroGenerico<Contabilidade>
     private LocalDate vencimentoInicial;
     private LocalDate vencimentoFinal;
 
+    public FiltroContabilidadeVencimento(String vencimentoInicial) {
+        this.vencimentoInicial = getDateFromString(vencimentoInicial);
+    }
+
     public FiltroContabilidadeVencimento(String vencimentoInicial, String vencimentoFinal) {
         this.vencimentoInicial = getDateFromString(vencimentoInicial);
         this.vencimentoFinal = getDateFromString(vencimentoFinal);
@@ -21,7 +25,14 @@ public class FiltroContabilidadeVencimento extends FiltroGenerico<Contabilidade>
 
     @Override
     public Predicate<Contabilidade> getPredicate() {
-        return c -> entreDatas(c.getVencimento(), vencimentoInicial, vencimentoFinal);
+        if (vencimentoFinal != null) {
+            return c -> entreDatas(c.getVencimento(), vencimentoInicial, vencimentoFinal);
+        }
+        return c -> vencimentoAcimaDaDataInicial(c);
+    }
+
+    private boolean vencimentoAcimaDaDataInicial(Contabilidade c) {
+        return c.getVencimento().compareTo(vencimentoInicial) >= 0;
     }
 
     @Override

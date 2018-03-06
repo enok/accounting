@@ -19,7 +19,7 @@ import java.util.List;
 import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
-public class SubGrupoServiceImpl extends GenericService<SubGrupo> implements SubGrupoService {
+public class SubGrupoServiceImpl extends GenericAbstractService<SubGrupo> implements SubGrupoService {
     private static final Logger LOG = LoggerFactory.getLogger(SubGrupoServiceImpl.class);
 
     @Autowired

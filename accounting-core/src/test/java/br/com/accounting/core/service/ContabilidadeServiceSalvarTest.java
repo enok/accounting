@@ -35,6 +35,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
+        assertThat(contabilidade.getDataAtualizacaoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("27/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(CARTAO_CREDITO));
         assertThat(contabilidade.getSubTipoPagamento().getDescricao(), equalTo("744"));
@@ -60,6 +61,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
+        assertThat(contabilidade.getDataAtualizacaoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("15/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(CARTAO_DEBITO));
         assertThat(contabilidade.getSubTipoPagamento().getDescricao(), equalTo("7660"));
@@ -83,6 +85,7 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
 
         assertThat(contabilidade, notNullValue());
         assertThat(contabilidade.getDataLancamentoFormatada(), equalTo("01/01/2018"));
+        assertThat(contabilidade.getDataAtualizacaoFormatada(), equalTo("01/01/2018"));
         assertThat(contabilidade.getVencimentoFormatado(), equalTo("25/01/2018"));
         assertThat(contabilidade.getTipoPagamento(), equalTo(DINHEIRO));
         assertThat(contabilidade.getSubTipoPagamento(), nullValue());
@@ -108,7 +111,8 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
 
         try {
             contabilidadeService.salvar(registro);
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e) {
             criarDiretorio();
             throw e;
         }

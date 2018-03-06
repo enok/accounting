@@ -16,7 +16,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class ContabilidadeBusinessTest extends GenericTest {
-
     @Autowired
     private ContabilidadeBusiness contabilidadeBusiness;
 
@@ -451,5 +450,78 @@ public class ContabilidadeBusinessTest extends GenericTest {
             assertThat(e.getCause().getMessage(), is("O valor não pode ser negativo"));
             throw e;
         }
+    }
+
+    @Test
+    public void atualizarContabilidade() throws TechnicalException, BusinessException {
+        ContabilidadeDTO contabilidadeDTO = createContabilidadeDTO1();
+
+        Long codigo = contabilidadeBusiness.salvar(contabilidadeDTO).get(0);
+
+        List<ContabilidadeDTO> contabilidades = contabilidadeBusiness.buscarRelacionadasPorCodigoPai(codigo);
+
+        assertThat(contabilidades.size(), equalTo(12));
+
+        String vencimento = "27/12/2017";
+        String codigoPai = null;
+        long cod = codigo;
+
+        for (int i = 0; i < contabilidades.size(); i++, cod++) {
+            String parcela = String.valueOf(i + 1);
+
+            assertThat(contabilidades.get(i).getCodigo(), equalTo(String.valueOf(cod)));
+            assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getVencimento(), equalTo(vencimento));
+            assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("CARTAO_CREDITO"));
+            assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("7660"));
+            assertThat(contabilidades.get(i).getTipo(), equalTo("FIXO"));
+            assertThat(contabilidades.get(i).getGrupo(), equalTo("MORADIA"));
+            assertThat(contabilidades.get(i).getSubGrupo(), equalTo("ASSINATURA"));
+            assertThat(contabilidades.get(i).getDescricao(), equalTo("spotify"));
+            assertThat(contabilidades.get(i).getParcela(), equalTo(parcela));
+            assertThat(contabilidades.get(i).getParcelas(), equalTo("12"));
+            assertThat(contabilidades.get(i).getParcelaCodigoPai(), equalTo(codigoPai));
+            assertThat(contabilidades.get(i).getCategoria(), equalTo("SAIDA"));
+            assertThat(contabilidades.get(i).getValor(), equalTo("26,90"));
+            assertThat(contabilidades.get(i).getStatus(), equalTo("PAGO"));
+
+            if (i == 0) {
+                codigoPai = contabilidades.get(i).getCodigo();
+            }
+            vencimento = getNextMonth(vencimento);
+        }
+
+        contabilidadeDTO.withCodigo(codigo.toString());
+        contabilidadeDTO.withVencimento("27/09/2018");
+        contabilidadeDTO.withParcela("10");
+        contabilidadeDTO.withValor("10,00");
+
+        contabilidadeBusiness.atualizar(contabilidadeDTO);
+
+        contabilidades = contabilidadeBusiness.buscarRelacionadasPorCodigoPai(codigo);
+
+        assertThat(contabilidades.size(), equalTo(12));
+
+        assertBuscasRelacionadasPorCodigoPai(contabilidades.get(9), "27/09/2018", "10", codigo);
+        assertBuscasRelacionadasPorCodigoPai(contabilidades.get(10), "27/10/2018", "11", codigo);
+        assertBuscasRelacionadasPorCodigoPai(contabilidades.get(11), "27/11/2018", "12", codigo);
+    }
+
+    private void assertBuscasRelacionadasPorCodigoPai(ContabilidadeDTO contabilidade, String vencimento, String parcela, Long codigo) {
+        assertThat(contabilidade.getCodigo(), equalTo(parcela));
+        assertThat(contabilidade.getDataLancamento(), equalTo(getStringFromCurrentDate()));
+        assertThat(contabilidade.getVencimento(), equalTo(vencimento));
+        assertThat(contabilidade.getTipoPagamento(), equalTo("CARTAO_CREDITO"));
+        assertThat(contabilidade.getSubTipoPagamento(), equalTo("7660"));
+        assertThat(contabilidade.getTipo(), equalTo("FIXO"));
+        assertThat(contabilidade.getGrupo(), equalTo("MORADIA"));
+        assertThat(contabilidade.getSubGrupo(), equalTo("ASSINATURA"));
+        assertThat(contabilidade.getDescricao(), equalTo("spotify"));
+        assertThat(contabilidade.getParcela(), equalTo(parcela));
+        assertThat(contabilidade.getParcelas(), equalTo("12"));
+        assertThat(contabilidade.getParcelaCodigoPai(), equalTo(String.valueOf(codigo)));
+        assertThat(contabilidade.getCategoria(), equalTo("SAIDA"));
+        assertThat(contabilidade.getValor(), equalTo("10,00"));
+        assertThat(contabilidade.getStatus(), equalTo("PAGO"));
     }
 }

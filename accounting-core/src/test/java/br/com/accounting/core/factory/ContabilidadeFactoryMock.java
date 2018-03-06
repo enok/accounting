@@ -10,6 +10,7 @@ public class ContabilidadeFactoryMock {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
+                .withDataAtualizacao("01/01/2018")
                 .withVencimento("27/01/2018")
                 .withTipoPagamento("CARTAO_CREDITO")
                 .withSubTipoPagamento("1", "744")
@@ -27,6 +28,7 @@ public class ContabilidadeFactoryMock {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
+                .withDataAtualizacao("01/01/2018")
                 .withVencimento("27/01/2018")
                 .withTipoPagamento("CARTAO_CREDITO")
                 .withSubTipoPagamento("1", "7660")
@@ -44,6 +46,7 @@ public class ContabilidadeFactoryMock {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
+                .withDataAtualizacao("01/01/2018")
                 .withVencimento("25/01/2018")
                 .withTipoPagamento("DINHEIRO")
                 .withTipo("FIXO")
@@ -59,6 +62,7 @@ public class ContabilidadeFactoryMock {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
+                .withDataAtualizacao("01/01/2018")
                 .withVencimento("15/01/2018")
                 .withTipoPagamento("CARTAO_DEBITO")
                 .withSubTipoPagamento("1", "7660")
@@ -75,6 +79,7 @@ public class ContabilidadeFactoryMock {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento("01/01/2018")
+                .withDataAtualizacao("01/01/2018")
                 .withVencimento("15/01/2018")
                 .withTipoPagamento("CARTAO_DEBITO")
                 .withSubTipoPagamento("1", "744")

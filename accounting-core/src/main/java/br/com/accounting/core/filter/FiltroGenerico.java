@@ -27,6 +27,13 @@ public abstract class FiltroGenerico<T> {
         }
     }
 
+    public T filtrarSingle(List<T> entities) {
+        LOG.info("[ filtrarUm ]");
+        LOG.debug("entities: " + entities);
+
+        return getCollectSingle(entities);
+    }
+
     public abstract Predicate<T> getPredicate();
 
     private List<T> removeDuplicates(List<T> list) {
@@ -39,5 +46,12 @@ public abstract class FiltroGenerico<T> {
                 .stream()
                 .filter(getPredicate())
                 .collect(Collectors.toList());
+    }
+
+    private T getCollectSingle(List<T> entities) {
+        return entities
+                .stream()
+                .filter(getPredicate())
+                .collect(Collectors.toList()).get(0);
     }
 }

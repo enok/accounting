@@ -9,7 +9,9 @@ public interface Repository<T> {
 
     void incrementarCodigo(Long proximoCodigo) throws RepositoryException;
 
-    Long salvar(T enitty) throws RepositoryException;
+    Long salvar(T entity) throws RepositoryException;
+
+    void atualizar(List<T> oldEntitiesList, List<T> newEntitiesList) throws RepositoryException;
 
     List<T> buscarRegistros() throws RepositoryException;
 }

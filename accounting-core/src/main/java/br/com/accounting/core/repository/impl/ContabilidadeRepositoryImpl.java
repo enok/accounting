@@ -1,8 +1,6 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.Parcelamento;
-import br.com.accounting.core.entity.SubTipoPagamento;
+import br.com.accounting.core.entity.*;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.impl.ContabilidadeServiceImpl;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,6 +60,7 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
         StringBuilder builder = new StringBuilder()
                 .append(contabilidade.getCodigo()).append(SEPARADOR)
                 .append(contabilidade.getDataLancamentoFormatada()).append(SEPARADOR)
+                .append(contabilidade.getDataAtualizacaoFormatada()).append(SEPARADOR)
                 .append(contabilidade.getVencimentoFormatado()).append(SEPARADOR)
                 .append(contabilidade.getTipoPagamento()).append(SEPARADOR)
                 .append(subTipoPagamentoDescricao).append(SEPARADOR)
@@ -107,16 +107,17 @@ public class ContabilidadeRepositoryImpl extends GenericRepository<Contabilidade
                 .begin()
                 .withCodigo(registro.get(0))
                 .withDataLancamento(registro.get(1))
-                .withVencimento(registro.get(2))
-                .withTipoPagamento(registro.get(3))
-                .withSubTipoPagamento(registro.get(4))
-                .withTipo(registro.get(5))
-                .withGrupoSubGrupo(registro.get(6), registro.get(7))
-                .withDescricao(registro.get(8))
-                .withParcelamento(registro.get(9), registro.get(10), registro.get(11))
-                .withCategoria(registro.get(12))
-                .withValor(registro.get(13))
-                .withStatus(registro.get(14))
+                .withDataAtualizacao(registro.get(2))
+                .withVencimento(registro.get(3))
+                .withTipoPagamento(registro.get(4))
+                .withSubTipoPagamento(registro.get(5))
+                .withTipo(registro.get(6))
+                .withGrupoSubGrupo(registro.get(7), registro.get(8))
+                .withDescricao(registro.get(9))
+                .withParcelamento(registro.get(10), registro.get(11), registro.get(12))
+                .withCategoria(registro.get(13))
+                .withValor(registro.get(14))
+                .withStatus(registro.get(15))
                 .build();
     }
 }

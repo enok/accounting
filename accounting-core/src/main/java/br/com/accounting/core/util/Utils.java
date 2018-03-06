@@ -1,5 +1,7 @@
 package br.com.accounting.core.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -28,8 +30,8 @@ public final class Utils {
     private Utils() {
     }
 
-    public static boolean isEmpty(String value) {
-        return (value == null) || value.isEmpty() || value.equals("null");
+    public static boolean isBlank(String value) {
+        return StringUtils.isBlank(value) || value.equals("null");
     }
 
     public static LocalDate getDateFromString(String date) {

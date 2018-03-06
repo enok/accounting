@@ -2,7 +2,7 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.SubTipoPagamento;
 
-import static br.com.accounting.core.util.Utils.isEmpty;
+import static br.com.accounting.core.util.Utils.isBlank;
 
 public class SubTipoPagamentoFactory {
     private static SubTipoPagamentoFactory subTipoPagamentoFactory;
@@ -18,14 +18,14 @@ public class SubTipoPagamentoFactory {
     }
 
     public SubTipoPagamentoFactory withCodigo(String codigo) {
-        if (!isEmpty(codigo)) {
+        if (!isBlank(codigo)) {
             subTipoPagamento.withCodigo(Long.parseLong(codigo));
         }
         return this;
     }
 
     public SubTipoPagamentoFactory withDescricao(String descricao) {
-        if (!isEmpty(descricao)) {
+        if (!isBlank(descricao)) {
             subTipoPagamento.withDescricao(descricao);
         }
         return this;

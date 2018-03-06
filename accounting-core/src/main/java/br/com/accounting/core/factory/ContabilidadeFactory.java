@@ -15,20 +15,29 @@ public final class ContabilidadeFactory {
         contabilidade = new Contabilidade();
     }
 
+    private ContabilidadeFactory(Contabilidade contabilidade) {
+        this.contabilidade = contabilidade;
+    }
+
     public static ContabilidadeFactory begin() {
         contabilidadeFactory = new ContabilidadeFactory();
         return contabilidadeFactory;
     }
 
+    public static ContabilidadeFactory begin(Contabilidade contabilidade) {
+        contabilidadeFactory = new ContabilidadeFactory(contabilidade);
+        return contabilidadeFactory;
+    }
+
     public ContabilidadeFactory withCodigo(String codigo) {
-        if (!isEmpty(codigo)) {
+        if (!isBlank(codigo)) {
             contabilidade.withCodigo(Long.parseLong(codigo));
         }
         return this;
     }
 
     public ContabilidadeFactory withDataLancamento(String dataLancamento) {
-        if (!isEmpty(dataLancamento)) {
+        if (!isBlank(dataLancamento)) {
             LocalDate dataLancamentoObject = getDateFromString(dataLancamento);
             contabilidade.withDataLancamento(dataLancamentoObject);
         }
@@ -42,8 +51,23 @@ public final class ContabilidadeFactory {
         return this;
     }
 
+    public ContabilidadeFactory withDataAtualizacao(String dataAtualizacao) {
+        if (!isBlank(dataAtualizacao)) {
+            LocalDate dataAtualizacaoObj = getDateFromString(dataAtualizacao);
+            contabilidade.withDataAtualizacao(dataAtualizacaoObj);
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withDataAtualizacao(LocalDate localDate) {
+        if (localDate != null) {
+            contabilidade.withDataAtualizacao(localDate);
+        }
+        return this;
+    }
+
     public ContabilidadeFactory withVencimento(String vencimento) {
-        if (!isEmpty(vencimento)) {
+        if (!isBlank(vencimento)) {
             LocalDate vencimentoObj = getDateFromString(vencimento);
             contabilidade.withVencimento(vencimentoObj);
         }
@@ -51,7 +75,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withTipoPagamento(String tipoPagamento) {
-        if (!isEmpty(tipoPagamento)) {
+        if (!isBlank(tipoPagamento)) {
             TipoPagamento tipoPagamentoObj = TipoPagamento.valueOf(tipoPagamento);
             contabilidade.withTipoPagamento(tipoPagamentoObj);
         }
@@ -59,7 +83,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withSubTipoPagamento(String codigo, String descricao) {
-        if (!isEmpty(codigo) && !isEmpty(descricao)) {
+        if (!isBlank(codigo) && !isBlank(descricao)) {
             SubTipoPagamento subTipoPagamentoObj = new SubTipoPagamento(Long.parseLong(codigo), descricao);
             contabilidade.withSubTipoPagamento(subTipoPagamentoObj);
         }
@@ -67,7 +91,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withSubTipoPagamento(String descricao) {
-        if (!isEmpty(descricao)) {
+        if (!isBlank(descricao)) {
             SubTipoPagamento subTipoPagamentoObj = new SubTipoPagamento()
                     .withDescricao(descricao);
             contabilidade.withSubTipoPagamento(subTipoPagamentoObj);
@@ -76,7 +100,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withTipo(String tipo) {
-        if (!isEmpty(tipo)) {
+        if (!isBlank(tipo)) {
             Tipo tipoObj = Tipo.valueOf(tipo);
             contabilidade.withTipo(tipoObj);
         }
@@ -84,7 +108,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withGrupoSubGrupo(String grupo, String subGrupo) {
-        if (!isEmpty(grupo)) {
+        if (!isBlank(grupo)) {
             SubGrupo subGrupoObj = SubGrupoFactory
                     .begin()
                     .withDescricao(subGrupo)
@@ -99,18 +123,18 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withDescricao(String descricao) {
-        if (!isEmpty(descricao)) {
+        if (!isBlank(descricao)) {
             contabilidade.withDescricao(descricao);
         }
         return this;
     }
 
     public ContabilidadeFactory withParcelamento(String parcela, String parcelas, String codigoParcelamentoPai) {
-        if (!isEmpty(parcela) && !isEmpty(parcelas)) {
+        if (!isBlank(parcela) && !isBlank(parcelas)) {
 
             Parcelamento parcelamento;
 
-            if (!isEmpty(codigoParcelamentoPai)) {
+            if (!isBlank(codigoParcelamentoPai)) {
                 parcelamento = new Parcelamento(Integer.parseInt(parcela), Integer.parseInt(parcelas), Long.parseLong(codigoParcelamentoPai));
             }
             else {
@@ -133,7 +157,7 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withCategoria(String categoria) {
-        if (!isEmpty(categoria)) {
+        if (!isBlank(categoria)) {
             Categoria categoriaObj = Categoria.valueOf(categoria);
             contabilidade.withCategoria(categoriaObj);
         }
@@ -141,14 +165,14 @@ public final class ContabilidadeFactory {
     }
 
     public ContabilidadeFactory withValor(String valor) throws ParseException {
-        if (!isEmpty(valor)) {
+        if (!isBlank(valor)) {
             contabilidade.withValor(createDouble(valor));
         }
         return this;
     }
 
     public ContabilidadeFactory withStatus(String status) {
-        if (!isEmpty(status)) {
+        if (!isBlank(status)) {
             Status statusObj = Status.valueOf(status);
             contabilidade.withStatus(statusObj);
         }

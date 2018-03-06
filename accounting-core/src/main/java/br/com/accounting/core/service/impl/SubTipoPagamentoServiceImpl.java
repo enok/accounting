@@ -18,7 +18,7 @@ import java.util.List;
 import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
-public class SubTipoPagamentoServiceImpl extends GenericService<SubTipoPagamento> implements SubTipoPagamentoService {
+public class SubTipoPagamentoServiceImpl extends GenericAbstractService<SubTipoPagamento> implements SubTipoPagamentoService {
     private static final Logger LOG = LoggerFactory.getLogger(SubTipoPagamentoServiceImpl.class);
 
     public SubTipoPagamentoServiceImpl(SubTipoPagamentoRepository subTipoPagamentoRepository) {

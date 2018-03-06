@@ -28,6 +28,13 @@ public abstract class FiltroMapaGenerico<E, T> {
         }
     }
 
+    public E filtrarSingle(List<T> entities) {
+        LOG.info("[ filtrarUm ]");
+        LOG.debug("entities: " + entities);
+
+        return getCollectSingle(entities);
+    }
+
     public abstract Predicate<T> getFiltroPredicado();
 
     public abstract Function<T, E> getMapPredicado();
@@ -43,5 +50,13 @@ public abstract class FiltroMapaGenerico<E, T> {
                 .filter(getFiltroPredicado())
                 .map(getMapPredicado())
                 .collect(Collectors.toList());
+    }
+
+    private E getCollectSingle(List<T> entities) {
+        return entities
+                .stream()
+                .filter(getFiltroPredicado())
+                .map(getMapPredicado())
+                .collect(Collectors.toList()).get(0);
     }
 }

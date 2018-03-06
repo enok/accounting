@@ -4,7 +4,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class Parcelamento {
+import java.io.Serializable;
+
+public class Parcelamento implements Serializable {
     private Integer parcela;
     private Integer parcelas;
     private Long codigoPai;

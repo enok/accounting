@@ -6,6 +6,7 @@ import br.com.accounting.core.filter.Duplicates;
 import br.com.accounting.core.filter.Filtro;
 import br.com.accounting.core.ordering.Ordem;
 import br.com.accounting.core.repository.Repository;
+import br.com.accounting.core.service.GenericService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,15 +14,16 @@ import java.util.List;
 
 import static br.com.accounting.core.filter.Duplicates.KEEP;
 
-public abstract class GenericService<T> {
-    private static final Logger LOG = LoggerFactory.getLogger(GenericService.class);
+public abstract class GenericAbstractService<T> implements GenericService<T> {
+    private static final Logger LOG = LoggerFactory.getLogger(GenericAbstractService.class);
 
     protected Repository repository;
 
-    public GenericService(Repository repository) {
+    public GenericAbstractService(Repository repository) {
         this.repository = repository;
     }
 
+    @Override
     public Long salvar(T entity) throws ServiceException {
         LOG.info("[ salvar ]");
         LOG.debug("entity: " + entity);
@@ -35,6 +37,22 @@ public abstract class GenericService<T> {
         }
     }
 
+    @Override
+    public void atualizar(List<T> oldEntitiesList, List<T> newEntitiesList) throws ServiceException {
+        LOG.info("[ atualizar ]");
+        LOG.debug("oldEntitiesList: " + oldEntitiesList);
+        LOG.debug("newEntitiesList: " + newEntitiesList);
+
+        try {
+            repository.atualizar(oldEntitiesList, newEntitiesList);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel atualizar os registros: " + oldEntitiesList;
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
     public List<T> buscarRegistros() throws ServiceException {
         LOG.info("[ buscarRegistros ]");
 
@@ -47,6 +65,7 @@ public abstract class GenericService<T> {
         }
     }
 
+    @Override
     public List<T> filtrar(Filtro filtro, Duplicates duplicates, List<T> entitys) throws ServiceException {
         LOG.info("[ filtrar ]");
         LOG.debug("filtro: " + filtro);
@@ -62,10 +81,12 @@ public abstract class GenericService<T> {
         }
     }
 
+    @Override
     public List<T> filtrar(Filtro filtro, List<T> entitys) throws ServiceException {
         return filtrar(filtro, KEEP, entitys);
     }
 
+    @Override
     public List<T> filtrar(Filtro filtro, Duplicates duplicates) throws ServiceException {
         LOG.info("[ filtrar ]");
         LOG.debug("filtro: " + filtro);
@@ -81,10 +102,27 @@ public abstract class GenericService<T> {
         }
     }
 
+    @Override
     public List<T> filtrar(Filtro filtro) throws ServiceException {
         return filtrar(filtro, KEEP);
     }
 
+    @Override
+    public T filtrarSingle(Filtro filtro, List<T> entitys) throws ServiceException {
+        LOG.info("[ filtrar ]");
+        LOG.debug("filtro: " + filtro);
+        LOG.debug("entitys: " + entitys);
+
+        try {
+            return (T) filtro.filtrarSingle(entitys);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar o registro";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
     public List<T> ordenar(Ordem ordem, Order order, List<T> entitys) throws ServiceException {
         LOG.info("[ ordenar ]");
         LOG.debug("ordem: " + ordem);
@@ -100,6 +138,7 @@ public abstract class GenericService<T> {
         }
     }
 
+    @Override
     public List<T> ordenar(Ordem ordem, Order order) throws ServiceException {
         LOG.info("[ ordenar ]");
         LOG.debug("ordem: " + ordem);

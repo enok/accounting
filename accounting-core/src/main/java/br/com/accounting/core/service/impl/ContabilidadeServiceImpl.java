@@ -14,12 +14,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ContabilidadeServiceImpl extends GenericService<Contabilidade> implements ContabilidadeService {
-    private static final Logger LOG = LoggerFactory.getLogger(GenericService.class);
+public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilidade> implements ContabilidadeService {
+    private static final Logger LOG = LoggerFactory.getLogger(GenericAbstractService.class);
 
     @Autowired
     public ContabilidadeServiceImpl(ContabilidadeRepository contabilidadeRepository) {
         super(contabilidadeRepository);
+    }
+
+    @Override
+    public Contabilidade filtrarPorCodigo(Long codigo, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ filtrarPorCodigo ]");
+        LOG.debug("codigo: " + codigo);
+
+        try {
+            Filtro filtro = new FiltroContabilidadeCodigo(codigo);
+            return filtrarSingle(filtro, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros por codigo";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
     }
 
     @Override
@@ -34,6 +49,22 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
             return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por intervalo de vencimento";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<Contabilidade> filtrarPorValoresAcimaDoVencimento(String vencimento, List<Contabilidade> contabilidades) throws ServiceException {
+        LOG.info("[ filtrarPorValoresAcimaDoVencimento ]");
+        LOG.debug("vencimento: " + vencimento);
+        LOG.debug("contabilidades: " + contabilidades);
+
+        try {
+            Filtro filtro = new FiltroContabilidadeVencimento(vencimento);
+            return filtrar(filtro, contabilidades);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os registros acima do vencimento: " + vencimento;
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -250,7 +281,7 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            Filtro filtro = new FiltroContabilidadeParcelamentoPai(codigoPai);
+            Filtro filtro = new FiltroContabilidadeAgrupadosPorParcelamentoPai(codigoPai);
             return filtrar(filtro, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
@@ -265,7 +296,7 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("codigoPai: " + codigoPai);
 
         try {
-            Filtro filtro = new FiltroContabilidadeParcelamentoPai(codigoPai);
+            Filtro filtro = new FiltroContabilidadeAgrupadosPorParcelamentoPai(codigoPai);
             return filtrar(filtro);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
@@ -559,7 +590,7 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("contabilidades: " + contabilidades);
 
         try {
-            Ordem ordem = new OrdemContabilidadeParcelamentoPai();
+            Ordem ordem = new OrdemContabilidadeAgrupadosPorParcelamentoPai();
             return ordenar(ordem, order, contabilidades);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
@@ -574,7 +605,7 @@ public class ContabilidadeServiceImpl extends GenericService<Contabilidade> impl
         LOG.debug("order: " + order);
 
         try {
-            Ordem ordem = new OrdemContabilidadeParcelamentoPai();
+            Ordem ordem = new OrdemContabilidadeAgrupadosPorParcelamentoPai();
             return ordenar(ordem, order);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";

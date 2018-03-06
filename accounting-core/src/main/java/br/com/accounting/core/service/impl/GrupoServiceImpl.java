@@ -23,7 +23,7 @@ import java.util.List;
 import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
-public class GrupoServiceImpl extends GenericService<Grupo> implements GrupoService {
+public class GrupoServiceImpl extends GenericAbstractService<Grupo> implements GrupoService {
     private static final Logger LOG = LoggerFactory.getLogger(GrupoServiceImpl.class);
 
     @Autowired

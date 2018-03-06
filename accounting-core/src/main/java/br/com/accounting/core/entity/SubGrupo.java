@@ -5,7 +5,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class SubGrupo implements Entity {
+import java.io.Serializable;
+
+public class SubGrupo implements Entity, Serializable {
     private Long codigo;
     private String descricao;
 
@@ -37,9 +39,13 @@ public class SubGrupo implements Entity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         SubGrupo subGrupo = (SubGrupo) o;
 

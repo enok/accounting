@@ -5,7 +5,7 @@ import br.com.accounting.core.entity.Contabilidade;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public class OrdemContabilidadeParcelamentoPai extends OrdemFiltroGenerica<Contabilidade> implements Ordem<Contabilidade, Contabilidade> {
+public class OrdemContabilidadeAgrupadosPorParcelamentoPai extends OrdemFiltroGenerica<Contabilidade> implements Ordem<Contabilidade, Contabilidade> {
 
     @Override
     public Predicate<Contabilidade> getPredicate() {

@@ -4,14 +4,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.DATE_FORMATTER;
-import static br.com.accounting.core.util.Utils.getDoubleFormatted;
+import static br.com.accounting.core.util.Utils.*;
 
-public class Contabilidade implements Entity {
+public class Contabilidade implements Entity, Serializable {
     private Long codigo;
     private LocalDate dataLancamento;
+    private LocalDate dataAtualizacao;
     private LocalDate vencimento;
     private TipoPagamento tipoPagamento;
     private SubTipoPagamento subTipoPagamento;
@@ -29,6 +30,14 @@ public class Contabilidade implements Entity {
 
     public LocalDate getDataLancamento() {
         return dataLancamento;
+    }
+
+    public LocalDate getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public String getDataAtualizacaoFormatada() {
+        return getDataAtualizacao().format(DATE_FORMATTER);
     }
 
     public String getDataLancamentoFormatada() {
@@ -140,62 +149,93 @@ public class Contabilidade implements Entity {
     }
 
     public Contabilidade withCodigo(Long codigo) {
-        this.codigo = codigo;
+        if (codigo != null) {
+            this.codigo = codigo;
+        }
         return this;
     }
 
     public Contabilidade withDataLancamento(LocalDate dataLancamento) {
-        this.dataLancamento = dataLancamento;
+        if (dataLancamento != null) {
+            this.dataLancamento = dataLancamento;
+        }
+        return this;
+    }
+
+    public Contabilidade withDataAtualizacao(LocalDate dataAtualizacao) {
+        if (dataAtualizacao != null) {
+            this.dataAtualizacao = dataAtualizacao;
+        }
         return this;
     }
 
     public Contabilidade withVencimento(LocalDate vencimento) {
-        this.vencimento = vencimento;
+        if (vencimento != null) {
+            this.vencimento = vencimento;
+        }
         return this;
     }
 
     public Contabilidade withTipoPagamento(TipoPagamento tipoPagamento) {
-        this.tipoPagamento = tipoPagamento;
+        if (tipoPagamento != null) {
+            this.tipoPagamento = tipoPagamento;
+        }
         return this;
     }
 
     public Contabilidade withSubTipoPagamento(SubTipoPagamento subTipoPagamento) {
-        this.subTipoPagamento = subTipoPagamento;
+        if (subTipoPagamento != null) {
+            this.subTipoPagamento = subTipoPagamento;
+        }
         return this;
     }
 
     public Contabilidade withTipo(Tipo tipo) {
-        this.tipo = tipo;
+        if (tipo != null) {
+            this.tipo = tipo;
+        }
         return this;
     }
 
     public Contabilidade withGrupo(Grupo grupo) {
-        this.grupo = grupo;
+        if (grupo != null) {
+            this.grupo = grupo;
+        }
         return this;
     }
 
     public Contabilidade withDescricao(String descricao) {
-        this.descricao = descricao;
+        if (!isBlank(descricao)) {
+            this.descricao = descricao;
+        }
         return this;
     }
 
     public Contabilidade withParcelamento(Parcelamento parcelamento) {
-        this.parcelamento = parcelamento;
+        if (parcelamento != null) {
+            this.parcelamento = parcelamento;
+        }
         return this;
     }
 
     public Contabilidade withCategoria(Categoria categoria) {
-        this.categoria = categoria;
+        if (categoria != null) {
+            this.categoria = categoria;
+        }
         return this;
     }
 
     public Contabilidade withValor(Double valor) {
-        this.valor = valor;
+        if (valor != null) {
+            this.valor = valor;
+        }
         return this;
     }
 
     public Contabilidade withStatus(Status status) {
-        this.status = status;
+        if (status != null) {
+            this.status = status;
+        }
         return this;
     }
 

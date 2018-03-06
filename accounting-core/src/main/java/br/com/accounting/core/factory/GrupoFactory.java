@@ -3,7 +3,7 @@ package br.com.accounting.core.factory;
 import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.SubGrupo;
 
-import static br.com.accounting.core.util.Utils.isEmpty;
+import static br.com.accounting.core.util.Utils.isBlank;
 
 public class GrupoFactory {
     private static GrupoFactory grupoFactory;
@@ -19,21 +19,21 @@ public class GrupoFactory {
     }
 
     public GrupoFactory withCodigo(String codigo) {
-        if (!isEmpty(codigo)) {
+        if (!isBlank(codigo)) {
             grupo.withCodigo(Long.parseLong(codigo));
         }
         return this;
     }
 
     public GrupoFactory withDescricao(String descricao) {
-        if (!isEmpty(descricao)) {
+        if (!isBlank(descricao)) {
             grupo.withDescricao(descricao);
         }
         return this;
     }
 
     public GrupoFactory withSubGrupo(String subGrupoCodigo, String subGrupoDescricao) {
-        if (!isEmpty(subGrupoCodigo)) {
+        if (!isBlank(subGrupoCodigo)) {
             SubGrupo subGrupo = SubGrupoFactory
                     .begin()
                     .withCodigo(subGrupoCodigo)

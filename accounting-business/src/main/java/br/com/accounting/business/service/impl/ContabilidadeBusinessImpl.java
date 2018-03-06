@@ -7,6 +7,7 @@ import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.accounting.business.validation.ValidacaoBusiness.validaBusiness;
-import static br.com.accounting.business.validation.ValidacaoBusiness.validaTipoDePagamentoComSubTipoPagamento;
 import static br.com.accounting.business.validation.ValidacaoCampo.*;
 import static br.com.accounting.core.util.Utils.getNextMonth;
+import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -63,11 +64,60 @@ public class ContabilidadeBusinessImpl implements ContabilidadeBusiness {
             throw new TechnicalException(mensagem, e);
         }
 
+        LOG.debug("codigos: " + codigos);
+
         return codigos;
     }
 
     @Override
+    public void atualizar(ContabilidadeDTO contabilidadeDTO) throws TechnicalException {
+        LOG.info("[ atualizar ]");
+        LOG.info("contabilidadeDTO: " + contabilidadeDTO);
+
+        try {
+            long codigo = Long.parseLong(contabilidadeDTO.getCodigo());
+            String vencimento = contabilidadeDTO.getVencimento();
+            String dataAtualizacao = getStringFromCurrentDate();
+
+            List<Contabilidade> contabilidades = contabilidadeService.buscarRegistros();
+            List<Contabilidade> contabilidadesAgrupadas = contabilidadeService.filtrarPorParcelamentoPai(codigo, contabilidades);
+            List<Contabilidade> contabilidadesAcimaDoVencimento = contabilidadeService.filtrarPorValoresAcimaDoVencimento(contabilidadeDTO.getVencimento(), contabilidadesAgrupadas);
+
+            List<Contabilidade> novaListaDeContabilidades = new ArrayList<>();
+
+            for (Contabilidade contabilidade : contabilidadesAcimaDoVencimento) {
+                Contabilidade contabilidadeNova = ContabilidadeFactory
+                        .begin(SerializationUtils.clone(contabilidade))
+                        .withDataAtualizacao(dataAtualizacao)
+                        .withVencimento(vencimento)
+                        .withTipoPagamento(contabilidadeDTO.getTipoPagamento())
+                        .withSubTipoPagamento(contabilidadeDTO.getSubTipoPagamento())
+                        .withTipo(contabilidadeDTO.getTipo())
+                        .withGrupoSubGrupo(contabilidadeDTO.getGrupo(), contabilidadeDTO.getSubGrupo())
+                        .withDescricao(contabilidadeDTO.getDescricao())
+                        .withCategoria(contabilidadeDTO.getCategoria())
+                        .withValor(contabilidadeDTO.getValor())
+                        .withStatus(contabilidadeDTO.getStatus())
+                        .build();
+
+                vencimento = getNextMonth(vencimento);
+
+                LOG.debug("contabilidadeNova: " + contabilidadeNova);
+                novaListaDeContabilidades.add(contabilidadeNova);
+            }
+
+            contabilidadeService.atualizar(contabilidadesAcimaDoVencimento, novaListaDeContabilidades);
+        }
+        catch (Exception e) {
+            String mensagem = "Nao foi possivel atualizar as contabilidades";
+            LOG.error(mensagem, e);
+            throw new TechnicalException(mensagem, e);
+        }
+    }
+
+    @Override
     public List<ContabilidadeDTO> buscarTudo() throws TechnicalException {
+        LOG.info("[ buscarTudo ]");
 
         List<ContabilidadeDTO> contabilidadeDTOS = new ArrayList<>();
 
@@ -101,6 +151,50 @@ public class ContabilidadeBusinessImpl implements ContabilidadeBusiness {
             throw new TechnicalException(mensagem, e);
         }
 
+        LOG.debug("contabilidadeDTOS: " + contabilidadeDTOS);
+
+        return contabilidadeDTOS;
+    }
+
+    @Override
+    public List<ContabilidadeDTO> buscarRelacionadasPorCodigoPai(Long codigo) throws TechnicalException {
+        LOG.info("[ buscarTudo ]");
+
+        List<ContabilidadeDTO> contabilidadeDTOS = new ArrayList<>();
+
+        try {
+            List<Contabilidade> contabilidades = contabilidadeService.buscarRegistros();
+            contabilidades = contabilidadeService.filtrarPorParcelamentoPai(codigo, contabilidades);
+
+            for (Contabilidade contabilidade : contabilidades) {
+                ContabilidadeDTO contabilidadeDTO = new ContabilidadeDTO()
+                        .withCodigo(contabilidade.getCodigo().toString())
+                        .withDataLancamento(contabilidade.getDataLancamentoFormatada())
+                        .withVencimento(contabilidade.getVencimentoFormatado())
+                        .withTipoPagamento(contabilidade.getTipoPagamentoValue())
+                        .withSubTipoPagamento(contabilidade.getSubTipoPagamentoDescricao())
+                        .withTipo(contabilidade.getTipoValue())
+                        .withGrupo(contabilidade.getGrupoDescricao())
+                        .withSubGrupo(contabilidade.getSubGrupoDescricao())
+                        .withDescricao(contabilidade.getDescricao())
+                        .withParcela(contabilidade.getParcela())
+                        .withParcelas(contabilidade.getParcelas())
+                        .withParcelaCodigoPai(contabilidade.getParcelaCodigoPai())
+                        .withCategoria(contabilidade.getCategoriaValue())
+                        .withValor(contabilidade.getValorFormatado())
+                        .withStatus(contabilidade.getStatusValue());
+
+                contabilidadeDTOS.add(contabilidadeDTO);
+            }
+        }
+        catch (Exception e) {
+            String mensagem = "Nao foi possivel buscar as contabilidades relacionadas por codigo pai: " + codigo;
+            LOG.error(mensagem, e);
+            throw new TechnicalException(mensagem, e);
+        }
+
+        LOG.debug("contabilidadeDTOS: " + contabilidadeDTOS);
+
         return contabilidadeDTOS;
     }
 
@@ -120,6 +214,7 @@ public class ContabilidadeBusinessImpl implements ContabilidadeBusiness {
         return ContabilidadeFactory
                 .begin()
                 .withDataLancamento(dataLancamento)
+                .withDataAtualizacao(dataLancamento)
                 .withVencimento(vencimento)
                 .withTipoPagamento(contabilidadeDTO.getTipoPagamento())
                 .withSubTipoPagamento(contabilidadeDTO.getSubTipoPagamento())
