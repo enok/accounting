@@ -6,8 +6,6 @@ import br.com.accounting.core.exception.ServiceException;
 import java.util.List;
 
 public interface ContabilidadeService extends GenericService<Contabilidade> {
-    Contabilidade filtrarPorCodigo(Long codigo, List<Contabilidade> contabilidades) throws ServiceException;
-
     List<Contabilidade> filtrarPorIntervaloDeVencimento(String vencimentoInicial, String vencimentoFinal, List<Contabilidade> contabilidades) throws ServiceException;
 
     List<Contabilidade> filtrarPorValoresAcimaDoVencimento(String vencimento, List<Contabilidade> contabilidades) throws ServiceException;

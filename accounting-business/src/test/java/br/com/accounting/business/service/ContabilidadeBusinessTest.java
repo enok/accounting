@@ -42,6 +42,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
             assertThat(contabilidades.get(i).getCodigo(), notNullValue());
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo(vencimento));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("CARTAO_CREDITO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("7660"));
@@ -80,6 +81,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         for (int i = 0; i < contabilidades.size(); i++) {
             assertThat(contabilidades.get(i).getCodigo(), notNullValue());
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo("27/02/2018"));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("CARTAO_CREDITO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("7660"));
@@ -113,6 +115,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         for (int i = 0; i < contabilidades.size(); i++) {
             assertThat(contabilidades.get(i).getCodigo(), notNullValue());
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo("15/01/2018"));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("CARTAO_DEBITO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("744"));
@@ -146,6 +149,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         for (int i = 0; i < contabilidades.size(); i++) {
             assertThat(contabilidades.get(i).getCodigo(), notNullValue());
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo("25/02/2018"));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("DINHEIRO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("transferencia"));
@@ -179,6 +183,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         for (int i = 0; i < contabilidades.size(); i++) {
             assertThat(contabilidades.get(i).getCodigo(), notNullValue());
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo("28/02/2018"));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("DINHEIRO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), nullValue());
@@ -408,7 +413,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             contabilidadeBusiness.salvar(contabilidadeDTO);
         }
         catch (BusinessException e) {
-                assertThat(e.getCause().getMessage(), is("Quando o TipoPagamento é " + "CARTAO_DEBITO" + "o campo SubTipoPagamento é obrigatório"));
+            assertThat(e.getCause().getMessage(), is("Quando o TipoPagamento é " + "CARTAO_DEBITO" + "o campo SubTipoPagamento é obrigatório"));
             throw e;
         }
     }
@@ -453,7 +458,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void atualizarContabilidade() throws TechnicalException, BusinessException {
+    public void buscarRelacionadasPorCodigoPai() throws TechnicalException, BusinessException {
         ContabilidadeDTO contabilidadeDTO = createContabilidadeDTO1();
 
         Long codigo = contabilidadeBusiness.salvar(contabilidadeDTO).get(0);
@@ -471,6 +476,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
             assertThat(contabilidades.get(i).getCodigo(), equalTo(String.valueOf(cod)));
             assertThat(contabilidades.get(i).getDataLancamento(), equalTo(getStringFromCurrentDate()));
+            assertThat(contabilidades.get(i).getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
             assertThat(contabilidades.get(i).getVencimento(), equalTo(vencimento));
             assertThat(contabilidades.get(i).getTipoPagamento(), equalTo("CARTAO_CREDITO"));
             assertThat(contabilidades.get(i).getSubTipoPagamento(), equalTo("7660"));
@@ -490,6 +496,24 @@ public class ContabilidadeBusinessTest extends GenericTest {
             }
             vencimento = getNextMonth(vencimento);
         }
+    }
+
+    @Test(expected = TechnicalException.class)
+    public void buscarRelacionadasPorCodigoPaiException() throws TechnicalException, BusinessException, IOException {
+        ContabilidadeDTO contabilidadeDTO = createContabilidadeDTO1();
+
+        Long codigo = contabilidadeBusiness.salvar(contabilidadeDTO).get(0);
+
+        deletarArquivosDoDiretorio();
+
+        contabilidadeBusiness.buscarRelacionadasPorCodigoPai(codigo);
+    }
+
+    @Test
+    public void atualizarContabilidade() throws TechnicalException, BusinessException {
+        ContabilidadeDTO contabilidadeDTO = createContabilidadeDTO1();
+
+        Long codigo = contabilidadeBusiness.salvar(contabilidadeDTO).get(0);
 
         contabilidadeDTO.withCodigo(codigo.toString());
         contabilidadeDTO.withVencimento("27/09/2018");
@@ -498,7 +522,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         contabilidadeBusiness.atualizar(contabilidadeDTO);
 
-        contabilidades = contabilidadeBusiness.buscarRelacionadasPorCodigoPai(codigo);
+        List<ContabilidadeDTO> contabilidades = contabilidadeBusiness.buscarRelacionadasPorCodigoPai(codigo);
 
         assertThat(contabilidades.size(), equalTo(12));
 
@@ -510,6 +534,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     private void assertBuscasRelacionadasPorCodigoPai(ContabilidadeDTO contabilidade, String vencimento, String parcela, Long codigo) {
         assertThat(contabilidade.getCodigo(), equalTo(parcela));
         assertThat(contabilidade.getDataLancamento(), equalTo(getStringFromCurrentDate()));
+        assertThat(contabilidade.getDataAtualizacao(), equalTo(getStringFromCurrentDate()));
         assertThat(contabilidade.getVencimento(), equalTo(vencimento));
         assertThat(contabilidade.getTipoPagamento(), equalTo("CARTAO_CREDITO"));
         assertThat(contabilidade.getSubTipoPagamento(), equalTo("7660"));
@@ -523,5 +548,18 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertThat(contabilidade.getCategoria(), equalTo("SAIDA"));
         assertThat(contabilidade.getValor(), equalTo("10,00"));
         assertThat(contabilidade.getStatus(), equalTo("PAGO"));
+    }
+
+    @Test(expected = TechnicalException.class)
+    public void atualizarContabilidadeException() throws TechnicalException, BusinessException, IOException {
+        ContabilidadeDTO contabilidadeDTO = createContabilidadeDTO1();
+
+        Long codigo = contabilidadeBusiness.salvar(contabilidadeDTO).get(0);
+
+        contabilidadeDTO.withCodigo(codigo.toString());
+
+        deletarArquivosDoDiretorio();
+
+        contabilidadeBusiness.atualizar(contabilidadeDTO);
     }
 }

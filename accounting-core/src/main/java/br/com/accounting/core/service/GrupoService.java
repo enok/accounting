@@ -18,6 +18,8 @@ public interface GrupoService extends GenericService<Grupo> {
 
     List<SubGrupo> filtrarSubGruposPorGrupoDescricao(String descricaoGrupo, List<Grupo> registros) throws ServiceException;
 
+    List<SubGrupo> filtrarSubGruposPorGrupoDescricaoSemDuplicidade(String descricaoGrupo, List<Grupo> grupos) throws ServiceException;
+
     List<SubGrupo> filtrarSubGruposPorGrupoDescricao(String descricaoGrupo) throws ServiceException;
 
     List<Grupo> ordenarPorDescricao(Order order, List<Grupo> grupos) throws ServiceException;

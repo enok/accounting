@@ -39,14 +39,6 @@ public class SubGrupo implements Entity, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
         SubGrupo subGrupo = (SubGrupo) o;
 
         return new EqualsBuilder()

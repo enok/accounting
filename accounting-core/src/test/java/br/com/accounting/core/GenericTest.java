@@ -1,6 +1,5 @@
-package br.com.accounting.core.service;
+package br.com.accounting.core;
 
-import br.com.accounting.core.ConfigCore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -32,6 +31,7 @@ public abstract class GenericTest {
 
     @After
     public void after() throws IOException {
+        criarDiretorio();
         deletarArquivosDoDiretorio();
     }
 

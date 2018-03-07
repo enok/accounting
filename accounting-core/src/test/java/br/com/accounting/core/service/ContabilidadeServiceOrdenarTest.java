@@ -52,13 +52,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorVencimento(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorVencimento(ASC, registros);
     }
 
 
@@ -83,13 +77,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorVencimento(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorVencimento(DESC, registros);
     }
 
     @Test
@@ -109,13 +97,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorIntervaloDeVencimentoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorVencimento(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorVencimento(ASC);
     }
 
     @Test
@@ -135,13 +117,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorIntervaloDeVencimentoDecrescenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorVencimento(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorVencimento(DESC);
     }
 
     @Test
@@ -165,13 +141,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorTipoDePagamento(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipoDePagamento(ASC, registros);
     }
 
     @Test
@@ -195,13 +165,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorTipoDePagamento(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipoDePagamento(DESC, registros);
     }
 
     @Test
@@ -221,13 +185,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorTipoDePagamentoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorTipoDePagamento(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipoDePagamento(ASC);
     }
 
     @Test
@@ -247,13 +205,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorTipoDePagamentoDecrescenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorTipoDePagamento(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipoDePagamento(DESC);
     }
 
     @Test
@@ -276,13 +228,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarSubTipoDePagamento(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarSubTipoDePagamento(ASC, registros);
     }
 
     @Test
@@ -305,13 +251,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarSubTipoDePagamento(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarSubTipoDePagamento(DESC, registros);
     }
 
     @Test
@@ -330,13 +270,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorSubTipoDePagamentoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarSubTipoDePagamento(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarSubTipoDePagamento(ASC);
     }
 
     @Test
@@ -355,13 +289,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorSubTipoDePagamentoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarSubTipoDePagamento(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarSubTipoDePagamento(DESC);
     }
 
     @Test
@@ -385,13 +313,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorTipo(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipo(ASC, registros);
     }
 
     @Test
@@ -415,13 +337,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorTipo(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipo(DESC, registros);
     }
 
 
@@ -442,13 +358,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorTipoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorTipo(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipo(ASC);
     }
 
     @Test
@@ -468,13 +378,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorTipoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorTipo(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorTipo(DESC);
     }
 
     @Test
@@ -498,13 +402,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorGrupo(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupo(ASC, registros);
     }
 
     @Test
@@ -528,13 +426,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorGrupo(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupo(DESC, registros);
     }
 
     @Test
@@ -554,13 +446,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorGrupo(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupo(ASC);
     }
 
     @Test
@@ -580,13 +466,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorGrupo(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupo(DESC);
     }
 
     @Test
@@ -616,13 +496,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorGrupoESubGrupo(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupoESubGrupo(ASC, registros);
     }
 
     @Test
@@ -652,13 +526,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorGrupoESubGrupo(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupoESubGrupo(DESC, registros);
     }
 
     @Test
@@ -684,13 +552,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorGrupoESubGrupoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorGrupoESubGrupo(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupoESubGrupo(ASC);
     }
 
     @Test
@@ -716,13 +578,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorGrupoESubGrupoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorGrupoESubGrupo(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorGrupoESubGrupo(DESC);
     }
 
     @Test
@@ -746,13 +602,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorDescricao(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorDescricao(ASC, registros);
     }
 
     @Test
@@ -776,13 +626,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorDescricao(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorDescricao(DESC, registros);
     }
 
     @Test
@@ -802,13 +646,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorDescricao(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorDescricao(ASC);
     }
 
     @Test
@@ -828,13 +666,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorDescricao(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorDescricao(DESC);
     }
 
     @Test
@@ -857,13 +689,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorParcelamentoPai(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorParcelamentoPai(ASC, registros);
     }
 
     @Test
@@ -886,13 +712,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorParcelamentoPai(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorParcelamentoPai(DESC, registros);
     }
 
     @Test
@@ -911,13 +731,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorParcelamentoPaiAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorParcelamentoPai(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorParcelamentoPai(ASC);
     }
 
     @Test
@@ -936,13 +750,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorParcelamentoPaiDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorParcelamentoPai(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorParcelamentoPai(DESC);
     }
 
     @Test
@@ -966,13 +774,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorCategoria(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorCategoria(ASC, registros);
     }
 
     @Test
@@ -996,13 +798,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorCategoria(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorCategoria(DESC, registros);
     }
 
     @Test
@@ -1022,13 +818,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorCategoriaAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorCategoria(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorCategoria(ASC);
     }
 
     @Test
@@ -1048,13 +838,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorCategoriaDecrescenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorCategoria(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorCategoria(DESC);
     }
 
     @Test
@@ -1078,13 +862,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorValor(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorValor(ASC, registros);
     }
 
     @Test
@@ -1108,13 +886,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorValor(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorValor(DESC, registros);
     }
 
     @Test
@@ -1134,13 +906,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorValorAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorValor(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorValor(ASC);
     }
 
     @Test
@@ -1160,13 +926,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorValorDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorValor(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorValor(DESC);
     }
 
     @Test
@@ -1190,13 +950,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorStatus(ASC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorStatus(ASC, registros);
     }
 
     @Test
@@ -1220,13 +974,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.ordenarPorStatus(DESC, registros);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorStatus(DESC, registros);
     }
 
     @Test
@@ -1246,13 +994,7 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorStatusAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorStatus(ASC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorStatus(ASC);
     }
 
     @Test
@@ -1272,12 +1014,6 @@ public class ContabilidadeServiceOrdenarTest extends ContabilidadeGenericTest {
     public void ordenarRegistrosPorStatusDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.ordenarPorStatus(DESC);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.ordenarPorStatus(DESC);
     }
 }

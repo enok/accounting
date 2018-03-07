@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static br.com.accounting.core.filter.Duplicates.KEEP;
 import static br.com.accounting.core.filter.Duplicates.REMOVE;
 
 @Service
@@ -103,9 +104,25 @@ public class GrupoServiceImpl extends GenericAbstractService<Grupo> implements G
 
         try {
             Filtro filtro = new FiltroGrupoDescricaoSubGrupo(descricaoGrupo);
-            return filtro.filtrar(grupos, REMOVE);
+            return filtro.filtrar(grupos, KEEP);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os subgrupo por descricao de grupo";
+            LOG.error(mensagem, e);
+            throw new ServiceException(mensagem, e);
+        }
+    }
+
+    @Override
+    public List<SubGrupo> filtrarSubGruposPorGrupoDescricaoSemDuplicidade(String descricaoGrupo, List<Grupo> grupos) throws ServiceException {
+        LOG.info("[ filtrarSubGruposPorGrupoDescricao ]");
+        LOG.debug("descricaoGrupo: " + descricaoGrupo);
+        LOG.debug("grupos: " + grupos);
+
+        try {
+            Filtro filtro = new FiltroGrupoDescricaoSubGrupo(descricaoGrupo);
+            return filtro.filtrar(grupos, REMOVE);
+        } catch (Exception e) {
+            String mensagem = "Nao foi possivel filtrar os subgrupo por descricao de grupo (sem deplicidade)";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
         }
@@ -118,7 +135,7 @@ public class GrupoServiceImpl extends GenericAbstractService<Grupo> implements G
 
         try {
             List<Grupo> grupos = buscarRegistros();
-            return filtrarSubGruposPorGrupoDescricao(descricaoGrupo, grupos);
+            return filtrarSubGruposPorGrupoDescricaoSemDuplicidade(descricaoGrupo, grupos);
         } catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os subgrupo por descricao de grupo";
             LOG.error(mensagem, e);

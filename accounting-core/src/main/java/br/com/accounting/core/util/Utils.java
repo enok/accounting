@@ -60,16 +60,14 @@ public final class Utils {
     }
 
     public static String getDoubleFormatted(Double value) {
-        if (value == null) {
-            return null;
-        }
         return decimalFormat.format(value);
     }
 
     public static Double createDouble(String value) throws ParseException {
         try {
             return Double.parseDouble(value.replaceAll(",", "."));
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             return decimalFormat.parse(value).doubleValue();
         }
     }

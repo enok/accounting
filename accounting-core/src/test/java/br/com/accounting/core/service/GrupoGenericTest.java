@@ -1,5 +1,6 @@
 package br.com.accounting.core.service;
 
+import br.com.accounting.core.GenericTest;
 import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.GrupoFactoryMock;
@@ -24,6 +25,9 @@ public abstract class GrupoGenericTest extends GenericTest {
 
     protected void criarVariosGrupos() throws ServiceException {
         Grupo grupo = GrupoFactoryMock.createMoradiaAssinatura();
+        grupoService.salvar(grupo);
+
+        grupo = GrupoFactoryMock.createMoradiaAssinatura();
         grupoService.salvar(grupo);
 
         grupo = GrupoFactoryMock.createMoradiaAluguel();

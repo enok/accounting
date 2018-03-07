@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Order.ASC;
@@ -50,12 +48,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
         SubTipoPagamento subTipoPagamento = SubTipoPagamentoFactoryMock.create744();
 
-        try {
-            subTipoPagamentoService.salvar(subTipoPagamento);
-        } catch (ServiceException e) {
-            Files.createDirectory(Paths.get(diretorio));
-            throw e;
-        }
+        subTipoPagamentoService.salvar(subTipoPagamento);
     }
 
     @Test
@@ -109,12 +102,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
         List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
-        try {
-            subTipoPagamentoService.filtrarPorDescricao("744", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.filtrarPorDescricao("744", registros);
     }
 
     @Test
@@ -132,12 +120,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subTipoPagamentoService.filtrarPorDescricao("744");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.filtrarPorDescricao("744");
     }
 
     @Test
@@ -161,12 +144,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
         List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
-        try {
-            subTipoPagamentoService.ordenarPorDescricao(ASC, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.ordenarPorDescricao(ASC, registros);
     }
 
     @Test
@@ -190,12 +168,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
 
         List<SubTipoPagamento> registros = getSubTipoPagamentos();
 
-        try {
-            subTipoPagamentoService.ordenarPorDescricao(DESC, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.ordenarPorDescricao(DESC, registros);
     }
 
     @Test
@@ -215,12 +188,7 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subTipoPagamentoService.ordenarPorDescricao(ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.ordenarPorDescricao(ASC);
     }
 
     @Test
@@ -240,11 +208,6 @@ public class SubTipoPagamentoServiceTest extends SubTipoPagamentoGenericTest {
     public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subTipoPagamentoService.ordenarPorDescricao(DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subTipoPagamentoService.ordenarPorDescricao(DESC);
     }
 }

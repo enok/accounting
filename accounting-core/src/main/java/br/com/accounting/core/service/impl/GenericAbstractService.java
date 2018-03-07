@@ -108,21 +108,6 @@ public abstract class GenericAbstractService<T> implements GenericService<T> {
     }
 
     @Override
-    public T filtrarSingle(Filtro filtro, List<T> entitys) throws ServiceException {
-        LOG.info("[ filtrar ]");
-        LOG.debug("filtro: " + filtro);
-        LOG.debug("entitys: " + entitys);
-
-        try {
-            return (T) filtro.filtrarSingle(entitys);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar o registro";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
     public List<T> ordenar(Ordem ordem, Order order, List<T> entitys) throws ServiceException {
         LOG.info("[ ordenar ]");
         LOG.debug("ordem: " + ordem);

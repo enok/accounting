@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static br.com.accounting.core.entity.Order.ASC;
@@ -50,12 +48,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         SubGrupo subGrupo = SubGrupoFactoryMock.createAssinatura();
 
-        try {
-            subGrupoService.salvar(subGrupo);
-        } catch (ServiceException e) {
-            Files.createDirectory(Paths.get(diretorio));
-            throw e;
-        }
+        subGrupoService.salvar(subGrupo);
     }
 
     @Test
@@ -97,12 +90,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         List<SubGrupo> registros = getSubGrupos();
 
-        try {
-            subGrupoService.filtrarPorDescricao("ASSINATURA", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.filtrarPorDescricao("ASSINATURA", registros);
     }
 
     @Test
@@ -132,12 +120,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subGrupoService.filtrarPorDescricao("ASSINATURA");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.filtrarPorDescricao("ASSINATURA");
     }
 
     @Test
@@ -161,12 +144,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         List<SubGrupo> registros = getSubGrupos();
 
-        try {
-            subGrupoService.ordenarPorDescricao(ASC, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.ordenarPorDescricao(ASC, registros);
     }
 
     @Test
@@ -190,12 +168,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
 
         List<SubGrupo> registros = getSubGrupos();
 
-        try {
-            subGrupoService.ordenarPorDescricao(DESC, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.ordenarPorDescricao(DESC, registros);
     }
 
     @Test
@@ -215,12 +188,7 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void ordenarRegistrosPorDescricaoAscendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subGrupoService.ordenarPorDescricao(ASC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.ordenarPorDescricao(ASC);
     }
 
     @Test
@@ -240,11 +208,6 @@ public class SubGrupoServiceTest extends SubGrupoGenericTest {
     public void ordenarRegistrosPorDescricaoDescendenteException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            subGrupoService.ordenarPorDescricao(DESC);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        subGrupoService.ordenarPorDescricao(DESC);
     }
 }

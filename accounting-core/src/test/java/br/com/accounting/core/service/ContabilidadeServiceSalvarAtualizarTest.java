@@ -20,7 +20,7 @@ import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
+public class ContabilidadeServiceSalvarAtualizarTest extends ContabilidadeGenericTest {
     @Autowired
     private ContabilidadeService contabilidadeService;
 
@@ -109,12 +109,11 @@ public class ContabilidadeServiceSalvarTest extends ContabilidadeGenericTest {
 
         Contabilidade registro = ContabilidadeFactoryMock.createDinheiro();
 
-        try {
-            contabilidadeService.salvar(registro);
-        }
-        catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.salvar(registro);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void atualizarContabilidadeServiceException() throws ServiceException {
+        contabilidadeService.atualizar(null, null);
     }
 }

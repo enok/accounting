@@ -18,9 +18,7 @@ import static br.com.accounting.core.entity.Tipo.FIXO;
 import static br.com.accounting.core.entity.Tipo.VARIAVEL;
 import static br.com.accounting.core.entity.TipoPagamento.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     @Autowired
@@ -49,12 +47,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorIntervaloDeVencimento("26/01/2018", "31/01/2018", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorIntervaloDeVencimento("26/01/2018", "31/01/2018", registros);
     }
 
     @Test
@@ -95,12 +88,16 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorIntervaloDeVencimentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorIntervaloDeVencimento("26/01/2018", "31/01/2018");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorIntervaloDeVencimento("26/01/2018", "31/01/2018");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void filtrarRegistrosBuscadosPorValoresAcimaDoVencimentoException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+
+        List<Contabilidade> registros = getContabilidades();
+
+        contabilidadeService.filtrarPorValoresAcimaDoVencimento("26/01/2018", registros);
     }
 
     @Test
@@ -122,12 +119,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorTipoDePagamento(DINHEIRO, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorTipoDePagamento(DINHEIRO, registros);
     }
 
     @Test
@@ -171,12 +163,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorTipoDePagamento(DINHEIRO);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorTipoDePagamento(DINHEIRO);
     }
 
     @Test
@@ -198,12 +185,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorSubTipoDePagamento("7660", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorSubTipoDePagamento("7660", registros);
     }
 
     @Test
@@ -249,12 +231,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorSubTipoDePagamentoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorSubTipoDePagamento("7660");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorSubTipoDePagamento("7660");
     }
 
     @Test
@@ -277,12 +254,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorTipo(FIXO, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorTipo(FIXO, registros);
     }
 
     @Test
@@ -313,12 +285,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorTipoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorTipo(FIXO);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorTipo(FIXO);
     }
 
     @Test
@@ -341,12 +308,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorGrupo("MORADIA", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorGrupo("MORADIA", registros);
     }
 
     @Test
@@ -378,12 +340,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorGrupoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorGrupo("MORADIA");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorGrupo("MORADIA");
     }
 
     @Test
@@ -410,12 +367,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorGrupoESubGrupo("MORADIA", "ASSINATURA", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorGrupoESubGrupo("MORADIA", "ASSINATURA", registros);
     }
 
     @Test
@@ -452,12 +404,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorGrupoESubGrupoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorGrupoESubGrupo("MORADIA", "ASSINATURA");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorGrupoESubGrupo("MORADIA", "ASSINATURA");
     }
 
     @Test
@@ -480,12 +427,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorDescricao("spotify", registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorDescricao("spotify", registros);
     }
 
     @Test
@@ -517,12 +459,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorDescricaoException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorDescricao("spotify");
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorDescricao("spotify");
     }
 
     @Test
@@ -545,12 +482,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorParcelamentoPai(-1L, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorParcelamentoPai(-1L, registros);
     }
 
     @Test
@@ -569,12 +501,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorParcelamentoPaiException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorParcelamentoPai(-1L);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorParcelamentoPai(-1L);
     }
 
     @Test
@@ -596,12 +523,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorCategoria(ENTRADA, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorCategoria(ENTRADA, registros);
     }
 
     @Test
@@ -633,12 +555,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorCategoriaException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorCategoria(ENTRADA);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorCategoria(ENTRADA);
     }
 
     @Test
@@ -674,12 +591,7 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
 
         List<Contabilidade> registros = getContabilidades();
 
-        try {
-            contabilidadeService.filtrarPorStatus(PAGO, registros);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorStatus(PAGO, registros);
     }
 
     @Test
@@ -709,11 +621,6 @@ public class ContabilidadeServiceFiltrarTest extends ContabilidadeGenericTest {
     public void filtrarRegistrosPorStatusException() throws IOException, ServiceException {
         deletarDiretorioEArquivos();
 
-        try {
-            contabilidadeService.filtrarPorStatus(PAGO);
-        } catch (ServiceException e) {
-            criarDiretorio();
-            throw e;
-        }
+        contabilidadeService.filtrarPorStatus(PAGO);
     }
 }

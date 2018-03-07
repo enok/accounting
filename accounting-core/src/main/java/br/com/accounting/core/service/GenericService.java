@@ -23,8 +23,6 @@ public interface GenericService<T> {
 
     List<T> filtrar(Filtro filtro) throws ServiceException;
 
-    T filtrarSingle(Filtro filtro, List<T> entitys) throws ServiceException;
-
     List<T> ordenar(Ordem ordem, Order order, List<T> entities) throws ServiceException;
 
     List<T> ordenar(Ordem ordem, Order order) throws ServiceException;

@@ -23,21 +23,6 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
     }
 
     @Override
-    public Contabilidade filtrarPorCodigo(Long codigo, List<Contabilidade> contabilidades) throws ServiceException {
-        LOG.info("[ filtrarPorCodigo ]");
-        LOG.debug("codigo: " + codigo);
-
-        try {
-            Filtro filtro = new FiltroContabilidadeCodigo(codigo);
-            return filtrarSingle(filtro, contabilidades);
-        } catch (Exception e) {
-            String mensagem = "Nao foi possivel filtrar os registros por codigo";
-            LOG.error(mensagem, e);
-            throw new ServiceException(mensagem, e);
-        }
-    }
-
-    @Override
     public List<Contabilidade> filtrarPorIntervaloDeVencimento(String vencimentoInicial, String vencimentoFinal, List<Contabilidade> contabilidades) throws ServiceException {
         LOG.info("[ filtrarPorIntervaloDeVencimento ]");
         LOG.debug("vencimentoInicial: " + vencimentoInicial);
@@ -47,7 +32,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por intervalo de vencimento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -63,7 +49,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeVencimento(vencimento);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros acima do vencimento: " + vencimento;
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -79,7 +66,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeVencimento(vencimentoInicial, vencimentoFinal);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por intervalo de vencimento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -95,7 +83,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeTipoPagamento(tipoPagamento);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -110,7 +99,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeTipoPagamento(tipoPagamento);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -126,7 +116,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeSubTipoPagamentoDescricao(descricao);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -141,7 +132,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeSubTipoPagamentoDescricao(descricao);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -157,7 +149,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeTipo(tipo);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -172,7 +165,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeTipo(tipo);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por tipo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -188,7 +182,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeGrupoDescricao(descricao);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -203,7 +198,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeGrupoDescricao(descricao);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -220,7 +216,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -236,7 +233,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeGrupoDescricaoSubGrupoDescricao(descricaoGrupo, descricaoSubGrupo);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -252,7 +250,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeDescricao(descricao);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -267,7 +266,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeDescricao(descricao);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por descricao";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -283,7 +283,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeAgrupadosPorParcelamentoPai(codigoPai);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -298,7 +299,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeAgrupadosPorParcelamentoPai(codigoPai);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -314,7 +316,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeCategoria(categoria);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por categoria";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -329,7 +332,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeCategoria(categoria);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por categoria";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -345,7 +349,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeStatus(status);
             return filtrar(filtro, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -360,7 +365,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Filtro filtro = new FiltroContabilidadeStatus(status);
             return filtrar(filtro);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel filtrar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -375,7 +381,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeVencimento();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por vencimento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -390,7 +397,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeVencimento();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por vencimento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -406,7 +414,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeTipoPagamento();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -421,7 +430,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeTipoPagamento();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -437,7 +447,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeSubTipoPagamentoDescricao();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -452,7 +463,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeSubTipoPagamentoDescricao();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por subtipo de pagamento";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -468,7 +480,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeTipo();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -483,7 +496,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeTipo();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por tipo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -499,7 +513,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeGrupoDescricao();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -514,7 +529,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeGrupoDescricao();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -530,7 +546,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -545,7 +562,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeGrupoDescricaoSubGrupoDescricao();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por grupo e subgrupo";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -561,7 +579,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeDescricao();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -576,7 +595,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeDescricao();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por descricao";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -592,7 +612,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeAgrupadosPorParcelamentoPai();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -607,7 +628,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeAgrupadosPorParcelamentoPai();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por parcelamento codigo pai";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -623,7 +645,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeCategoria();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por categoria";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -638,7 +661,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeCategoria();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por categoria";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -654,7 +678,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeValor();
             return ordenar(ordem, order, registros);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por valor";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -669,7 +694,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeValor();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por valor";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -685,7 +711,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeStatus();
             return ordenar(ordem, order, contabilidades);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
@@ -700,7 +727,8 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         try {
             Ordem ordem = new OrdemContabilidadeStatus();
             return ordenar(ordem, order);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             String mensagem = "Nao foi possivel ordenar os registros por status";
             LOG.error(mensagem, e);
             throw new ServiceException(mensagem, e);
