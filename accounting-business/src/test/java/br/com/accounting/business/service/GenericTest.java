@@ -1,7 +1,6 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.ConfigBusiness;
-import br.com.accounting.core.repository.ContabilidadeRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -24,8 +23,6 @@ public abstract class GenericTest {
 
     @Autowired
     protected String diretorio;
-    @Autowired
-    private ContabilidadeRepository contabilidadeRepository;
 
     @Before
     public void setUp() throws IOException {

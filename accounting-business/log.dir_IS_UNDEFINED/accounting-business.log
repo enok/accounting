@@ -1,0 +1,52 @@
+2018-03-15 15:27:10,136 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,197 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:27:10,206 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,206 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:27:10,220 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,221 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:27:10,225 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,226 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:27:10,234 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,234 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:27:10,238 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:27:10,239 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: %s
+2018-03-15 15:29:37,122 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,126 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Salário, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 15:29:37,134 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,135 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Salário, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 15:29:37,149 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,149 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Salário, descricao=null)
+2018-03-15 15:29:37,154 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,154 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Salário, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 15:29:37,159 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,160 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 15:29:37,164 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:29:37,165 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=null)
+2018-03-15 15:32:25,580 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:32:25,589 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Sal�rio, descricao=null)
+2018-03-15 15:32:25,607 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:32:25,608 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Sal�rio, descricao=Sal�rio mensal recebido pela Sysmap)
+2018-03-15 15:32:25,614 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:32:25,615 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=Sal�rio mensal recebido pela Sysmap)
+2018-03-15 15:32:25,621 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:32:25,622 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=null)
+2018-03-15 15:37:34,394 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:37:34,399 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Sal�rio, descricao=null)
+2018-03-15 15:37:34,413 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:37:34,413 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=Sal�rio, descricao=Sal�rio mensal recebido pela Sysmap)
+2018-03-15 15:37:34,419 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:37:34,419 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=Sal�rio mensal recebido pela Sysmap)
+2018-03-15 15:37:34,424 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:22] [ criar ]
+2018-03-15 15:37:34,425 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:23] contaDTO: ContaDTO(nome=null, descricao=null)
+2018-03-15 16:32:45,111 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:29] [ criar ]
+2018-03-15 16:32:45,118 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:30] contaDTO: ContaDTO(nome=null, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 16:32:54,462 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:29] [ criar ]
+2018-03-15 16:32:54,472 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:30] contaDTO: ContaDTO(nome=Salário, descricao=null)
+2018-03-15 16:32:54,483 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:29] [ criar ]
+2018-03-15 16:32:54,483 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:30] contaDTO: ContaDTO(nome=Salário, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 16:32:54,489 DEBUG [main] b.c.a.c.s.i.ContaServiceImpl [ContaServiceImpl.java:13] [ salvar ]
+2018-03-15 16:32:54,490 DEBUG [main] b.c.a.c.s.i.ContaServiceImpl [ContaServiceImpl.java:14] conta: Conta(nome=Salário, descricao=Salário mensal recebido pela Sysmap, saldo=0.0)
+2018-03-15 16:32:54,497 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:29] [ criar ]
+2018-03-15 16:32:54,498 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:30] contaDTO: ContaDTO(nome=null, descricao=Salário mensal recebido pela Sysmap)
+2018-03-15 16:32:54,503 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:29] [ criar ]
+2018-03-15 16:32:54,503 INFO [main] b.c.a.b.s.i.ContaBusinessImpl [ContaBusinessImpl.java:30] contaDTO: ContaDTO(nome=null, descricao=null)

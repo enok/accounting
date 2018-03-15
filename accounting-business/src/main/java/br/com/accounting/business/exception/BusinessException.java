@@ -1,11 +1,16 @@
 package br.com.accounting.business.exception;
 
-public class BusinessException extends Exception {
-    public BusinessException(String mensagem) {
-        super(mensagem);
-    }
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-    public BusinessException(String mensagem, Exception e) {
-        super(mensagem, e);
+import java.util.List;
+
+@NoArgsConstructor
+public class BusinessException extends Exception {
+    @Getter
+    private List<String> erros;
+
+    public BusinessException(List<String> erros) {
+        this.erros = erros;
     }
 }
