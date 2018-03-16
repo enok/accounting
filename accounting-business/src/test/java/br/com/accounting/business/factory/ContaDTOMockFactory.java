@@ -25,4 +25,10 @@ public final class ContaDTOMockFactory {
                 .nome("Salário")
                 .descricao("Salário mensal recebido pela Sysmap");
     }
+
+    public static ContaDTO conta2DTO() {
+        return new ContaDTO()
+                .nome("Enok")
+                .descricao("Valor separado para o Enok");
+    }
 }

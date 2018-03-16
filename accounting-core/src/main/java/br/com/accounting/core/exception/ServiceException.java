@@ -2,7 +2,7 @@ package br.com.accounting.core.exception;
 
 public class ServiceException extends Exception {
 
-    public ServiceException(String mensagem, Exception e) {
-        super(mensagem, e);
+    public ServiceException(String message, Exception e) {
+        super(message, e);
     }
 }

@@ -2,17 +2,18 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.List;
 
 import static br.com.accounting.business.factory.ContaDTOMockFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
 
 public class ContaBusinessTest extends GenericTest {
@@ -20,15 +21,29 @@ public class ContaBusinessTest extends GenericTest {
     private ContaBusiness contaBusiness;
 
     @Test(expected = BusinessException.class)
+    public void criarUmaContaSemDiretorio() throws BusinessException, IOException {
+        deletarDiretorioEArquivos();
+        ContaDTO contaDTO = contaDTO();
+
+        try {
+            contaBusiness.criar(contaDTO);
+        }
+        catch (BusinessException e) {
+            ServiceException e1 = (ServiceException) e.getCause();
+            assertThat(e1.getMessage(), equalTo("Não foi possível buscar a conta."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void criarUmaContaSemNome() throws BusinessException {
         ContaDTO contaDTO = contaDTOSemNome();
 
-        Long codigoConta = null;
         try {
-            codigoConta = contaBusiness.criar(contaDTO);
+            contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            MissingFieldException e1 = (MissingFieldException) e;
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
             assertThat(erros, notNullValue());
@@ -37,21 +52,17 @@ public class ContaBusinessTest extends GenericTest {
 
             throw e;
         }
-
-        assertThat(codigoConta, notNullValue());
-        assertTrue(codigoConta > 0);
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaContaSemDescricao() throws BusinessException {
         ContaDTO contaDTO = contaDTOSemDescricao();
 
-        Long codigoConta = null;
         try {
-            codigoConta = contaBusiness.criar(contaDTO);
+            contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            MissingFieldException e1 = (MissingFieldException) e;
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
             assertThat(erros, notNullValue());
@@ -60,21 +71,17 @@ public class ContaBusinessTest extends GenericTest {
 
             throw e;
         }
-
-        assertThat(codigoConta, notNullValue());
-        assertTrue(codigoConta > 0);
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaContaSemNomeEDescricao() throws BusinessException {
         ContaDTO contaDTO = contaDTOSemNomeEDescricao();
 
-        Long codigoConta = null;
         try {
-            codigoConta = contaBusiness.criar(contaDTO);
+            contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            MissingFieldException e1 = (MissingFieldException) e;
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
             assertThat(erros, notNullValue());
@@ -84,9 +91,6 @@ public class ContaBusinessTest extends GenericTest {
 
             throw e;
         }
-
-        assertThat(codigoConta, notNullValue());
-        assertTrue(codigoConta > 0);
     }
 
     @Test
@@ -95,21 +99,37 @@ public class ContaBusinessTest extends GenericTest {
 
         Long codigoConta = contaBusiness.criar(contaDTO);
         assertThat(codigoConta, notNullValue());
-        assertTrue(codigoConta > 0);
+        assertTrue(codigoConta >= 0);
     }
 
-//    @Test
-//    public void criarDuasContas() throws BusinessException {
-//        ContaDTO contaDTO = contaDTO();
-//
-//        Long codigoConta = contaBusiness.criar(contaDTO);
-//        assertThat(codigoConta, notNullValue());
-//        assertTrue(codigoConta > 0);
-//
-//        Long codigoConta2 = contaBusiness.criar(contaDTO);
-//        assertThat(codigoConta2, notNullValue());
-//        assertTrue(codigoConta2 > 0);
-//
-//        assertThat(codigoConta, not(equalTo(codigoConta2)));
-//    }
+    @Test(expected = BusinessException.class)
+    public void criarDuasContasComNomeEDescricaoIguais() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+
+        try {
+            contaBusiness.criar(contaDTO);
+            contaBusiness.criar(contaDTO);
+        }
+        catch (BusinessException e) {
+            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
+            assertThat(e1.getMessage(), equalTo("Conta duplicada."));
+
+            throw e;
+        }
+    }
+
+    @Test
+    public void criarDuasContas() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        assertThat(codigoConta, notNullValue());
+        assertTrue(codigoConta >= 0);
+
+        ContaDTO conta2DTO = conta2DTO();
+        Long codigoConta2 = contaBusiness.criar(conta2DTO);
+        assertThat(codigoConta2, notNullValue());
+        assertTrue(codigoConta2 >= 0);
+
+        assertThat(codigoConta, not(equalTo(codigoConta2)));
+    }
 }

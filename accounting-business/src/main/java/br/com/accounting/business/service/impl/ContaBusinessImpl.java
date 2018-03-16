@@ -2,9 +2,11 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
+import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.service.ContaService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,18 +31,28 @@ public class ContaBusinessImpl implements ContaBusiness {
         log.info("[ criar ]");
         log.info("contaDTO: {}", contaDTO);
 
-        final List<String> erros = new ArrayList<>();
+        String message = "Nao foi possivel criar a conta: " + contaDTO;
 
-        validarEntrada(contaDTO, erros);
+        try {
+            final List<String> erros = new ArrayList<>();
 
-        Conta conta = ContaFactory
-                .begin()
-                .withNome(contaDTO.nome())
-                .withDescricao(contaDTO.descricao())
-                .withSaldo(0.0)
-                .build();
+            validarEntrada(contaDTO, erros);
 
-        return contaService.salvar(conta);
+            Conta conta = ContaFactory
+                    .begin()
+                    .withNome(contaDTO.nome())
+                    .withDescricao(contaDTO.descricao())
+                    .withSaldo(0.0)
+                    .build();
+
+            validaRegistroDuplicado(conta);
+
+            return contaService.salvar(conta);
+        }
+        catch (MissingFieldException | ServiceException | DuplicatedRegistryException e) {
+            log.error(message, e);
+            throw new BusinessException(message, e);
+        }
     }
 
     private void validarEntrada(final ContaDTO contaDTO, final List<String> erros) throws MissingFieldException {
@@ -57,6 +69,14 @@ public class ContaBusinessImpl implements ContaBusiness {
 
         if (!isEmpty(erros)) {
             throw new MissingFieldException(erros);
+        }
+    }
+
+    private void validaRegistroDuplicado(Conta conta) throws ServiceException, DuplicatedRegistryException {
+        Conta contaBuscada = contaService.buscarPorNomeDescricao(conta.nome(), conta.descricao());
+
+        if (conta.equals(contaBuscada)) {
+            throw new DuplicatedRegistryException("Conta duplicada.");
         }
     }
 }
