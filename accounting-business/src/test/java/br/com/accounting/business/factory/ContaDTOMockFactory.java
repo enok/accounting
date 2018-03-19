@@ -23,8 +23,7 @@ public final class ContaDTOMockFactory {
     public static ContaDTO contaDTO() {
         return new ContaDTO()
                 .nome("Salário")
-                .descricao("Salário mensal recebido pela Sysmap")
-                .saldo("1000.0");
+                .descricao("Salário mensal recebido pela Sysmap");
     }
 
     public static ContaDTO conta2DTO() {

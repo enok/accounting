@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.SEPARADOR;
+import static org.springframework.util.CollectionUtils.*;
 
 @Slf4j
 @Repository
@@ -37,7 +38,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
-    public String criarLinha(Conta entity) {
+    public String criarLinha(final Conta entity) {
         log.debug("[ criarLinha ]");
         log.debug("conta: {}" + entity);
 
@@ -51,7 +52,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
-    public List<Conta> criarRegistros(List<String> linhas) throws ParseException {
+    public List<Conta> criarRegistros(final List<String> linhas) throws ParseException {
         log.debug("[ criarRegistros ]");
         log.debug("linhas: " + linhas);
 
@@ -66,7 +67,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
         return contas;
     }
 
-    private Conta criarConta(String linha) throws ParseException {
+    private Conta criarConta(final String linha) throws ParseException {
         log.debug("[ criarConta ]");
         log.debug("linha: {}", linha);
 
@@ -85,12 +86,24 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
-    public Conta filtrarPorNomeDescricao(List<Conta> contas, String nome, String descricao) {
+    public Conta filtrarCodigo(final List<Conta> contas, final Long codigo) {
+        List<Conta> contasBuscadas = contas
+                .stream()
+                .filter(c -> (c.codigo().equals(codigo)))
+                .collect(Collectors.toList());
+        if (isEmpty(contasBuscadas)) {
+            return null;
+        }
+        return contasBuscadas.get(0);
+    }
+
+    @Override
+    public Conta filtrarPorNomeDescricao(final List<Conta> contas, final String nome, final String descricao) {
         List<Conta> contasBuscadas = contas
                 .stream()
                 .filter(c -> (c.nome().equals(nome) && c.descricao().equals(descricao)))
                 .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(contasBuscadas)) {
+        if (isEmpty(contasBuscadas)) {
             return null;
         }
         return contasBuscadas.get(0);

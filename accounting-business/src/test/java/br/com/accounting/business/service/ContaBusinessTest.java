@@ -46,7 +46,6 @@ public class ContaBusinessTest extends GenericTest {
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
-            assertThat(erros, notNullValue());
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             throw e;
@@ -64,7 +63,6 @@ public class ContaBusinessTest extends GenericTest {
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
-            assertThat(erros, notNullValue());
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo descrição é obrigatório."));
             throw e;
@@ -82,7 +80,6 @@ public class ContaBusinessTest extends GenericTest {
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
 
-            assertThat(erros, notNullValue());
             assertThat(erros.size(), equalTo(2));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
@@ -95,7 +92,6 @@ public class ContaBusinessTest extends GenericTest {
         ContaDTO contaDTO = contaDTO();
 
         Long codigoConta = contaBusiness.criar(contaDTO);
-        assertThat(codigoConta, notNullValue());
         assertTrue(codigoConta >= 0);
     }
 
@@ -123,7 +119,6 @@ public class ContaBusinessTest extends GenericTest {
 
         ContaDTO conta2DTO = conta2DTO();
         Long codigoConta2 = contaBusiness.criar(conta2DTO);
-        assertThat(codigoConta2, notNullValue());
         assertTrue(codigoConta2 >= 0);
 
         assertThat(codigoConta, not(equalTo(codigoConta2)));
@@ -146,16 +141,197 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void buscarContas() throws BusinessException {
         ContaDTO contaDTO = contaDTO();
-
         contaBusiness.criar(contaDTO);
+
         List<ContaDTO> contasDTO = contaBusiness.buscarContas();
 
-        assertThat(contasDTO, notNullValue());
         assertThat(contasDTO.size(), equalTo(1));
 
         ContaDTO contaDTOBuscada = contasDTO.get(0);
         assertThat(contaDTOBuscada.nome(), equalTo("Salário"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
-//        assertThat(contaDTOBuscada.saldo(), equalTo("1000.0"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void adicionarCreditoEmUmaContaSemDiretorio() throws BusinessException, IOException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscado = contaBusiness.buscarContas().get(0);
+
+        deletarDiretorioEArquivos();
+
+        try {
+            contaBusiness.adicionarCredito(contaDTOBuscado, "500,00");
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível adicionar crédito à conta."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void adicionarCreditoEmUmaConta() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        assertThat(contaDTOBuscada.saldo(), equalTo("500.0"));
+    }
+
+    @Test
+    public void adicionarVariosCreditosEmUmaConta() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        assertThat(contaDTOBuscada.saldo(), equalTo("1000.0"));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void adicionarDebitoEmUmaContaSemDiretorio() throws BusinessException, IOException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscado = contaBusiness.buscarContas().get(0);
+
+        deletarDiretorioEArquivos();
+
+        try {
+            contaBusiness.adicionarDebito(contaDTOBuscado, "100,00");
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível adicionar débito à conta."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void adicionarDebitoEmUmaConta() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        assertThat(contaDTOBuscada.saldo(), equalTo("-100.0"));
+    }
+
+    @Test
+    public void adicionarVariosDebitosEmUmaConta() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
+        contaDTOBuscada = contaBusiness.buscarContas().get(0);
+
+        assertThat(contaDTOBuscada.saldo(), equalTo("-200.0"));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void excluirUmaContaException() throws BusinessException {
+        try {
+            contaBusiness.excluir(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir a conta."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void excluirUmaConta() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+        contaBusiness.criar(contaDTO);
+
+        List<ContaDTO> contasDTO = contaBusiness.buscarContas();
+        ContaDTO contaDTOBuscada = contasDTO.get(0);
+        assertThat(contasDTO.size(), equalTo(1));
+
+        contaBusiness.excluir(contaDTOBuscada);
+
+        contasDTO = contaBusiness.buscarContas();
+        assertThat(contasDTO.size(), equalTo(0));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarContaPorIdException() throws BusinessException {
+        try {
+            contaBusiness.buscarContaPorId(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar a conta por id."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void transferirSaldoDeUmaContaParaOutraException() throws BusinessException {
+        try {
+            contaBusiness.transferir(null, null, null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível tranferir o valor entre as contas."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void transferirSaldoDeUmaContaParaOutraSaldoInsuficiente() throws BusinessException {
+        ContaDTO contaSalario = contaDTO();
+        Long contaSalarioId = contaBusiness.criar(contaSalario);
+        contaBusiness.adicionarCredito(contaSalario, "500.0");
+        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+
+        ContaDTO contaEnok = conta2DTO();
+        Long contaEnokId = contaBusiness.criar(contaEnok);
+        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+
+        try {
+            contaBusiness.transferir(contaSalario, contaEnok, "600.0");
+        }
+        catch (BusinessException e) {
+            assertThat(e.getCause().getMessage(), equalTo("Saldo insuficiente."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void transferirSaldoDeUmaContaParaOutra() throws BusinessException {
+        ContaDTO contaSalario = contaDTO();
+        Long contaSalarioId = contaBusiness.criar(contaSalario);
+        contaBusiness.adicionarCredito(contaSalario, "1000.0");
+        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+
+        ContaDTO contaEnok = conta2DTO();
+        Long contaEnokId = contaBusiness.criar(contaEnok);
+        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+
+        contaBusiness.transferir(contaSalario, contaEnok, "600.0");
+
+        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+        assertThat(contaSalario.saldo(), equalTo("400.0"));
+
+        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+        assertThat(contaEnok.saldo(), equalTo("600.0"));
     }
 }

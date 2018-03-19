@@ -12,4 +12,8 @@ public interface GenericRepository<T> {
     void salvar(T entity) throws RepositoryException;
 
     List<T> buscarRegistros() throws RepositoryException;
+
+    void atualizar(T entity, T entityAtualizada) throws RepositoryException;
+
+    void deletar(T entity) throws RepositoryException;
 }

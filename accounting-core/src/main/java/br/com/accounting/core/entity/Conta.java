@@ -4,12 +4,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Conta {
+public class Conta implements Cloneable {
     private Long codigo;
     private String nome;
     private String descricao;
@@ -27,5 +26,10 @@ public class Conta {
                 .append(nome, conta.nome)
                 .append(descricao, conta.descricao)
                 .isEquals();
+    }
+
+    @Override
+    public Conta clone() throws CloneNotSupportedException {
+        return (Conta) super.clone();
     }
 }

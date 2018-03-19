@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent = true)
 public class ContaDTO {
+    private String codigo;
     private String nome;
     private String descricao;
     private String saldo;

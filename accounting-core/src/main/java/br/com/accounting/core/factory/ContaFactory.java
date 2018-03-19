@@ -1,11 +1,10 @@
 package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.util.Utils;
 
 import java.text.ParseException;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.core.util.Utils.createDouble;
 import static br.com.accounting.core.util.Utils.isBlank;
 
 public final class ContaFactory {
@@ -22,7 +21,10 @@ public final class ContaFactory {
     }
 
     public ContaFactory withCodigo(String codigo) {
-        if (!isBlank(codigo)) {
+        if (isBlank(codigo)) {
+            conta.codigo(0L);
+        }
+        else {
             conta.codigo(Long.parseLong(codigo));
         }
         return this;
@@ -43,12 +45,17 @@ public final class ContaFactory {
     }
 
     public ContaFactory withSaldo(Double saldo) {
-        conta.saldo(saldo);
+        if (saldo != null) {
+            conta.saldo(saldo);
+        }
         return this;
     }
 
     public ContaFactory withSaldo(String saldo) throws ParseException {
-        if (!isBlank(saldo)) {
+        if (isBlank(saldo)) {
+            conta.saldo(0.0);
+        }
+        else {
             conta.saldo(createDouble(saldo));
         }
         return this;
