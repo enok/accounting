@@ -26,7 +26,7 @@ public class ContaServiceImpl implements ContaService {
             setaProximoCodigo(conta);
             contaRepository.salvar(conta);
         }
-        catch (RepositoryException e) {
+        catch (Exception e) {
             String message = "Não foi possível salvar: a conta";
             log.error(message, e);
             throw new ServiceException(message, e);
@@ -46,13 +46,27 @@ public class ContaServiceImpl implements ContaService {
             List<Conta> contas = contaRepository.buscarRegistros();
             conta = contaRepository.filtrarPorNomeDescricao(contas, nome, descricao);
         }
-        catch (RepositoryException e) {
+        catch (Exception e) {
             String message = "Não foi possível buscar a conta.";
             log.error(message, e);
             throw new ServiceException(message, e);
         }
 
         return conta;
+    }
+
+    @Override
+    public List<Conta> buscarTodas() throws ServiceException {
+        log.debug("[ buscarTodas ]");
+
+        try {
+            return contaRepository.buscarRegistros();
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar as contas.";
+            log.error(message, e);
+            throw new ServiceException(message, e);
+        }
     }
 
     private void setaProximoCodigo(Conta conta) throws RepositoryException {

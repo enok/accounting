@@ -4,6 +4,7 @@ import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.exception.ServiceException;
@@ -31,8 +32,6 @@ public class ContaBusinessImpl implements ContaBusiness {
         log.info("[ criar ]");
         log.info("contaDTO: {}", contaDTO);
 
-        String message = "Nao foi possivel criar a conta: " + contaDTO;
-
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -50,9 +49,28 @@ public class ContaBusinessImpl implements ContaBusiness {
             return contaService.salvar(conta);
         }
         catch (MissingFieldException | ServiceException | DuplicatedRegistryException e) {
+            String message = "Não foi possivel criar a conta: " + contaDTO;
             log.error(message, e);
             throw new BusinessException(message, e);
         }
+    }
+
+    @Override
+    public List<ContaDTO> buscarContas() throws BusinessException {
+        log.info("[ buscarContas ]");
+
+        List<ContaDTO> contasDTO = null;
+        try {
+            List<Conta> contas = contaService.buscarTodas();
+            contasDTO = criarListaContasDTO(contas);
+        }
+        catch (ServiceException e) {
+            String message = "Não foi possivel buscar as contas.";
+            log.error(message, e);
+            throw new BusinessException(message, e);
+        }
+
+        return contasDTO;
     }
 
     private void validarEntrada(final ContaDTO contaDTO, final List<String> erros) throws MissingFieldException {
@@ -78,5 +96,19 @@ public class ContaBusinessImpl implements ContaBusiness {
         if (conta.equals(contaBuscada)) {
             throw new DuplicatedRegistryException("Conta duplicada.");
         }
+    }
+
+    private List<ContaDTO> criarListaContasDTO(List<Conta> contas) {
+        List<ContaDTO> contasDTO = new ArrayList<>();
+        for (Conta conta : contas) {
+            ContaDTO contaDTO = ContaDTOFactory
+                    .begin()
+                    .withNome(conta.nome())
+                    .withDescricao(conta.descricao())
+                    .withSaldo(conta.saldo())
+                    .build();
+            contasDTO.add(contaDTO);
+        }
+        return contasDTO;
     }
 }

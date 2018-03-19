@@ -34,41 +34,42 @@ public final class Utils {
         return StringUtils.isBlank(value) || value.equals("null");
     }
 
-    public static LocalDate getDateFromString(String date) {
-        return LocalDate.parse(date, DATE_FORMATTER);
-    }
+//    public static LocalDate getDateFromString(String date) {
+//        return LocalDate.parse(date, DATE_FORMATTER);
+//    }
+//
+//    public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
+//        long intervaloDataInicial = DAYS.between(dataInicial, data);
+//        long intervaloDataFinal = DAYS.between(data, dataFinal);
+//
+//        return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
+//    }
 
-    public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
-        long intervaloDataInicial = DAYS.between(dataInicial, data);
-        long intervaloDataFinal = DAYS.between(data, dataFinal);
+//    public static String getStringFromDate(LocalDate localDate) {
+//        return localDate.format(DATE_FORMATTER);
+//    }
 
-        return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
-    }
-
-    public static String getStringFromDate(LocalDate localDate) {
-        return localDate.format(DATE_FORMATTER);
-    }
-
-    public static String getStringFromCurrentDate() {
-        return LocalDate.now().format(DATE_FORMATTER);
-    }
-
-    public static String getNextMonth(String date) {
-        LocalDate localDate = getDateFromString(date);
-        localDate = localDate.plusMonths(1L);
-        return getStringFromDate(localDate);
-    }
-
-    public static String getDoubleFormatted(Double value) {
-        return decimalFormat.format(value);
-    }
+//    public static String getStringFromCurrentDate() {
+//        return LocalDate.now().format(DATE_FORMATTER);
+//    }
+//
+//    public static String getNextMonth(String date) {
+//        LocalDate localDate = getDateFromString(date);
+//        localDate = localDate.plusMonths(1L);
+//        return getStringFromDate(localDate);
+//    }
+//
+//    public static String getDoubleFormatted(Double value) {
+//        return decimalFormat.format(value);
+//    }
 
     public static Double createDouble(String value) throws ParseException {
-        try {
-            return Double.parseDouble(value.replaceAll(",", "."));
-        }
-        catch (NumberFormatException e) {
-            return decimalFormat.parse(value).doubleValue();
-        }
+        return Double.parseDouble(value.replaceAll(",", "."));
+//        try {
+//            return Double.parseDouble(value.replaceAll(",", "."));
+//        }
+//        catch (NumberFormatException e) {
+//            return decimalFormat.parse(value).doubleValue();
+//        }
     }
 }

@@ -49,7 +49,6 @@ public class ContaBusinessTest extends GenericTest {
             assertThat(erros, notNullValue());
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
-
             throw e;
         }
     }
@@ -68,7 +67,6 @@ public class ContaBusinessTest extends GenericTest {
             assertThat(erros, notNullValue());
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo descrição é obrigatório."));
-
             throw e;
         }
     }
@@ -88,7 +86,6 @@ public class ContaBusinessTest extends GenericTest {
             assertThat(erros.size(), equalTo(2));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
-
             throw e;
         }
     }
@@ -113,7 +110,6 @@ public class ContaBusinessTest extends GenericTest {
         catch (BusinessException e) {
             DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
             assertThat(e1.getMessage(), equalTo("Conta duplicada."));
-
             throw e;
         }
     }
@@ -131,5 +127,35 @@ public class ContaBusinessTest extends GenericTest {
         assertTrue(codigoConta2 >= 0);
 
         assertThat(codigoConta, not(equalTo(codigoConta2)));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarContasException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+
+        try {
+            contaBusiness.buscarContas();
+        }
+        catch (BusinessException e) {
+            ServiceException e1 = (ServiceException) e.getCause();
+            assertThat(e1.getMessage(), equalTo("Não foi possível buscar as contas."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void buscarContas() throws BusinessException {
+        ContaDTO contaDTO = contaDTO();
+
+        contaBusiness.criar(contaDTO);
+        List<ContaDTO> contasDTO = contaBusiness.buscarContas();
+
+        assertThat(contasDTO, notNullValue());
+        assertThat(contasDTO.size(), equalTo(1));
+
+        ContaDTO contaDTOBuscada = contasDTO.get(0);
+        assertThat(contaDTOBuscada.nome(), equalTo("Salário"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
+//        assertThat(contaDTOBuscada.saldo(), equalTo("1000.0"));
     }
 }

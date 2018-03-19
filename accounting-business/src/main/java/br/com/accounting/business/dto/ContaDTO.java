@@ -10,4 +10,5 @@ import lombok.experimental.Accessors;
 public class ContaDTO {
     private String nome;
     private String descricao;
+    private String saldo;
 }

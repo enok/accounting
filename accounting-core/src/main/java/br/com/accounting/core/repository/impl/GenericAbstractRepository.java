@@ -81,6 +81,23 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         }
     }
 
+    @Override
+    public List<T> buscarRegistros() throws RepositoryException {
+        log.debug("[ buscarRegistros ]");
+
+        try {
+            Path caminhoArquivo = buscarCaminhoArquivo();
+            List<String> linhas = Files.readAllLines(caminhoArquivo);
+            log.trace("linhas: " + linhas);
+            return criarRegistros(linhas);
+        }
+        catch (Exception e) {
+            String message = "Nao foi possivel buscar os registros";
+            log.error(message, e);
+            throw new RepositoryException(message, e);
+        }
+    }
+
 //    @Override
 //    public void atualizar(List<T> oldEntitiesList, List<T> newEntitiesList) throws RepositoryException {
 //        LOG.info("[ atualizar ]");
@@ -106,23 +123,6 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
 //            throw new RepositoryException(message, e);
 //        }
 //    }
-
-    @Override
-    public List<T> buscarRegistros() throws RepositoryException {
-        log.debug("[ buscarRegistros ]");
-
-        try {
-            Path caminhoArquivo = buscarCaminhoArquivo();
-            List<String> linhas = Files.readAllLines(caminhoArquivo);
-            log.trace("linhas: " + linhas);
-            return criarRegistros(linhas);
-        }
-        catch (Exception e) {
-            String message = "Nao foi possivel buscar os registros";
-            log.error(message, e);
-            throw new RepositoryException(message, e);
-        }
-    }
 
     private Path buscarArquivoContagem() throws IOException {
         String caminhoArquivoContagem = getArquivoContagem();
