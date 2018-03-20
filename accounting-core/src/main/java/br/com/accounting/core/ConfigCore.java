@@ -5,11 +5,11 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 
 @Configuration
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan("br.com.accounting.core")
 @PropertySource(value = {"file:application.properties", "classpath:application.properties"}, ignoreResourceNotFound = true)
 @Lazy
 public class ConfigCore {
-
     @Autowired
     private Environment env;
 

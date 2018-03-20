@@ -20,7 +20,7 @@
     <logger name="org.springframework.security" level="ERROR"/>
     <logger name="weblogic.security.services" level="ERROR"/>
 
-    <logger name="br.com.accounting.core" level="DEBUG"/>
+    <logger name="br.com.accounting.core" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

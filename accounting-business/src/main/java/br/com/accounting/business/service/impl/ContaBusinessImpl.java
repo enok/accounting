@@ -11,7 +11,6 @@ import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.service.ContaService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,6 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-@Slf4j
 @Service
 public class ContaBusinessImpl implements ContaBusiness {
     @Autowired
@@ -32,9 +30,6 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @Override
     public Long criar(final ContaDTO contaDTO) throws BusinessException {
-        log.info("[ criar ]");
-        log.info("contaDTO: {}", contaDTO);
-
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -53,31 +48,24 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
         catch (Exception e) {
             String message = "Não foi possível criar a conta";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
 
     @Override
     public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
-        log.info("[ buscarContas ]");
-        log.info("codigo: {}", codigo);
-
         try {
             Conta conta = contaService.buscarPorCodigo(codigo);
             return criarConta(conta);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta por id.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
 
     @Override
     public List<ContaDTO> buscarContas() throws BusinessException {
-        log.info("[ buscarContas ]");
-
         List<ContaDTO> contasDTO;
         try {
             List<Conta> contas = contaService.buscarTodas();
@@ -85,7 +73,6 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
         catch (Exception e) {
             String message = "Não foi possível buscar as contas.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
 
@@ -94,10 +81,6 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @Override
     public void adicionarCredito(final ContaDTO contaDTO, final String credito) throws BusinessException {
-        log.info("[ adicionarCredito ]");
-        log.info("contaDTO: {}", contaDTO);
-        log.info("credito: {}", credito);
-
         try {
             Conta conta = criarConta(contaDTO);
             Double saldo = createDouble(credito);
@@ -105,17 +88,12 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
         catch (Exception e) {
             String message = "Não foi possível adicionar crédito à conta.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
 
     @Override
     public void adicionarDebito(final ContaDTO contaDTO, final String debito) throws BusinessException {
-        log.info("[ adicionarDebito ]");
-        log.info("contaDTO: {}", contaDTO);
-        log.info("debito: {}", debito);
-
         try {
             Conta conta = criarConta(contaDTO);
             Double saldo = createDouble(debito);
@@ -123,34 +101,24 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
         catch (Exception e) {
             String message = "Não foi possível adicionar débito à conta.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
 
     @Override
     public void excluir(final ContaDTO contaDTO) throws BusinessException {
-        log.info("[ excluir ]");
-        log.info("contaDTO: {}", contaDTO);
-
         try {
             Conta conta = criarConta(contaDTO);
             contaService.deletar(conta);
         }
         catch (Exception e) {
             String message = "Não foi possível excluir a conta.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
 
     @Override
     public void transferir(final ContaDTO contaOrigemDTO, final ContaDTO contaDestinoDTO, final String valor) throws BusinessException {
-        log.info("[ transferir ]");
-        log.info("contaOrigemDTO: {}", contaOrigemDTO);
-        log.info("contaDestinoDTO: {}", contaDestinoDTO);
-        log.info("valor: {}", valor);
-
         try {
             Double saldoOrigem = Double.parseDouble(contaOrigemDTO.saldo());
             Double valorTransferencia = Double.parseDouble(valor);
@@ -164,7 +132,6 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
         catch (Exception e) {
             String message = "Não foi possível tranferir o valor entre as contas.";
-            log.error(message, e);
             throw new BusinessException(message, e);
         }
     }
@@ -178,8 +145,6 @@ public class ContaBusinessImpl implements ContaBusiness {
         if (isBlank(contaDTO.descricao())) {
             erros.add(format(msg, "descrição"));
         }
-
-        log.trace("erros: {}", erros);
 
         if (!isEmpty(erros)) {
             throw new MissingFieldException(erros);

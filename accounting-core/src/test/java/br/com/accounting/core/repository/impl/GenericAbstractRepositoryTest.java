@@ -11,8 +11,8 @@ public class GenericAbstractRepositoryTest extends GenericTest {
         genericAbstractRepository = new GenericAbstractRepositoryMock();
     }
 
-    @Test
-    public void proximoCodigoNoiFoiPossivelLerAsLinhas() {
+    @Test(expected = RepositoryException.class)
+    public void proximoCodigoNoiFoiPossivelLerAsLinhas() throws RepositoryException {
         genericAbstractRepository.proximoCodigo();
     }
 

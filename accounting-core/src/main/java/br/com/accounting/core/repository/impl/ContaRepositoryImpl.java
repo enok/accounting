@@ -3,10 +3,8 @@ package br.com.accounting.core.repository.impl;
 import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.repository.ContaRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -17,9 +15,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.SEPARADOR;
-import static org.springframework.util.CollectionUtils.*;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
-@Slf4j
 @Repository
 public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implements ContaRepository {
     @Autowired
@@ -27,21 +24,16 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
 
     @Override
     public String getArquivo() {
-        log.debug("[ getArquivo ]");
         return diretorio + File.separator + "contas.csv";
     }
 
     @Override
     public String getArquivoContagem() {
-        log.debug("[ getArquivoContagem ]");
         return diretorio + File.separator + "contas-contagem.txt";
     }
 
     @Override
     public String criarLinha(final Conta entity) {
-        log.debug("[ criarLinha ]");
-        log.debug("conta: {}" + entity);
-
         StringBuilder builder = new StringBuilder()
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(entity.nome()).append(SEPARADOR)
@@ -53,14 +45,10 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
 
     @Override
     public List<Conta> criarRegistros(final List<String> linhas) throws ParseException {
-        log.debug("[ criarRegistros ]");
-        log.debug("linhas: " + linhas);
-
         List<Conta> contas = new ArrayList<>();
 
         for (String linha : linhas) {
             Conta conta = criarConta(linha);
-            log.debug("conta: " + conta);
             contas.add(conta);
         }
 
@@ -68,9 +56,6 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     private Conta criarConta(final String linha) throws ParseException {
-        log.debug("[ criarConta ]");
-        log.debug("linha: {}", linha);
-
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

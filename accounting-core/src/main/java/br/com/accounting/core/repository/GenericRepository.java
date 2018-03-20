@@ -5,7 +5,7 @@ import br.com.accounting.core.exception.RepositoryException;
 import java.util.List;
 
 public interface GenericRepository<T> {
-    Long proximoCodigo();
+    Long proximoCodigo() throws RepositoryException;
 
     void incrementarCodigo(Long codigo) throws RepositoryException;
 
