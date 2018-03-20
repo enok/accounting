@@ -13,23 +13,14 @@ import org.springframework.stereotype.Component;
 public class LoggingHandlerAspect {
     private static Logger log = LoggerFactory.getLogger(LoggingHandlerAspect.class);
 
-    private static final String ALL_METHODS = "execution(* *(..)) && within(br.com.accounting..*)";
     private static final String PUBLIC_METHOD = "execution(public * *(..)) && within(br.com.accounting..*)";
-    private static final String PRIVATE_METHOD = "execution(private * *(..)) && within(br.com.accounting..*)";
 
     @Before(value = PUBLIC_METHOD)
     public void publicLogBeforeAdvice(JoinPoint joinPoint) {
-        log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        log = getLogger(joinPoint);
         log.debug("[ {} ]", getMethodName(joinPoint));
         printArgumentsDebug(joinPoint);
     }
-
-//    @Before(value = PRIVATE_METHOD)
-//    public void privateLogBeforeAdvice(JoinPoint joinPoint) {
-//        log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
-//        log.trace("[ {} ]", getMethodName(joinPoint));
-//        printArgumentsTrace(joinPoint);
-//    }
 
     @AfterReturning(pointcut = PUBLIC_METHOD, returning = "result")
     public void logAfterReturningAdvice(JoinPoint joinPoint, Object result) {
@@ -65,15 +56,4 @@ public class LoggingHandlerAspect {
     private Logger getLogger(JoinPoint joinPoint) {
         return LoggerFactory.getLogger(joinPoint.getTarget().getClass());
     }
-
-//    private void printArgumentsTrace(JoinPoint joinPoint) {
-//        CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
-//        String[] parameterNames = codeSignature.getParameterNames();
-//        Object[] args = joinPoint.getArgs();
-//        if (notNullArguments(parameterNames, args)) {
-//            for (int i = 0; i < parameterNames.length; i++) {
-//                log.trace("\t{}: {}", parameterNames[i], args[i]);
-//            }
-//        }
-//    }
 }
