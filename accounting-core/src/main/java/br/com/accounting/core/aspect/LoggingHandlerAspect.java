@@ -33,13 +33,13 @@ public class LoggingHandlerAspect {
 
     @AfterReturning(pointcut = PUBLIC_METHOD, returning = "result")
     public void logAfterReturningAdvice(JoinPoint joinPoint, Object result) {
-        log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        log = getLogger(joinPoint);
         log.trace("\t\tresult: {}", result);
     }
 
     @AfterThrowing(pointcut = PUBLIC_METHOD, throwing = "e")
     public void publicLogAfterThrowingAdvice(JoinPoint joinPoint, Exception e) {
-        log = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        log = getLogger(joinPoint);
         log.error("Erro: " + e.getMessage(), e);
     }
 
@@ -58,6 +58,14 @@ public class LoggingHandlerAspect {
         }
     }
 
+    private boolean notNullArguments(String[] parameterNames, Object[] args) {
+        return (parameterNames != null) && (args != null);
+    }
+
+    private Logger getLogger(JoinPoint joinPoint) {
+        return LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+    }
+
 //    private void printArgumentsTrace(JoinPoint joinPoint) {
 //        CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
 //        String[] parameterNames = codeSignature.getParameterNames();
@@ -68,8 +76,4 @@ public class LoggingHandlerAspect {
 //            }
 //        }
 //    }
-
-    private boolean notNullArguments(String[] parameterNames, Object[] args) {
-        return (parameterNames != null) && (args != null);
-    }
 }
