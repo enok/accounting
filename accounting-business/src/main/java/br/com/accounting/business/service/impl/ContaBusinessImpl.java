@@ -1,5 +1,6 @@
 package br.com.accounting.business.service.impl;
 
+import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
@@ -28,6 +29,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     @Autowired
     private ContaService contaService;
 
+    @History
     @Override
     public Long criar(final ContaDTO contaDTO) throws BusinessException {
         try {
@@ -79,6 +81,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         return contasDTO;
     }
 
+    @History
     @Override
     public void adicionarCredito(final ContaDTO contaDTO, final String credito) throws BusinessException {
         try {
@@ -92,6 +95,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
     }
 
+    @History
     @Override
     public void adicionarDebito(final ContaDTO contaDTO, final String debito) throws BusinessException {
         try {
@@ -105,6 +109,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
     }
 
+    @History
     @Override
     public void excluir(final ContaDTO contaDTO) throws BusinessException {
         try {
@@ -117,6 +122,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
     }
 
+    @History
     @Override
     public void transferir(final ContaDTO contaOrigemDTO, final ContaDTO contaDestinoDTO, final String valor) throws BusinessException {
         try {
