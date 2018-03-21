@@ -2,6 +2,7 @@ package br.com.accounting.core.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -13,20 +14,22 @@ public class LoggingHandlerAspect extends GenericAspect {
 
     @Before("publicMethod()")
     public void publicLogBeforeAdvice(JoinPoint joinPoint) {
-        log = getLogger(joinPoint);
-        log.debug("[ {} ]", getMethodName(joinPoint));
+        getLog(joinPoint).debug("[ {} ]", getMethodName(joinPoint));
         printArgumentsDebug(joinPoint);
     }
 
     @AfterReturning(pointcut = "publicMethod()", returning = "result")
     public void logAfterReturningAdvice(JoinPoint joinPoint, Object result) {
-        log = getLogger(joinPoint);
-        log.trace("\t\tresult: {}", result);
+        getLog(joinPoint).trace("\t\tresult: {}", result);
     }
 
     @AfterThrowing(pointcut = "publicMethod()", throwing = "e")
     public void publicLogAfterThrowingAdvice(JoinPoint joinPoint, Exception e) {
-        log = getLogger(joinPoint);
-        log.error("Erro: " + e.getMessage(), e);
+        getLog(joinPoint).error("Erro: " + e.getMessage(), e);
+    }
+
+    @Override
+    protected Logger getLog(JoinPoint joinPoint) {
+        return getLogger(joinPoint);
     }
 }

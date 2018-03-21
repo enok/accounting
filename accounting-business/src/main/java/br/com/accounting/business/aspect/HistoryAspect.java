@@ -6,6 +6,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +27,15 @@ public class HistoryAspect extends GenericAspect {
     @AfterReturning("saveHistoryMethod()")
     public void saveHistory(JoinPoint joinPoint) {
         try {
-            String metodo = getMethodName(joinPoint);
+            String metodo = getClass(joinPoint).getName() + "." + getMethodName(joinPoint) + "()";
             Map<String, Object> parametros = buscarParametros(joinPoint);
+            getLog(joinPoint).trace("<< salvando historico >>");
+            getLog(joinPoint).trace("metodo: {}", metodo);
+            getLog(joinPoint).trace("parametros: {}", parametros);
             historicoService.salvar(metodo, parametros);
         }
         catch (Exception e) {
-            log = getLogger(joinPoint);
-            log.warn("Não foi possível salvar o histórico.", e);
+            getLog(joinPoint).warn("Não foi possível salvar o histórico.", e);
         }
     }
 
@@ -47,5 +51,10 @@ public class HistoryAspect extends GenericAspect {
             }
         }
         return parametros;
+    }
+
+    @Override
+    protected Logger getLog(JoinPoint joinPoint) {
+        return getLogger(joinPoint);
     }
 }

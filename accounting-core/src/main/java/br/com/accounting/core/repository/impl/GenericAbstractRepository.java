@@ -33,7 +33,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             proximoCodigo = buscarProximoCodigo(lines);
         }
         catch (Exception e) {
-            String message = "Nao foi possivel ler as linhas do arquivo: " + getArquivoContagem();
+            String message = "Não foi possível ler as linhas do arquivo: " + getArquivoContagem();
             throw new RepositoryException(message, e);
         }
 
@@ -48,7 +48,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             write(get(getArquivoContagem()), linha.getBytes(), CREATE);
         }
         catch (Exception e) {
-            String message = "Nao foi possivel incrementar o codigo: " + codigo;
+            String message = "Não foi possível incrementar o código: " + codigo;
             throw new RepositoryException(message, e);
         }
     }
@@ -63,7 +63,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             write(get(caminhoArquivo), asList(linha), UTF_8, APPEND, CREATE);
         }
         catch (Exception e) {
-            String message = "Nao foi possivel salvar a linha: " + linha;
+            String message = "Não foi possível salvar a linha: " + linha;
             throw new RepositoryException(message, e);
         }
     }
@@ -76,7 +76,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             return criarRegistros(linhas);
         }
         catch (Exception e) {
-            String message = "Nao foi possivel buscar os registros";
+            String message = "Não foi possível buscar os registros";
             throw new RepositoryException(message, e);
         }
     }

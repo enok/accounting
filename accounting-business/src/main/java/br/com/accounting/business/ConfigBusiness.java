@@ -10,5 +10,6 @@ import org.springframework.context.annotation.*;
 @PropertySource(value = {"file:application.properties", "classpath:application.properties"}, ignoreResourceNotFound = true)
 @Import({ConfigCore.class})
 @Lazy
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ConfigBusiness {
 }

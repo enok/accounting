@@ -6,14 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class GenericAspect {
-    protected static Logger log = LoggerFactory.getLogger(GenericAspect.class);
-
-    protected Logger getLogger(JoinPoint joinPoint) {
-        return LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+    protected Class<?> getClass(JoinPoint joinPoint) {
+        return joinPoint.getTarget().getClass();
     }
 
     protected String getMethodName(JoinPoint joinPoint) {
         return joinPoint.getSignature().getName();
+    }
+
+    protected Logger getLogger(JoinPoint joinPoint) {
+        return LoggerFactory.getLogger(getClass(joinPoint));
     }
 
     protected void printArgumentsDebug(JoinPoint joinPoint) {
@@ -22,7 +24,7 @@ public abstract class GenericAspect {
         Object[] args = joinPoint.getArgs();
         if (notNullArguments(parameterNames, args)) {
             for (int i = 0; i < parameterNames.length; i++) {
-                log.debug("\t{}: {}", parameterNames[i], args[i]);
+                getLog(joinPoint).debug("\t{}: {}", parameterNames[i], args[i]);
             }
         }
     }
@@ -39,4 +41,6 @@ public abstract class GenericAspect {
     protected Object[] getParameterValues(JoinPoint joinPoint) {
         return joinPoint.getArgs();
     }
+
+    protected abstract Logger getLog(JoinPoint joinPoint);
 }
