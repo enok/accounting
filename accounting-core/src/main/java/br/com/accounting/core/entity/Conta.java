@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Conta implements Cloneable {
+public class Conta implements Entity, Cloneable {
     private Long codigo;
     private String nome;
     private String descricao;
@@ -31,5 +31,10 @@ public class Conta implements Cloneable {
     @Override
     public Conta clone() throws CloneNotSupportedException {
         return (Conta) super.clone();
+    }
+
+    @Override
+    public Long getCodigo() {
+        return codigo;
     }
 }

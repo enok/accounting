@@ -1,5 +1,6 @@
 package br.com.accounting.core.repository.impl;
 
+import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.repository.GenericRepository;
 import org.springframework.util.CollectionUtils;
@@ -59,8 +60,8 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
 
         try {
             linha = criarLinha(entity);
-            String caminhoArquivo = getArquivo();
-            write(get(caminhoArquivo), asList(linha), UTF_8, APPEND, CREATE);
+            Path caminhoArquivo = buscarCaminhoArquivo();
+            write(caminhoArquivo, asList(linha), UTF_8, APPEND, CREATE);
         }
         catch (Exception e) {
             String message = "Não foi possível salvar a linha: " + linha;
@@ -69,28 +70,11 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     @Override
-    public List<T> buscarRegistros() throws RepositoryException {
-        try {
-            Path caminhoArquivo = buscarCaminhoArquivo();
-            List<String> linhas = Files.readAllLines(caminhoArquivo);
-            return criarRegistros(linhas);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar os registros";
-            throw new RepositoryException(message, e);
-        }
-    }
-
-    @Override
-    public void atualizar(final T entity, final T entityAtualizada) throws RepositoryException {
+    public void atualizar(final T entity) throws RepositoryException {
         try {
             String linha = criarLinha(entity);
-            String linhaAtualizada = criarLinha(entityAtualizada);
-
-            String caminhoArquivo = getArquivo();
-            Path path = Paths.get(caminhoArquivo);
-
-            atualizarLinha(path, linha, linhaAtualizada);
+            Path caminhoArquivo = buscarCaminhoArquivo();
+            atualizarLinha(caminhoArquivo, ((Entity) entity).getCodigo(), linha);
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar a linha.";
@@ -102,14 +86,24 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     public void deletar(final T entity) throws RepositoryException {
         try {
             String linha = criarLinha(entity);
-
-            String caminhoArquivo = getArquivo();
-            Path path = Paths.get(caminhoArquivo);
-
-            deletarLinha(path, linha);
+            Path caminhoArquivo = buscarCaminhoArquivo();
+            deletarLinha(caminhoArquivo, linha);
         }
         catch (Exception e) {
             String message = "Não foi possível deletar a linha.";
+            throw new RepositoryException(message, e);
+        }
+    }
+
+    @Override
+    public List<T> buscarRegistros() throws RepositoryException {
+        try {
+            Path caminhoArquivo = buscarCaminhoArquivo();
+            List<String> linhas = readAllLines(caminhoArquivo);
+            return criarRegistros(linhas);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar os registros";
             throw new RepositoryException(message, e);
         }
     }
@@ -134,7 +128,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         return Long.valueOf(lines.get(0));
     }
 
-    private Path buscarCaminhoArquivo() throws IOException {
+    private Path buscarCaminhoArquivo() throws IOException, InterruptedException {
         Path caminhoArquivo = Paths.get(getArquivo());
         if (!Files.exists(caminhoArquivo)) {
             Files.createFile(caminhoArquivo);
@@ -142,22 +136,26 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         return caminhoArquivo;
     }
 
-    private void atualizarLinha(Path caminho, String linha, String novaLinha) throws IOException {
-        Stream<String> linhas = Files.lines(caminho);
-        List<String> replaced = linhas
-                .map(line -> line.replaceAll(linha, novaLinha))
+    private void atualizarLinha(Path caminho, Long codigo, String linha) throws IOException {
+        Stream<String> linhasStream = Files.lines(caminho, UTF_8);
+        List<String> linhasAtualizadas = linhasStream
+                .map(linhaAtual -> buscarLinha(codigo, linha, linhaAtual))
                 .collect(Collectors.toList());
-        Files.write(caminho, replaced);
-        linhas.close();
+        Files.write(caminho, linhasAtualizadas, UTF_8);
+        linhasStream.close();
+    }
+
+    private static String buscarLinha(Long codigo, String novaLinha, String linha) {
+        return linha.startsWith(String.valueOf(codigo)) ? novaLinha : linha;
     }
 
     private void deletarLinha(Path caminho, String linha) throws IOException {
-        Stream<String> linhas = Files.lines(caminho);
-        List<String> replaced = linhas
+        Stream<String> linhasSream = Files.lines(caminho, UTF_8);
+        List<String> linhasAtualizadas = linhasSream
                 .filter(line -> !line.equals(linha))
                 .collect(Collectors.toList());
-        Files.write(caminho, replaced);
-        linhas.close();
+        write(caminho, linhasAtualizadas);
+        linhasSream.close();
     }
 
     public abstract String getArquivo();

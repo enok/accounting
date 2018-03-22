@@ -39,19 +39,16 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .append(entity.nome()).append(SEPARADOR)
                 .append(entity.descricao()).append(SEPARADOR)
                 .append(entity.saldo());
-
         return builder.toString();
     }
 
     @Override
     public List<Conta> criarRegistros(final List<String> linhas) throws ParseException {
         List<Conta> contas = new ArrayList<>();
-
         for (String linha : linhas) {
             Conta conta = criarConta(linha);
             contas.add(conta);
         }
-
         return contas;
     }
 
@@ -60,7 +57,6 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)
                 .collect(Collectors.toList());
-
         return ContaFactory
                 .begin()
                 .withCodigo(registro.get(0))

@@ -114,7 +114,6 @@ public class ContaBusinessTest extends GenericTest {
     public void criarDuasContas() throws BusinessException {
         ContaDTO contaDTO = contaDTO();
         Long codigoConta = contaBusiness.criar(contaDTO);
-        assertThat(codigoConta, notNullValue());
         assertTrue(codigoConta >= 0);
 
         ContaDTO conta2DTO = conta2DTO();
@@ -122,6 +121,101 @@ public class ContaBusinessTest extends GenericTest {
         assertTrue(codigoConta2 >= 0);
 
         assertThat(codigoConta, not(equalTo(codigoConta2)));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alterarNomeSemNome() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        contaDTOBuscada.nome(null);
+        contaBusiness.atualizar(contaDTOBuscada);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alterarDescricaoSemDescricao() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        contaDTOBuscada.descricao(null);
+        contaBusiness.atualizar(contaDTOBuscada);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alterarNomeEDescricaoSemNomeEDescricao() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        contaDTOBuscada.nome(null);
+        contaDTOBuscada.descricao(null);
+        contaBusiness.atualizar(contaDTOBuscada);
+    }
+
+    @Test
+    public void alterarNomeDaConta() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        assertTrue(codigoConta >= 0);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+
+        contaDTOBuscada.nome("Carol");
+        contaBusiness.atualizar(contaDTOBuscada);
+        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+    }
+
+    @Test
+    public void alterarDescricaoDaConta() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        assertTrue(codigoConta >= 0);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+
+        contaDTOBuscada.descricao("Valor separado para a Carol");
+        contaBusiness.atualizar(contaDTOBuscada);
+        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+    }
+
+    @Test
+    public void alterarNomeEDescricao() throws BusinessException {
+        ContaDTO contaDTO = conta2DTO();
+        Long codigoConta = contaBusiness.criar(contaDTO);
+        assertTrue(codigoConta >= 0);
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+
+        contaDTOBuscada.nome("Carol");
+        contaDTOBuscada.descricao("Valor separado para a Carol");
+        contaBusiness.atualizar(contaDTOBuscada);
+        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+
+        assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
     }
 
     @Test(expected = BusinessException.class)

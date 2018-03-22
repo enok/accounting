@@ -25,8 +25,44 @@ public class ContaServiceImpl implements ContaService {
             String message = "Não foi possível salvar a conta.";
             throw new ServiceException(message, e);
         }
-
         return conta.codigo();
+    }
+
+    @Override
+    public void atualizar(Conta conta) throws ServiceException {
+        try {
+            contaRepository.atualizar(conta);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível atualizar a conta.";
+            throw new ServiceException(message, e);
+        }
+    }
+
+    @Override
+    public void atualizarSaldo(final Conta conta, final Double saldo) throws ServiceException {
+        try {
+            Conta contaAtualizada = conta.clone();
+            Double novoSaldo = buscarSaldo(conta) + saldo;
+            contaAtualizada.saldo(novoSaldo);
+
+            atualizar(contaAtualizada);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível atualizar o saldo da conta.";
+            throw new ServiceException(message, e);
+        }
+    }
+
+    @Override
+    public void deletar(final Conta conta) throws ServiceException {
+        try {
+            contaRepository.deletar(conta);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível deletar a conta.";
+            throw new ServiceException(message, e);
+        }
     }
 
     @Override
@@ -64,38 +100,13 @@ public class ContaServiceImpl implements ContaService {
         }
     }
 
-    @Override
-    public void atualizarSaldo(final Conta conta, final Double saldo) throws ServiceException {
-        try {
-            Conta contaAtualizada = conta.clone();
-            Double novoSaldo = buscarSaldo(conta) + saldo;
-            contaAtualizada.saldo(novoSaldo);
-            contaRepository.atualizar(conta, contaAtualizada);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível atualizar a conta.";
-            throw new ServiceException(message, e);
-        }
-    }
-
-    private Double buscarSaldo(Conta conta) {
-        return (conta.saldo() == null) ? 0.0 : conta.saldo();
-    }
-
-    @Override
-    public void deletar(final Conta conta) throws ServiceException {
-        try {
-            contaRepository.deletar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível deletar a conta.";
-            throw new ServiceException(message, e);
-        }
-    }
-
     private void setaProximoCodigo(Conta conta) throws RepositoryException {
         Long proximoCodigo = contaRepository.proximoCodigo();
         contaRepository.incrementarCodigo(proximoCodigo);
         conta.codigo(proximoCodigo);
+    }
+
+    private Double buscarSaldo(Conta conta) {
+        return (conta.saldo() == null) ? 0.0 : conta.saldo();
     }
 }

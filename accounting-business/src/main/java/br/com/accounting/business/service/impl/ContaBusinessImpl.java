@@ -49,36 +49,33 @@ public class ContaBusinessImpl implements ContaBusiness {
             return contaService.salvar(conta);
         }
         catch (Exception e) {
-            String message = "Não foi possível criar a conta";
+            String message = "Não foi possível criar a conta.";
             throw new BusinessException(message, e);
         }
     }
 
+    @History
     @Override
-    public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
+    public void atualizar(final ContaDTO contaDTO) throws BusinessException {
         try {
-            Conta conta = contaService.buscarPorCodigo(codigo);
-            return criarConta(conta);
+            final List<String> erros = new ArrayList<>();
+
+            validarEntrada(contaDTO, erros);
+
+            Conta conta = ContaFactory
+                    .begin()
+                    .withCodigo(contaDTO.codigo())
+                    .withNome(contaDTO.nome())
+                    .withDescricao(contaDTO.descricao())
+                    .withSaldo(contaDTO.saldo())
+                    .build();
+
+            contaService.atualizar(conta);
         }
         catch (Exception e) {
-            String message = "Não foi possível buscar a conta por id.";
+            String message = "Não foi possível atualizar a conta.";
             throw new BusinessException(message, e);
         }
-    }
-
-    @Override
-    public List<ContaDTO> buscarContas() throws BusinessException {
-        List<ContaDTO> contasDTO;
-        try {
-            List<Conta> contas = contaService.buscarTodas();
-            contasDTO = criarListaContasDTO(contas);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar as contas.";
-            throw new BusinessException(message, e);
-        }
-
-        return contasDTO;
     }
 
     @History
@@ -111,19 +108,6 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @History
     @Override
-    public void excluir(final ContaDTO contaDTO) throws BusinessException {
-        try {
-            Conta conta = criarConta(contaDTO);
-            contaService.deletar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível excluir a conta.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @History
-    @Override
     public void transferir(final ContaDTO contaOrigemDTO, final ContaDTO contaDestinoDTO, final String valor) throws BusinessException {
         try {
             Double saldoOrigem = Double.parseDouble(contaOrigemDTO.saldo());
@@ -142,6 +126,46 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
     }
 
+    @History
+    @Override
+    public void excluir(final ContaDTO contaDTO) throws BusinessException {
+        try {
+            Conta conta = criarConta(contaDTO);
+            contaService.deletar(conta);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível excluir a conta.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @Override
+    public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
+        try {
+            Conta conta = contaService.buscarPorCodigo(codigo);
+            return criarConta(conta);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar a conta por id.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @Override
+    public List<ContaDTO> buscarContas() throws BusinessException {
+        List<ContaDTO> contasDTO;
+        try {
+            List<Conta> contas = contaService.buscarTodas();
+            contasDTO = criarListaContasDTO(contas);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar as contas.";
+            throw new BusinessException(message, e);
+        }
+
+        return contasDTO;
+    }
+
     private void validarEntrada(final ContaDTO contaDTO, final List<String> erros) throws MissingFieldException {
         String msg = "O campo %s é obrigatório.";
 
@@ -153,7 +177,11 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
 
         if (!isEmpty(erros)) {
-            throw new MissingFieldException(erros);
+            StringBuilder builder = new StringBuilder();
+            for (String erro : erros) {
+                builder.append("\n\t").append(erro);
+            }
+            throw new MissingFieldException(erros, builder.toString());
         }
     }
 
