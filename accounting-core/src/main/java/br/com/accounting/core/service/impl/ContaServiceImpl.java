@@ -1,7 +1,6 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.ContaRepository;
 import br.com.accounting.core.service.ContaService;
@@ -18,7 +17,7 @@ public class ContaServiceImpl implements ContaService {
     @Override
     public Long salvar(final Conta conta) throws ServiceException {
         try {
-            setaProximoCodigo(conta);
+            setarProximoCodigo(contaRepository, conta);
             contaRepository.salvar(conta);
         }
         catch (Exception e) {
@@ -29,7 +28,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public void atualizar(Conta conta) throws ServiceException {
+    public void atualizar(final Conta conta) throws ServiceException {
         try {
             contaRepository.atualizar(conta);
         }
@@ -67,14 +66,7 @@ public class ContaServiceImpl implements ContaService {
 
     @Override
     public Conta buscarPorCodigo(final Long codigo) throws ServiceException {
-        try {
-            List<Conta> contas = contaRepository.buscarRegistros();
-            return contaRepository.filtrarCodigo(contas, codigo);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar a conta por código.";
-            throw new ServiceException(message, e);
-        }
+        return buscarPorCodigo(contaRepository, codigo);
     }
 
     @Override
@@ -98,12 +90,6 @@ public class ContaServiceImpl implements ContaService {
             String message = "Não foi possível buscar as contas.";
             throw new ServiceException(message, e);
         }
-    }
-
-    private void setaProximoCodigo(Conta conta) throws RepositoryException {
-        Long proximoCodigo = contaRepository.proximoCodigo();
-        contaRepository.incrementarCodigo(proximoCodigo);
-        conta.codigo(proximoCodigo);
     }
 
     private Double buscarSaldo(Conta conta) {

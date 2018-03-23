@@ -5,7 +5,7 @@ import br.com.accounting.core.exception.ServiceException;
 
 import java.util.List;
 
-public interface ContaService {
+public interface ContaService extends GenericService<Conta> {
     Long salvar(Conta conta) throws ServiceException;
 
     void atualizar(Conta conta) throws ServiceException;

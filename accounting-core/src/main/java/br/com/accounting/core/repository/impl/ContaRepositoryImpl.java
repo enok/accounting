@@ -23,6 +23,18 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     private String diretorio;
 
     @Override
+    public Conta filtrarPorNomeDescricao(final List<Conta> contas, final String nome, final String descricao) {
+        List<Conta> contasBuscadas = contas
+                .stream()
+                .filter(c -> (c.nome().equals(nome) && c.descricao().equals(descricao)))
+                .collect(Collectors.toList());
+        if (isEmpty(contasBuscadas)) {
+            return null;
+        }
+        return contasBuscadas.get(0);
+    }
+
+    @Override
     public String getArquivo() {
         return diretorio + File.separator + "contas.csv";
     }
@@ -64,29 +76,5 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .withDescricao(registro.get(2))
                 .withSaldo(registro.get(3))
                 .build();
-    }
-
-    @Override
-    public Conta filtrarCodigo(final List<Conta> contas, final Long codigo) {
-        List<Conta> contasBuscadas = contas
-                .stream()
-                .filter(c -> (c.codigo().equals(codigo)))
-                .collect(Collectors.toList());
-        if (isEmpty(contasBuscadas)) {
-            return null;
-        }
-        return contasBuscadas.get(0);
-    }
-
-    @Override
-    public Conta filtrarPorNomeDescricao(final List<Conta> contas, final String nome, final String descricao) {
-        List<Conta> contasBuscadas = contas
-                .stream()
-                .filter(c -> (c.nome().equals(nome) && c.descricao().equals(descricao)))
-                .collect(Collectors.toList());
-        if (isEmpty(contasBuscadas)) {
-            return null;
-        }
-        return contasBuscadas.get(0);
     }
 }

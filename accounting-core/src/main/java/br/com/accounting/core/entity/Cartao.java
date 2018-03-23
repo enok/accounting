@@ -5,14 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Conta implements Entity, Cloneable {
+public class Cartao implements Entity, Cloneable {
     private Long codigo;
-    private String nome;
-    private String descricao;
-    private Double saldo;
+    private String numero;
+    private LocalDate vencimento;
+    private LocalDate diaMelhorCompra;
+    private String portador;
+    private Tipo tipo;
+    private Double limite;
 
     @Override
     public Long getCodigo() {
@@ -26,15 +31,18 @@ public class Conta implements Entity, Cloneable {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        Conta conta = (Conta) o;
+        Cartao cartao = (Cartao) o;
 
         return new EqualsBuilder()
-                .append(nome, conta.nome)
-                .append(descricao, conta.descricao)
+                .append(numero, cartao.numero)
                 .isEquals();
     }
 

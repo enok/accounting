@@ -22,7 +22,6 @@ import java.util.List;
 import static br.com.accounting.core.util.Utils.createDouble;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 public class ContaBusinessImpl implements ContaBusiness {
@@ -35,7 +34,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         try {
             final List<String> erros = new ArrayList<>();
 
-            validarEntrada(contaDTO, erros);
+            validarEntrada(contaDTO, erros, false);
 
             Conta conta = ContaFactory
                     .begin()
@@ -60,7 +59,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         try {
             final List<String> erros = new ArrayList<>();
 
-            validarEntrada(contaDTO, erros);
+            validarEntrada(contaDTO, erros, true);
 
             Conta conta = ContaFactory
                     .begin()
@@ -143,7 +142,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
         try {
             Conta conta = contaService.buscarPorCodigo(codigo);
-            return criarConta(conta);
+            return (conta == null) ? null : criarDTOEntity(ContaDTOFactory.create(), conta);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta por id.";
@@ -166,26 +165,27 @@ public class ContaBusinessImpl implements ContaBusiness {
         return contasDTO;
     }
 
-    private void validarEntrada(final ContaDTO contaDTO, final List<String> erros) throws MissingFieldException {
+    @Override
+    public void validarEntrada(final ContaDTO dto, final List<String> erros, final boolean atualizacao) throws MissingFieldException {
         String msg = "O campo %s é obrigatório.";
 
-        if (isBlank(contaDTO.nome())) {
+        if (atualizacao) {
+            if (isBlank(dto.codigo())) {
+                erros.add(format(msg, "código"));
+            }
+        }
+        if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
-        if (isBlank(contaDTO.descricao())) {
+        if (isBlank(dto.descricao())) {
             erros.add(format(msg, "descrição"));
         }
 
-        if (!isEmpty(erros)) {
-            StringBuilder builder = new StringBuilder();
-            for (String erro : erros) {
-                builder.append("\n\t").append(erro);
-            }
-            throw new MissingFieldException(erros, builder.toString());
-        }
+        conferirErros(erros);
     }
 
-    private void validaRegistroDuplicado(Conta conta) throws ServiceException, DuplicatedRegistryException {
+    @Override
+    public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException {
         Conta contaBuscada = contaService.buscarPorNomeDescricao(conta.nome(), conta.descricao());
 
         if (conta.equals(contaBuscada)) {
@@ -196,7 +196,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     private List<ContaDTO> criarListaContasDTO(List<Conta> contas) {
         List<ContaDTO> contasDTO = new ArrayList<>();
         for (Conta conta : contas) {
-            contasDTO.add(criarConta(conta));
+            contasDTO.add(criarDTOEntity(ContaDTOFactory.create(), conta));
         }
         return contasDTO;
     }
@@ -208,13 +208,6 @@ public class ContaBusinessImpl implements ContaBusiness {
                 .withNome(contaDTO.nome())
                 .withDescricao(contaDTO.descricao())
                 .withSaldo(contaDTO.saldo())
-                .build();
-    }
-
-    private ContaDTO criarConta(Conta conta) {
-        return ContaDTOFactory
-                .begin()
-                .preencherCampos(conta)
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package br.com.accounting.core.repository.impl;
 
+import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.repository.GenericRepository;
@@ -21,6 +22,7 @@ import static java.nio.file.Paths.get;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Arrays.asList;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 public abstract class GenericAbstractRepository<T> implements GenericRepository<T> {
 
@@ -108,6 +110,18 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         }
     }
 
+    @Override
+    public T filtrarCodigo(final List<T> entities, final Long codigo) {
+        List<T> entityesBuscadas = entities
+                .stream()
+                .filter(c -> (((Entity) c).getCodigo().equals(codigo)))
+                .collect(Collectors.toList());
+        if (isEmpty(entityesBuscadas)) {
+            return null;
+        }
+        return entityesBuscadas.get(0);
+    }
+
     private Path buscarArquivoContagem() throws IOException {
         String caminhoArquivoContagem = getArquivoContagem();
         return buscarArquivo(caminhoArquivoContagem);
@@ -128,7 +142,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         return Long.valueOf(lines.get(0));
     }
 
-    private Path buscarCaminhoArquivo() throws IOException, InterruptedException {
+    private Path buscarCaminhoArquivo() throws IOException {
         Path caminhoArquivo = Paths.get(getArquivo());
         if (!Files.exists(caminhoArquivo)) {
             Files.createFile(caminhoArquivo);

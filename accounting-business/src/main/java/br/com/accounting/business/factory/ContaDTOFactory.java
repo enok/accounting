@@ -5,26 +5,37 @@ import br.com.accounting.core.entity.Conta;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public final class ContaDTOFactory {
-
+public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
     private static ContaDTOFactory contaDTOFactory;
+
     private ContaDTO contaDTO;
 
     private ContaDTOFactory() {
         contaDTO = new ContaDTO();
     }
 
-    public static ContaDTOFactory begin() {
+    public static ContaDTOFactory create() {
+        return new ContaDTOFactory();
+    }
+
+    @Override
+    public ContaDTOFactory begin() {
         contaDTOFactory = new ContaDTOFactory();
         return contaDTOFactory;
     }
 
+    @Override
     public ContaDTOFactory preencherCampos(Conta conta) {
         withCodigo(conta.codigo());
         withNome(conta.nome());
         withDescricao(conta.descricao());
         withSaldo(conta.saldo());
         return this;
+    }
+
+    @Override
+    public ContaDTO build() {
+        return contaDTO;
     }
 
     public ContaDTOFactory withCodigo(Long codigo) {
@@ -53,9 +64,5 @@ public final class ContaDTOFactory {
             contaDTO.saldo(saldo.toString());
         }
         return this;
-    }
-
-    public ContaDTO build() {
-        return contaDTO;
     }
 }

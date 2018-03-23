@@ -2,10 +2,11 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.core.entity.Conta;
 
 import java.util.List;
 
-public interface ContaBusiness {
+public interface ContaBusiness extends GenericBusiness<ContaDTO, Conta> {
     Long criar(ContaDTO contaDTO) throws BusinessException;
 
     void atualizar(ContaDTO contaDTO) throws BusinessException;
