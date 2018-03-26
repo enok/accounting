@@ -186,7 +186,7 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @Override
     public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException {
-        Conta contaBuscada = contaService.buscarPorNomeDescricao(conta.nome(), conta.descricao());
+        Conta contaBuscada = contaService.buscarPorNome(conta.nome());
 
         if (conta.equals(contaBuscada)) {
             throw new DuplicatedRegistryException("Conta duplicada.");

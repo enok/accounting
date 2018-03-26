@@ -442,12 +442,24 @@ public class CartaoBusinessTest extends GenericTest {
     @Test
     public void buscarCartoes() throws BusinessException {
         criarCartaoFisicoEnok();
+        criarCartaoFisicoCarol();
+
         List<CartaoDTO> cartoesDTO = cartaoBusiness.buscarCartoes();
-        assertThat(cartoesDTO.size(), equalTo(1));
+        assertThat(cartoesDTO.size(), equalTo(2));
+
+        assertCartaoFisicoCarol(cartoesDTO.get(0));
+        assertCartaoFisicoEnok(cartoesDTO.get(1));
     }
 
     private Long criarCartaoFisicoEnok() throws BusinessException {
         CartaoDTO cartaoDTO = criarCartaoFisico7660();
+        Long codigoCartao = cartaoBusiness.criar(cartaoDTO);
+        assertTrue(codigoCartao >= 0);
+        return codigoCartao;
+    }
+
+    private Long criarCartaoFisicoCarol() throws BusinessException {
+        CartaoDTO cartaoDTO = criarCartaoFisico0744();
         Long codigoCartao = cartaoBusiness.criar(cartaoDTO);
         assertTrue(codigoCartao >= 0);
         return codigoCartao;
@@ -462,4 +474,12 @@ public class CartaoBusinessTest extends GenericTest {
         assertThat(cartaoDTOBuscado.limite(), equalTo("2.000,00"));
     }
 
+    private void assertCartaoFisicoCarol(CartaoDTO cartaoDTOBuscado) {
+        assertThat(cartaoDTOBuscado.numero(), equalTo("0744"));
+        assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
+        assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
+        assertThat(cartaoDTOBuscado.portador(), equalTo("Carol"));
+        assertThat(cartaoDTOBuscado.tipo(), equalTo("FISICO"));
+        assertThat(cartaoDTOBuscado.limite(), equalTo("2.000,00"));
+    }
 }

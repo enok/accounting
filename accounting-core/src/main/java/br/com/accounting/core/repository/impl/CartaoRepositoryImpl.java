@@ -3,7 +3,6 @@ package br.com.accounting.core.repository.impl;
 import br.com.accounting.core.entity.Cartao;
 import br.com.accounting.core.factory.CartaoFactory;
 import br.com.accounting.core.repository.CartaoRepository;
-import br.com.accounting.core.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,12 +10,12 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.*;
-import static br.com.accounting.core.util.Utils.SEPARADOR;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
@@ -26,14 +25,19 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
 
     @Override
     public Cartao filtrarCodigo(final List<Cartao> cartoes, final String numero) {
-        List<Cartao> cartaosBuscados = cartoes
+        List<Cartao> cartoesFiltrados = cartoes
                 .stream()
                 .filter(c -> (c.numero().equals(numero)))
                 .collect(Collectors.toList());
-        if (isEmpty(cartaosBuscados)) {
+        if (isEmpty(cartoesFiltrados)) {
             return null;
         }
-        return cartaosBuscados.get(0);
+        return cartoesFiltrados.get(0);
+    }
+
+    @Override
+    public void ordenarPorNumero(final List<Cartao> cartoes) {
+        cartoes.sort(Comparator.comparing(Cartao::numero));
     }
 
     @Override

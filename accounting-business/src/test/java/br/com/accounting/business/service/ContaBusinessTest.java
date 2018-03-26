@@ -84,10 +84,7 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void criarUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-
-        ContaDTO contaDTOBuscado = contaBusiness.buscarContaPorId(codigoConta);
-        assertThat(contaDTOBuscado.nome(), equalTo("Salário"));
-        assertThat(contaDTOBuscado.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
+        assertContaSalario(codigoConta);
     }
 
     @Test(expected = BusinessException.class)
@@ -369,8 +366,13 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void buscarContas() throws BusinessException {
         criarContaSalario();
+        criarContaEnok();
+
         List<ContaDTO> cartoesDTO = contaBusiness.buscarContas();
-        assertThat(cartoesDTO.size(), equalTo(1));
+        assertThat(cartoesDTO.size(), equalTo(2));
+
+        assertContaEnok(cartoesDTO.get(0));
+        assertContaSalario(cartoesDTO.get(1));
     }
 
     private Long criarContaSalario() throws BusinessException {
@@ -387,11 +389,27 @@ public class ContaBusinessTest extends GenericTest {
         return codigoConta2;
     }
 
+    private ContaDTO assertContaSalario(Long codigoConta) throws BusinessException {
+        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        return assertContaSalario(contaDTOBuscada);
+    }
+
+    private ContaDTO assertContaSalario(ContaDTO contaDTO) {
+        assertThat(contaDTO.nome(), equalTo("Salário"));
+        assertThat(contaDTO.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
+        assertThat(contaDTO.saldo(), equalTo("0.0"));
+        return contaDTO;
+    }
+
     private ContaDTO assertContaEnok(Long codigoConta) throws BusinessException {
         ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
-        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
-        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
-        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
-        return contaDTOBuscada;
+        return assertContaEnok(contaDTOBuscada);
+    }
+
+    private ContaDTO assertContaEnok(ContaDTO contaDTO) {
+        assertThat(contaDTO.nome(), equalTo("Enok"));
+        assertThat(contaDTO.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTO.saldo(), equalTo("0.0"));
+        return contaDTO;
     }
 }

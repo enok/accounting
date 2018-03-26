@@ -16,7 +16,7 @@ public interface ContaService extends GenericService<Conta> {
 
     Conta buscarPorCodigo(Long codigo) throws ServiceException;
 
-    Conta buscarPorNomeDescricao(String nome, String descricao) throws ServiceException;
+    Conta buscarPorNome(String nome) throws ServiceException;
 
     List<Conta> buscarTodas() throws ServiceException;
 }

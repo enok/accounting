@@ -10,6 +10,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,15 +24,20 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     private String diretorio;
 
     @Override
-    public Conta filtrarPorNomeDescricao(final List<Conta> contas, final String nome, final String descricao) {
+    public Conta filtrarPorNome(final List<Conta> contas, final String nome) {
         List<Conta> contasBuscadas = contas
                 .stream()
-                .filter(c -> (c.nome().equals(nome) && c.descricao().equals(descricao)))
+                .filter(c -> (c.nome().equals(nome)))
                 .collect(Collectors.toList());
         if (isEmpty(contasBuscadas)) {
             return null;
         }
         return contasBuscadas.get(0);
+    }
+
+    @Override
+    public void ordenarPorNomeDescricao(List<Conta> contas) {
+        contas.sort(Comparator.comparing(Conta::getNome));
     }
 
     @Override

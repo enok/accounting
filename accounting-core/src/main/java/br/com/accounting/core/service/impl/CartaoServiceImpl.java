@@ -1,12 +1,14 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Cartao;
+import br.com.accounting.core.entity.Tipo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.CartaoRepository;
 import br.com.accounting.core.service.CartaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -69,7 +71,9 @@ public class CartaoServiceImpl implements CartaoService {
     @Override
     public List<Cartao> buscarTodos() throws ServiceException {
         try {
-            return cartaoRepository.buscarRegistros();
+            List<Cartao> cartoes = cartaoRepository.buscarRegistros();
+            cartaoRepository.ordenarPorNumero(cartoes);
+            return cartoes;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar os cartões.";

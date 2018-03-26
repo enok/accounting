@@ -24,6 +24,10 @@ public class Conta implements Entity, Cloneable {
         this.codigo = codigo;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -34,7 +38,6 @@ public class Conta implements Entity, Cloneable {
 
         return new EqualsBuilder()
                 .append(nome, conta.nome)
-                .append(descricao, conta.descricao)
                 .isEquals();
     }
 

@@ -5,5 +5,7 @@ import br.com.accounting.core.entity.Conta;
 import java.util.List;
 
 public interface ContaRepository extends GenericRepository<Conta> {
-    Conta filtrarPorNomeDescricao(List<Conta> contas, String nome, String descricao);
+    Conta filtrarPorNome(List<Conta> contas, String nome);
+
+    void ordenarPorNomeDescricao(List<Conta> contas);
 }

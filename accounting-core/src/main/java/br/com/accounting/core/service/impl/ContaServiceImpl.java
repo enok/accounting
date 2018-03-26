@@ -70,10 +70,10 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public Conta buscarPorNomeDescricao(final String nome, final String descricao) throws ServiceException {
+    public Conta buscarPorNome(final String nome) throws ServiceException {
         try {
             List<Conta> contas = contaRepository.buscarRegistros();
-            return contaRepository.filtrarPorNomeDescricao(contas, nome, descricao);
+            return contaRepository.filtrarPorNome(contas, nome);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta.";
@@ -84,7 +84,9 @@ public class ContaServiceImpl implements ContaService {
     @Override
     public List<Conta> buscarTodas() throws ServiceException {
         try {
-            return contaRepository.buscarRegistros();
+            List<Conta> contas = contaRepository.buscarRegistros();
+            contaRepository.ordenarPorNomeDescricao(contas);
+            return contas;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar as contas.";
