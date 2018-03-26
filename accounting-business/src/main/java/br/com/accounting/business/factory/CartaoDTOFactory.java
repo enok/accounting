@@ -64,18 +64,26 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
         return this;
     }
 
+    public CartaoDTOFactory withVencimento(String vencimento) {
+        if (!isBlank(vencimento)) {
+            cartaoDTO.vencimento(vencimento);
+        }
+        return this;
+    }
+
     public CartaoDTOFactory withVencimento(LocalDate vencimento) {
-        if (vencimento != null) {
-            cartaoDTO.vencimento(getStringFromDate(vencimento));
+        return withVencimento(getStringFromDate(vencimento));
+    }
+
+    public CartaoDTOFactory withDiaMelhorCompra(String diaMelhorCompra) {
+        if (!isBlank(diaMelhorCompra)) {
+            cartaoDTO.diaMelhorCompra(diaMelhorCompra);
         }
         return this;
     }
 
     public CartaoDTOFactory withDiaMelhorCompra(LocalDate diaMelhorCompra) {
-        if (diaMelhorCompra != null) {
-            cartaoDTO.diaMelhorCompra(getStringFromDate(diaMelhorCompra));
-        }
-        return this;
+        return withDiaMelhorCompra(getStringFromDate(diaMelhorCompra));
     }
 
     public CartaoDTOFactory withPortador(String portador) {
@@ -85,17 +93,25 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
         return this;
     }
 
+    public CartaoDTOFactory withTipo(String tipo) {
+        if (!isBlank(tipo)) {
+            cartaoDTO.tipo(tipo);
+        }
+        return this;
+    }
+
     public CartaoDTOFactory withTipo(Tipo tipo) {
-        if (tipo != null) {
-            cartaoDTO.tipo(tipo.toString());
+        return withTipo(tipo.toString());
+    }
+
+    public CartaoDTOFactory withLimite(String limite) {
+        if (!isBlank(limite)) {
+            cartaoDTO.limite(limite);
         }
         return this;
     }
 
     public CartaoDTOFactory withLimite(Double limite) {
-        if (limite != null) {
-            cartaoDTO.limite(getDoubleFormatted(limite));
-        }
-        return this;
+        return withLimite(getDoubleFormatted(limite));
     }
 }

@@ -11,24 +11,32 @@ public final class ContaDTOMockFactory {
     }
 
     public static ContaDTO contaDTOSemNome() {
-        return new ContaDTO()
-                .descricao("Salário mensal recebido pela Sysmap");
+        return ContaDTOFactory
+                .create()
+                .withDescricao("Salário mensal recebido pela Sysmap")
+                .build();
     }
 
     public static ContaDTO contaDTOSemDescricao() {
-        return new ContaDTO()
-                .nome("Salário");
+        return ContaDTOFactory
+                .create()
+                .withNome("Salário")
+                .build();
     }
 
     public static ContaDTO contaDTO() {
-        return new ContaDTO()
-                .nome("Salário")
-                .descricao("Salário mensal recebido pela Sysmap");
+        return ContaDTOFactory
+                .create()
+                .withNome("Salário")
+                .withDescricao("Salário mensal recebido pela Sysmap")
+                .build();
     }
 
     public static ContaDTO conta2DTO() {
-        return new ContaDTO()
-                .nome("Enok")
-                .descricao("Valor separado para o Enok");
+        return ContaDTOFactory
+                .create()
+                .withNome("Enok")
+                .withDescricao("Valor separado para o Enok")
+                .build();
     }
 }
