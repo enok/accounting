@@ -1,6 +1,5 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.repository.GenericRepository;
@@ -11,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -172,11 +172,20 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         linhasSream.close();
     }
 
+    public List<T> criarRegistros(final List<String> linhas) throws ParseException {
+        List<T> entities = new ArrayList<>();
+        for (String linha : linhas) {
+            T entity = criarEntity(linha);
+            entities.add(entity);
+        }
+        return entities;
+    }
+
     public abstract String getArquivo();
 
     public abstract String getArquivoContagem();
 
     public abstract String criarLinha(T entity);
 
-    public abstract List<T> criarRegistros(List<String> linhas) throws ParseException;
+    public abstract T criarEntity(final String linha) throws ParseException;
 }

@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -50,18 +48,7 @@ public class HistoricoRepositoryImpl extends GenericAbstractRepository<Historico
     }
 
     @Override
-    public List<Historico> criarRegistros(final List<String> linhas) {
-        List<Historico> historicos = new ArrayList<>();
-
-        for (String linha : linhas) {
-            Historico conta = criarHistorico(linha);
-            historicos.add(conta);
-        }
-
-        return historicos;
-    }
-
-    private Historico criarHistorico(final String linha) {
+    public Historico criarEntity(final String linha) {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

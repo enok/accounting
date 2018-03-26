@@ -12,18 +12,18 @@ import java.util.List;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public interface GenericBusiness<D, E> {
-    void validarEntrada(D dto, List<String> erros, boolean atualizacao) throws MissingFieldException;
+    void validarEntrada(final D dto, final List<String> erros, final boolean atualizacao) throws MissingFieldException;
 
     void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException;
 
-    default D criarDTOEntity(GenericDTOFactory genericDTOFactory, E entity) {
+    default D criarDTOEntity(final GenericDTOFactory genericDTOFactory, final E entity) {
         return (D) genericDTOFactory
                 .begin()
                 .preencherCampos(entity)
                 .build();
     }
 
-    default void conferirErros(List<String> erros) throws MissingFieldException {
+    default void conferirErros(final List<String> erros) throws MissingFieldException {
         if (!isEmpty(erros)) {
             StringBuilder builder = new StringBuilder();
             for (String erro : erros) {
@@ -33,7 +33,7 @@ public interface GenericBusiness<D, E> {
         }
     }
 
-    default List<D> criarListaEntitiesDTO(GenericDTOFactory genericDTOFactory, List<E> entities) {
+    default List<D> criarListaEntitiesDTO(final GenericDTOFactory genericDTOFactory, final List<E> entities) {
         List<D> entityesDTO = new ArrayList<>();
         for (E entity : entities) {
             entityesDTO.add(criarDTOEntity(genericDTOFactory, entity));
@@ -41,5 +41,5 @@ public interface GenericBusiness<D, E> {
         return entityesDTO;
     }
 
-    E criarEntity(D entity) throws ParseException;
+    E criarEntity(final D entity) throws ParseException;
 }

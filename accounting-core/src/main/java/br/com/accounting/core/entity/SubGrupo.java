@@ -8,11 +8,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Conta implements Entity, Cloneable {
+public class SubGrupo implements Entity {
     private Long codigo;
     private String nome;
     private String descricao;
-    private Double saldo;
 
     @Override
     public Long getCodigo() {
@@ -30,15 +29,10 @@ public class Conta implements Entity, Cloneable {
             return false;
         }
 
-        Conta conta = (Conta) o;
+        SubGrupo subGrupo = (SubGrupo) o;
 
         return new EqualsBuilder()
-                .append(nome, conta.nome)
+                .append(nome, subGrupo.nome)
                 .isEquals();
-    }
-
-    @Override
-    public Conta clone() throws CloneNotSupportedException {
-        return (Conta) super.clone();
     }
 }

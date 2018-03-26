@@ -85,7 +85,7 @@ public class ContaServiceImpl implements ContaService {
     public List<Conta> buscarTodas() throws ServiceException {
         try {
             List<Conta> contas = contaRepository.buscarRegistros();
-            contaRepository.ordenarPorNomeDescricao(contas);
+            contaRepository.ordenarPorNome(contas);
             return contas;
         }
         catch (Exception e) {

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -64,16 +63,7 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
     }
 
     @Override
-    public List<Cartao> criarRegistros(final List<String> linhas) throws ParseException {
-        List<Cartao> cartoes = new ArrayList<>();
-        for (String linha : linhas) {
-            Cartao cartao = criarCartao(linha);
-            cartoes.add(cartao);
-        }
-        return cartoes;
-    }
-
-    private Cartao criarCartao(final String linha) throws ParseException {
+    public Cartao criarEntity(final String linha) throws ParseException {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

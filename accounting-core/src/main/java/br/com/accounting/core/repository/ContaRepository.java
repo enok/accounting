@@ -7,5 +7,5 @@ import java.util.List;
 public interface ContaRepository extends GenericRepository<Conta> {
     Conta filtrarPorNome(List<Conta> contas, String nome);
 
-    void ordenarPorNomeDescricao(List<Conta> contas);
+    void ordenarPorNome(List<Conta> contas);
 }

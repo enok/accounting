@@ -1,14 +1,12 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.factory.ContaFactory;
-import br.com.accounting.core.repository.ContaRepository;
+import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.core.factory.SubGrupoFactory;
+import br.com.accounting.core.repository.SubGrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -19,59 +17,57 @@ import static br.com.accounting.core.util.Utils.SEPARADOR;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
-public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implements ContaRepository {
+public class SubGrupoRepositoryImpl extends GenericAbstractRepository<SubGrupo> implements SubGrupoRepository {
     @Autowired
     private String diretorio;
 
     @Override
-    public Conta filtrarPorNome(final List<Conta> contas, final String nome) {
-        List<Conta> contasBuscadas = contas
+    public SubGrupo filtrarPorNome(final List<SubGrupo> entities, final String nome) {
+        List<SubGrupo> entitiesBuscadas = entities
                 .stream()
                 .filter(c -> (c.nome().equals(nome)))
                 .collect(Collectors.toList());
-        if (isEmpty(contasBuscadas)) {
+        if (isEmpty(entitiesBuscadas)) {
             return null;
         }
-        return contasBuscadas.get(0);
+        return entitiesBuscadas.get(0);
     }
 
     @Override
-    public void ordenarPorNome(List<Conta> contas) {
-        contas.sort(Comparator.comparing(Conta::nome));
+    public void ordenarPorNome(final List<SubGrupo> subGrupos) {
+        subGrupos.sort(Comparator.comparing(SubGrupo::nome));
     }
 
     @Override
     public String getArquivo() {
-        return diretorio + File.separator + "contas.csv";
+        return diretorio + File.separator + "subGrupos.csv";
     }
 
     @Override
     public String getArquivoContagem() {
-        return diretorio + File.separator + "contas-contagem.txt";
+        return diretorio + File.separator + "subGrupos-contagem.txt";
     }
 
     @Override
-    public String criarLinha(final Conta entity) {
+    public String criarLinha(SubGrupo entity) {
         StringBuilder builder = new StringBuilder()
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(entity.nome()).append(SEPARADOR)
-                .append(entity.descricao()).append(SEPARADOR)
-                .append(entity.saldo());
+                .append(entity.descricao());
         return builder.toString();
     }
 
     @Override
-    public Conta criarEntity(String linha) throws ParseException {
+    public SubGrupo criarEntity(String linha) {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)
                 .collect(Collectors.toList());
-        return ContaFactory
+        return SubGrupoFactory
                 .begin()
                 .withCodigo(registro.get(0))
                 .withNome(registro.get(1))
                 .withDescricao(registro.get(2))
-                .withSaldo(registro.get(3))
                 .build();
     }
 }

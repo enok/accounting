@@ -20,6 +20,11 @@ public class GenericAbstractRepositoryMock extends GenericAbstractRepository {
     }
 
     @Override
+    public Object criarEntity(String linha) throws ParseException {
+        return null;
+    }
+
+    @Override
     public List criarRegistros(List linhas) throws ParseException {
         return null;
     }

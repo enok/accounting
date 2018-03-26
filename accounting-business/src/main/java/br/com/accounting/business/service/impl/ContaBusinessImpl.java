@@ -194,7 +194,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     }
 
     @Override
-    public Conta criarEntity(ContaDTO entity) throws ParseException {
+    public Conta criarEntity(final ContaDTO entity) throws ParseException {
         return ContaFactory
                 .begin()
                 .withCodigo(entity.codigo())
