@@ -81,7 +81,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     @Override
     public void adicionarCredito(final ContaDTO contaDTO, final String credito) throws BusinessException {
         try {
-            Conta conta = criarConta(contaDTO);
+            Conta conta = criarEntity(contaDTO);
             Double saldo = createDouble(credito);
             contaService.atualizarSaldo(conta, saldo);
         }
@@ -95,7 +95,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     @Override
     public void adicionarDebito(final ContaDTO contaDTO, final String debito) throws BusinessException {
         try {
-            Conta conta = criarConta(contaDTO);
+            Conta conta = criarEntity(contaDTO);
             Double saldo = createDouble(debito);
             contaService.atualizarSaldo(conta, -saldo);
         }
@@ -129,7 +129,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     @Override
     public void excluir(final ContaDTO contaDTO) throws BusinessException {
         try {
-            Conta conta = criarConta(contaDTO);
+            Conta conta = criarEntity(contaDTO);
             contaService.deletar(conta);
         }
         catch (Exception e) {
@@ -142,7 +142,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
         try {
             Conta conta = contaService.buscarPorCodigo(codigo);
-            return (conta == null) ? null : criarDTOEntity(ContaDTOFactory.create(), conta);
+            return criarDTOEntity(ContaDTOFactory.create(), conta);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta por id.";
@@ -155,7 +155,7 @@ public class ContaBusinessImpl implements ContaBusiness {
         List<ContaDTO> contasDTO;
         try {
             List<Conta> contas = contaService.buscarTodas();
-            contasDTO = criarListaContasDTO(contas);
+            contasDTO = criarListaEntitiesDTO(ContaDTOFactory.create(), contas);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar as contas.";
@@ -193,21 +193,14 @@ public class ContaBusinessImpl implements ContaBusiness {
         }
     }
 
-    private List<ContaDTO> criarListaContasDTO(List<Conta> contas) {
-        List<ContaDTO> contasDTO = new ArrayList<>();
-        for (Conta conta : contas) {
-            contasDTO.add(criarDTOEntity(ContaDTOFactory.create(), conta));
-        }
-        return contasDTO;
-    }
-
-    private Conta criarConta(ContaDTO contaDTO) throws ParseException {
+    @Override
+    public Conta criarEntity(ContaDTO entity) throws ParseException {
         return ContaFactory
                 .begin()
-                .withCodigo(contaDTO.codigo())
-                .withNome(contaDTO.nome())
-                .withDescricao(contaDTO.descricao())
-                .withSaldo(contaDTO.saldo())
+                .withCodigo(entity.codigo())
+                .withNome(entity.nome())
+                .withDescricao(entity.descricao())
+                .withSaldo(entity.saldo())
                 .build();
     }
 }

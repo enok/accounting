@@ -31,6 +31,10 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
 
     @Override
     public CartaoDTOFactory preencherCampos(Cartao cartao) {
+        if (cartao == null) {
+            cartaoDTO = null;
+            return this;
+        }
         withCodigo(cartao.codigo());
         withNumero(cartao.numero());
         withVencimento(cartao.vencimento());

@@ -5,6 +5,8 @@ import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.factory.GenericDTOFactory;
 import br.com.accounting.core.exception.ServiceException;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -30,4 +32,14 @@ public interface GenericBusiness<D, E> {
             throw new MissingFieldException(erros, builder.toString());
         }
     }
+
+    default List<D> criarListaEntitiesDTO(GenericDTOFactory genericDTOFactory, List<E> entities) {
+        List<D> entityesDTO = new ArrayList<>();
+        for (E entity : entities) {
+            entityesDTO.add(criarDTOEntity(genericDTOFactory, entity));
+        }
+        return entityesDTO;
+    }
+
+    E criarEntity(D entity) throws ParseException;
 }

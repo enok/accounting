@@ -39,6 +39,17 @@ public class CartaoServiceImpl implements CartaoService {
     }
 
     @Override
+    public void deletar(final Cartao cartao) throws ServiceException {
+        try {
+            cartaoRepository.deletar(cartao);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível deletar o cartão.";
+            throw new ServiceException(message, e);
+        }
+    }
+
+    @Override
     public Cartao buscarPorCodigo(final Long codigo) throws ServiceException {
         return buscarPorCodigo(cartaoRepository, codigo);
     }
@@ -51,6 +62,17 @@ public class CartaoServiceImpl implements CartaoService {
         }
         catch (Exception e) {
             String message = "Não foi possível buscar o cartão por código.";
+            throw new ServiceException(message, e);
+        }
+    }
+
+    @Override
+    public List<Cartao> buscarTodos() throws ServiceException {
+        try {
+            return cartaoRepository.buscarRegistros();
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar os cartões.";
             throw new ServiceException(message, e);
         }
     }

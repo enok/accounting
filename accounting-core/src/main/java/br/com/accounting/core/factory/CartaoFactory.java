@@ -21,12 +21,7 @@ public class CartaoFactory {
     }
 
     public CartaoFactory withCodigo(String codigo) {
-        if (isBlank(codigo)) {
-            cartao.codigo(0L);
-        }
-        else {
-            cartao.codigo(Long.parseLong(codigo));
-        }
+        cartao.codigo(Long.parseLong(codigo));
         return this;
     }
 

@@ -14,6 +14,7 @@ import br.com.accounting.core.service.CartaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class CartaoBusinessImpl implements CartaoBusiness {
         }
     }
 
+    @History
     @Override
     public void atualizar(final CartaoDTO cartaoDTO) throws BusinessException {
         try {
@@ -79,6 +81,19 @@ public class CartaoBusinessImpl implements CartaoBusiness {
         }
     }
 
+    @History
+    @Override
+    public void excluir(final CartaoDTO cartaoDTO) throws BusinessException {
+        try {
+            Cartao cartao = criarEntity(cartaoDTO);
+            cartaoService.deletar(cartao);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível excluir o cartão.";
+            throw new BusinessException(message, e);
+        }
+    }
+
     @Override
     public CartaoDTO buscarCartaoPorId(final Long codigo) throws BusinessException {
         try {
@@ -89,6 +104,21 @@ public class CartaoBusinessImpl implements CartaoBusiness {
             String message = "Não foi possível buscar o cartão por id.";
             throw new BusinessException(message, e);
         }
+    }
+
+    @Override
+    public List<CartaoDTO> buscarCartoes() throws BusinessException {
+        List<CartaoDTO> cartoesDTO;
+        try {
+            List<Cartao> cartoes = cartaoService.buscarTodos();
+            cartoesDTO = criarListaEntitiesDTO(CartaoDTOFactory.create(), cartoes);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar os cartões.";
+            throw new BusinessException(message, e);
+        }
+
+        return cartoesDTO;
     }
 
     @Override
@@ -129,5 +159,19 @@ public class CartaoBusinessImpl implements CartaoBusiness {
         if (entity.equals(entityBuscado)) {
             throw new DuplicatedRegistryException("Cartão duplicado.");
         }
+    }
+
+    @Override
+    public Cartao criarEntity(CartaoDTO entity) throws ParseException {
+        return CartaoFactory
+                .begin()
+                .withCodigo(entity.codigo())
+                .withNumero(entity.numero())
+                .withVencimento(entity.vencimento())
+                .withDiaMelhorCompra(entity.diaMelhorCompra())
+                .withPortador(entity.portador())
+                .withTipo(entity.tipo())
+                .withLimite(entity.limite())
+                .build();
     }
 }

@@ -12,8 +12,7 @@ import java.util.List;
 
 import static br.com.accounting.business.factory.CartaoDTOMockFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
 
 public class CartaoBusinessTest extends GenericTest {
@@ -391,6 +390,60 @@ public class CartaoBusinessTest extends GenericTest {
         assertThat(cartaoDTOBuscado.portador(), equalTo("Enok"));
         assertThat(cartaoDTOBuscado.tipo(), equalTo("FISICO"));
         assertThat(cartaoDTOBuscado.limite(), equalTo("2.100,00"));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void excluirUmCartaoException() throws BusinessException {
+        try {
+            cartaoBusiness.excluir(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir o cartão."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void excluirUmCartao() throws BusinessException {
+        Long codigoCartao = criarCartaoFisicoEnok();
+        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarCartaoPorId(codigoCartao);
+
+        cartaoBusiness.excluir(cartaoDTOBuscado);
+
+        cartaoDTOBuscado = cartaoBusiness.buscarCartaoPorId(codigoCartao);
+        assertThat(cartaoDTOBuscado, nullValue());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarCartaoPorIdException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            CartaoDTO cartaoDTO = cartaoBusiness.buscarCartaoPorId(null);
+            assertThat(cartaoDTO, nullValue());
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar o cartão por id."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarCartoesException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            cartaoBusiness.buscarCartoes();
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os cartões."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void buscarCartoes() throws BusinessException {
+        criarCartaoFisicoEnok();
+        List<CartaoDTO> cartoesDTO = cartaoBusiness.buscarCartoes();
+        assertThat(cartoesDTO.size(), equalTo(1));
     }
 
     private Long criarCartaoFisicoEnok() throws BusinessException {

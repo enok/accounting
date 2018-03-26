@@ -31,10 +31,6 @@ public class Cartao implements Entity, Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
@@ -44,10 +40,5 @@ public class Cartao implements Entity, Cloneable {
         return new EqualsBuilder()
                 .append(numero, cartao.numero)
                 .isEquals();
-    }
-
-    @Override
-    public Conta clone() throws CloneNotSupportedException {
-        return (Conta) super.clone();
     }
 }
