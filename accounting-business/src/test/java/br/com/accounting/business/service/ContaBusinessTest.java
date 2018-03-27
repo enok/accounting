@@ -39,9 +39,10 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
-
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             throw e;
@@ -55,9 +56,10 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
-
             assertThat(erros.size(), equalTo(1));
             assertThat(erros.get(0), equalTo("O campo descrição é obrigatório."));
             throw e;
@@ -71,9 +73,10 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
-
             assertThat(erros.size(), equalTo(2));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
@@ -88,7 +91,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void criarDuasContasComNomeEDescricaoIguais() throws BusinessException {
+    public void criarDuasContasComNomesIguais() throws BusinessException {
         try {
             criarContaSalario();
             criarContaSalario();
@@ -112,7 +115,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws BusinessException {
         Long codigoConta = criarContaEnok();
 
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         contaDTOBuscada.codigo(null);
 
         contaBusiness.atualizar(contaDTOBuscada);
@@ -122,7 +125,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemNome() throws BusinessException {
         Long codigoConta = criarContaEnok();
 
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         contaDTOBuscada.nome(null);
 
         contaBusiness.atualizar(contaDTOBuscada);
@@ -132,7 +135,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws BusinessException {
         Long codigoConta = criarContaEnok();
 
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         contaDTOBuscada.descricao(null);
 
         contaBusiness.atualizar(contaDTOBuscada);
@@ -147,7 +150,7 @@ public class ContaBusinessTest extends GenericTest {
         contaDTOBuscada.nome("Carol");
         contaBusiness.atualizar(contaDTOBuscada);
 
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
@@ -162,7 +165,7 @@ public class ContaBusinessTest extends GenericTest {
         contaDTOBuscada.descricao("Valor separado para a Carol");
         contaBusiness.atualizar(contaDTOBuscada);
 
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
@@ -178,7 +181,7 @@ public class ContaBusinessTest extends GenericTest {
         contaDTOBuscada.descricao("Valor separado para a Carol");
         contaBusiness.atualizar(contaDTOBuscada);
 
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
@@ -187,7 +190,7 @@ public class ContaBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void adicionarCreditoEmUmaContaSemDiretorio() throws BusinessException, IOException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         deletarDiretorioEArquivos();
 
@@ -203,10 +206,10 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarCreditoEmUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         assertThat(contaDTOBuscada.saldo(), equalTo("500.0"));
     }
@@ -214,13 +217,13 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarVariosCreditosEmUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarCredito(contaDTOBuscada, "500,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         assertThat(contaDTOBuscada.saldo(), equalTo("1000.0"));
     }
@@ -228,7 +231,7 @@ public class ContaBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void adicionarDebitoEmUmaContaSemDiretorio() throws BusinessException, IOException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         deletarDiretorioEArquivos();
 
@@ -244,10 +247,10 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarDebitoEmUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         assertThat(contaDTOBuscada.saldo(), equalTo("-100.0"));
     }
@@ -255,13 +258,13 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarVariosDebitosEmUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.adicionarDebito(contaDTOBuscada, "100,00");
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         assertThat(contaDTOBuscada.saldo(), equalTo("-200.0"));
     }
@@ -282,11 +285,11 @@ public class ContaBusinessTest extends GenericTest {
         ContaDTO contaSalario = contaDTO();
         Long contaSalarioId = contaBusiness.criar(contaSalario);
         contaBusiness.adicionarCredito(contaSalario, "500.0");
-        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+        contaSalario = contaBusiness.buscarPorId(contaSalarioId);
 
         ContaDTO contaEnok = conta2DTO();
         Long contaEnokId = contaBusiness.criar(contaEnok);
-        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+        contaEnok = contaBusiness.buscarPorId(contaEnokId);
 
         try {
             contaBusiness.transferir(contaSalario, contaEnok, "600.0");
@@ -302,18 +305,18 @@ public class ContaBusinessTest extends GenericTest {
         ContaDTO contaSalario = contaDTO();
         Long contaSalarioId = contaBusiness.criar(contaSalario);
         contaBusiness.adicionarCredito(contaSalario, "1000.0");
-        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+        contaSalario = contaBusiness.buscarPorId(contaSalarioId);
 
         ContaDTO contaEnok = conta2DTO();
         Long contaEnokId = contaBusiness.criar(contaEnok);
-        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+        contaEnok = contaBusiness.buscarPorId(contaEnokId);
 
         contaBusiness.transferir(contaSalario, contaEnok, "600.0");
 
-        contaSalario = contaBusiness.buscarContaPorId(contaSalarioId);
+        contaSalario = contaBusiness.buscarPorId(contaSalarioId);
         assertThat(contaSalario.saldo(), equalTo("400.0"));
 
-        contaEnok = contaBusiness.buscarContaPorId(contaEnokId);
+        contaEnok = contaBusiness.buscarPorId(contaEnokId);
         assertThat(contaEnok.saldo(), equalTo("600.0"));
     }
 
@@ -331,11 +334,11 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void excluirUmaConta() throws BusinessException {
         Long codigoConta = criarContaSalario();
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
 
         contaBusiness.excluir(contaDTOBuscada);
 
-        contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         assertThat(contaDTOBuscada, nullValue());
     }
 
@@ -343,7 +346,7 @@ public class ContaBusinessTest extends GenericTest {
     public void buscarContaPorIdException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            contaBusiness.buscarContaPorId(null);
+            contaBusiness.buscarPorId(null);
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível buscar a conta por id."));
@@ -355,7 +358,7 @@ public class ContaBusinessTest extends GenericTest {
     public void buscarContasException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            contaBusiness.buscarContas();
+            contaBusiness.buscarTodas();
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível buscar as contas."));
@@ -368,7 +371,7 @@ public class ContaBusinessTest extends GenericTest {
         criarContaSalario();
         criarContaEnok();
 
-        List<ContaDTO> cartoesDTO = contaBusiness.buscarContas();
+        List<ContaDTO> cartoesDTO = contaBusiness.buscarTodas();
         assertThat(cartoesDTO.size(), equalTo(2));
 
         assertContaEnok(cartoesDTO.get(0));
@@ -390,7 +393,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     private ContaDTO assertContaSalario(Long codigoConta) throws BusinessException {
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         return assertContaSalario(contaDTOBuscada);
     }
 
@@ -402,7 +405,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     private ContaDTO assertContaEnok(Long codigoConta) throws BusinessException {
-        ContaDTO contaDTOBuscada = contaBusiness.buscarContaPorId(codigoConta);
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         return assertContaEnok(contaDTOBuscada);
     }
 

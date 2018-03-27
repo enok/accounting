@@ -139,7 +139,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     }
 
     @Override
-    public ContaDTO buscarContaPorId(final Long codigo) throws BusinessException {
+    public ContaDTO buscarPorId(final Long codigo) throws BusinessException {
         try {
             Conta conta = contaService.buscarPorCodigo(codigo);
             return criarDTOEntity(ContaDTOFactory.create(), conta);
@@ -151,7 +151,7 @@ public class ContaBusinessImpl implements ContaBusiness {
     }
 
     @Override
-    public List<ContaDTO> buscarContas() throws BusinessException {
+    public List<ContaDTO> buscarTodas() throws BusinessException {
         List<ContaDTO> contasDTO;
         try {
             List<Conta> contas = contaService.buscarTodas();
@@ -161,7 +161,6 @@ public class ContaBusinessImpl implements ContaBusiness {
             String message = "Não foi possível buscar as contas.";
             throw new BusinessException(message, e);
         }
-
         return contasDTO;
     }
 

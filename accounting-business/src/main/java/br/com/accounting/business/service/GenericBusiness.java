@@ -12,9 +12,11 @@ import java.util.List;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public interface GenericBusiness<D, E> {
-    void validarEntrada(final D dto, final List<String> erros, final boolean atualizacao) throws MissingFieldException;
+    void validarEntrada(D dto, List<String> erros, boolean atualizacao) throws MissingFieldException;
 
     void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException;
+
+    E criarEntity(D entity) throws ParseException;
 
     default D criarDTOEntity(final GenericDTOFactory genericDTOFactory, final E entity) {
         return (D) genericDTOFactory
@@ -40,6 +42,4 @@ public interface GenericBusiness<D, E> {
         }
         return entityesDTO;
     }
-
-    E criarEntity(final D entity) throws ParseException;
 }

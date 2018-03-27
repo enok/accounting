@@ -12,25 +12,25 @@ import java.util.List;
 @Service
 public class SubGrupoServiceImpl implements SubGrupoService {
     @Autowired
-    private SubGrupoRepository subGrupoRepository;
+    private SubGrupoRepository repository;
 
     @Override
-    public Long salvar(final SubGrupo subGrupo) throws ServiceException {
+    public Long salvar(final SubGrupo entity) throws ServiceException {
         try {
-            setarProximoCodigo(subGrupoRepository, subGrupo);
-            subGrupoRepository.salvar(subGrupo);
+            setarProximoCodigo(repository, entity);
+            repository.salvar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível salvar o subGrupo.";
             throw new ServiceException(message, e);
         }
-        return subGrupo.codigo();
+        return entity.codigo();
     }
 
     @Override
-    public void atualizar(final SubGrupo subGrupo) throws ServiceException {
+    public void atualizar(final SubGrupo entity) throws ServiceException {
         try {
-            subGrupoRepository.atualizar(subGrupo);
+            repository.atualizar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar o subGrupo.";
@@ -39,9 +39,9 @@ public class SubGrupoServiceImpl implements SubGrupoService {
     }
 
     @Override
-    public void deletar(final SubGrupo subGrupo) throws ServiceException {
+    public void deletar(final SubGrupo entity) throws ServiceException {
         try {
-            subGrupoRepository.deletar(subGrupo);
+            repository.deletar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível deletar o subGrupo.";
@@ -51,14 +51,14 @@ public class SubGrupoServiceImpl implements SubGrupoService {
 
     @Override
     public SubGrupo buscarPorCodigo(final Long codigo) throws ServiceException {
-        return buscarPorCodigo(subGrupoRepository, codigo);
+        return buscarPorCodigo(repository, codigo);
     }
 
     @Override
     public SubGrupo buscarPorNome(final String nome) throws ServiceException {
         try {
-            List<SubGrupo> subGrupos = subGrupoRepository.buscarRegistros();
-            return subGrupoRepository.filtrarPorNome(subGrupos, nome);
+            List<SubGrupo> entities = repository.buscarRegistros();
+            return repository.filtrarPorNome(entities, nome);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar o subGrupo.";
@@ -69,9 +69,9 @@ public class SubGrupoServiceImpl implements SubGrupoService {
     @Override
     public List<SubGrupo> buscarTodos() throws ServiceException {
         try {
-            List<SubGrupo> subGrupos = subGrupoRepository.buscarRegistros();
-            subGrupoRepository.ordenarPorNome(subGrupos);
-            return subGrupos;
+            List<SubGrupo> entities = repository.buscarRegistros();
+            repository.ordenarPorNome(entities);
+            return entities;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar os subGrupos.";

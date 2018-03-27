@@ -13,7 +13,7 @@ public interface CartaoBusiness extends GenericBusiness<CartaoDTO, Cartao> {
 
     void excluir(CartaoDTO cartaoDTO) throws BusinessException;
 
-    CartaoDTO buscarCartaoPorId(Long codigo) throws BusinessException;
+    CartaoDTO buscarPorId(Long codigo) throws BusinessException;
 
-    List<CartaoDTO> buscarCartoes() throws BusinessException;
+    List<CartaoDTO> buscarTodos() throws BusinessException;
 }

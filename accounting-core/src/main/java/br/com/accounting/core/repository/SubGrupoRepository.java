@@ -5,7 +5,7 @@ import br.com.accounting.core.entity.SubGrupo;
 import java.util.List;
 
 public interface SubGrupoRepository extends GenericRepository<SubGrupo> {
-    SubGrupo filtrarPorNome(final List<SubGrupo> entities, final String nome);
+    SubGrupo filtrarPorNome(List<SubGrupo> entities, String nome);
 
-    void ordenarPorNome(final List<SubGrupo> entities);
+    void ordenarPorNome(List<SubGrupo> entities);
 }

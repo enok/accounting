@@ -19,7 +19,7 @@ public interface ContaBusiness extends GenericBusiness<ContaDTO, Conta> {
 
     void excluir(ContaDTO contaDTO) throws BusinessException;
 
-    ContaDTO buscarContaPorId(Long codigo) throws BusinessException;
+    ContaDTO buscarPorId(Long codigo) throws BusinessException;
 
-    List<ContaDTO> buscarContas() throws BusinessException;
+    List<ContaDTO> buscarTodas() throws BusinessException;
 }

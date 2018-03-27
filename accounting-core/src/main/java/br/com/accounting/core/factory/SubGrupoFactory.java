@@ -18,12 +18,7 @@ public final class SubGrupoFactory {
     }
 
     public SubGrupoFactory withCodigo(String codigo) {
-        if (isBlank(codigo)) {
-            subGrupo.codigo(0L);
-        }
-        else {
-            subGrupo.codigo(Long.parseLong(codigo));
-        }
+        subGrupo.codigo(Long.parseLong(codigo));
         return this;
     }
 

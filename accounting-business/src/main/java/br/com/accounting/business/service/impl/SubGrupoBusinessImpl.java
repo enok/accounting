@@ -1,12 +1,15 @@
 package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.annotation.History;
+import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.factory.SubGrupoDTOFactory;
 import br.com.accounting.business.service.SubGrupoBusiness;
+import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.SubGrupoFactory;
@@ -23,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Service
 public class SubGrupoBusinessImpl implements SubGrupoBusiness {
     @Autowired
-    private SubGrupoService subGrupoService;
+    private SubGrupoService service;
 
     @History
     @Override
@@ -33,15 +36,15 @@ public class SubGrupoBusinessImpl implements SubGrupoBusiness {
 
             validarEntrada(dto, erros, false);
 
-            SubGrupo subGrupo = SubGrupoFactory
+            SubGrupo entity = SubGrupoFactory
                     .begin()
                     .withNome(dto.nome())
                     .withDescricao(dto.descricao())
                     .build();
 
-            validaRegistroDuplicado(subGrupo);
+            validaRegistroDuplicado(entity);
 
-            return subGrupoService.salvar(subGrupo);
+            return service.salvar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível criar o subGrupo.";
@@ -49,16 +52,66 @@ public class SubGrupoBusinessImpl implements SubGrupoBusiness {
         }
     }
 
+    @History
     @Override
-    public SubGrupoDTO buscarSubGrupoPorId(final Long codigo) throws BusinessException {
+    public void atualizar(final SubGrupoDTO dto) throws BusinessException {
         try {
-            SubGrupo subGrupo = subGrupoService.buscarPorCodigo(codigo);
+            final List<String> erros = new ArrayList<>();
+
+            validarEntrada(dto, erros, true);
+
+            SubGrupo entity = SubGrupoFactory
+                    .begin()
+                    .withCodigo(dto.codigo())
+                    .withNome(dto.nome())
+                    .withDescricao(dto.descricao())
+                    .build();
+
+            service.atualizar(entity);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível atualizar o subGrupo.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @History
+    @Override
+    public void excluir(final SubGrupoDTO dto) throws BusinessException {
+        try {
+            SubGrupo entity = criarEntity(dto);
+            service.deletar(entity);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível excluir o subGrupo.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @Override
+    public SubGrupoDTO buscarPorId(final Long codigo) throws BusinessException {
+        try {
+            SubGrupo subGrupo = service.buscarPorCodigo(codigo);
             return criarDTOEntity(SubGrupoDTOFactory.create(), subGrupo);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar o subGrupo por id.";
             throw new BusinessException(message, e);
         }
+    }
+
+    @Override
+    public List<SubGrupoDTO> buscarTodos() throws BusinessException {
+        List<SubGrupoDTO> entitiesDTO;
+        try {
+            List<SubGrupo> entities = service.buscarTodos();
+            entitiesDTO = criarListaEntitiesDTO(SubGrupoDTOFactory.create(), entities);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar os subGrupos.";
+            throw new BusinessException(message, e);
+        }
+        return entitiesDTO;
     }
 
     @Override
@@ -82,7 +135,7 @@ public class SubGrupoBusinessImpl implements SubGrupoBusiness {
 
     @Override
     public void validaRegistroDuplicado(final SubGrupo entity) throws ServiceException, DuplicatedRegistryException {
-        SubGrupo subGrupoBuscada = subGrupoService.buscarPorNome(entity.nome());
+        SubGrupo subGrupoBuscada = service.buscarPorNome(entity.nome());
 
         if (entity.equals(subGrupoBuscada)) {
             throw new DuplicatedRegistryException("SubGrupo duplicado.");

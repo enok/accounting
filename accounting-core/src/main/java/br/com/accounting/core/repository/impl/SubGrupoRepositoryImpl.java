@@ -23,19 +23,19 @@ public class SubGrupoRepositoryImpl extends GenericAbstractRepository<SubGrupo> 
 
     @Override
     public SubGrupo filtrarPorNome(final List<SubGrupo> entities, final String nome) {
-        List<SubGrupo> entitiesBuscadas = entities
+        List<SubGrupo> entitiesFiltradas = entities
                 .stream()
                 .filter(c -> (c.nome().equals(nome)))
                 .collect(Collectors.toList());
-        if (isEmpty(entitiesBuscadas)) {
+        if (isEmpty(entitiesFiltradas)) {
             return null;
         }
-        return entitiesBuscadas.get(0);
+        return entitiesFiltradas.get(0);
     }
 
     @Override
-    public void ordenarPorNome(final List<SubGrupo> subGrupos) {
-        subGrupos.sort(Comparator.comparing(SubGrupo::nome));
+    public void ordenarPorNome(final List<SubGrupo> entities) {
+        entities.sort(Comparator.comparing(SubGrupo::nome));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SubGrupoRepositoryImpl extends GenericAbstractRepository<SubGrupo> 
     }
 
     @Override
-    public String criarLinha(SubGrupo entity) {
+    public String criarLinha(final SubGrupo entity) {
         StringBuilder builder = new StringBuilder()
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(entity.nome()).append(SEPARADOR)
@@ -58,7 +58,7 @@ public class SubGrupoRepositoryImpl extends GenericAbstractRepository<SubGrupo> 
     }
 
     @Override
-    public SubGrupo criarEntity(String linha) {
+    public SubGrupo criarEntity(final String linha) {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

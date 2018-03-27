@@ -95,7 +95,7 @@ public class CartaoBusinessImpl implements CartaoBusiness {
     }
 
     @Override
-    public CartaoDTO buscarCartaoPorId(final Long codigo) throws BusinessException {
+    public CartaoDTO buscarPorId(final Long codigo) throws BusinessException {
         try {
             Cartao cartao = cartaoService.buscarPorCodigo(codigo);
             return criarDTOEntity(CartaoDTOFactory.create(), cartao);
@@ -107,7 +107,7 @@ public class CartaoBusinessImpl implements CartaoBusiness {
     }
 
     @Override
-    public List<CartaoDTO> buscarCartoes() throws BusinessException {
+    public List<CartaoDTO> buscarTodos() throws BusinessException {
         List<CartaoDTO> cartoesDTO;
         try {
             List<Cartao> cartoes = cartaoService.buscarTodos();
