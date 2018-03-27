@@ -1,17 +1,22 @@
 package br.com.accounting.core.entity;
 
+import br.com.accounting.core.factory.SubGrupoFactory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class SubGrupo implements Entity {
+public class Grupo implements Entity {
     private Long codigo;
     private String nome;
     private String descricao;
+    private List<SubGrupo> subGrupos = new ArrayList<>();
 
     @Override
     public Long getCodigo() {
@@ -23,21 +28,27 @@ public class SubGrupo implements Entity {
         this.codigo = codigo;
     }
 
+    public void addSubGrupo(String nomeSubGrupo) {
+        this.subGrupos.add(criarSubGrupo(nomeSubGrupo));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        SubGrupo subGrupo = (SubGrupo) o;
+        Grupo grupo = (Grupo) o;
 
         return new EqualsBuilder()
-                .append(nome, subGrupo.nome)
+                .append(nome, grupo.nome)
                 .isEquals();
     }
 
-    @Override
-    public String toString() {
-        return nome;
+    private SubGrupo criarSubGrupo(String nomeSubGrupo) {
+        return SubGrupoFactory
+                .begin()
+                .withNome(nomeSubGrupo)
+                .build();
     }
 }

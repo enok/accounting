@@ -1,6 +1,6 @@
 package br.com.accounting.business.service;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
@@ -10,23 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.List;
 
-import static br.com.accounting.business.factory.SubGrupoDTOMockFactory.*;
+import static br.com.accounting.business.factory.GrupoDTOMockFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertTrue;
 
-public class SubGrupoBusinessTest extends GenericTest {
+public class GrupoBusinessTest extends GenericTest {
     @Autowired
-    private SubGrupoBusiness business;
+    private GrupoBusiness business;
 
     @Test(expected = BusinessException.class)
     public void criarSemDiretorio() throws IOException, BusinessException {
         try {
             deletarDiretorioEArquivos();
-            criarSubGrupoAluguel();
+            criarGrupoMoradia();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
             throw e;
         }
     }
@@ -34,11 +36,11 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void criarSemNome() throws BusinessException {
         try {
-            SubGrupoDTO subGrupoDTO = subGrupoAluguelSemNome();
-            business.criar(subGrupoDTO);
+            GrupoDTO grupoDTO = grupoMoradiaSemNome();
+            business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -51,11 +53,11 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void criarSemDescricao() throws BusinessException {
         try {
-            SubGrupoDTO subGrupoDTO = subGrupoAluguelSemDescricao();
-            business.criar(subGrupoDTO);
+            GrupoDTO grupoDTO = grupoMoradiaSemDescricao();
+            business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -68,11 +70,11 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void criarSemNomeDescricao() throws BusinessException {
         try {
-            SubGrupoDTO subGrupoDTO = subGrupoAluguelSemNomeDescricao();
-            business.criar(subGrupoDTO);
+            GrupoDTO grupoDTO = grupoMoradiaSemNomeDescricao();
+            business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -84,31 +86,37 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
+    public void criarSemGrupo() throws BusinessException {
+        Long codigo = criarGrupoMoradiaSemGrupos();
+        assertGrupoMoradiaSemGrupos(codigo);
+    }
+
+    @Test
     public void criar() throws BusinessException {
-        Long codigo = criarSubGrupoAluguel();
-        assertSubGrupoAluguel(codigo);
+        Long codigo = criarGrupoMoradia();
+        assertGrupoMoradia(codigo);
     }
 
     @Test(expected = BusinessException.class)
     public void criarDoisComNomesIguais() throws BusinessException {
         try {
-            criarSubGrupoAluguel();
-            criarSubGrupoAluguel();
+            criarGrupoMoradia();
+            criarGrupoMoradia();
         }
         catch (BusinessException e) {
             DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
-            assertThat(e1.getMessage(), equalTo("SubGrupo duplicado."));
+            assertThat(e1.getMessage(), equalTo("Grupo duplicado."));
             throw e;
         }
     }
 
     @Test
     public void criarDois() throws BusinessException {
-        Long codigo1 = criarSubGrupoAluguel();
-        assertSubGrupoAluguel(codigo1);
+        Long codigo1 = criarGrupoMoradia();
+        assertGrupoMoradia(codigo1);
 
-        Long codigo2 = criarSubGrupoInternet();
-        assertSubGrupoInternet(codigo2);
+        Long codigo2 = criarGrupoTransporte();
+        assertGrupoTransporte(codigo2);
 
         assertThat(codigo1, not(equalTo(codigo2)));
     }
@@ -116,15 +124,15 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void alterarSemCodigo() throws BusinessException {
         try {
-            Long codigo = criarSubGrupoAluguel();
+            Long codigo = criarGrupoMoradia();
 
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorId(codigo);
             dto.codigo("");
 
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -137,15 +145,15 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void alterarSemNome() throws BusinessException {
         try {
-            Long codigo = criarSubGrupoAluguel();
+            Long codigo = criarGrupoMoradia();
 
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorId(codigo);
             dto.nome("");
 
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -158,15 +166,15 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void alterarSemDescricao() throws BusinessException {
         try {
-            Long codigo = criarSubGrupoAluguel();
+            Long codigo = criarGrupoMoradia();
 
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorId(codigo);
             dto.descricao("");
 
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -178,45 +186,48 @@ public class SubGrupoBusinessTest extends GenericTest {
 
     @Test
     public void alterarNome() throws BusinessException {
-        Long codigo = criarSubGrupoAluguel();
-        assertSubGrupoAluguel(codigo);
+        Long codigo = criarGrupoMoradia();
+        assertGrupoMoradia(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
-        dto.nome("Internet");
+        GrupoDTO dto = business.buscarPorId(codigo);
+        dto.nome("Transporte");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.nome(), equalTo("Internet"));
-        assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
+        assertThat(dto.nome(), equalTo("Transporte"));
+        assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
+        assertGrupoMoradiaSubGrupos(dto);
     }
 
     @Test
     public void alterarDescricao() throws BusinessException {
-        Long codigo = criarSubGrupoAluguel();
-        assertSubGrupoAluguel(codigo);
+        Long codigo = criarGrupoMoradia();
+        assertGrupoMoradia(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        GrupoDTO dto = business.buscarPorId(codigo);
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.nome(), equalTo("Aluguel"));
+        assertThat(dto.nome(), equalTo("Moradia"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
+        assertGrupoMoradiaSubGrupos(dto);
     }
 
     @Test
     public void alterarNomeDescricao() throws BusinessException {
-        Long codigo = criarSubGrupoAluguel();
-        assertSubGrupoAluguel(codigo);
+        Long codigo = criarGrupoMoradia();
+        assertGrupoMoradia(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
-        dto.nome("Internet");
+        GrupoDTO dto = business.buscarPorId(codigo);
+        dto.nome("Transporte");
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.nome(), equalTo("Internet"));
+        assertThat(dto.nome(), equalTo("Transporte"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
+        assertGrupoMoradiaSubGrupos(dto);
     }
 
     @Test(expected = BusinessException.class)
@@ -225,15 +236,15 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.excluir(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir o grupo."));
             throw e;
         }
     }
 
     @Test
     public void excluir() throws BusinessException {
-        Long codigo = criarSubGrupoAluguel();
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        Long codigo = criarGrupoMoradia();
+        GrupoDTO dto = business.buscarPorId(codigo);
 
         business.excluir(dto);
 
@@ -248,11 +259,10 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.buscarPorId(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar o subGrupo por id."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar o grupo por id."));
             throw e;
         }
     }
-
 
     @Test(expected = BusinessException.class)
     public void buscarTodosException() throws IOException, BusinessException {
@@ -261,54 +271,81 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.buscarTodos();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os subGrupos."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os grupos."));
             throw e;
         }
     }
 
     @Test
     public void buscarTodos() throws BusinessException {
-        criarSubGrupoAluguel();
-        criarSubGrupoInternet();
+        criarGrupoMoradia();
+        criarGrupoTransporte();
 
-        List<SubGrupoDTO> entities = business.buscarTodos();
+        List<GrupoDTO> entities = business.buscarTodos();
         assertThat(entities.size(), equalTo(2));
 
-        assertSubGrupoAluguel(entities.get(0));
-        assertSubGrupoInternet(entities.get(1));
+        assertGrupoMoradia(entities.get(0));
+        assertGrupoTransporte(entities.get(1));
     }
 
-    private Long criarSubGrupoAluguel() throws BusinessException {
-        SubGrupoDTO dto = subGrupoAluguel();
+    private Long criarGrupoMoradia() throws BusinessException {
+        GrupoDTO dto = grupoMoradia();
         Long codigo = business.criar(dto);
         assertTrue(codigo >= 0);
         return codigo;
     }
 
-    private Long criarSubGrupoInternet() throws BusinessException {
-        SubGrupoDTO dto = subGrupoInternet();
+    private Long criarGrupoMoradiaSemGrupos() throws BusinessException {
+        GrupoDTO dto = grupoMoradiaSemGrupos();
         Long codigo = business.criar(dto);
         assertTrue(codigo >= 0);
         return codigo;
     }
 
-    private void assertSubGrupoAluguel(Long codigo) throws BusinessException {
-        SubGrupoDTO dto = business.buscarPorId(codigo);
-        assertSubGrupoAluguel(dto);
+    private Long criarGrupoTransporte() throws BusinessException {
+        GrupoDTO dto = grupoTransporte();
+        Long codigo = business.criar(dto);
+        assertTrue(codigo >= 0);
+        return codigo;
     }
 
-    private void assertSubGrupoAluguel(SubGrupoDTO dto) {
-        assertThat(dto.nome(), equalTo("Aluguel"));
-        assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
+    private void assertGrupoMoradia(Long codigo) throws BusinessException {
+        GrupoDTO dto = business.buscarPorId(codigo);
+        assertGrupoMoradia(dto);
     }
 
-    private void assertSubGrupoInternet(Long codigo) throws BusinessException {
-        SubGrupoDTO dto = business.buscarPorId(codigo);
-        assertSubGrupoInternet(dto);
+    private void assertGrupoMoradiaSemGrupos(Long codigo) throws BusinessException {
+        GrupoDTO dto = business.buscarPorId(codigo);
+        assertGrupoMoradiaSemGrupos(dto);
     }
 
-    private void assertSubGrupoInternet(SubGrupoDTO dto) {
-        assertThat(dto.nome(), equalTo("Internet"));
-        assertThat(dto.descricao(), equalTo("Serviço de internet fibra"));
+    private void assertGrupoTransporte(Long codigo) throws BusinessException {
+        GrupoDTO dto = business.buscarPorId(codigo);
+        assertGrupoTransporte(dto);
+    }
+
+    private void assertGrupoMoradia(GrupoDTO dto) {
+        assertThat(dto.nome(), equalTo("Moradia"));
+        assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
+        assertGrupoMoradiaSubGrupos(dto);
+    }
+
+    private void assertGrupoMoradiaSemGrupos(GrupoDTO dto) {
+        assertThat(dto.nome(), equalTo("Moradia"));
+        assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
+        assertThat(dto.subGrupos().size(), equalTo(0));
+    }
+
+    private void assertGrupoTransporte(GrupoDTO dto) {
+        assertThat(dto.nome(), equalTo("Transporte"));
+        assertThat(dto.descricao(), equalTo("Gastos gerais com transporte"));
+        assertThat(dto.subGrupos().size(), equalTo(1));
+        assertThat(dto.subGrupos().get(0), equalTo("Combustível"));
+    }
+
+    private void assertGrupoMoradiaSubGrupos(GrupoDTO dto) {
+        assertThat(dto.subGrupos().size(), equalTo(2));
+        assertThat(dto.subGrupos().get(0), equalTo("Aluguel"));
+        assertThat(dto.subGrupos().get(1), equalTo("Internet"));
     }
 }

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.SEPARADOR;
+import static br.com.accounting.core.util.Utils.removeUltimo;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
@@ -44,7 +45,7 @@ public class HistoricoRepositoryImpl extends GenericAbstractRepository<Historico
             }
         }
 
-        return removeUltimoSeparador(builder);
+        return removeUltimo(builder, SEPARADOR);
     }
 
     @Override
@@ -66,10 +67,5 @@ public class HistoricoRepositoryImpl extends GenericAbstractRepository<Historico
         }
 
         return historicoFactory.build();
-    }
-
-    private String removeUltimoSeparador(StringBuilder builder) {
-        int index = builder.lastIndexOf(SEPARADOR);
-        return builder.substring(0, index);
     }
 }

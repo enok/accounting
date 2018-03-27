@@ -32,6 +32,11 @@ public final class Utils {
         return StringUtils.isBlank(value) || value.equals("null");
     }
 
+    public static String removeUltimo(final StringBuilder builder, final String value) {
+        int index = builder.lastIndexOf(value);
+        return builder.substring(0, index);
+    }
+
     public static Double createDouble(final String value) throws ParseException {
         try {
             return Double.parseDouble(value.replaceAll(",", "."));
