@@ -13,12 +13,14 @@ import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.util.CollectionUtils.*;
 
 @Service
 public class GrupoBusinessImpl implements GrupoBusiness {
@@ -127,6 +129,9 @@ public class GrupoBusinessImpl implements GrupoBusiness {
         }
         if (isBlank(dto.descricao())) {
             erros.add(format(msg, "descrição"));
+        }
+        if (isEmpty(dto.subGrupos())) {
+            erros.add(format(msg, "subGrupos"));
         }
 
         conferirErros(erros);

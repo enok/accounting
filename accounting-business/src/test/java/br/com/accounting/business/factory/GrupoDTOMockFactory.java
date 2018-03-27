@@ -42,7 +42,7 @@ public final class GrupoDTOMockFactory {
                 .build();
     }
 
-    public static GrupoDTO grupoMoradiaSemNomeDescricao() {
+    public static GrupoDTO grupoMoradiaSemNomeDescricaoSubGrupo() {
         return GrupoDTOFactory
                 .create()
                 .build();

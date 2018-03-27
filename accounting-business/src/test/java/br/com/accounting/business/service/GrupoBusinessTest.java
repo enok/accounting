@@ -68,9 +68,9 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void criarSemNomeDescricao() throws BusinessException {
+    public void criarSemGrupo() throws BusinessException {
         try {
-            GrupoDTO grupoDTO = grupoMoradiaSemNomeDescricao();
+            GrupoDTO grupoDTO = grupoMoradiaSemGrupos();
             business.criar(grupoDTO);
         }
         catch (BusinessException e) {
@@ -78,17 +78,29 @@ public class GrupoBusinessTest extends GenericTest {
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(2));
-            assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
-            assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
+            assertThat(erros.size(), equalTo(1));
+            assertThat(erros.get(0), equalTo("O campo subGrupos é obrigatório."));
             throw e;
         }
     }
 
-    @Test
-    public void criarSemGrupo() throws BusinessException {
-        Long codigo = criarGrupoMoradiaSemGrupos();
-        assertGrupoMoradiaSemGrupos(codigo);
+    @Test(expected = BusinessException.class)
+    public void criarSemNomeDescricaoSubGrupo() throws BusinessException {
+        try {
+            GrupoDTO grupoDTO = grupoMoradiaSemNomeDescricaoSubGrupo();
+            business.criar(grupoDTO);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            List<String> erros = e1.getErros();
+            assertThat(erros.size(), equalTo(3));
+            assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
+            assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
+            assertThat(erros.get(2), equalTo("O campo subGrupos é obrigatório."));
+            throw e;
+        }
     }
 
     @Test
@@ -290,13 +302,6 @@ public class GrupoBusinessTest extends GenericTest {
 
     private Long criarGrupoMoradia() throws BusinessException {
         GrupoDTO dto = grupoMoradia();
-        Long codigo = business.criar(dto);
-        assertTrue(codigo >= 0);
-        return codigo;
-    }
-
-    private Long criarGrupoMoradiaSemGrupos() throws BusinessException {
-        GrupoDTO dto = grupoMoradiaSemGrupos();
         Long codigo = business.criar(dto);
         assertTrue(codigo >= 0);
         return codigo;
