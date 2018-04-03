@@ -1,9 +1,11 @@
 package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Conta;
+import br.com.accounting.core.util.Utils;
 
 import java.text.ParseException;
 
+import static br.com.accounting.core.util.Utils.*;
 import static br.com.accounting.core.util.Utils.getDoubleFromString;
 import static br.com.accounting.core.util.Utils.isBlankOrNull;
 
@@ -48,6 +50,13 @@ public final class ContaFactory {
         return this;
     }
 
+    public ContaFactory withSaldo(String saldo) throws ParseException {
+        if (!isBlankOrNull(saldo)) {
+            withSaldo(getDoubleFromString(saldo));
+        }
+        return this;
+    }
+
     public ContaFactory withSaldo(Double saldo) {
         if (saldo != null) {
             entity.saldo(saldo);
@@ -55,9 +64,16 @@ public final class ContaFactory {
         return this;
     }
 
-    public ContaFactory withSaldo(String saldo) throws ParseException {
-        if (!isBlankOrNull(saldo)) {
-            withSaldo(getDoubleFromString(saldo));
+    public ContaFactory withCumulativo(String cumulativo) {
+        if (!isBlankOrNull(cumulativo)) {
+            withCumulativo(getBooleanFromString(cumulativo));
+        }
+        return this;
+    }
+
+    private ContaFactory withCumulativo(Boolean cumulativo) {
+        if (cumulativo != null) {
+            entity.cumulativo(cumulativo);
         }
         return this;
     }

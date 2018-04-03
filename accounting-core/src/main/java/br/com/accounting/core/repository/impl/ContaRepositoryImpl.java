@@ -3,6 +3,7 @@ package br.com.accounting.core.repository.impl;
 import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.repository.ContaRepository;
+import br.com.accounting.core.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static br.com.accounting.core.util.Utils.*;
 import static br.com.accounting.core.util.Utils.SEPARADOR;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -56,7 +58,8 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(entity.nome()).append(SEPARADOR)
                 .append(entity.descricao()).append(SEPARADOR)
-                .append(entity.saldo());
+                .append(entity.saldo()).append(SEPARADOR)
+                .append(getStringFromBoolean(entity.cumulativo()));
         return builder.toString();
     }
 
@@ -72,6 +75,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .withNome(registro.get(1))
                 .withDescricao(registro.get(2))
                 .withSaldo(registro.get(3))
+                .withCumulativo(registro.get(4))
                 .build();
     }
 }

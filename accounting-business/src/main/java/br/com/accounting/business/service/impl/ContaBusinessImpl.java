@@ -95,6 +95,9 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         if (isBlank(dto.descricao())) {
             erros.add(format(msg, "descrição"));
         }
+        if (isBlank(dto.cumulativo())) {
+            erros.add(format(msg, "cumulativo"));
+        }
 
         conferirErros(erros);
     }
@@ -116,6 +119,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
                 .withSaldo(dto.saldo())
+                .withCumulativo(dto.cumulativo())
                 .build();
     }
 }

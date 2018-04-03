@@ -1,7 +1,5 @@
 package br.com.accounting.core.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -72,7 +70,7 @@ public final class Utils {
     }
 
     public static String getStringFromBoolean(final Boolean value) {
-        return value ? "S" : "N";
+        return (value != null) && value ? "S" : "N";
     }
 
 //    public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {

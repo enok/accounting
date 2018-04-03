@@ -13,6 +13,7 @@ public class Conta implements Entity, Cloneable {
     private String nome;
     private String descricao;
     private Double saldo;
+    private Boolean cumulativo;
 
     @Override
     public Long getCodigo() {

@@ -12,4 +12,5 @@ public class ContaDTO {
     private String nome;
     private String descricao;
     private String saldo;
+    private String cumulativo;
 }

@@ -67,9 +67,9 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void criarUmaContaSemNomeEDescricao() throws BusinessException {
+    public void criarUmaContaSemCumulativo() throws BusinessException {
         try {
-            ContaDTO contaDTO = contaDTOSemNomeEDescricao();
+            ContaDTO contaDTO = contaDTOSemCumulativo();
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
@@ -77,9 +77,27 @@ public class ContaBusinessTest extends GenericTest {
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(2));
+            assertThat(erros.size(), equalTo(1));
+            assertThat(erros.get(0), equalTo("O campo cumulativo é obrigatório."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void criarUmaContaSemNomeDescricaoCumulativo() throws BusinessException {
+        try {
+            ContaDTO contaDTO = contaDTOSemNomeDescricaoCumulativo();
+            contaBusiness.criar(contaDTO);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            List<String> erros = e1.getErros();
+            assertThat(erros.size(), equalTo(3));
             assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
             assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
+            assertThat(erros.get(2), equalTo("O campo cumulativo é obrigatório."));
             throw e;
         }
     }
@@ -141,6 +159,16 @@ public class ContaBusinessTest extends GenericTest {
         contaBusiness.atualizar(contaDTOBuscada);
     }
 
+    @Test(expected = BusinessException.class)
+    public void alterarSemCumulativo() throws BusinessException {
+        Long codigoConta = criarContaEnok();
+
+        ContaDTO contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
+        contaDTOBuscada.cumulativo(null);
+
+        contaBusiness.atualizar(contaDTOBuscada);
+    }
+
     @Test
     public void alterarNomeDaConta() throws BusinessException {
         Long codigoConta = criarContaEnok();
@@ -154,6 +182,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+        assertThat(contaDTOBuscada.cumulativo(), equalTo("S"));
     }
 
     @Test
@@ -169,22 +198,41 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+        assertThat(contaDTOBuscada.cumulativo(), equalTo("S"));
     }
 
     @Test
-    public void alterarNomeEDescricao() throws BusinessException {
+    public void alterarCumulativoDaConta() throws BusinessException {
+        Long codigoConta = criarContaEnok();
+
+        ContaDTO contaDTOBuscada = assertContaEnok(codigoConta);
+
+        contaDTOBuscada.cumulativo("N");
+        contaBusiness.atualizar(contaDTOBuscada);
+
+        contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
+        assertThat(contaDTOBuscada.nome(), equalTo("Enok"));
+        assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+        assertThat(contaDTOBuscada.cumulativo(), equalTo("N"));
+    }
+
+    @Test
+    public void alterarNomeDescricaoCumulativo() throws BusinessException {
         Long codigoConta = criarContaEnok();
 
         ContaDTO contaDTOBuscada = assertContaEnok(codigoConta);
 
         contaDTOBuscada.nome("Carol");
         contaDTOBuscada.descricao("Valor separado para a Carol");
+        contaDTOBuscada.cumulativo("N");
         contaBusiness.atualizar(contaDTOBuscada);
 
         contaDTOBuscada = contaBusiness.buscarPorId(codigoConta);
         assertThat(contaDTOBuscada.nome(), equalTo("Carol"));
         assertThat(contaDTOBuscada.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(contaDTOBuscada.saldo(), equalTo("0.0"));
+        assertThat(contaDTOBuscada.cumulativo(), equalTo("N"));
     }
 
     @Test(expected = BusinessException.class)
@@ -402,6 +450,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(contaDTO.nome(), equalTo("Salário"));
         assertThat(contaDTO.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
         assertThat(contaDTO.saldo(), equalTo("0.0"));
+        assertThat(contaDTO.cumulativo(), equalTo("N"));
         return contaDTO;
     }
 
@@ -414,6 +463,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(contaDTO.nome(), equalTo("Enok"));
         assertThat(contaDTO.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(contaDTO.saldo(), equalTo("0.0"));
+        assertThat(contaDTO.cumulativo(), equalTo("S"));
         return contaDTO;
     }
 }
