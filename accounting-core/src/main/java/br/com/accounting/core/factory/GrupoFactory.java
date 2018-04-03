@@ -4,7 +4,7 @@ import br.com.accounting.core.entity.Grupo;
 
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.isBlank;
+import static br.com.accounting.core.util.Utils.isBlankOrNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public final class GrupoFactory {
@@ -20,21 +20,34 @@ public final class GrupoFactory {
         return factory;
     }
 
+    public Grupo build() {
+        return entity;
+    }
+
     public GrupoFactory withCodigo(String codigo) {
-        entity.codigo(Long.parseLong(codigo));
+        if (!isBlankOrNull(codigo)) {
+            entity.codigo(Long.parseLong(codigo));
+        }
         return this;
     }
 
     public GrupoFactory withNome(String nome) {
-        if (!isBlank(nome)) {
+        if (!isBlankOrNull(nome)) {
             entity.nome(nome);
         }
         return this;
     }
 
     public GrupoFactory withDescricao(String descricao) {
-        if (!isBlank(descricao)) {
+        if (!isBlankOrNull(descricao)) {
             entity.descricao(descricao);
+        }
+        return this;
+    }
+
+    public GrupoFactory withSubGrupo(String subGrupo) {
+        if (!isBlankOrNull(subGrupo)) {
+            entity.addSubGrupo(subGrupo);
         }
         return this;
     }
@@ -46,14 +59,5 @@ public final class GrupoFactory {
             }
         }
         return this;
-    }
-
-    public GrupoFactory withSubGrupo(String subGrupo) {
-        entity.addSubGrupo(subGrupo);
-        return this;
-    }
-
-    public Grupo build() {
-        return entity;
     }
 }

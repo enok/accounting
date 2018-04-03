@@ -58,7 +58,7 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
                 .append(getStringFromDate(entity.diaMelhorCompra())).append(SEPARADOR)
                 .append(entity.portador()).append(SEPARADOR)
                 .append(entity.tipo()).append(SEPARADOR)
-                .append(getDoubleFormatted(entity.limite()));
+                .append(getStringFromDouble(entity.limite()));
         return builder.toString();
     }
 

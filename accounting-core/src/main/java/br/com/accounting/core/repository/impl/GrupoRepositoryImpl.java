@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.SEPARADOR;
-import static br.com.accounting.core.util.Utils.removeUltimo;
+import static br.com.accounting.core.util.Utils.removeLast;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
@@ -61,7 +61,7 @@ public class GrupoRepositoryImpl extends GenericAbstractRepository<Grupo> implem
             builder.append(subGrupo.nome()).append(SEPARADOR);
         }
 
-        return removeUltimo(builder, SEPARADOR);
+        return removeLast(builder, SEPARADOR);
     }
 
     @Override

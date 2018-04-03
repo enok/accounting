@@ -28,7 +28,7 @@ public class GrupoBusinessTest extends GenericTest {
             criarGrupoMoradia();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
             throw e;
         }
     }
@@ -40,7 +40,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -57,7 +57,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -74,7 +74,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -91,7 +91,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.criar(grupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -144,7 +144,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -165,7 +165,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -186,7 +186,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -248,7 +248,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.excluir(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
             throw e;
         }
     }
@@ -271,7 +271,7 @@ public class GrupoBusinessTest extends GenericTest {
             business.buscarPorId(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar o grupo por id."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
             throw e;
         }
     }
@@ -280,10 +280,10 @@ public class GrupoBusinessTest extends GenericTest {
     public void buscarTodosException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            business.buscarTodos();
+            business.buscarTodas();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os grupos."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
             throw e;
         }
     }
@@ -293,7 +293,7 @@ public class GrupoBusinessTest extends GenericTest {
         criarGrupoMoradia();
         criarGrupoTransporte();
 
-        List<GrupoDTO> entities = business.buscarTodos();
+        List<GrupoDTO> entities = business.buscarTodas();
         assertThat(entities.size(), equalTo(2));
 
         assertGrupoMoradia(entities.get(0));
@@ -319,11 +319,6 @@ public class GrupoBusinessTest extends GenericTest {
         assertGrupoMoradia(dto);
     }
 
-    private void assertGrupoMoradiaSemGrupos(Long codigo) throws BusinessException {
-        GrupoDTO dto = business.buscarPorId(codigo);
-        assertGrupoMoradiaSemGrupos(dto);
-    }
-
     private void assertGrupoTransporte(Long codigo) throws BusinessException {
         GrupoDTO dto = business.buscarPorId(codigo);
         assertGrupoTransporte(dto);
@@ -333,12 +328,6 @@ public class GrupoBusinessTest extends GenericTest {
         assertThat(dto.nome(), equalTo("Moradia"));
         assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
         assertGrupoMoradiaSubGrupos(dto);
-    }
-
-    private void assertGrupoMoradiaSemGrupos(GrupoDTO dto) {
-        assertThat(dto.nome(), equalTo("Moradia"));
-        assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
-        assertThat(dto.subGrupos().size(), equalTo(0));
     }
 
     private void assertGrupoTransporte(GrupoDTO dto) {

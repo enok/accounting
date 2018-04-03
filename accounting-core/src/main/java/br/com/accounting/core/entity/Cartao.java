@@ -16,7 +16,7 @@ public class Cartao implements Entity, Cloneable {
     private LocalDate vencimento;
     private LocalDate diaMelhorCompra;
     private String portador;
-    private Tipo tipo;
+    private TipoCartao tipo;
     private Double limite;
 
     @Override

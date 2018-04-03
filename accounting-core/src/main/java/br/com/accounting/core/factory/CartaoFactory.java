@@ -1,73 +1,75 @@
 package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Cartao;
-import br.com.accounting.core.entity.Tipo;
+import br.com.accounting.core.entity.TipoCartao;
 
 import java.text.ParseException;
 
 import static br.com.accounting.core.util.Utils.*;
 
 public class CartaoFactory {
-    private static CartaoFactory cartaoFactory;
-    private Cartao cartao;
+    private static CartaoFactory factory;
+    private Cartao entity;
 
     private CartaoFactory() {
-        cartao = new Cartao();
+        entity = new Cartao();
     }
 
     public static CartaoFactory begin() {
-        cartaoFactory = new CartaoFactory();
-        return cartaoFactory;
+        factory = new CartaoFactory();
+        return factory;
+    }
+
+    public Cartao build() {
+        return entity;
     }
 
     public CartaoFactory withCodigo(String codigo) {
-        cartao.codigo(Long.parseLong(codigo));
+        if (!isBlankOrNull(codigo)) {
+            entity.codigo(Long.parseLong(codigo));
+        }
         return this;
     }
 
     public CartaoFactory withNumero(String numero) {
-        if (!isBlank(numero)) {
-            cartao.numero(numero);
+        if (!isBlankOrNull(numero)) {
+            entity.numero(numero);
         }
         return this;
     }
 
     public CartaoFactory withVencimento(String vencimento) {
-        if (!isBlank(vencimento)) {
-            cartao.vencimento(getDateFromString(vencimento));
+        if (!isBlankOrNull(vencimento)) {
+            entity.vencimento(getDateFromString(vencimento));
         }
         return this;
     }
 
     public CartaoFactory withDiaMelhorCompra(String diaMelhorCompra) {
-        if (!isBlank(diaMelhorCompra)) {
-            cartao.diaMelhorCompra(getDateFromString(diaMelhorCompra));
+        if (!isBlankOrNull(diaMelhorCompra)) {
+            entity.diaMelhorCompra(getDateFromString(diaMelhorCompra));
         }
         return this;
     }
 
     public CartaoFactory withPortador(String portador) {
-        if (!isBlank(portador)) {
-            cartao.portador(portador);
+        if (!isBlankOrNull(portador)) {
+            entity.portador(portador);
         }
         return this;
     }
 
     public CartaoFactory withTipo(String tipo) {
-        if (!isBlank(tipo)) {
-            cartao.tipo(Tipo.valueOf(tipo));
+        if (!isBlankOrNull(tipo)) {
+            entity.tipo(TipoCartao.valueOf(tipo));
         }
         return this;
     }
 
     public CartaoFactory withLimite(String limite) throws ParseException {
-        if (!isBlank(limite)) {
-            cartao.limite(createDouble(limite));
+        if (!isBlankOrNull(limite)) {
+            entity.limite(getDoubleFromString(limite));
         }
         return this;
-    }
-
-    public Cartao build() {
-        return cartao;
     }
 }

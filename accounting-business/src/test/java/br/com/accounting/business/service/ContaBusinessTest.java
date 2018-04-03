@@ -27,7 +27,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
             throw e;
         }
     }
@@ -39,7 +39,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -56,7 +56,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -73,7 +73,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.criar(contaDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar a conta."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -302,19 +302,20 @@ public class ContaBusinessTest extends GenericTest {
 
     @Test
     public void transferirSaldoDeUmaContaParaOutra() throws BusinessException {
-        ContaDTO contaSalario = contaDTO();
-        Long contaSalarioId = contaBusiness.criar(contaSalario);
-        contaBusiness.adicionarCredito(contaSalario, "1000.0");
-        contaSalario = contaBusiness.buscarPorId(contaSalarioId);
+        ContaDTO dto = contaDTO();
+        Long contaSalarioId = contaBusiness.criar(dto);
+        dto = contaBusiness.buscarPorId(contaSalarioId);
+        contaBusiness.adicionarCredito(dto, "1000.0");
+        dto = contaBusiness.buscarPorId(contaSalarioId);
 
         ContaDTO contaEnok = conta2DTO();
         Long contaEnokId = contaBusiness.criar(contaEnok);
         contaEnok = contaBusiness.buscarPorId(contaEnokId);
 
-        contaBusiness.transferir(contaSalario, contaEnok, "600.0");
+        contaBusiness.transferir(dto, contaEnok, "600.0");
 
-        contaSalario = contaBusiness.buscarPorId(contaSalarioId);
-        assertThat(contaSalario.saldo(), equalTo("400.0"));
+        dto = contaBusiness.buscarPorId(contaSalarioId);
+        assertThat(dto.saldo(), equalTo("400.0"));
 
         contaEnok = contaBusiness.buscarPorId(contaEnokId);
         assertThat(contaEnok.saldo(), equalTo("600.0"));
@@ -326,7 +327,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.excluir(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir a conta."));
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
             throw e;
         }
     }
@@ -349,7 +350,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.buscarPorId(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar a conta por id."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
             throw e;
         }
     }
@@ -361,7 +362,7 @@ public class ContaBusinessTest extends GenericTest {
             contaBusiness.buscarTodas();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar as contas."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
             throw e;
         }
     }

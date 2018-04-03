@@ -2,21 +2,19 @@ package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.core.entity.Cartao;
-import br.com.accounting.core.entity.Tipo;
+import br.com.accounting.core.entity.TipoCartao;
 
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.getDoubleFormatted;
-import static br.com.accounting.core.util.Utils.getStringFromDate;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static br.com.accounting.core.util.Utils.*;
 
 public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao> {
-    private static CartaoDTOFactory cartaoDTOFactory;
+    private static CartaoDTOFactory factory;
 
-    private CartaoDTO cartaoDTO;
+    private CartaoDTO dto;
 
     private CartaoDTOFactory() {
-        cartaoDTO = new CartaoDTO();
+        dto = new CartaoDTO();
     }
 
     public static CartaoDTOFactory create() {
@@ -25,14 +23,14 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
 
     @Override
     public CartaoDTOFactory begin() {
-        cartaoDTOFactory = new CartaoDTOFactory();
-        return cartaoDTOFactory;
+        factory = new CartaoDTOFactory();
+        return factory;
     }
 
     @Override
     public CartaoDTOFactory preencherCampos(Cartao cartao) {
         if (cartao == null) {
-            cartaoDTO = null;
+            dto = null;
             return this;
         }
         withCodigo(cartao.codigo());
@@ -47,26 +45,26 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
 
     @Override
     public CartaoDTO build() {
-        return cartaoDTO;
+        return dto;
     }
 
     public CartaoDTOFactory withCodigo(Long codigo) {
         if (codigo != null) {
-            cartaoDTO.codigo(codigo.toString());
+            dto.codigo(codigo.toString());
         }
         return this;
     }
 
     public CartaoDTOFactory withNumero(String numero) {
-        if (!isBlank(numero)) {
-            cartaoDTO.numero(numero);
+        if (!isBlankOrNull(numero)) {
+            dto.numero(numero);
         }
         return this;
     }
 
     public CartaoDTOFactory withVencimento(String vencimento) {
-        if (!isBlank(vencimento)) {
-            cartaoDTO.vencimento(vencimento);
+        if (!isBlankOrNull(vencimento)) {
+            dto.vencimento(vencimento);
         }
         return this;
     }
@@ -76,8 +74,8 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
     }
 
     public CartaoDTOFactory withDiaMelhorCompra(String diaMelhorCompra) {
-        if (!isBlank(diaMelhorCompra)) {
-            cartaoDTO.diaMelhorCompra(diaMelhorCompra);
+        if (!isBlankOrNull(diaMelhorCompra)) {
+            dto.diaMelhorCompra(diaMelhorCompra);
         }
         return this;
     }
@@ -87,31 +85,31 @@ public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao>
     }
 
     public CartaoDTOFactory withPortador(String portador) {
-        if (!isBlank(portador)) {
-            cartaoDTO.portador(portador);
+        if (!isBlankOrNull(portador)) {
+            dto.portador(portador);
         }
         return this;
     }
 
     public CartaoDTOFactory withTipo(String tipo) {
-        if (!isBlank(tipo)) {
-            cartaoDTO.tipo(tipo);
+        if (!isBlankOrNull(tipo)) {
+            dto.tipo(tipo);
         }
         return this;
     }
 
-    public CartaoDTOFactory withTipo(Tipo tipo) {
-        return withTipo(tipo.toString());
+    public CartaoDTOFactory withTipo(TipoCartao tipoCartao) {
+        return withTipo(tipoCartao.toString());
     }
 
     public CartaoDTOFactory withLimite(String limite) {
-        if (!isBlank(limite)) {
-            cartaoDTO.limite(limite);
+        if (!isBlankOrNull(limite)) {
+            dto.limite(limite);
         }
         return this;
     }
 
     public CartaoDTOFactory withLimite(Double limite) {
-        return withLimite(getDoubleFormatted(limite));
+        return withLimite(getStringFromDouble(limite));
     }
 }

@@ -18,7 +18,7 @@ public class CartaoServiceTest extends GenericTest {
             cartaoService.salvar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível salvar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível salvar."));
             throw e;
         }
     }
@@ -29,7 +29,7 @@ public class CartaoServiceTest extends GenericTest {
             cartaoService.atualizar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
             throw e;
         }
     }
@@ -40,7 +40,7 @@ public class CartaoServiceTest extends GenericTest {
             cartaoService.deletar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível deletar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível deletar."));
             throw e;
         }
     }

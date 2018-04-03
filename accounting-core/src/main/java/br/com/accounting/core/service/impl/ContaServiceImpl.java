@@ -10,32 +10,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ContaServiceImpl implements ContaService {
+public class ContaServiceImpl extends GenericAbstractService<Conta> implements ContaService {
+    private ContaRepository repository;
+
     @Autowired
-    private ContaRepository contaRepository;
-
-    @Override
-    public Long salvar(final Conta conta) throws ServiceException {
-        try {
-            setarProximoCodigo(contaRepository, conta);
-            contaRepository.salvar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível salvar a conta.";
-            throw new ServiceException(message, e);
-        }
-        return conta.codigo();
-    }
-
-    @Override
-    public void atualizar(final Conta conta) throws ServiceException {
-        try {
-            contaRepository.atualizar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível atualizar a conta.";
-            throw new ServiceException(message, e);
-        }
+    public ContaServiceImpl(ContaRepository repository) {
+        super(repository);
+        this.repository = repository;
     }
 
     @Override
@@ -54,26 +35,10 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    public void deletar(final Conta conta) throws ServiceException {
-        try {
-            contaRepository.deletar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível deletar a conta.";
-            throw new ServiceException(message, e);
-        }
-    }
-
-    @Override
-    public Conta buscarPorCodigo(final Long codigo) throws ServiceException {
-        return buscarPorCodigo(contaRepository, codigo);
-    }
-
-    @Override
     public Conta buscarPorNome(final String nome) throws ServiceException {
         try {
-            List<Conta> contas = contaRepository.buscarRegistros();
-            return contaRepository.filtrarPorNome(contas, nome);
+            List<Conta> contas = repository.buscarRegistros();
+            return repository.filtrarPorNome(contas, nome);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta.";
@@ -81,20 +46,12 @@ public class ContaServiceImpl implements ContaService {
         }
     }
 
-    @Override
-    public List<Conta> buscarTodas() throws ServiceException {
-        try {
-            List<Conta> contas = contaRepository.buscarRegistros();
-            contaRepository.ordenarPorNome(contas);
-            return contas;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar as contas.";
-            throw new ServiceException(message, e);
-        }
-    }
-
     private Double buscarSaldo(Conta conta) {
         return (conta.saldo() == null) ? 0.0 : conta.saldo();
+    }
+
+    @Override
+    public void ordenarTodas(final List<Conta> entities) {
+        repository.ordenarPorNome(entities);
     }
 }

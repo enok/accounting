@@ -20,7 +20,7 @@ public class GrupoServiceTest extends GenericTest {
             service.salvar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível salvar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível salvar."));
             throw e;
         }
     }
@@ -31,7 +31,7 @@ public class GrupoServiceTest extends GenericTest {
             service.atualizar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
             throw e;
         }
     }
@@ -42,7 +42,7 @@ public class GrupoServiceTest extends GenericTest {
             service.deletar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível deletar o grupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível deletar."));
             throw e;
         }
     }

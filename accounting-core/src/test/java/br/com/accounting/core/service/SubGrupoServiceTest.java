@@ -20,7 +20,7 @@ public class SubGrupoServiceTest extends GenericTest {
             service.salvar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível salvar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível salvar."));
             throw e;
         }
     }
@@ -31,7 +31,7 @@ public class SubGrupoServiceTest extends GenericTest {
             service.atualizar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
             throw e;
         }
     }
@@ -42,7 +42,7 @@ public class SubGrupoServiceTest extends GenericTest {
             service.deletar(null);
         }
         catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível deletar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível deletar."));
             throw e;
         }
     }

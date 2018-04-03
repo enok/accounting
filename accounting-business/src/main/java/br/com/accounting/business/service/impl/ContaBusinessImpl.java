@@ -16,74 +16,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.createDouble;
+import static br.com.accounting.core.util.Utils.getDoubleFromString;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
-public class ContaBusinessImpl implements ContaBusiness {
+public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> implements ContaBusiness {
+    private ContaService service;
+
     @Autowired
-    private ContaService contaService;
-
-    @History
-    @Override
-    public Long criar(final ContaDTO contaDTO) throws BusinessException {
-        try {
-            final List<String> erros = new ArrayList<>();
-
-            validarEntrada(contaDTO, erros, false);
-
-            Conta conta = ContaFactory
-                    .begin()
-                    .withNome(contaDTO.nome())
-                    .withDescricao(contaDTO.descricao())
-                    .withSaldo(0.0)
-                    .build();
-
-            validaRegistroDuplicado(conta);
-
-            return contaService.salvar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível criar a conta.";
-            throw new BusinessException(message, e);
-        }
+    public ContaBusinessImpl(final ContaService service) {
+        super(service, ContaDTOFactory.create());
+        this.service = service;
     }
 
     @History
     @Override
-    public void atualizar(final ContaDTO contaDTO) throws BusinessException {
+    public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
         try {
-            final List<String> erros = new ArrayList<>();
-
-            validarEntrada(contaDTO, erros, true);
-
-            Conta conta = ContaFactory
-                    .begin()
-                    .withCodigo(contaDTO.codigo())
-                    .withNome(contaDTO.nome())
-                    .withDescricao(contaDTO.descricao())
-                    .withSaldo(contaDTO.saldo())
-                    .build();
-
-            contaService.atualizar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível atualizar a conta.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @History
-    @Override
-    public void adicionarCredito(final ContaDTO contaDTO, final String credito) throws BusinessException {
-        try {
-            Conta conta = criarEntity(contaDTO);
-            Double saldo = createDouble(credito);
-            contaService.atualizarSaldo(conta, saldo);
+            Conta entity = criarEntity(dto);
+            Double saldo = getDoubleFromString(credito);
+            service.atualizarSaldo(entity, saldo);
         }
         catch (Exception e) {
             String message = "Não foi possível adicionar crédito à conta.";
@@ -93,11 +48,11 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @History
     @Override
-    public void adicionarDebito(final ContaDTO contaDTO, final String debito) throws BusinessException {
+    public void adicionarDebito(final ContaDTO dto, final String debito) throws BusinessException {
         try {
-            Conta conta = criarEntity(contaDTO);
-            Double saldo = createDouble(debito);
-            contaService.atualizarSaldo(conta, -saldo);
+            Conta entity = criarEntity(dto);
+            Double saldo = getDoubleFromString(debito);
+            service.atualizarSaldo(entity, -saldo);
         }
         catch (Exception e) {
             String message = "Não foi possível adicionar débito à conta.";
@@ -107,61 +62,22 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @History
     @Override
-    public void transferir(final ContaDTO contaOrigemDTO, final ContaDTO contaDestinoDTO, final String valor) throws BusinessException {
+    public void transferir(final ContaDTO origemDTO, final ContaDTO destinoDTO, final String valor) throws BusinessException {
         try {
-            Double saldoOrigem = Double.parseDouble(contaOrigemDTO.saldo());
+            Double saldoOrigem = Double.parseDouble(origemDTO.saldo());
             Double valorTransferencia = Double.parseDouble(valor);
 
             if (saldoOrigem < valorTransferencia) {
                 throw new InsufficientFundsException("Saldo insuficiente.");
             }
 
-            adicionarDebito(contaOrigemDTO, valor);
-            adicionarCredito(contaDestinoDTO, valor);
+            adicionarDebito(origemDTO, valor);
+            adicionarCredito(destinoDTO, valor);
         }
         catch (Exception e) {
             String message = "Não foi possível tranferir o valor entre as contas.";
             throw new BusinessException(message, e);
         }
-    }
-
-    @History
-    @Override
-    public void excluir(final ContaDTO contaDTO) throws BusinessException {
-        try {
-            Conta conta = criarEntity(contaDTO);
-            contaService.deletar(conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível excluir a conta.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @Override
-    public ContaDTO buscarPorId(final Long codigo) throws BusinessException {
-        try {
-            Conta conta = contaService.buscarPorCodigo(codigo);
-            return criarDTOEntity(ContaDTOFactory.create(), conta);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar a conta por id.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @Override
-    public List<ContaDTO> buscarTodas() throws BusinessException {
-        List<ContaDTO> contasDTO;
-        try {
-            List<Conta> contas = contaService.buscarTodas();
-            contasDTO = criarListaEntitiesDTO(ContaDTOFactory.create(), contas);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar as contas.";
-            throw new BusinessException(message, e);
-        }
-        return contasDTO;
     }
 
     @Override
@@ -185,7 +101,7 @@ public class ContaBusinessImpl implements ContaBusiness {
 
     @Override
     public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException {
-        Conta contaBuscada = contaService.buscarPorNome(conta.nome());
+        Conta contaBuscada = service.buscarPorNome(conta.nome());
 
         if (conta.equals(contaBuscada)) {
             throw new DuplicatedRegistryException("Conta duplicada.");
@@ -193,13 +109,13 @@ public class ContaBusinessImpl implements ContaBusiness {
     }
 
     @Override
-    public Conta criarEntity(final ContaDTO entity) throws ParseException {
+    public Conta criarEntity(final ContaDTO dto) throws ParseException {
         return ContaFactory
                 .begin()
-                .withCodigo(entity.codigo())
-                .withNome(entity.nome())
-                .withDescricao(entity.descricao())
-                .withSaldo(entity.saldo())
+                .withCodigo(dto.codigo())
+                .withNome(dto.nome())
+                .withDescricao(dto.descricao())
+                .withSaldo(dto.saldo())
                 .build();
     }
 }

@@ -1,8 +1,6 @@
 package br.com.accounting.business.service.impl;
 
-import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.CartaoDTO;
-import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.factory.CartaoDTOFactory;
@@ -15,110 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
-public class CartaoBusinessImpl implements CartaoBusiness {
+public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Cartao> implements CartaoBusiness {
+    private CartaoService service;
+
     @Autowired
-    private CartaoService cartaoService;
-
-    @History
-    @Override
-    public Long criar(final CartaoDTO cartaoDTO) throws BusinessException {
-        try {
-            final List<String> erros = new ArrayList<>();
-
-            validarEntrada(cartaoDTO, erros, false);
-
-            Cartao cartao = CartaoFactory
-                    .begin()
-                    .withNumero(cartaoDTO.numero())
-                    .withVencimento(cartaoDTO.vencimento())
-                    .withDiaMelhorCompra(cartaoDTO.diaMelhorCompra())
-                    .withPortador(cartaoDTO.portador())
-                    .withTipo(cartaoDTO.tipo())
-                    .withLimite(cartaoDTO.limite())
-                    .build();
-
-            validaRegistroDuplicado(cartao);
-
-            return cartaoService.salvar(cartao);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível criar o cartão.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @History
-    @Override
-    public void atualizar(final CartaoDTO cartaoDTO) throws BusinessException {
-        try {
-            final List<String> erros = new ArrayList<>();
-
-            validarEntrada(cartaoDTO, erros, true);
-
-            Cartao cartao = CartaoFactory
-                    .begin()
-                    .withCodigo(cartaoDTO.codigo())
-                    .withNumero(cartaoDTO.numero())
-                    .withVencimento(cartaoDTO.vencimento())
-                    .withDiaMelhorCompra(cartaoDTO.diaMelhorCompra())
-                    .withPortador(cartaoDTO.portador())
-                    .withTipo(cartaoDTO.tipo())
-                    .withLimite(cartaoDTO.limite())
-                    .build();
-
-            cartaoService.atualizar(cartao);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível atualizar o cartão.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @History
-    @Override
-    public void excluir(final CartaoDTO cartaoDTO) throws BusinessException {
-        try {
-            Cartao cartao = criarEntity(cartaoDTO);
-            cartaoService.deletar(cartao);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível excluir o cartão.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @Override
-    public CartaoDTO buscarPorId(final Long codigo) throws BusinessException {
-        try {
-            Cartao cartao = cartaoService.buscarPorCodigo(codigo);
-            return criarDTOEntity(CartaoDTOFactory.create(), cartao);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar o cartão por id.";
-            throw new BusinessException(message, e);
-        }
-    }
-
-    @Override
-    public List<CartaoDTO> buscarTodos() throws BusinessException {
-        List<CartaoDTO> cartoesDTO;
-        try {
-            List<Cartao> cartoes = cartaoService.buscarTodos();
-            cartoesDTO = criarListaEntitiesDTO(CartaoDTOFactory.create(), cartoes);
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar os cartões.";
-            throw new BusinessException(message, e);
-        }
-
-        return cartoesDTO;
+    public CartaoBusinessImpl(final CartaoService service) {
+        super(service, CartaoDTOFactory.create());
+        this.service = service;
     }
 
     @Override
@@ -154,7 +61,7 @@ public class CartaoBusinessImpl implements CartaoBusiness {
 
     @Override
     public void validaRegistroDuplicado(final Cartao entity) throws ServiceException, DuplicatedRegistryException {
-        Cartao entityBuscado = cartaoService.buscarPorNumero(entity.numero());
+        Cartao entityBuscado = service.buscarPorNumero(entity.numero());
 
         if (entity.equals(entityBuscado)) {
             throw new DuplicatedRegistryException("Cartão duplicado.");
@@ -162,16 +69,16 @@ public class CartaoBusinessImpl implements CartaoBusiness {
     }
 
     @Override
-    public Cartao criarEntity(CartaoDTO entity) throws ParseException {
+    public Cartao criarEntity(CartaoDTO dto) throws ParseException {
         return CartaoFactory
                 .begin()
-                .withCodigo(entity.codigo())
-                .withNumero(entity.numero())
-                .withVencimento(entity.vencimento())
-                .withDiaMelhorCompra(entity.diaMelhorCompra())
-                .withPortador(entity.portador())
-                .withTipo(entity.tipo())
-                .withLimite(entity.limite())
+                .withCodigo(dto.codigo())
+                .withNumero(dto.numero())
+                .withVencimento(dto.vencimento())
+                .withDiaMelhorCompra(dto.diaMelhorCompra())
+                .withPortador(dto.portador())
+                .withTipo(dto.tipo())
+                .withLimite(dto.limite())
                 .build();
     }
 }

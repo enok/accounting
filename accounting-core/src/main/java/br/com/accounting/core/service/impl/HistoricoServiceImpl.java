@@ -14,11 +14,10 @@ import java.util.Map;
 @Service
 public class HistoricoServiceImpl implements HistoricoService {
     @Autowired
-    private HistoricoRepository historicoRepository;
+    private HistoricoRepository repository;
 
     @Override
     public Long salvar(final String metodo, final Map<String, Object> parametros) throws ServiceException {
-
         Historico historico;
         try {
             historico = HistoricoFactory
@@ -26,20 +25,19 @@ public class HistoricoServiceImpl implements HistoricoService {
                     .withMetodo(metodo)
                     .withParametros(parametros)
                     .build();
-            setaProximoCodigo(historico);
-            historicoRepository.salvar(historico);
+            setarProximoCodigo(historico);
+            repository.salvar(historico);
         }
         catch (Exception e) {
             String message = "Não foi possível salvar o histórico.";
             throw new ServiceException(message, e);
         }
-
         return historico.codigo();
     }
 
-    private void setaProximoCodigo(Historico historico) throws RepositoryException {
-        Long proximoCodigo = historicoRepository.proximoCodigo();
-        historicoRepository.incrementarCodigo(proximoCodigo);
-        historico.codigo(proximoCodigo);
+    private void setarProximoCodigo(final Historico entity) throws RepositoryException {
+        Long proximoCodigo = repository.proximoCodigo();
+        repository.incrementarCodigo(proximoCodigo);
+        entity.codigo(proximoCodigo);
     }
 }

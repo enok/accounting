@@ -4,64 +4,61 @@ import br.com.accounting.core.entity.Conta;
 
 import java.text.ParseException;
 
-import static br.com.accounting.core.util.Utils.createDouble;
-import static br.com.accounting.core.util.Utils.isBlank;
+import static br.com.accounting.core.util.Utils.getDoubleFromString;
+import static br.com.accounting.core.util.Utils.isBlankOrNull;
 
 public final class ContaFactory {
-    private static ContaFactory contaFactory;
-    private Conta conta;
+    private static ContaFactory factory;
+    private Conta entity;
 
     private ContaFactory() {
-        conta = new Conta();
+        entity = new Conta();
     }
 
     public static ContaFactory begin() {
-        contaFactory = new ContaFactory();
-        return contaFactory;
+        factory = new ContaFactory();
+        return factory;
+    }
+
+    public Conta build() {
+        if (entity.saldo() == null) {
+            entity.saldo(0.0);
+        }
+        return entity;
     }
 
     public ContaFactory withCodigo(String codigo) {
-        if (isBlank(codigo)) {
-            conta.codigo(0L);
-        }
-        else {
-            conta.codigo(Long.parseLong(codigo));
+        if (!isBlankOrNull(codigo)) {
+            entity.codigo(Long.parseLong(codigo));
         }
         return this;
     }
 
     public ContaFactory withNome(String nome) {
-        if (!isBlank(nome)) {
-            conta.nome(nome);
+        if (!isBlankOrNull(nome)) {
+            entity.nome(nome);
         }
         return this;
     }
 
     public ContaFactory withDescricao(String descricao) {
-        if (!isBlank(descricao)) {
-            conta.descricao(descricao);
+        if (!isBlankOrNull(descricao)) {
+            entity.descricao(descricao);
         }
         return this;
     }
 
     public ContaFactory withSaldo(Double saldo) {
         if (saldo != null) {
-            conta.saldo(saldo);
+            entity.saldo(saldo);
         }
         return this;
     }
 
     public ContaFactory withSaldo(String saldo) throws ParseException {
-        if (isBlank(saldo)) {
-            conta.saldo(0.0);
-        }
-        else {
-            conta.saldo(createDouble(saldo));
+        if (!isBlankOrNull(saldo)) {
+            withSaldo(getDoubleFromString(saldo));
         }
         return this;
-    }
-
-    public Conta build() {
-        return conta;
     }
 }

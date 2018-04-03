@@ -3,15 +3,15 @@ package br.com.accounting.business.factory;
 import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.core.entity.SubGrupo;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static br.com.accounting.core.util.Utils.isBlankOrNull;
 
 public final class SubGrupoDTOFactory extends GenericDTOFactory<SubGrupoDTO, SubGrupo> {
-    private static SubGrupoDTOFactory subGrupoDTOFactory;
+    private static SubGrupoDTOFactory factory;
 
-    private SubGrupoDTO subGrupoDTO;
+    private SubGrupoDTO dto;
 
     private SubGrupoDTOFactory() {
-        subGrupoDTO = new SubGrupoDTO();
+        dto = new SubGrupoDTO();
     }
 
     public static SubGrupoDTOFactory create() {
@@ -20,14 +20,14 @@ public final class SubGrupoDTOFactory extends GenericDTOFactory<SubGrupoDTO, Sub
 
     @Override
     public GenericDTOFactory begin() {
-        subGrupoDTOFactory = new SubGrupoDTOFactory();
-        return subGrupoDTOFactory;
+        factory = new SubGrupoDTOFactory();
+        return factory;
     }
 
     @Override
     public GenericDTOFactory preencherCampos(SubGrupo entity) {
         if (entity == null) {
-            subGrupoDTO = null;
+            dto = null;
             return this;
         }
         withCodigo(entity.codigo());
@@ -38,26 +38,26 @@ public final class SubGrupoDTOFactory extends GenericDTOFactory<SubGrupoDTO, Sub
 
     @Override
     public SubGrupoDTO build() {
-        return subGrupoDTO;
+        return dto;
     }
 
     public SubGrupoDTOFactory withCodigo(Long codigo) {
         if (codigo != null) {
-            subGrupoDTO.codigo(codigo.toString());
+            dto.codigo(codigo.toString());
         }
         return this;
     }
 
     public SubGrupoDTOFactory withNome(String nome) {
-        if (!isBlank(nome)) {
-            subGrupoDTO.nome(nome);
+        if (!isBlankOrNull(nome)) {
+            dto.nome(nome);
         }
         return this;
     }
 
     public SubGrupoDTOFactory withDescricao(String descricao) {
-        if (!isBlank(descricao)) {
-            subGrupoDTO.descricao(descricao);
+        if (!isBlankOrNull(descricao)) {
+            dto.descricao(descricao);
         }
         return this;
     }

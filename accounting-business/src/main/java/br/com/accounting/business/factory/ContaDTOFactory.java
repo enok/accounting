@@ -3,15 +3,15 @@ package br.com.accounting.business.factory;
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.core.entity.Conta;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static br.com.accounting.core.util.Utils.isBlankOrNull;
 
 public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
-    private static ContaDTOFactory contaDTOFactory;
+    private static ContaDTOFactory factory;
 
-    private ContaDTO contaDTO;
+    private ContaDTO dto;
 
     private ContaDTOFactory() {
-        contaDTO = new ContaDTO();
+        dto = new ContaDTO();
     }
 
     public static ContaDTOFactory create() {
@@ -20,14 +20,14 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
 
     @Override
     public ContaDTOFactory begin() {
-        contaDTOFactory = new ContaDTOFactory();
-        return contaDTOFactory;
+        factory = new ContaDTOFactory();
+        return factory;
     }
 
     @Override
     public ContaDTOFactory preencherCampos(Conta conta) {
         if (conta == null) {
-            contaDTO = null;
+            dto = null;
             return this;
         }
         withCodigo(conta.codigo());
@@ -39,33 +39,33 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
 
     @Override
     public ContaDTO build() {
-        return contaDTO;
+        return dto;
     }
 
     public ContaDTOFactory withCodigo(Long codigo) {
         if (codigo != null) {
-            contaDTO.codigo(codigo.toString());
+            dto.codigo(codigo.toString());
         }
         return this;
     }
 
     public ContaDTOFactory withNome(String nome) {
-        if (!isBlank(nome)) {
-            contaDTO.nome(nome);
+        if (!isBlankOrNull(nome)) {
+            dto.nome(nome);
         }
         return this;
     }
 
     public ContaDTOFactory withDescricao(String descricao) {
-        if (!isBlank(descricao)) {
-            contaDTO.descricao(descricao);
+        if (!isBlankOrNull(descricao)) {
+            dto.descricao(descricao);
         }
         return this;
     }
 
     public ContaDTOFactory withSaldo(Double saldo) {
         if (saldo != null) {
-            contaDTO.saldo(saldo.toString());
+            dto.saldo(saldo.toString());
         }
         return this;
     }

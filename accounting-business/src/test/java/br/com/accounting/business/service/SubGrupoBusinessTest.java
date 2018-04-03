@@ -26,7 +26,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             criarSubGrupoAluguel();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
             throw e;
         }
     }
@@ -38,7 +38,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.criar(subGrupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -55,7 +55,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.criar(subGrupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -72,7 +72,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.criar(subGrupoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -124,7 +124,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -145,7 +145,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -166,7 +166,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -225,7 +225,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.excluir(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir o subGrupo."));
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
             throw e;
         }
     }
@@ -248,7 +248,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.buscarPorId(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar o subGrupo por id."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
             throw e;
         }
     }
@@ -258,10 +258,10 @@ public class SubGrupoBusinessTest extends GenericTest {
     public void buscarTodosException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            business.buscarTodos();
+            business.buscarTodas();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os subGrupos."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
             throw e;
         }
     }
@@ -271,7 +271,7 @@ public class SubGrupoBusinessTest extends GenericTest {
         criarSubGrupoAluguel();
         criarSubGrupoInternet();
 
-        List<SubGrupoDTO> entities = business.buscarTodos();
+        List<SubGrupoDTO> entities = business.buscarTodas();
         assertThat(entities.size(), equalTo(2));
 
         assertSubGrupoAluguel(entities.get(0));

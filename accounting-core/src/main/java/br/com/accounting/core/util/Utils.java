@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 public final class Utils {
     public static final String SEPARADOR = ";";
     public static final Locale LOCALE = new Locale("pt", "BR");
@@ -28,16 +30,16 @@ public final class Utils {
     private Utils() {
     }
 
-    public static boolean isBlank(final String value) {
-        return StringUtils.isBlank(value) || value.equals("null");
+    public static boolean isBlankOrNull(final String value) {
+        return isBlank(value) || value.equals("null");
     }
 
-    public static String removeUltimo(final StringBuilder builder, final String value) {
+    public static String removeLast(final StringBuilder builder, final String value) {
         int index = builder.lastIndexOf(value);
         return builder.substring(0, index);
     }
 
-    public static Double createDouble(final String value) throws ParseException {
+    public static Double getDoubleFromString(final String value) throws ParseException {
         try {
             return Double.parseDouble(value.replaceAll(",", "."));
         }
@@ -46,16 +48,31 @@ public final class Utils {
         }
     }
 
-    public static String getDoubleFormatted(Double value) {
-        return decimalFormat.format(value);
-    }
-
     public static LocalDate getDateFromString(final String date) {
         return LocalDate.parse(date, DATE_FORMATTER);
     }
 
+    public static Boolean getBooleanFromString(final String value) {
+        if (isBlank(value)) {
+            return false;
+        }
+        return value.equals("S");
+    }
+
+    public static String getStringFromDouble(final Double value) {
+        return decimalFormat.format(value);
+    }
+
     public static String getStringFromDate(final LocalDate localDate) {
         return localDate.format(DATE_FORMATTER);
+    }
+
+    public static String getStringFromCurrentDate() {
+        return LocalDate.now().format(DATE_FORMATTER);
+    }
+
+    public static String getStringFromBoolean(final Boolean value) {
+        return value ? "S" : "N";
     }
 
 //    public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
@@ -65,10 +82,6 @@ public final class Utils {
 //        return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
 //    }
 
-//    public static String getStringFromCurrentDate() {
-//        return LocalDate.now().format(DATE_FORMATTER);
-//    }
-//
 //    public static String getNextMonth(String date) {
 //        LocalDate localDate = getDateFromString(date);
 //        localDate = localDate.plusMonths(1L);

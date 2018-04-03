@@ -26,7 +26,7 @@ public class CartaoBusinessTest extends GenericTest {
             criarCartaoFisicoEnok();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
             throw e;
         }
     }
@@ -39,7 +39,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.criar(cartaoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -57,7 +57,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.criar(cartaoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -75,7 +75,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.criar(cartaoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -93,7 +93,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.criar(cartaoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -111,7 +111,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.criar(cartaoDTO);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
 
             MissingFieldException e1 = (MissingFieldException) e.getCause();
             List<String> erros = e1.getErros();
@@ -130,7 +130,7 @@ public class CartaoBusinessTest extends GenericTest {
         }
         catch (BusinessException e) {
             IllegalArgumentException e1 = (IllegalArgumentException) e.getCause();
-            assertThat(e1.getMessage(), equalTo("No enum constant br.com.accounting.core.entity.Tipo.OUTRO"));
+            assertThat(e1.getMessage(), equalTo("No enum constant br.com.accounting.core.entity.TipoCartao.OUTRO"));
             throw e;
         }
     }
@@ -403,7 +403,7 @@ public class CartaoBusinessTest extends GenericTest {
             cartaoBusiness.excluir(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir o cartão."));
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
             throw e;
         }
     }
@@ -427,7 +427,7 @@ public class CartaoBusinessTest extends GenericTest {
             assertThat(cartaoDTO, nullValue());
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar o cartão por id."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
             throw e;
         }
     }
@@ -436,10 +436,10 @@ public class CartaoBusinessTest extends GenericTest {
     public void buscarCartoesException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            cartaoBusiness.buscarTodos();
+            cartaoBusiness.buscarTodas();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os cartões."));
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
             throw e;
         }
     }
@@ -449,7 +449,7 @@ public class CartaoBusinessTest extends GenericTest {
         criarCartaoFisicoEnok();
         criarCartaoFisicoCarol();
 
-        List<CartaoDTO> cartoesDTO = cartaoBusiness.buscarTodos();
+        List<CartaoDTO> cartoesDTO = cartaoBusiness.buscarTodas();
         assertThat(cartoesDTO.size(), equalTo(2));
 
         assertCartaoFisicoCarol(cartoesDTO.get(0));

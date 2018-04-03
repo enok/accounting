@@ -6,7 +6,7 @@ import br.com.accounting.core.entity.SubGrupo;
 
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static br.com.accounting.core.util.Utils.isBlankOrNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public class GrupoDTOFactory extends GenericDTOFactory<GrupoDTO, Grupo> {
@@ -54,14 +54,14 @@ public class GrupoDTOFactory extends GenericDTOFactory<GrupoDTO, Grupo> {
     }
 
     public GrupoDTOFactory withNome(String nome) {
-        if (!isBlank(nome)) {
+        if (!isBlankOrNull(nome)) {
             dto.nome(nome);
         }
         return this;
     }
 
     public GrupoDTOFactory withDescricao(String descricao) {
-        if (!isBlank(descricao)) {
+        if (!isBlankOrNull(descricao)) {
             dto.descricao(descricao);
         }
         return this;
@@ -77,7 +77,7 @@ public class GrupoDTOFactory extends GenericDTOFactory<GrupoDTO, Grupo> {
     }
 
     public GrupoDTOFactory withSubGrupo(String subGrupo) {
-        if (!isBlank(subGrupo)) {
+        if (!isBlankOrNull(subGrupo)) {
             dto.addSubGrupo(subGrupo);
         }
         return this;
