@@ -2,10 +2,7 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.business.exception.InsufficientFundsException;
-import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
@@ -16,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.accounting.core.util.Utils.getDoubleFromString;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -36,7 +35,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
         try {
-            Conta entity = criarEntity(dto);
+            Conta entity = criarEntities(dto).get(0);
             Double saldo = getDoubleFromString(credito);
             service.atualizarSaldo(entity, saldo);
         }
@@ -50,7 +49,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarDebito(final ContaDTO dto, final String debito) throws BusinessException {
         try {
-            Conta entity = criarEntity(dto);
+            Conta entity = criarEntities(dto).get(0);
             Double saldo = getDoubleFromString(debito);
             service.atualizarSaldo(entity, -saldo);
         }
@@ -81,14 +80,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validarEntrada(final ContaDTO dto, final List<String> erros, final boolean atualizacao) throws MissingFieldException {
-        String msg = "O campo %s é obrigatório.";
-
-        if (atualizacao) {
-            if (isBlank(dto.codigo())) {
-                erros.add(format(msg, "código"));
-            }
-        }
+    public void validarEntrada(final ContaDTO dto, final List<String> erros) throws MissingFieldException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
@@ -98,8 +90,17 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         if (isBlank(dto.cumulativo())) {
             erros.add(format(msg, "cumulativo"));
         }
-
         conferirErros(erros);
+    }
+
+    @Override
+    public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws MissingFieldException, UpdateException {
+        conferirCodigo(dto, erros);
+        conferirErros(erros);
+
+        List<String> errosUpdate = new ArrayList<>();
+        conferirCodigoAlterado(dto, entity, errosUpdate);
+        conferirErrosUpdate(errosUpdate);
     }
 
     @Override
@@ -112,14 +113,14 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public Conta criarEntity(final ContaDTO dto) throws ParseException {
-        return ContaFactory
+    public List<Conta> criarEntities(final ContaDTO dto) throws ParseException {
+        return asList(ContaFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
                 .withSaldo(dto.saldo())
                 .withCumulativo(dto.cumulativo())
-                .build();
+                .build());
     }
 }

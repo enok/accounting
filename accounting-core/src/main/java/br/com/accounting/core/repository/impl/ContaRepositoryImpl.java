@@ -26,8 +26,8 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     private String diretorio;
 
     @Override
-    public Conta filtrarPorNome(final List<Conta> contas, final String nome) {
-        List<Conta> contasBuscadas = contas
+    public Conta filtrarPorNome(final List<Conta> entities, final String nome) {
+        List<Conta> contasBuscadas = entities
                 .stream()
                 .filter(c -> (c.nome().equals(nome)))
                 .collect(Collectors.toList());
@@ -38,8 +38,8 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
-    public void ordenarPorNome(List<Conta> contas) {
-        contas.sort(Comparator.comparing(Conta::nome));
+    public void ordenarPorNome(List<Conta> entities) {
+        entities.sort(Comparator.comparing(Conta::nome));
     }
 
     @Override

@@ -6,7 +6,7 @@ public final class ContaDTOMockFactory {
     private ContaDTOMockFactory() {
     }
 
-    public static ContaDTO contaDTOSemNomeDescricaoCumulativo() {
+    public static ContaDTO contaDTOSemCamposObrigatorios() {
         return new ContaDTO();
     }
 

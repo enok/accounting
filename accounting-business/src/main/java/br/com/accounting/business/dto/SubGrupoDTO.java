@@ -7,8 +7,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class SubGrupoDTO {
+public class SubGrupoDTO implements EntityDTO {
     private String codigo;
     private String nome;
     private String descricao;
+
+    @Override
+    public String getCodigo() {
+        return codigo;
+    }
 }

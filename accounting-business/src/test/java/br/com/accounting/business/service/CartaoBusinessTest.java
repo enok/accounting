@@ -3,7 +3,6 @@ package br.com.accounting.business.service;
 import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.business.exception.MissingFieldException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CartaoBusinessTest extends GenericTest {
     @Autowired
-    private CartaoBusiness cartaoBusiness;
+    private CartaoBusiness business;
 
     @Test(expected = BusinessException.class)
     public void criarUmCartaoSemDiretorio() throws IOException, BusinessException {
@@ -26,107 +25,70 @@ public class CartaoBusinessTest extends GenericTest {
             criarCartaoFisicoEnok();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-            throw e;
+            assertCreation(e);
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemNumero() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemNumero();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemNumero();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo número é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "número");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemVencimento() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemVencimento();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemVencimento();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo vencimento é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "vencimento");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemDiaMelhorCompra() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemDiaMelhorCompra();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemDiaMelhorCompra();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo diaMelhorCompra é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "diaMelhorCompra");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemPortador() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemPortador();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemPortador();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo portador é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "portador");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemTipo() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemTipo();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemTipo();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo tipo é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "tipo");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoComTipoErrado() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660TipoErrado();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660TipoErrado();
+            business.criar(dto);
         }
         catch (BusinessException e) {
             IllegalArgumentException e1 = (IllegalArgumentException) e.getCause();
@@ -137,73 +99,56 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test(expected = BusinessException.class)
     public void criarUmaCartaoSemLimite() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemLimite();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemLimite();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo limite é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "limite");
         }
     }
 
     @Test(expected = BusinessException.class)
-    public void criarUmaCartaoSemNumeroVencimentoDiaMelhorCompraPortadorETipo() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660SemNumeroVencimentoDiaMelhorCompraPortadorTipoELimite();
-
+    public void criarUmaCartaoSemCamposObrigatorios() throws BusinessException {
         try {
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660SemCamposObrigatorios();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-
-            assertThat(erros.size(), equalTo(6));
-            assertThat(erros.get(0), equalTo("O campo número é obrigatório."));
-            assertThat(erros.get(1), equalTo("O campo vencimento é obrigatório."));
-            assertThat(erros.get(2), equalTo("O campo diaMelhorCompra é obrigatório."));
-            assertThat(erros.get(3), equalTo("O campo portador é obrigatório."));
-            assertThat(erros.get(4), equalTo("O campo tipo é obrigatório."));
-            assertThat(erros.get(5), equalTo("O campo limite é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "número", "vencimento", "diaMelhorCompra", "portador", "tipo", "limite");
         }
     }
 
     @Test
     public void criarUmCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        Long codigo = criarCartaoFisicoEnok();
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
     }
 
     @Test
     public void criarUmCartaoVirtual() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoVirtual7339();
+        CartaoDTO dto = criarCartaoVirtual7339();
 
-        assertThat(cartaoDTO.numero(), equalTo("7339"));
-        assertThat(cartaoDTO.vencimento(), equalTo("27/03/2018"));
-        assertThat(cartaoDTO.diaMelhorCompra(), equalTo("17/04/2018"));
-        assertThat(cartaoDTO.portador(), equalTo("Enok"));
-        assertThat(cartaoDTO.tipo(), equalTo("DIGITAL"));
-        assertThat(cartaoDTO.limite(), equalTo("2.000,00"));
+        assertThat(dto.numero(), equalTo("7339"));
+        assertThat(dto.vencimento(), equalTo("27/03/2018"));
+        assertThat(dto.diaMelhorCompra(), equalTo("17/04/2018"));
+        assertThat(dto.portador(), equalTo("Enok"));
+        assertThat(dto.tipo(), equalTo("DIGITAL"));
+        assertThat(dto.limite(), equalTo("2.000,00"));
 
-        Long codigoCartao = cartaoBusiness.criar(cartaoDTO);
-        assertTrue(codigoCartao >= 0);
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo = codigos.get(0);
+        assertTrue(codigo >= 0);
     }
 
     @Test(expected = BusinessException.class)
     public void criarDoisCartoesComNumerosIguais() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660();
-
         try {
-            cartaoBusiness.criar(cartaoDTO);
-            cartaoBusiness.criar(cartaoDTO);
+            CartaoDTO dto = criarCartaoFisico7660();
+            business.criar(dto);
+            business.criar(dto);
         }
         catch (BusinessException e) {
             DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
@@ -214,86 +159,124 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void criarDoisCartaos() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo1 = criarCartaoFisicoEnok();
 
-        CartaoDTO cartao2DTO = criarCartaoFisico0744();
-        Long codigoCartao2 = cartaoBusiness.criar(cartao2DTO);
-        assertTrue(codigoCartao2 >= 0);
+        CartaoDTO dto = criarCartaoFisico0744();
 
-        assertThat(codigoCartao, not(equalTo(codigoCartao2)));
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo2 = codigos.get(0);
+        assertTrue(codigo2 >= 0);
+
+        assertThat(codigo1, not(equalTo(codigo2)));
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemCodigo() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.codigo(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.codigo(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "código");
+        }
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemNumero() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.numero(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.numero(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "número");
+        }
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemVencimento() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.vencimento(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.vencimento(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "vencimento");
+        }
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemDiaMelhorCompra() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.diaMelhorCompra(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.diaMelhorCompra(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "diaMelhorCompra");
+        }
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemPortador() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.portador(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.portador(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "portador");
+        }
     }
 
     @Test(expected = BusinessException.class)
     public void alterarSemTipo() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
-        cartaoDTOBuscado.tipo(null);
-
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
+            cartaoDTOBuscado.tipo(null);
+            business.atualizar(cartaoDTOBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "tipo");
+        }
     }
+
+    @Test(expected = BusinessException.class)
+    public void alterarCodigo() throws BusinessException {
+        try {
+            Long codigo = criarCartaoFisicoEnok();
+            String codigoAnterior = String.valueOf(codigo);
+            String codigoNovo = "10";
+            CartaoDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
+            dtoBuscado.codigo(codigoNovo);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "código");
+        }
+    }
+
 
     @Test
     public void alterarNumeroDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.numero("0774");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("0774"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
@@ -304,15 +287,15 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void alterarVencimentoDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.vencimento("27/04/2018");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("7660"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/04/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
@@ -323,15 +306,15 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void alterarDiaMelhorCompraDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.diaMelhorCompra("17/05/2018");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("7660"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/05/2018"));
@@ -342,15 +325,15 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void alterarPortadorDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.portador("Carol");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("7660"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
@@ -361,15 +344,15 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void alterarTipoDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.tipo("DIGITAL");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("7660"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
@@ -380,15 +363,15 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void alterarLimiteDoCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
+        Long codigo = criarCartaoFisicoEnok();
 
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
 
         cartaoDTOBuscado.limite("2.100,00");
-        cartaoBusiness.atualizar(cartaoDTOBuscado);
+        business.atualizar(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado.numero(), equalTo("7660"));
         assertThat(cartaoDTOBuscado.vencimento(), equalTo("27/03/2018"));
         assertThat(cartaoDTOBuscado.diaMelhorCompra(), equalTo("17/04/2018"));
@@ -400,7 +383,7 @@ public class CartaoBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void excluirUmCartaoException() throws BusinessException {
         try {
-            cartaoBusiness.excluir(null);
+            business.excluir(null);
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
@@ -410,12 +393,12 @@ public class CartaoBusinessTest extends GenericTest {
 
     @Test
     public void excluirUmCartao() throws BusinessException {
-        Long codigoCartao = criarCartaoFisicoEnok();
-        CartaoDTO cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        Long codigo = criarCartaoFisicoEnok();
+        CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
 
-        cartaoBusiness.excluir(cartaoDTOBuscado);
+        business.excluir(cartaoDTOBuscado);
 
-        cartaoDTOBuscado = cartaoBusiness.buscarPorId(codigoCartao);
+        cartaoDTOBuscado = business.buscarPorId(codigo);
         assertThat(cartaoDTOBuscado, nullValue());
     }
 
@@ -423,8 +406,8 @@ public class CartaoBusinessTest extends GenericTest {
     public void buscarCartaoPorIdException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            CartaoDTO cartaoDTO = cartaoBusiness.buscarPorId(null);
-            assertThat(cartaoDTO, nullValue());
+            CartaoDTO dto = business.buscarPorId(null);
+            assertThat(dto, nullValue());
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
@@ -436,7 +419,7 @@ public class CartaoBusinessTest extends GenericTest {
     public void buscarCartoesException() throws IOException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            cartaoBusiness.buscarTodas();
+            business.buscarTodas();
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
@@ -449,7 +432,7 @@ public class CartaoBusinessTest extends GenericTest {
         criarCartaoFisicoEnok();
         criarCartaoFisicoCarol();
 
-        List<CartaoDTO> cartoesDTO = cartaoBusiness.buscarTodas();
+        List<CartaoDTO> cartoesDTO = business.buscarTodas();
         assertThat(cartoesDTO.size(), equalTo(2));
 
         assertCartaoFisicoCarol(cartoesDTO.get(0));
@@ -457,17 +440,21 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     private Long criarCartaoFisicoEnok() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico7660();
-        Long codigoCartao = cartaoBusiness.criar(cartaoDTO);
-        assertTrue(codigoCartao >= 0);
-        return codigoCartao;
+        CartaoDTO dto = criarCartaoFisico7660();
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo = codigos.get(0);
+        assertTrue(codigo >= 0);
+        return codigo;
     }
 
     private Long criarCartaoFisicoCarol() throws BusinessException {
-        CartaoDTO cartaoDTO = criarCartaoFisico0744();
-        Long codigoCartao = cartaoBusiness.criar(cartaoDTO);
-        assertTrue(codigoCartao >= 0);
-        return codigoCartao;
+        CartaoDTO dto = criarCartaoFisico0744();
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo = codigos.get(0);
+        assertTrue(codigo >= 0);
+        return codigo;
     }
 
     private void assertCartaoFisicoEnok(CartaoDTO cartaoDTOBuscado) {

@@ -5,7 +5,7 @@ import br.com.accounting.business.exception.BusinessException;
 import java.util.List;
 
 public interface GenericBusiness<D> {
-    Long criar(D dto) throws BusinessException;
+    List<Long> criar(D dto) throws BusinessException;
 
     void atualizar(D dto) throws BusinessException;
 

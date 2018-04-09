@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class GrupoDTO {
+public class GrupoDTO implements EntityDTO {
     private String codigo;
     private String nome;
     private String descricao;
@@ -21,5 +21,10 @@ public class GrupoDTO {
         if (!StringUtils.isBlank(subGrupo)) {
             this.subGrupos.add(subGrupo);
         }
+    }
+
+    @Override
+    public String getCodigo() {
+        return codigo;
     }
 }

@@ -120,7 +120,7 @@ public final class CartaoDTOMockFactory {
                 .build();
     }
 
-    public static CartaoDTO criarCartaoFisico7660SemNumeroVencimentoDiaMelhorCompraPortadorTipoELimite() {
+    public static CartaoDTO criarCartaoFisico7660SemCamposObrigatorios() {
         return new CartaoDTO();
     }
 }

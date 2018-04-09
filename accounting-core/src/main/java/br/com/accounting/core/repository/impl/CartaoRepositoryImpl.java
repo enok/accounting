@@ -23,8 +23,8 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
     private String diretorio;
 
     @Override
-    public Cartao filtrarCodigo(final List<Cartao> cartoes, final String numero) {
-        List<Cartao> cartoesFiltrados = cartoes
+    public Cartao filtrarCodigo(final List<Cartao> entities, final String numero) {
+        List<Cartao> cartoesFiltrados = entities
                 .stream()
                 .filter(c -> (c.numero().equals(numero)))
                 .collect(Collectors.toList());
@@ -35,8 +35,8 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
     }
 
     @Override
-    public void ordenarPorNumero(final List<Cartao> cartoes) {
-        cartoes.sort(Comparator.comparing(Cartao::numero));
+    public void ordenarPorNumero(final List<Cartao> entities) {
+        entities.sort(Comparator.comparing(Cartao::numero));
     }
 
     @Override

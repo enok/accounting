@@ -28,7 +28,7 @@ public final class SubGrupoDTOMockFactory {
                 .build();
     }
 
-    public static SubGrupoDTO subGrupoAluguelSemNomeDescricao() {
+    public static SubGrupoDTO subGrupoAluguelSemCamposObrigatorios() {
         return SubGrupoDTOFactory
                 .create()
                 .build();

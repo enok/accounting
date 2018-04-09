@@ -3,7 +3,6 @@ package br.com.accounting.business.service;
 import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.business.exception.MissingFieldException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,78 +27,51 @@ public class GrupoBusinessTest extends GenericTest {
             criarGrupoMoradia();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-            throw e;
+            assertCreation(e);
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarSemNome() throws BusinessException {
         try {
-            GrupoDTO grupoDTO = grupoMoradiaSemNome();
-            business.criar(grupoDTO);
+            GrupoDTO dto = grupoMoradiaSemNome();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "nome");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarSemDescricao() throws BusinessException {
         try {
-            GrupoDTO grupoDTO = grupoMoradiaSemDescricao();
-            business.criar(grupoDTO);
+            GrupoDTO dto = grupoMoradiaSemDescricao();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo descrição é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "descrição");
         }
     }
 
     @Test(expected = BusinessException.class)
     public void criarSemGrupo() throws BusinessException {
         try {
-            GrupoDTO grupoDTO = grupoMoradiaSemGrupos();
-            business.criar(grupoDTO);
+            GrupoDTO dto = grupoMoradiaSemGrupos();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo subGrupos é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "subGrupos");
         }
     }
 
     @Test(expected = BusinessException.class)
-    public void criarSemNomeDescricaoSubGrupo() throws BusinessException {
+    public void criarSemCamposObrigatorios() throws BusinessException {
         try {
-            GrupoDTO grupoDTO = grupoMoradiaSemNomeDescricaoSubGrupo();
-            business.criar(grupoDTO);
+            GrupoDTO dto = grupoMoradiaSemCamposObrigatorios();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(3));
-            assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
-            assertThat(erros.get(1), equalTo("O campo descrição é obrigatório."));
-            assertThat(erros.get(2), equalTo("O campo subGrupos é obrigatório."));
-            throw e;
+            assertCreationAndMandatoryFields(e, "nome", "descrição", "subGrupos");
         }
     }
 
@@ -137,20 +109,12 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws BusinessException {
         try {
             Long codigo = criarGrupoMoradia();
-
             GrupoDTO dto = business.buscarPorId(codigo);
             dto.codigo("");
-
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo código é obrigatório."));
-            throw e;
+            assertUpdateAndMandatoryFields(e, "código");
         }
     }
 
@@ -158,20 +122,12 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemNome() throws BusinessException {
         try {
             Long codigo = criarGrupoMoradia();
-
             GrupoDTO dto = business.buscarPorId(codigo);
             dto.nome("");
-
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
-
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo nome é obrigatório."));
-            throw e;
+            assertUpdateAndMandatoryFields(e, "nome");
         }
     }
 
@@ -179,20 +135,28 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws BusinessException {
         try {
             Long codigo = criarGrupoMoradia();
-
             GrupoDTO dto = business.buscarPorId(codigo);
             dto.descricao("");
-
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
+            assertUpdateAndMandatoryFields(e, "descrição");
+        }
+    }
 
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
-            List<String> erros = e1.getErros();
-            assertThat(erros.size(), equalTo(1));
-            assertThat(erros.get(0), equalTo("O campo descrição é obrigatório."));
-            throw e;
+    @Test(expected = BusinessException.class)
+    public void alterarCodigo() throws BusinessException {
+        try {
+            Long codigo = criarGrupoMoradia();
+            String codigoAnterior = String.valueOf(codigo);
+            String codigoNovo = "10";
+            GrupoDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
+            dtoBuscado.codigo(codigoNovo);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "código");
         }
     }
 
@@ -302,14 +266,18 @@ public class GrupoBusinessTest extends GenericTest {
 
     private Long criarGrupoMoradia() throws BusinessException {
         GrupoDTO dto = grupoMoradia();
-        Long codigo = business.criar(dto);
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo = codigos.get(0);
         assertTrue(codigo >= 0);
         return codigo;
     }
 
     private Long criarGrupoTransporte() throws BusinessException {
         GrupoDTO dto = grupoTransporte();
-        Long codigo = business.criar(dto);
+        List<Long> codigos = business.criar(dto);
+        assertThat(codigos.size(), equalTo(1));
+        Long codigo = codigos.get(0);
         assertTrue(codigo >= 0);
         return codigo;
     }
