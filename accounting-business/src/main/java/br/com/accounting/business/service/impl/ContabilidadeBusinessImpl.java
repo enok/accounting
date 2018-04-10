@@ -12,6 +12,7 @@ import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import static br.com.accounting.core.util.Utils.getBooleanFromString;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<ContabilidadeDTO, Contabilidade> implements ContabilidadeBusiness {
@@ -150,7 +150,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             erros.add(format(msg, "parcela"));
         }
 
-        if (ehParcelado(dto) && naoEhPai(dto)) {
+        if (ehParcelado(dto) && (entity != null) && naoEhPai(entity)) {
             if (isBlank(dto.codigoPai())) {
                 erros.add(format(msg, "códigoPai"));
             }
@@ -158,20 +158,50 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         conferirErros(erros);
 
         List<String> errosUpdate = new ArrayList<>();
+
         conferirCodigoAlterado(dto, entity, errosUpdate);
+        conferirParcelaAlterada(dto, entity, errosUpdate);
+        conferirCodigoPaiAlterado(dto, entity, errosUpdate);
+
         conferirErrosUpdate(errosUpdate);
     }
 
-    private boolean naoEhPai(ContabilidadeDTO dto) {
-        return temParcela(dto) && naoEhPrimeiraParcela(dto);
+    private void conferirParcelaAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
+        if ((entity != null) && entity.parcelado() && parcelasDiferentes(dto, entity)) {
+            errosUpdate.add("O campo parcela não pode ser alterado.");
+        }
     }
 
-    private boolean temParcela(ContabilidadeDTO dto) {
-        return !isBlank(dto.parcela());
+    private void conferirCodigoPaiAlterado(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
+        if ((entity != null) && codigosPaiDiferentes(dto, entity)) {
+            errosUpdate.add("O campo códigoPai não pode ser alterado.");
+        }
     }
 
-    private boolean naoEhPrimeiraParcela(ContabilidadeDTO dto) {
-        return !dto.parcela().equals("1");
+    private boolean parcelasDiferentes(ContabilidadeDTO dto, Contabilidade entity) {
+        return !dto.parcela().equals(entity.parcelamento().parcela().toString());
+    }
+
+    private boolean codigosPaiDiferentes(ContabilidadeDTO dto, Contabilidade entity) {
+        if ((dto.codigoPai() == null) && (entity.codigoPai() == null)) {
+            return false;
+        }
+        if ((dto.codigoPai() == null) || (entity.codigoPai() == null)) {
+            return true;
+        }
+        return !dto.codigoPai().equals(entity.codigoPai().toString());
+    }
+
+    private boolean naoEhPai(Contabilidade entity) {
+        return temParcela(entity) && naoEhPrimeiraParcela(entity);
+    }
+
+    private boolean temParcela(Contabilidade entity) {
+        return entity.parcelamento().parcela() != null;
+    }
+
+    private boolean naoEhPrimeiraParcela(Contabilidade entity) {
+        return !entity.parcelamento().parcela().equals(1);
     }
 
     private boolean usouCartao(ContabilidadeDTO dto) {
@@ -196,7 +226,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @Override
     public void validaRegistroDuplicado(final Contabilidade contabilidade) {
-        // Nao sera feita validacao de registro duplicado
+        throw new InvalidStateException("Uma contabilidade não valida duplicidade de registro.");
     }
 
     @Override

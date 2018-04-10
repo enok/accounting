@@ -250,7 +250,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             String codigoAnterior = String.valueOf(codigo);
@@ -448,13 +448,12 @@ public class CartaoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private Long criarCartaoFisicoCarol() throws BusinessException {
+    private void criarCartaoFisicoCarol() throws BusinessException {
         CartaoDTO dto = criarCartaoFisico0744();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);
         assertTrue(codigo >= 0);
-        return codigo;
     }
 
     private void assertCartaoFisicoEnok(CartaoDTO cartaoDTOBuscado) {

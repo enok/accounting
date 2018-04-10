@@ -132,7 +132,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
         try {
             Long codigo = criarSubGrupoAluguel();
             String codigoAnterior = String.valueOf(codigo);

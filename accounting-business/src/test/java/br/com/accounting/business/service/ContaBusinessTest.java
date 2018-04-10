@@ -151,7 +151,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
         try {
             Long codigo = criarContaEnok();
             String codigoAnterior = String.valueOf(codigo);
@@ -442,17 +442,16 @@ public class ContaBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private ContaDTO assertContaSalario(Long codigo) throws BusinessException {
+    private void assertContaSalario(Long codigo) throws BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
-        return assertContaSalario(dtoBuscado);
+        assertContaSalario(dtoBuscado);
     }
 
-    private ContaDTO assertContaSalario(ContaDTO dto) {
+    private void assertContaSalario(ContaDTO dto) {
         assertThat(dto.nome(), equalTo("Salário"));
         assertThat(dto.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
         assertThat(dto.saldo(), equalTo("0.0"));
         assertThat(dto.cumulativo(), equalTo("N"));
-        return dto;
     }
 
     private ContaDTO assertContaEnok(Long codigo) throws BusinessException {

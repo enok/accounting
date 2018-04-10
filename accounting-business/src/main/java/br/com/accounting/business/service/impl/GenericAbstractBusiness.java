@@ -172,7 +172,7 @@ public abstract class GenericAbstractBusiness<D, E> {
 
     protected void conferirCodigoAlterado(D dto, E entity, List<String> errosUpdate) {
         if (entity == null || codigosDiferentes(((EntityDTO) dto).getCodigo(), ((Entity) entity).getCodigo())) {
-            errosUpdate.add("O código não pode ser alterado.");
+            errosUpdate.add("O campo código não pode ser alterado.");
         }
     }
 }

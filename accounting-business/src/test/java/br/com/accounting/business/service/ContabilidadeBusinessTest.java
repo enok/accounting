@@ -2,8 +2,10 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.service.impl.ContabilidadeBusinessImpl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +28,17 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
         catch (BusinessException e) {
             assertCreation(e);
+        }
+    }
+
+    @Test(expected = InvalidStateException.class)
+    public void criarUmaContabilidadeNaoValidaRegistroDuplicado() {
+        try {
+            ((ContabilidadeBusinessImpl) business).validaRegistroDuplicado(null);
+        }
+        catch (InvalidStateException e) {
+            assertThat(e.getMessage(), equalTo("Uma contabilidade não valida duplicidade de registro."));
+            throw e;
         }
     }
 
@@ -438,7 +451,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigoAnterior = String.valueOf(codigos.get(0));
@@ -451,6 +464,70 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
         catch (BusinessException e) {
             assertUpdateNotModifiebleFields(e, "código");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDaParcelaPai() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(0));
+            String parcelaNova = "20";
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.parcela(parcelaNova);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "parcela");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDaParcelaFilho() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(1));
+            String parcelaNova = "20";
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.parcela(parcelaNova);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "parcela");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDoCodigoPaiUsandoPai() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(0));
+            String codigoPaiNovo = "20";
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.codigoPai(codigoPaiNovo);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "códigoPai");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDoCodigoPaiUsandoFilho() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(1));
+            String codigoPaiNovo = "20";
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.codigoPai(codigoPaiNovo);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "códigoPai");
         }
     }
 

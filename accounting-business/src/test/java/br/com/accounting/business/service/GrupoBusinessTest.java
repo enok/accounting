@@ -145,7 +145,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
         try {
             Long codigo = criarGrupoMoradia();
             String codigoAnterior = String.valueOf(codigo);

@@ -111,7 +111,7 @@ public abstract class GenericTest {
         assertThat(erros.size(), equalTo(campos.size()));
 
         for (int i = 0; i < campos.size(); i++) {
-            assertThat(erros.get(i), equalTo("O " + campos.get(i) + " não pode ser alterado."));
+            assertThat(erros.get(i), equalTo("O campo " + campos.get(i) + " não pode ser alterado."));
         }
 
         throw e;
