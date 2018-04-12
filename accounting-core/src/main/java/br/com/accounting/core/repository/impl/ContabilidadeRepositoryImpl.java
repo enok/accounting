@@ -1,6 +1,5 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.Cartao;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.*;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
 public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Contabilidade> implements ContabilidadeRepository {

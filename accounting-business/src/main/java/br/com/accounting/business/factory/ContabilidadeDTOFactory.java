@@ -54,6 +54,9 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
 
     @Override
     public ContabilidadeDTO build() {
+        if (dto == null) {
+            return dto;
+        }
         if (isBlank(dto.dataLancamento())) {
             dto.dataLancamento(getStringFromCurrentDate());
         }
@@ -69,7 +72,6 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
         if (isBlank(dto.parcelado())) {
             dto.parcelado(getStringFromBoolean(false));
         }
-
         return dto;
     }
 

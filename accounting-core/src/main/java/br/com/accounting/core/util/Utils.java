@@ -51,9 +51,9 @@ public final class Utils {
     }
 
     public static Boolean getBooleanFromString(final String value) {
-        if (isBlank(value)) {
-            return false;
-        }
+//        if (isBlank(value)) {
+//            return false;
+//        }
         return value.equals("S");
     }
 
@@ -65,8 +65,18 @@ public final class Utils {
         return localDate.format(DATE_FORMATTER);
     }
 
+    public static String getStringFromDateNextMonth(String date) {
+        LocalDate localDate = getDateFromString(date);
+        localDate = localDate.plusMonths(1L);
+        return getStringFromDate(localDate);
+    }
+
     public static String getStringFromCurrentDate() {
         return LocalDate.now().format(DATE_FORMATTER);
+    }
+
+    public static String getStringFromCurrentDateNextMonth() {
+        return getStringFromDateNextMonth(getStringFromCurrentDate());
     }
 
     public static String getStringFromBoolean(final Boolean value) {
@@ -80,10 +90,5 @@ public final class Utils {
 //        return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
 //    }
 
-//    public static String getNextMonth(String date) {
-//        LocalDate localDate = getDateFromString(date);
-//        localDate = localDate.plusMonths(1L);
-//        return getStringFromDate(localDate);
-//    }
 
 }

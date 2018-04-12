@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import static br.com.accounting.business.factory.ContabilidadeDTOMockFactory.*;
+import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static br.com.accounting.core.util.Utils.getStringFromCurrentDateNextMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -221,6 +224,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
+    @Test
+    public void criarUmaContabilidadeNaoParcelada() throws BusinessException {
+        List<Long> codigos = criarContabilidadeNaoParcelada();
+
+        Long codigo = codigos.get(0);
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertContabilidadeNaoParcelada(dto);
+    }
+
     @Test(expected = BusinessException.class)
     public void alterarSemCodigo() throws BusinessException {
         try {
@@ -244,19 +257,6 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
         catch (BusinessException e) {
             assertUpdateAndMandatoryFields(e, "dataLançamento");
-        }
-    }
-
-    @Test(expected = BusinessException.class)
-    public void alterarSemDataAtualizacao() throws BusinessException {
-        try {
-            List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
-            dtoBuscado.dataAtualizacao(null);
-            business.atualizar(dtoBuscado);
-        }
-        catch (BusinessException e) {
-            assertUpdateAndMandatoryFields(e, "dataAtualização");
         }
     }
 
@@ -468,6 +468,38 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDaDataLancamento() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(0));
+            String dataLancamentoNova = getStringFromCurrentDateNextMonth();
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.dataLancamento(dataLancamentoNova);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "dataLançamento");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void alteracaoNaoPermitidaDaParcelas() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            String codigo = String.valueOf(codigos.get(1));
+            String parcelasNova = "20";
+
+            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            dtoBuscado.parcelas(parcelasNova);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateNotModifiebleFields(e, "parcelas");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void alteracaoNaoPermitidaDaParcelaPai() throws BusinessException {
         try {
             List<Long> codigos = criarContabilidades();
@@ -531,287 +563,510 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-//    @Test
-//    public void alterarDescricaoDaContabilidade() throws BusinessException {
+    @Test
+    public void alterarDataVencimentoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
 
-//        List<Long> codigos = criarContabilidades();
-//        String codigoAnterior = String.valueOf(codigos.get(0));
-//        String codigoNovo = "10";
-//
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
-//        assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
-//            dtoBuscado.codigo(codigoNovo);
-//            business.atualizar(dtoBuscado);
-//
-//        dtoBuscado = business.buscarPorId(Long.parseLong(codigoNovo));
-//        assertThat(dtoBuscado.codigo(), equalTo(codigoNovo));
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
 
+        assertEntityDTO(dto, null, "S", "1", "7");
 
-//        Long codigo = criarContabilidades();
-//
-//        ContabilidadeDTO dtoBuscado = assertContabilidadeEnok(codigo);
-//
-//        dtoBuscado.descricao("Valor separado para a Carol");
-//        business.atualizar(dtoBuscado);
-//
-//        dtoBuscado = business.buscarPorId(codigo);
-//        assertThat(dtoBuscado.nome(), equalTo("Enok"));
-//        assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
-//        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
-//        assertThat(dtoBuscado.cumulativo(), equalTo("S"));
-//    }
-//
-//    @Test
-//    public void alterarCumulativoDaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//
-//        ContabilidadeDTO dtoBuscado = assertContabilidadeEnok(codigo);
-//
-//        dtoBuscado.cumulativo("N");
-//        business.atualizar(dtoBuscado);
-//
-//        dtoBuscado = business.buscarPorId(codigo);
-//        assertThat(dtoBuscado.nome(), equalTo("Enok"));
-//        assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
-//        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
-//        assertThat(dtoBuscado.cumulativo(), equalTo("N"));
-//    }
-//
-//    @Test
-//    public void alterarNomeDescricaoCumulativo() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//
-//        ContabilidadeDTO dtoBuscado = assertContabilidadeEnok(codigo);
-//
-//        dtoBuscado.nome("Carol");
-//        dtoBuscado.descricao("Valor separado para a Carol");
-//        dtoBuscado.cumulativo("N");
-//        business.atualizar(dtoBuscado);
-//
-//        dtoBuscado = business.buscarPorId(codigo);
-//        assertThat(dtoBuscado.nome(), equalTo("Carol"));
-//        assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
-//        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
-//        assertThat(dtoBuscado.cumulativo(), equalTo("N"));
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void adicionarCreditoEmUmaContabilidadeSemDiretorio() throws BusinessException, IOException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        deletarDiretorioEArquivos();
-//
-//        try {
-//            business.adicionarCredito(dtoBuscado, "500,00");
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível adicionar crédito à contabilidade."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test
-//    public void adicionarCreditoEmUmaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarCredito(dtoBuscado, "500,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        assertThat(dtoBuscado.saldo(), equalTo("500.0"));
-//    }
-//
-//    @Test
-//    public void adicionarVariosCreditosEmUmaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarCredito(dtoBuscado, "500,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarCredito(dtoBuscado, "500,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        assertThat(dtoBuscado.saldo(), equalTo("1000.0"));
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void adicionarDebitoEmUmaContabilidadeSemDiretorio() throws BusinessException, IOException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        deletarDiretorioEArquivos();
-//
-//        try {
-//            business.adicionarDebito(dtoBuscado, "100,00");
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível adicionar débito à contabilidade."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test
-//    public void adicionarDebitoEmUmaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarDebito(dtoBuscado, "100,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        assertThat(dtoBuscado.saldo(), equalTo("-100.0"));
-//    }
-//
-//    @Test
-//    public void adicionarVariosDebitosEmUmaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarDebito(dtoBuscado, "100,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.adicionarDebito(dtoBuscado, "100,00");
-//        dtoBuscado = business.buscarPorId(codigo);
-//
-//        assertThat(dtoBuscado.saldo(), equalTo("-200.0"));
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void transferirSaldoDeUmaContabilidadeParaOutraException() throws BusinessException {
-//        try {
-//            business.transferir(null, null, null);
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível tranferir o valor entre as contabilidades."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void transferirSaldoDeUmaContabilidadeParaOutraSaldoInsuficiente() throws BusinessException {
-//        ContabilidadeDTO contabilidadeSalario = dto();
-//        Long contabilidadeSalarioId = business.criar(contabilidadeSalario);
-//        business.adicionarCredito(contabilidadeSalario, "500.0");
-//        contabilidadeSalario = business.buscarPorId(contabilidadeSalarioId);
-//
-//        ContabilidadeDTO contabilidadeEnok = contabilidade2DTO();
-//        Long contabilidadeEnokId = business.criar(contabilidadeEnok);
-//        contabilidadeEnok = business.buscarPorId(contabilidadeEnokId);
-//
-//        try {
-//            business.transferir(contabilidadeSalario, contabilidadeEnok, "600.0");
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getCause().getMessage(), equalTo("Saldo insuficiente."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test
-//    public void transferirSaldoDeUmaContabilidadeParaOutra() throws BusinessException {
-//        ContabilidadeDTO dto = dto();
-//        Long contabilidadeSalarioId = business.criar(dto);
-//        dto = business.buscarPorId(contabilidadeSalarioId);
-//        business.adicionarCredito(dto, "1000.0");
-//        dto = business.buscarPorId(contabilidadeSalarioId);
-//
-//        ContabilidadeDTO contabilidadeEnok = contabilidade2DTO();
-//        Long contabilidadeEnokId = business.criar(contabilidadeEnok);
-//        contabilidadeEnok = business.buscarPorId(contabilidadeEnokId);
-//
-//        business.transferir(dto, contabilidadeEnok, "600.0");
-//
-//        dto = business.buscarPorId(contabilidadeSalarioId);
-//        assertThat(dto.saldo(), equalTo("400.0"));
-//
-//        contabilidadeEnok = business.buscarPorId(contabilidadeEnokId);
-//        assertThat(contabilidadeEnok.saldo(), equalTo("600.0"));
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void excluirUmaContabilidadeException() throws BusinessException {
-//        try {
-//            business.excluir(null);
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test
-//    public void excluirUmaContabilidade() throws BusinessException {
-//        Long codigo = criarContabilidades();
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//
-//        business.excluir(dtoBuscado);
-//
-//        dtoBuscado = business.buscarPorId(codigo);
-//        assertThat(dtoBuscado, nullValue());
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void buscarContabilidadePorIdException() throws IOException, BusinessException {
-//        deletarDiretorioEArquivos();
-//        try {
-//            business.buscarPorId(null);
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test(expected = BusinessException.class)
-//    public void buscarContabilidadesException() throws IOException, BusinessException {
-//        deletarDiretorioEArquivos();
-//        try {
-//            business.buscarTodas();
-//        }
-//        catch (BusinessException e) {
-//            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-//            throw e;
-//        }
-//    }
-//
-//    @Test
-//    public void buscarContabilidades() throws BusinessException {
-//        criarContabilidades();
-//        criarContabilidades();
-//
-//        List<ContabilidadeDTO> cartoesDTO = business.buscarTodas();
-//        assertThat(cartoesDTO.size(), equalTo(2));
-//
-//        assertContabilidadeEnok(cartoesDTO.get(0));
-//        assertEntitiesDTOS(cartoesDTO.get(1));
-//    }
+        dto.dataVencimento("27/05/2018");
+        business.atualizar(dto);
 
-//    private Long criarContabilidades() throws BusinessException {
-//        ContabilidadeDTO contabilidade2DTO = contabilidade2DTO();
-//        Long codigoContabilidade2 = business.criar(contabilidade2DTO);
-//        assertTrue(codigoContabilidade2 >= 0);
-//        return codigoContabilidade2;
-//    }
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        //
+        assertThat(dto.dataVencimento(), equalTo("27/05/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
 
-//
-//    private ContabilidadeDTO assertContabilidadeEnok(Long codigo) throws BusinessException {
-//        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-//        return assertContabilidadeEnok(dtoBuscado);
-//    }
-//
-//    private ContabilidadeDTO assertContabilidadeEnok(ContabilidadeDTO dto) {
-//        assertThat(dto.nome(), equalTo("Enok"));
-//        assertThat(dto.descricao(), equalTo("Valor separado para o Enok"));
-//        assertThat(dto.saldo(), equalTo("0.0"));
-//        assertThat(dto.cumulativo(), equalTo("S"));
-//        return dto;
-//    }
+    @Test
+    public void alterarDataPagamentoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.dataPagamento(getStringFromCurrentDate());
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        //
+        assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarRecorrenteDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.recorrente("S");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        //
+        assertThat(dto.recorrente(), equalTo("S"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarGrupoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.grupo("Um grupo");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        //
+        assertThat(dto.grupo(), equalTo("Um grupo"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarSubGrupoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.subGrupo("Um subGrupo");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        //
+        assertThat(dto.subGrupo(), equalTo("Um subGrupo"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarDescricaoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.descricao("Nova descrição");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        //
+        assertThat(dto.descricao(), equalTo("Nova descrição"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarUsouCartaoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.usouCartao("N");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        //
+        assertThat(dto.usouCartao(), equalTo("N"));
+        assertThat(dto.cartao(), nullValue());
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("N"));
+        assertThat(dto.parcela(), nullValue());
+        assertThat(dto.parcelas(), nullValue());
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarCartaoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.cartao("1234");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        //
+        assertThat(dto.cartao(), equalTo("1234"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarContaDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.conta("OUTRA");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        //
+        assertThat(dto.conta(), equalTo("OUTRA"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarTipoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.tipo("CREDITO");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        //
+        assertThat(dto.tipo(), equalTo("CREDITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarValorDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.valor("1000,00");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        //
+        assertThat(dto.valor(), equalTo("1.000,00"));
+        assertThat(dto.parcelado(), equalTo("S"));
+        assertThat(dto.parcela(), equalTo("1"));
+        assertThat(dto.parcelas(), equalTo("7"));
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test
+    public void alterarParceladoDaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.parcelado("N");
+        business.atualizar(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("N"));
+        assertThat(dto.grupo(), equalTo("Saúde"));
+        assertThat(dto.subGrupo(), equalTo("Suplementos"));
+        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.usouCartao(), equalTo("S"));
+        assertThat(dto.cartao(), equalTo("0744"));
+        assertThat(dto.conta(), equalTo("CAROL"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("24,04"));
+        //
+        assertThat(dto.parcelado(), equalTo("N"));
+        assertThat(dto.parcela(), nullValue());
+        assertThat(dto.parcelas(), nullValue());
+        assertThat(dto.codigoPai(), nullValue());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void excluirUmaContabilidadeException() throws BusinessException {
+        try {
+            business.excluir(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void excluirUmaContabilidade() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        business.excluir(dto);
+
+        dto = business.buscarPorId(codigo);
+        assertThat(dto, nullValue());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void realizarPagamentoException() throws BusinessException {
+        try {
+            business.realizarPagamento(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível realizar o pagamento."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void realizarPagamento() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        assertThat(dto.dataPagamento(), nullValue());
+
+        business.realizarPagamento(codigo);
+        dto = business.buscarPorId(codigo);
+        assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarContabilidadePorIdException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            business.buscarPorId(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarContabilidadesException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            business.buscarTodas();
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void buscarContabilidades() throws BusinessException {
+        criarContabilidades();
+        criarContabilidadeNaoParcelada();
+
+        List<ContabilidadeDTO> dtos = business.buscarTodas();
+        dtos.sort(Comparator
+                .comparing(ContabilidadeDTO::codigo));
+        assertThat(dtos.size(), equalTo(8));
+
+        assertEntitiesDTOS(dtos.subList(0, 7));
+        assertContabilidadeNaoParcelada(dtos.get(7));
+    }
+
+    @Test(expected = BusinessException.class)
+    public void buscarTodasAsParcelasException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            business.buscarTodasAsParcelas(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscas todas as parcelas."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void buscarTodasAsParcelas() throws BusinessException {
+        Long codigo = criarContabilidades().get(0);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+        assertThat(dtos.size(), equalTo(7));
+        assertEntitiesDTOS(dtos);
+    }
 
     private List<Long> criarContabilidades() throws BusinessException {
         ContabilidadeDTO dto = contabilidadeDTO();
         List<Long> codigos = business.criar(dto);
-        assertThat(codigos.size(), equalTo(7));
+        return assertCodigos(codigos, 7);
+    }
+
+    private List<Long> criarContabilidadeNaoParcelada() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTONaoParcelada();
+        List<Long> codigos = business.criar(dto);
+        return assertCodigos(codigos, 1);
+    }
+
+    private List<Long> assertCodigos(List<Long> codigos, int size) {
+        assertThat(codigos.size(), equalTo(size));
         for (Long codigo : codigos) {
             assertTrue(codigo >= 0);
         }
@@ -841,16 +1096,12 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertEntityDTO(dto, codigoPai, parcelado, parcela, parcelas);
     }
 
-    private void assertEntityDTO(ContabilidadeDTO dto) {
-        assertEntityDTO(dto, null, "N", null, null);
-    }
-
     private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, String parcelado, String parcela, String parcelas) {
         assertThat(dto.codigo(), not(nullValue()));
         assertThat(dto.dataLancamento(), not(nullValue()));
         assertThat(dto.dataAtualizacao(), not(nullValue()));
         assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
         assertThat(dto.recorrente(), equalTo("N"));
         assertThat(dto.grupo(), equalTo("Saúde"));
         assertThat(dto.subGrupo(), equalTo("Suplementos"));
@@ -866,4 +1117,24 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertThat(dto.codigoPai(), equalTo(codigoPai));
     }
 
+    private void assertContabilidadeNaoParcelada(ContabilidadeDTO dto) {
+        assertThat(dto.codigo(), not(nullValue()));
+        assertThat(dto.dataLancamento(), not(nullValue()));
+        assertThat(dto.dataAtualizacao(), not(nullValue()));
+        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
+        assertThat(dto.dataPagamento(), nullValue());
+        assertThat(dto.recorrente(), equalTo("S"));
+        assertThat(dto.grupo(), equalTo("Apartamento"));
+        assertThat(dto.subGrupo(), equalTo("Aluguel"));
+        assertThat(dto.descricao(), equalTo("Aluguel mensal do apartamento"));
+        assertThat(dto.usouCartao(), equalTo("N"));
+        assertThat(dto.cartao(), nullValue());
+        assertThat(dto.conta(), equalTo("MORADIA"));
+        assertThat(dto.tipo(), equalTo("DEBITO"));
+        assertThat(dto.valor(), equalTo("1.000,00"));
+        assertThat(dto.parcelado(), equalTo("N"));
+        assertThat(dto.parcela(), nullValue());
+        assertThat(dto.parcelas(), nullValue());
+        assertThat(dto.codigoPai(), nullValue());
+    }
 }

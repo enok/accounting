@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.getBooleanFromString;
+import static br.com.accounting.core.util.Utils.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -48,6 +48,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             if (entities.get(0).parcelado()) {
                 for (int i = 0; i < entities.get(0).parcelamento().parcelas(); i++) {
                     entity.codigoPai(codigoPai);
+                    entity.dataPagamento(null);
                     entity.parcelamento().parcela(i + 1);
 
                     Long codigo = salvarEntity(codigos, entity);
@@ -58,6 +59,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
                 }
             }
             else {
+                entity.dataPagamento(null);
                 salvarEntity(codigos, entity);
             }
             return codigos;
@@ -68,10 +70,25 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private Long salvarEntity(List<Long> codigos, Contabilidade entity) throws br.com.accounting.core.exception.ServiceException {
-        Long codigo = service.salvar(entity);
-        codigos.add(codigo);
-        return codigo;
+    @History
+    @Override
+    public void atualizar(final ContabilidadeDTO dto) throws BusinessException {
+        dto.dataAtualizacao(getStringFromCurrentDate());
+        super.atualizar(dto);
+    }
+
+    @History
+    @Override
+    public void realizarPagamento(final Long codigo) throws BusinessException {
+        try {
+            ContabilidadeDTO dto = buscarPorId(codigo);
+            dto.dataPagamento(getStringFromCurrentDate());
+            atualizar(dto);
+        }
+        catch (Exception e) {
+            String message = "Não foi possível realizar o pagamento.";
+            throw new BusinessException(message, e);
+        }
     }
 
     @Override
@@ -142,10 +159,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         if (isBlank(dto.dataLancamento())) {
             erros.add(format(msg, "dataLançamento"));
         }
-        if (isBlank(dto.dataAtualizacao())) {
-            erros.add(format(msg, "dataAtualização"));
-        }
-
         if (usouCartao(dto) && temCartao(dto) && ehParcelado(dto) && naoTemParcela(dto)) {
             erros.add(format(msg, "parcela"));
         }
@@ -160,14 +173,34 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         List<String> errosUpdate = new ArrayList<>();
 
         conferirCodigoAlterado(dto, entity, errosUpdate);
+        conferirDataLancamentoAlterada(dto, entity, errosUpdate);
+        conferirParcelasAlteradas(dto, entity, errosUpdate);
         conferirParcelaAlterada(dto, entity, errosUpdate);
         conferirCodigoPaiAlterado(dto, entity, errosUpdate);
 
         conferirErrosUpdate(errosUpdate);
     }
 
-    private void conferirParcelaAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
+    private Long salvarEntity(List<Long> codigos, Contabilidade entity) throws br.com.accounting.core.exception.ServiceException {
+        Long codigo = service.salvar(entity);
+        codigos.add(codigo);
+        return codigo;
+    }
+
+    private void conferirDataLancamentoAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
+        if ((entity != null) && datasLancamentoDiferentes(dto, entity)) {
+            errosUpdate.add("O campo dataLançamento não pode ser alterado.");
+        }
+    }
+
+    private void conferirParcelasAlteradas(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
         if ((entity != null) && entity.parcelado() && parcelasDiferentes(dto, entity)) {
+            errosUpdate.add("O campo parcelas não pode ser alterado.");
+        }
+    }
+
+    private void conferirParcelaAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
+        if ((entity != null) && entity.parcelado() && parcelaDiferentes(dto, entity)) {
             errosUpdate.add("O campo parcela não pode ser alterado.");
         }
     }
@@ -178,7 +211,15 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
+    private boolean datasLancamentoDiferentes(ContabilidadeDTO dto, Contabilidade entity) {
+        return !dto.dataLancamento().equals(getStringFromDate(entity.dataLancamento()));
+    }
+
     private boolean parcelasDiferentes(ContabilidadeDTO dto, Contabilidade entity) {
+        return !dto.parcelas().equals(entity.parcelamento().parcelas().toString());
+    }
+
+    private boolean parcelaDiferentes(ContabilidadeDTO dto, Contabilidade entity) {
         return !dto.parcela().equals(entity.parcelamento().parcela().toString());
     }
 
