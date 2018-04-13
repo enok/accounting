@@ -9,4 +9,6 @@ public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO>
     void realizarPagamento(Long codigo) throws BusinessException;
 
     List<ContabilidadeDTO> buscarTodasAsParcelas(Long codigo) throws BusinessException;
+
+    void atualizarRecursivamente(ContabilidadeDTO dto) throws BusinessException;
 }

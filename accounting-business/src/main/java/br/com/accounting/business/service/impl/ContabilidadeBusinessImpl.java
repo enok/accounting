@@ -79,6 +79,34 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
+    public void atualizarRecursivamente(final ContabilidadeDTO dto) throws BusinessException {
+        final String message = "Não foi possível atualizar recursivamente.";
+        try {
+            if (dto.parcelado().equals("S")) {
+                int parcelas = Integer.parseInt(dto.parcelas());
+                String codigoPai = buscarCodigoPai(dto);
+
+                for (int i = primeiraParcela(dto); i < parcelas; i++) {
+                    String parcela = String.valueOf(i + 1);
+                    dto.parcela(parcela);
+
+                    gravarCodigo(dto, codigoPai, i);
+                    gravarCodigoPai(dto, codigoPai, parcela);
+
+                    atualizar(dto);
+                }
+            }
+            else {
+                throw new BusinessException(message);
+            }
+        }
+        catch (Exception e) {
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @History
+    @Override
     public void realizarPagamento(final Long codigo) throws BusinessException {
         try {
             ContabilidadeDTO dto = buscarPorId(codigo);
@@ -162,7 +190,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         if (usouCartao(dto) && temCartao(dto) && ehParcelado(dto) && naoTemParcela(dto)) {
             erros.add(format(msg, "parcela"));
         }
-
         if (ehParcelado(dto) && (entity != null) && naoEhPai(entity)) {
             if (isBlank(dto.codigoPai())) {
                 erros.add(format(msg, "códigoPai"));
@@ -185,6 +212,39 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         Long codigo = service.salvar(entity);
         codigos.add(codigo);
         return codigo;
+    }
+
+    private String buscarCodigoPai(ContabilidadeDTO dto) {
+        String codigoPai = dto.codigoPai();
+        if (ehPai(dto)) {
+            codigoPai = dto.codigo();
+        }
+        return codigoPai;
+    }
+
+    private int primeiraParcela(ContabilidadeDTO dto) {
+        return Integer.parseInt(dto.parcela()) - 1;
+    }
+
+    private void gravarCodigo(ContabilidadeDTO dto, String codigoPai, int i) {
+        String codigo = dto.codigo();
+        if (!ehPai(dto)) {
+            codigo = String.valueOf(Integer.parseInt(codigoPai) + i);
+        }
+        dto.codigo(codigo);
+    }
+
+    private void gravarCodigoPai(ContabilidadeDTO dto, String codigoPai, String parcela) {
+        if (parcela.equals("1")) {
+            dto.codigoPai(null);
+        }
+        else {
+            dto.codigoPai(codigoPai);
+        }
+    }
+
+    private boolean ehPai(ContabilidadeDTO dto) {
+        return dto.parcela().equals("1");
     }
 
     private void conferirDataLancamentoAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {

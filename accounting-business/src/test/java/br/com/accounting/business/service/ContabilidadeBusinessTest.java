@@ -948,6 +948,84 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
+    public void alterarContabilidadeRecursivamenteNaoParcelado() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidadeNaoParcelada();
+            Long codigo = codigos.get(0);
+
+            ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+            dto.descricao("Outra descrição");
+            business.atualizarRecursivamente(dto);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recursivamente."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void alterarContabilidadeRecursivamente() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, null, "S", "1", "7");
+
+        dto.descricao("Outra descrição");
+        business.atualizarRecursivamente(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+
+        int parcelas = Integer.parseInt(dto.parcelas());
+        String codigoPai = null;
+        for (int i = 0; i < parcelas; i++) {
+            dto = dtos.get(i);
+            String parcela = String.valueOf(i + 1);
+
+            assertEntityDTO(dto, codigoPai, "Outra descrição", "S", parcela, "7");
+
+            if (i == 0) {
+                codigoPai = dtos.get(0).codigo();
+            }
+        }
+    }
+
+    @Test
+    public void alterarContabilidadeRecursivamenteParcial() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(1);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertEntityDTO(dto, "0", "S", "2", "7");
+
+        dto.descricao("Outra descrição");
+        business.atualizarRecursivamente(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(Long.parseLong(dto.codigoPai()));
+
+        int parcelas = Integer.parseInt(dto.parcelas());
+        String codigoPai = null;
+        for (int i = 0; i < parcelas; i++) {
+            dto = dtos.get(i);
+            String parcela = String.valueOf(i + 1);
+
+            if (i == 0) {
+                assertEntityDTO(dto, codigoPai, "Suplementos comprados pela Carol", "S", parcela, "7");
+            }
+            else {
+                assertEntityDTO(dto, codigoPai, "Outra descrição", "S", parcela, "7");
+            }
+
+            if (i == 0) {
+                codigoPai = dtos.get(0).codigo();
+            }
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void excluirUmaContabilidadeException() throws BusinessException {
         try {
             business.excluir(null);
@@ -1097,6 +1175,10 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, String parcelado, String parcela, String parcelas) {
+        assertEntityDTO(dto, codigoPai, "Suplementos comprados pela Carol", parcelado, parcela, parcelas);
+    }
+
+    private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, String descricao, String parcelado, String parcela, String parcelas) {
         assertThat(dto.codigo(), not(nullValue()));
         assertThat(dto.dataLancamento(), not(nullValue()));
         assertThat(dto.dataAtualizacao(), not(nullValue()));
@@ -1105,7 +1187,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertThat(dto.recorrente(), equalTo("N"));
         assertThat(dto.grupo(), equalTo("Saúde"));
         assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
+        assertThat(dto.descricao(), equalTo(descricao));
         assertThat(dto.usouCartao(), equalTo("S"));
         assertThat(dto.cartao(), equalTo("0744"));
         assertThat(dto.conta(), equalTo("CAROL"));

@@ -51,9 +51,6 @@ public final class Utils {
     }
 
     public static Boolean getBooleanFromString(final String value) {
-//        if (isBlank(value)) {
-//            return false;
-//        }
         return value.equals("S");
     }
 

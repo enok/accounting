@@ -25,9 +25,6 @@ public final class ContabilidadeFactory {
             entity.dataLancamento(LocalDate.now());
         }
         entity.dataAtualizacao(LocalDate.now());
-//        if (entity.recorrente() == null) {
-//            entity.recorrente(false);
-//        }
         if (entity.usouCartao() == null) {
             entity.usouCartao(false);
             entity.cartao(null);
