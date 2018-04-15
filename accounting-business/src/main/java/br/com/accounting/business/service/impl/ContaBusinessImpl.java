@@ -90,13 +90,13 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         if (isBlank(dto.cumulativo())) {
             erros.add(format(msg, "cumulativo"));
         }
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
     }
 
     @Override
     public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws MissingFieldException, UpdateException {
         conferirCodigo(dto, erros);
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);

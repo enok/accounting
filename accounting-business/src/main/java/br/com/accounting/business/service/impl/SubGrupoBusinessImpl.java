@@ -38,13 +38,13 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
         if (isBlank(dto.descricao())) {
             erros.add(format(msg, "descrição"));
         }
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
     }
 
     @Override
     public void validarEntradaUpdate(final SubGrupoDTO dto, final SubGrupo entity, final List<String> erros) throws MissingFieldException, UpdateException {
         conferirCodigo(dto, erros);
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);

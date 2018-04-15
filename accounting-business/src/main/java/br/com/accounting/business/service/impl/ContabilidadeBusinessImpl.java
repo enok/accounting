@@ -3,6 +3,7 @@ package br.com.accounting.business.service.impl;
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.UpdateException;
 import br.com.accounting.business.factory.ContabilidadeDTOFactory;
@@ -22,6 +23,7 @@ import static br.com.accounting.core.util.Utils.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<ContabilidadeDTO, Contabilidade> implements ContabilidadeBusiness {
@@ -135,7 +137,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException {
+    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException, CreateException {
         if (isBlank(dto.dataVencimento())) {
             erros.add(format(msg, "dataVencimento"));
         }
@@ -178,7 +180,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         if (isBlank(dto.valor())) {
             erros.add(format(msg, "valor"));
         }
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
+
+        List<String> errosCreate = new ArrayList<>();
+
+        conferirRecorrenteEParcelado(dto, errosCreate);
+
+        conferirErrosCreate(errosCreate);
     }
 
     @Override
@@ -195,7 +203,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
                 erros.add(format(msg, "códigoPai"));
             }
         }
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
 
@@ -245,6 +253,12 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     private boolean ehPai(ContabilidadeDTO dto) {
         return dto.parcela().equals("1");
+    }
+
+    private void conferirRecorrenteEParcelado(ContabilidadeDTO dto, List<String> errosCreate) {
+        if (dto.recorrente().equals("S") && dto.parcelado().equals("S")) {
+            errosCreate.add("Uma contabilidade não pode ser recorrente e parcelada.");
+        }
     }
 
     private void conferirDataLancamentoAlterada(ContabilidadeDTO dto, Contabilidade entity, List<String> errosUpdate) {
@@ -333,21 +347,21 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     @Override
     public List<Contabilidade> criarEntities(final ContabilidadeDTO dto) throws ParseException {
         return asList(ContabilidadeFactory
-                .begin()
-                .withCodigo(dto.codigo())
-                .withDataVencimento(dto.dataVencimento())
-                .withDataPagamento(dto.dataPagamento())
-                .withRecorrente(dto.recorrente())
-                .withGrupo(dto.grupo(), dto.subGrupo())
-                .withDescricao(dto.descricao())
-                .withUsouCartao(dto.usouCartao())
-                .withCartao(dto.cartao())
-                .withParcelado(dto.parcelado())
-                .withParcelamento(dto.parcela(), dto.parcelas())
-                .withConta(dto.conta())
-                .withTipo(dto.tipo())
-                .withValor(dto.valor())
-                .withCodigoPai(dto.codigoPai())
-                .build());
+                              .begin()
+                              .withCodigo(dto.codigo())
+                              .withDataVencimento(dto.dataVencimento())
+                              .withDataPagamento(dto.dataPagamento())
+                              .withRecorrente(dto.recorrente())
+                              .withGrupo(dto.grupo(), dto.subGrupo())
+                              .withDescricao(dto.descricao())
+                              .withUsouCartao(dto.usouCartao())
+                              .withCartao(dto.cartao())
+                              .withParcelado(dto.parcelado())
+                              .withParcelamento(dto.parcela(), dto.parcelas())
+                              .withConta(dto.conta())
+                              .withTipo(dto.tipo())
+                              .withValor(dto.valor())
+                              .withCodigoPai(dto.codigoPai())
+                              .build());
     }
 }

@@ -26,7 +26,7 @@ public final class ContabilidadeDTOMockFactory {
                 .build();
     }
 
-    public static ContabilidadeDTO contabilidadeDTONaoParcelada() {
+    public static ContabilidadeDTO contabilidadeDTORecorrenteNaoParcelada() {
         return ContabilidadeDTOFactory
                 .create()
                 .withDataVencimento("27/04/2018")

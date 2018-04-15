@@ -2,6 +2,7 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.service.impl.ContabilidadeBusinessImpl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,7 +227,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
     @Test
     public void criarUmaContabilidadeNaoParcelada() throws BusinessException {
-        List<Long> codigos = criarContabilidadeNaoParcelada();
+        List<Long> codigos = criarContabilidadeRecorrenteNaoParcelada();
 
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorId(codigo);
@@ -484,6 +485,27 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
+    public void alterarRecorrenteDaContabilidade() throws BusinessException {
+        try {
+            List<Long> codigos = criarContabilidades();
+            Long codigo = codigos.get(0);
+
+            ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+            assertEntityDTO(dto, null, "S", "1", "7");
+
+            dto.recorrente("S");
+            business.atualizar(dto);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
+            CreateException e1 = (CreateException) e.getCause();
+            assertThat(e1.getMessage(), equalTo("Uma contabilidade não pode ser recorrente e parcelada."));
+            throw e;
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void alteracaoNaoPermitidaDaParcelas() throws BusinessException {
         try {
             List<Long> codigos = criarContabilidades();
@@ -613,38 +635,6 @@ public class ContabilidadeBusinessTest extends GenericTest {
         //
         assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
         assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-    }
-
-    @Test
-    public void alterarRecorrenteDaContabilidade() throws BusinessException {
-        List<Long> codigos = criarContabilidades();
-        Long codigo = codigos.get(0);
-
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
-
-        assertEntityDTO(dto, null, "S", "1", "7");
-
-        dto.recorrente("S");
-        business.atualizar(dto);
-
-        dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        //
-        assertThat(dto.recorrente(), equalTo("S"));
         assertThat(dto.grupo(), equalTo("Saúde"));
         assertThat(dto.subGrupo(), equalTo("Suplementos"));
         assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
@@ -950,7 +940,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void alterarContabilidadeRecursivamenteNaoParcelado() throws BusinessException {
         try {
-            List<Long> codigos = criarContabilidadeNaoParcelada();
+            List<Long> codigos = criarContabilidadeRecorrenteNaoParcelada();
             Long codigo = codigos.get(0);
 
             ContabilidadeDTO dto = business.buscarPorId(codigo);
@@ -1099,7 +1089,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void buscarContabilidades() throws BusinessException {
         criarContabilidades();
-        criarContabilidadeNaoParcelada();
+        criarContabilidadeRecorrenteNaoParcelada();
 
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         dtos.sort(Comparator
@@ -1137,8 +1127,8 @@ public class ContabilidadeBusinessTest extends GenericTest {
         return assertCodigos(codigos, 7);
     }
 
-    private List<Long> criarContabilidadeNaoParcelada() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTONaoParcelada();
+    private List<Long> criarContabilidadeRecorrenteNaoParcelada() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
         List<Long> codigos = business.criar(dto);
         return assertCodigos(codigos, 1);
     }

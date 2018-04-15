@@ -2,10 +2,7 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.EntityDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.ServiceException;
@@ -30,7 +27,7 @@ public abstract class GenericAbstractBusiness<D, E> {
         this.dtoFactory = dtoFactory;
     }
 
-    public abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException;
+    public abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException;
 
     public abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
@@ -140,13 +137,23 @@ public abstract class GenericAbstractBusiness<D, E> {
         return entityesDTO;
     }
 
-    protected void conferirErros(final List<String> erros) throws MissingFieldException {
+    protected void conferirErrosCamposObrigatorios(final List<String> erros) throws MissingFieldException {
         if (!isEmpty(erros)) {
             StringBuilder builder = new StringBuilder();
             for (String erro : erros) {
                 builder.append("\n\t").append(erro);
             }
             throw new MissingFieldException(erros, builder.toString());
+        }
+    }
+
+    protected void conferirErrosCreate(List<String> erros) throws CreateException {
+        if (!isEmpty(erros)) {
+            StringBuilder builder = new StringBuilder();
+            for (String erro : erros) {
+                builder.append(erro);
+            }
+            throw new CreateException(erros, builder.toString());
         }
     }
 

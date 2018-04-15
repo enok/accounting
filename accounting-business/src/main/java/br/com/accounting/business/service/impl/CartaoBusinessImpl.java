@@ -51,13 +51,13 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
         if (isBlank(dto.limite())) {
             erros.add(format(msg, "limite"));
         }
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
     }
 
     @Override
     public void validarEntradaUpdate(final CartaoDTO dto, final Cartao entity, final List<String> erros) throws MissingFieldException, UpdateException {
         conferirCodigo(dto, erros);
-        conferirErros(erros);
+        conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);
