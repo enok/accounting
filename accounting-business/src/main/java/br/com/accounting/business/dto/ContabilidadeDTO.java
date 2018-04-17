@@ -4,10 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class ContabilidadeDTO implements EntityDTO {
+public class ContabilidadeDTO implements EntityDTO, Serializable {
     private String codigo;
     private String dataLancamento;
     private String dataAtualizacao;
@@ -26,6 +28,7 @@ public class ContabilidadeDTO implements EntityDTO {
     private String tipo;
     private String valor;
     private String codigoPai;
+    private String proximoLancamento;
 
     @Override
     public String getCodigo() {

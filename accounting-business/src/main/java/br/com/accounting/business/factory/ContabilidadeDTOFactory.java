@@ -49,6 +49,7 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
         withTipo(entity.tipo());
         withValor(entity.valor());
         withCodigoPai(entity.codigoPai());
+        withProximoLancamento(entity.proximoLancamento());
         return this;
     }
 
@@ -271,6 +272,20 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
     public ContabilidadeDTOFactory withCodigoPai(Long codigoPai) {
         if (codigoPai != null) {
             dto.codigoPai(codigoPai.toString());
+        }
+        return this;
+    }
+
+    public ContabilidadeDTOFactory withProximoLancamento(String proximoLancamento) {
+        if (!isBlankOrNull(proximoLancamento)) {
+            dto.proximoLancamento(proximoLancamento);
+        }
+        return this;
+    }
+
+    private ContabilidadeDTOFactory withProximoLancamento(Long proximoLancamento) {
+        if (proximoLancamento != null) {
+            withProximoLancamento(proximoLancamento.toString());
         }
         return this;
     }

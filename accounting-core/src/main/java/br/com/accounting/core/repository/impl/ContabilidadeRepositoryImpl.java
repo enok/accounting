@@ -89,7 +89,8 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .append(entity.conta().nome()).append(SEPARADOR)
                 .append(entity.tipo()).append(SEPARADOR)
                 .append(getStringFromDouble(entity.valor())).append(SEPARADOR)
-                .append(entity.codigoPai());
+                .append(entity.codigoPai()).append(SEPARADOR)
+                .append(entity.proximoLancamento());
         return builder.toString();
     }
 
@@ -117,6 +118,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .withTipo(registro.get(15))
                 .withValor(registro.get(16))
                 .withCodigoPai(registro.get(17))
+                .withProximoLancamento(registro.get(18))
                 .build();
     }
 }

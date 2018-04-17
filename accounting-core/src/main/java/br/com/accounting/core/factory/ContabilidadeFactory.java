@@ -170,4 +170,11 @@ public final class ContabilidadeFactory {
         }
         return this;
     }
+
+    public ContabilidadeFactory withProximoLancamento(String proximoLancamento) {
+        if (!isBlankOrNull(proximoLancamento)) {
+            entity.proximoLancamento(Long.parseLong(proximoLancamento));
+        }
+        return this;
+    }
 }

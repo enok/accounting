@@ -11,6 +11,8 @@ import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
+import br.com.accounting.core.util.Utils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.plugin.dom.exception.InvalidStateException;
@@ -77,6 +79,48 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     public void atualizar(final ContabilidadeDTO dto) throws BusinessException {
         dto.dataAtualizacao(getStringFromCurrentDate());
         super.atualizar(dto);
+    }
+
+    @History
+    @Override
+    public List<Long> criarRecorrente(final ContabilidadeDTO dto, final Integer meses) throws BusinessException {
+        try {
+            validaRecorrente(dto, meses);
+
+            List<Long> codigos = new ArrayList<>();
+            Long codigoAnterior = null;
+            for (int i = 0; i < meses; i++) {
+                ContabilidadeDTO copiaDTO = SerializationUtils.clone(dto);
+                ContabilidadeDTO dtoBuscado = null;
+                if (codigoAnterior != null) {
+                    dtoBuscado = buscarPorId(codigoAnterior);
+                    String novaDataVencimento = buscarNovaDataDeVencimento(dtoBuscado);
+                    copiaDTO.dataVencimento(novaDataVencimento);
+                }
+
+                Long codigo;
+                if ((i == 0) && (copiaDTO.codigo() != null)) {
+                    atualizar(copiaDTO);
+                    codigo = Long.parseLong(copiaDTO.codigo());
+                }
+                else {
+                    codigo = criar(copiaDTO).get(0);
+                }
+                codigos.add(codigo);
+
+                if (codigoAnterior != null) {
+                    dtoBuscado.proximoLancamento(codigo.toString());
+                    atualizar(dtoBuscado);
+                }
+                codigoAnterior = codigo;
+            }
+
+            return codigos;
+        }
+        catch (Exception e) {
+            String message = "Não foi possível criar recorrente.";
+            throw new BusinessException(message, e);
+        }
     }
 
     @History
@@ -222,6 +266,22 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigo;
     }
 
+    private void validaRecorrente(ContabilidadeDTO dto, Integer meses) throws BusinessException {
+        if (!"S".equals(dto.recorrente())) {
+            throw new BusinessException("A contabilidade não é recorrente.");
+        }
+        if (meses <= 0) {
+            throw new BusinessException("O valor de meses deve ser maior que 0.");
+        }
+        if (dto.proximoLancamento() != null) {
+            throw new BusinessException("A contabilidade já possui proximoLancamento.");
+        }
+    }
+
+    private String buscarNovaDataDeVencimento(ContabilidadeDTO dto) {
+        return getStringFromDateNextMonth(dto.dataVencimento());
+    }
+
     private String buscarCodigoPai(ContabilidadeDTO dto) {
         String codigoPai = dto.codigoPai();
         if (ehPai(dto)) {
@@ -347,21 +407,22 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     @Override
     public List<Contabilidade> criarEntities(final ContabilidadeDTO dto) throws ParseException {
         return asList(ContabilidadeFactory
-                              .begin()
-                              .withCodigo(dto.codigo())
-                              .withDataVencimento(dto.dataVencimento())
-                              .withDataPagamento(dto.dataPagamento())
-                              .withRecorrente(dto.recorrente())
-                              .withGrupo(dto.grupo(), dto.subGrupo())
-                              .withDescricao(dto.descricao())
-                              .withUsouCartao(dto.usouCartao())
-                              .withCartao(dto.cartao())
-                              .withParcelado(dto.parcelado())
-                              .withParcelamento(dto.parcela(), dto.parcelas())
-                              .withConta(dto.conta())
-                              .withTipo(dto.tipo())
-                              .withValor(dto.valor())
-                              .withCodigoPai(dto.codigoPai())
-                              .build());
+                .begin()
+                .withCodigo(dto.codigo())
+                .withDataVencimento(dto.dataVencimento())
+                .withDataPagamento(dto.dataPagamento())
+                .withRecorrente(dto.recorrente())
+                .withGrupo(dto.grupo(), dto.subGrupo())
+                .withDescricao(dto.descricao())
+                .withUsouCartao(dto.usouCartao())
+                .withCartao(dto.cartao())
+                .withParcelado(dto.parcelado())
+                .withParcelamento(dto.parcela(), dto.parcelas())
+                .withConta(dto.conta())
+                .withTipo(dto.tipo())
+                .withValor(dto.valor())
+                .withCodigoPai(dto.codigoPai())
+                .withProximoLancamento(dto.proximoLancamento())
+                .build());
     }
 }

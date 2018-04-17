@@ -40,6 +40,21 @@ public final class ContabilidadeDTOMockFactory {
                 .build();
     }
 
+    public static ContabilidadeDTO contabilidadeDTORecorrenteNaoParceladaComProximoLancamento() {
+        return ContabilidadeDTOFactory
+                .create()
+                .withDataVencimento("27/04/2018")
+                .withDataPagamento("27/04/2018")
+                .withRecorrente(getStringFromBoolean(true))
+                .withGrupo("Apartamento", "Aluguel")
+                .withDescricao("Aluguel mensal do apartamento")
+                .withConta("MORADIA")
+                .withTipo("DEBITO")
+                .withValor("1000,00")
+                .withProximoLancamento("1")
+                .build();
+    }
+
     public static ContabilidadeDTO contabilidadeDTOSemDataVencimento() {
         return contabilidadeDTO()
                 .dataVencimento(null);

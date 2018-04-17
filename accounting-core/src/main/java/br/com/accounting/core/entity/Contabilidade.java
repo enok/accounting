@@ -26,6 +26,7 @@ public class Contabilidade implements Entity {
     private TipoContabilidade tipo;
     private Double valor;
     private Long codigoPai;
+    private Long proximoLancamento;
 
     @Override
     public Long getCodigo() {
