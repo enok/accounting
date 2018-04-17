@@ -8,4 +8,6 @@ public interface ContabilidadeRepository extends GenericRepository<Contabilidade
     void ordenarPorDataVencimentoGrupoSubGrupo(List<Contabilidade> entities);
 
     List<Contabilidade> filtrarPorCodigoPai(List<Contabilidade> entities, Long codigoPai);
+
+    List<Contabilidade> filtrarRecorrentesNaoLancados(List<Contabilidade> entities);
 }

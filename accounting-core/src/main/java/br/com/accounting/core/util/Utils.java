@@ -80,12 +80,9 @@ public final class Utils {
         return (value != null) && value ? "S" : "N";
     }
 
-//    public static boolean entreDatas(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
-//        long intervaloDataInicial = DAYS.between(dataInicial, data);
-//        long intervaloDataFinal = DAYS.between(data, dataFinal);
-//
-//        return (intervaloDataInicial >= 0) && (intervaloDataFinal >= 0);
-//    }
-
-
+    public static int getRemainingMonthsInclusiveFromYear(final String date) {
+        LocalDate dateFromString = getDateFromString(date);
+        int monthValue = dateFromString.getMonthValue();
+        return 12 - monthValue + 1;
+    }
 }

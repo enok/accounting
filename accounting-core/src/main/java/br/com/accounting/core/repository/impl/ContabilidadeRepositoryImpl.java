@@ -41,6 +41,17 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     }
 
     @Override
+    public List<Contabilidade> filtrarRecorrentesNaoLancados(List<Contabilidade> entities) {
+        return entities
+                .stream()
+                .filter(c -> (
+                        (c.recorrente()) &&
+                                (c.proximoLancamento() == null))
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public String getArquivo() {
         return diretorio + File.separator + "contabilidades.csv";
     }

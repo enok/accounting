@@ -1,6 +1,7 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.ContabilidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,11 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
     @Override
     public List<Contabilidade> buscarTodasAsParcelas(final List<Contabilidade> entities, final Long codigoPai) {
         return repository.filtrarPorCodigoPai(entities, codigoPai);
+    }
+
+    @Override
+    public List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws RepositoryException {
+        List<Contabilidade> entities = repository.buscarRegistros();
+        return repository.filtrarRecorrentesNaoLancados(entities);
     }
 }

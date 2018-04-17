@@ -160,7 +160,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     private static String buscarLinha(Long codigo, String novaLinha, String linha) {
-        return linha.startsWith(String.valueOf(codigo)) ? novaLinha : linha;
+        return linha.startsWith(String.valueOf(codigo).concat(";")) ? novaLinha : linha;
     }
 
     private void deletarLinha(Path caminho, String linha) throws IOException {

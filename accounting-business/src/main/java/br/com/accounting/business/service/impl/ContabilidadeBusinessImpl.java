@@ -11,7 +11,6 @@ import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
-import br.com.accounting.core.util.Utils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import static br.com.accounting.core.util.Utils.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<ContabilidadeDTO, Contabilidade> implements ContabilidadeBusiness {
@@ -100,7 +98,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
                 Long codigo;
                 if ((i == 0) && (copiaDTO.codigo() != null)) {
-                    atualizar(copiaDTO);
+//                    atualizar(copiaDTO);
                     codigo = Long.parseLong(copiaDTO.codigo());
                 }
                 else {
@@ -119,6 +117,34 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
         catch (Exception e) {
             String message = "Não foi possível criar recorrente.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @History
+    @Override
+    public List<Long> atualizarRecorrentes(final Integer anos) throws BusinessException {
+        try {
+            if (anos < 1) {
+                throw new BusinessException("O valor de anos deve ser maior ou igual a 1.");
+            }
+            List<Contabilidade> entities = service.buscarTodasRecorrentesNaoLancadas();
+            List<ContabilidadeDTO> dtos = criarListaEntitiesDTO(dtoFactory, entities);
+
+            List<Long> codigos = new ArrayList<>();
+            for (ContabilidadeDTO dto : dtos) {
+                int meses = getRemainingMonthsInclusiveFromYear(dto.dataVencimento());
+                if (anos > 1) {
+                    meses += ((anos - 1) * 12);
+                }
+                List<Long> codigosRecorrentes = criarRecorrente(dto, meses);
+                codigos.addAll(codigosRecorrentes);
+            }
+
+            return codigos;
+        }
+        catch (Exception e) {
+            String message = "Não foi possível atualizar recorrentes.";
             throw new BusinessException(message, e);
         }
     }

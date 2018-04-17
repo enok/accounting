@@ -13,8 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static br.com.accounting.business.factory.ContabilidadeDTOMockFactory.*;
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDateNextMonth;
+import static br.com.accounting.core.util.Utils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -294,6 +293,69 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = business.criarRecorrente(dto, 3);
         assertCodigos(codigos, 3);
         assertCriarContabilidadeRecorrente(codigos);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void atualizarContabilidadesRecorrentesComAnosMenorQue1() throws BusinessException {
+        try {
+            ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+            business.criar(dto);
+            ContabilidadeDTO dto2 = contabilidadeDTORecorrenteNaoParcelada2();
+            business.criar(dto2);
+
+            business.atualizarRecorrentes(0);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recorrentes."));
+            assertThat(e.getCause().getMessage(), equalTo("O valor de anos deve ser maior ou igual a 1."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void atualizarContabilidadesRecorrentes() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+        business.criar(dto);
+        ContabilidadeDTO dto2 = contabilidadeDTORecorrenteNaoParcelada2();
+        business.criar(dto2);
+
+        List<Long> codigosAtualizados = business.atualizarRecorrentes(1);
+
+        Long codigo0 = codigosAtualizados.get(0);
+        ContabilidadeDTO dto0 = business.buscarPorId(codigo0);
+        String dataVencimento = "27/04/2018";
+        assertContabilidadeNaoParcelada(dto0, dataVencimento, "2");
+        assertContabilidadeRecorrenteParcial(codigosAtualizados, dataVencimento, 1, 9, 8, 2);
+
+        Long codigo1 = codigosAtualizados.get(9);
+        ContabilidadeDTO dto1 = business.buscarPorId(codigo1);
+        dataVencimento = "27/10/2018";
+        assertContabilidadeNaoParcelada(dto1, dataVencimento, "10");
+        assertContabilidadeRecorrenteParcial(codigosAtualizados, dataVencimento, 10, 12, 11, 1);
+    }
+
+    @Test
+    public void atualizarContabilidadesRecorrentesSeguidos() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+        business.criar(dto);
+
+        List<Long> codigosAtualizados = business.atualizarRecorrentes(1);
+
+        assertContabilidadeRecorrenteTotal("27/04/2018", codigosAtualizados, 9, 1);
+
+        codigosAtualizados = business.atualizarRecorrentes(2);
+
+        assertContabilidadeRecorrenteTotal("27/12/2018", codigosAtualizados, 13, 9);
+    }
+
+    @Test
+    public void atualizarContabilidadesRecorrentesComMaisDe1Ano() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+        business.criar(dto);
+
+        List<Long> codigosAtualizados = business.atualizarRecorrentes(2);
+
+        assertContabilidadeRecorrenteTotal("27/04/2018", codigosAtualizados, 21, 1);
     }
 
     @Test(expected = BusinessException.class)
@@ -1297,5 +1359,42 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertContabilidadeNaoParcelada(dto1, "27/04/2018", codigo2.toString());
         assertContabilidadeNaoParcelada(dto2, "27/05/2018", codigo3.toString());
         assertContabilidadeNaoParcelada(dto3, "27/06/2018", null);
+    }
+
+    private void assertContabilidadeRecorrenteParcial(List<Long> codigosAtualizados, String dataVencimento, int inicio,
+                                                      int teto, int ultimoLancamento, int passoProximoLancamento) throws BusinessException {
+        ContabilidadeDTO dto;
+        for (; inicio < teto; inicio++) {
+            Long codigo = codigosAtualizados.get(inicio);
+            dto = business.buscarPorId(codigo);
+            dataVencimento = getStringFromDateNextMonth(dataVencimento);
+            String proximoLancamento;
+            if (inicio == ultimoLancamento) {
+                proximoLancamento = null;
+            }
+            else {
+                proximoLancamento = String.valueOf(inicio + passoProximoLancamento);
+            }
+            assertContabilidadeNaoParcelada(dto, dataVencimento, proximoLancamento);
+        }
+    }
+
+    private void assertContabilidadeRecorrenteTotal(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
+                                                    int passoProximoRegistro) throws BusinessException {
+        String dataVencimentoLocal = dataVencimento;
+        ContabilidadeDTO dto;
+        for (int i = 0; i < totalDeRegistros; i++) {
+            Long codigo = codigosAtualizados.get(i);
+            dto = business.buscarPorId(codigo);
+            String proximoLancamento;
+            if (i == (totalDeRegistros - 1)) {
+                proximoLancamento = null;
+            }
+            else {
+                proximoLancamento = String.valueOf(i + passoProximoRegistro);
+            }
+            assertContabilidadeNaoParcelada(dto, dataVencimentoLocal, proximoLancamento);
+            dataVencimentoLocal = getStringFromDateNextMonth(dataVencimentoLocal);
+        }
     }
 }
