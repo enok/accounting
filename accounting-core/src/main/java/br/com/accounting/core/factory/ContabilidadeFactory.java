@@ -43,21 +43,42 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withCodigo(String codigo) {
         if (!isBlankOrNull(codigo)) {
-            entity.codigo(Long.parseLong(codigo));
+            withCodigo(Long.parseLong(codigo));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withCodigo(Long codigo) {
+        if (codigo != null) {
+            entity.codigo(codigo);
         }
         return this;
     }
 
     public ContabilidadeFactory withDataLancamento(String dataLancamento) {
         if (!isBlankOrNull(dataLancamento)) {
-            entity.dataLancamento(getDateFromString(dataLancamento));
+            withDataLancamento(getDateFromString(dataLancamento));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withDataLancamento(LocalDate dataLancamento) {
+        if (dataLancamento != null) {
+            entity.dataLancamento(dataLancamento);
         }
         return this;
     }
 
     public ContabilidadeFactory withDataAtualizacao(String dataAtualizacao) {
         if (!isBlankOrNull(dataAtualizacao)) {
-            entity.dataAtualizacao(getDateFromString(dataAtualizacao));
+            withDataAtualizacao(getDateFromString(dataAtualizacao));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withDataAtualizacao(LocalDate dataAtualizacao) {
+        if (dataAtualizacao != null) {
+            entity.dataAtualizacao(dataAtualizacao);
         }
         return this;
     }
@@ -71,14 +92,28 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withDataPagamento(String dataPagamento) {
         if (!isBlankOrNull(dataPagamento)) {
-            entity.dataPagamento(getDateFromString(dataPagamento));
+            withDataPagamento(getDateFromString(dataPagamento));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withDataPagamento(LocalDate dataPagamento) {
+        if (dataPagamento != null) {
+            entity.dataPagamento(dataPagamento);
         }
         return this;
     }
 
     public ContabilidadeFactory withRecorrente(String recorrente) {
         if (!isBlankOrNull(recorrente)) {
-            entity.recorrente(getBooleanFromString(recorrente));
+            withRecorrente(getBooleanFromString(recorrente));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withRecorrente(Boolean recorrente) {
+        if (recorrente != null) {
+            entity.recorrente(recorrente);
         }
         return this;
     }
@@ -152,7 +187,14 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withTipo(String tipo) {
         if (!isBlankOrNull(tipo)) {
-            entity.tipo(TipoContabilidade.valueOf(tipo));
+            withTipo(TipoContabilidade.valueOf(tipo));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withTipo(TipoContabilidade tipo) {
+        if (tipo != null) {
+            entity.tipo(tipo);
         }
         return this;
     }
@@ -173,7 +215,14 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withProximoLancamento(String proximoLancamento) {
         if (!isBlankOrNull(proximoLancamento)) {
-            entity.proximoLancamento(Long.parseLong(proximoLancamento));
+            withProximoLancamento(Long.parseLong(proximoLancamento));
+        }
+        return this;
+    }
+
+    public ContabilidadeFactory withProximoLancamento(Long proximoLancamento) {
+        if (proximoLancamento != null) {
+            entity.proximoLancamento(proximoLancamento);
         }
         return this;
     }

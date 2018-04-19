@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -121,11 +123,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         ContabilidadeDTO dto = contabilidadeDTONaoUsouCartao();
         Long codigo = business.criar(dto).get(0);
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
-        assertThat(dtoBuscado.usouCartao(), equalTo("N"));
-        assertThat(dtoBuscado.cartao(), nullValue());
-        assertThat(dtoBuscado.parcelado(), equalTo("N"));
-        assertThat(dtoBuscado.parcela(), nullValue());
-        assertThat(dtoBuscado.parcelas(), nullValue());
+        assertNaoParcelado(dtoBuscado);
     }
 
     @Test(expected = BusinessException.class)
@@ -201,7 +199,8 @@ public class ContabilidadeBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "dataVencimento", "grupo", "subGrupo", "descrição", "conta", "tipo", "valor");
+            assertCreationAndMandatoryFields(e, "dataVencimento", "grupo", "subGrupo", "descrição", "conta",
+                    "tipo", "valor");
             throw e;
         }
     }
@@ -209,7 +208,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void criarUmaContabilidade() throws BusinessException {
         List<Long> codigos = criarContabilidades();
-        assertEntities(codigos);
+        assertCodigos(codigos);
     }
 
     @Test
@@ -231,131 +230,40 @@ public class ContabilidadeBusinessTest extends GenericTest {
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertContabilidadeNaoParcelada(dto, "27/04/2018", null);
-    }
-
-    @Test(expected = BusinessException.class)
-    public void criarContabilidadeRecorrenteNaoRecorrente() throws BusinessException {
-        try {
-            ContabilidadeDTO dto = contabilidadeDTO();
-            business.criarRecorrente(dto, 3);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar recorrente."));
-            assertThat(e.getCause().getMessage(), equalTo("A contabilidade não é recorrente."));
-            throw e;
-        }
-    }
-
-    @Test(expected = BusinessException.class)
-    public void criarContabilidadeRecorrenteComMesesMenorOuIgualA0() throws BusinessException {
-        try {
-            ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-            business.criarRecorrente(dto, 0);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar recorrente."));
-            assertThat(e.getCause().getMessage(), equalTo("O valor de meses deve ser maior que 0."));
-            throw e;
-        }
+        assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
     }
 
     @Test(expected = BusinessException.class)
     public void criarContabilidadeRecorrenteComProximoLancamento() throws BusinessException {
         try {
-            ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParceladaComProximoLancamento();
-            business.criarRecorrente(dto, 3);
+            ContabilidadeDTO dto = contabilidadeDTORecorrenteComProximoLancamento();
+            business.criar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar recorrente."));
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
             assertThat(e.getCause().getMessage(), equalTo("A contabilidade já possui proximoLancamento."));
             throw e;
         }
     }
 
     @Test
-    public void criarContabilidadeRecorrenteAtualizando() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+    public void criarContabilidadeRecorrenteTest() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrente();
+
+        List<Long> codigos = business.criar(dto);
+        assertCodigos(codigos, 9);
+        assertCodigosRecorrentes(codigos);
+    }
+
+    @Test
+    public void criarContabilidadeRecorrenteUltimoMes() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrenteUltimoMes();
 
         List<Long> codigos = business.criar(dto);
         assertCodigos(codigos, 1);
         dto = business.buscarPorId(codigos.get(0));
 
-        codigos = business.criarRecorrente(dto, 3);
-        assertCodigos(codigos, 3);
-        assertCriarContabilidadeRecorrente(codigos);
-    }
-
-    @Test
-    public void criarContabilidadeRecorrente() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-
-        List<Long> codigos = business.criarRecorrente(dto, 3);
-        assertCodigos(codigos, 3);
-        assertCriarContabilidadeRecorrente(codigos);
-    }
-
-    @Test(expected = BusinessException.class)
-    public void atualizarContabilidadesRecorrentesComAnosMenorQue1() throws BusinessException {
-        try {
-            ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-            business.criar(dto);
-            ContabilidadeDTO dto2 = contabilidadeDTORecorrenteNaoParcelada2();
-            business.criar(dto2);
-
-            business.atualizarRecorrentes(0);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recorrentes."));
-            assertThat(e.getCause().getMessage(), equalTo("O valor de anos deve ser maior ou igual a 1."));
-            throw e;
-        }
-    }
-
-    @Test
-    public void atualizarContabilidadesRecorrentes() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-        business.criar(dto);
-        ContabilidadeDTO dto2 = contabilidadeDTORecorrenteNaoParcelada2();
-        business.criar(dto2);
-
-        List<Long> codigosAtualizados = business.atualizarRecorrentes(1);
-
-        Long codigo0 = codigosAtualizados.get(0);
-        ContabilidadeDTO dto0 = business.buscarPorId(codigo0);
-        String dataVencimento = "27/04/2018";
-        assertContabilidadeNaoParcelada(dto0, dataVencimento, "2");
-        assertContabilidadeRecorrenteParcial(codigosAtualizados, dataVencimento, 1, 9, 8, 2);
-
-        Long codigo1 = codigosAtualizados.get(9);
-        ContabilidadeDTO dto1 = business.buscarPorId(codigo1);
-        dataVencimento = "27/10/2018";
-        assertContabilidadeNaoParcelada(dto1, dataVencimento, "10");
-        assertContabilidadeRecorrenteParcial(codigosAtualizados, dataVencimento, 10, 12, 11, 1);
-    }
-
-    @Test
-    public void atualizarContabilidadesRecorrentesSeguidos() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-        business.criar(dto);
-
-        List<Long> codigosAtualizados = business.atualizarRecorrentes(1);
-
-        assertContabilidadeRecorrenteTotal("27/04/2018", codigosAtualizados, 9, 1);
-
-        codigosAtualizados = business.atualizarRecorrentes(2);
-
-        assertContabilidadeRecorrenteTotal("27/12/2018", codigosAtualizados, 13, 9);
-    }
-
-    @Test
-    public void atualizarContabilidadesRecorrentesComMaisDe1Ano() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
-        business.criar(dto);
-
-        List<Long> codigosAtualizados = business.atualizarRecorrentes(2);
-
-        assertContabilidadeRecorrenteTotal("27/04/2018", codigosAtualizados, 21, 1);
+        assertRecorrente(dto, "27/12/2018", "Aluguel mensal do apartamento", null);
     }
 
     @Test(expected = BusinessException.class)
@@ -596,7 +504,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(0));
-            String dataLancamentoNova = getStringFromCurrentDateNextMonth();
+            String dataLancamentoNova = getStringNextMonth();
 
             ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
             dtoBuscado.dataLancamento(dataLancamentoNova);
@@ -615,7 +523,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
             ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-            assertEntityDTO(dto, null, "S", "1", "7");
+            assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
             dto.recorrente("S");
             business.atualizar(dto);
@@ -715,30 +623,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.dataVencimento("27/05/2018");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        //
-        assertThat(dto.dataVencimento(), equalTo("27/05/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/05/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -748,30 +642,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.dataPagamento(getStringFromCurrentDate());
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        //
-        assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", getStringFromCurrentDate(), "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -781,30 +661,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.grupo("Um grupo");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        //
-        assertThat(dto.grupo(), equalTo("Um grupo"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Um grupo",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -814,30 +680,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.subGrupo("Um subGrupo");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        //
-        assertThat(dto.subGrupo(), equalTo("Um subGrupo"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Um subGrupo", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -847,30 +699,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.descricao("Nova descrição");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        //
-        assertThat(dto.descricao(), equalTo("Nova descrição"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Nova descrição", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -880,30 +718,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.usouCartao("N");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        //
-        assertThat(dto.usouCartao(), equalTo("N"));
-        assertThat(dto.cartao(), nullValue());
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("N"));
-        assertThat(dto.parcela(), nullValue());
-        assertThat(dto.parcelas(), nullValue());
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "N", null,
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -913,30 +737,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.cartao("1234");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        //
-        assertThat(dto.cartao(), equalTo("1234"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "1234",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -946,30 +756,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.conta("OUTRA");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        //
-        assertThat(dto.conta(), equalTo("OUTRA"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -979,30 +775,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.tipo("CREDITO");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        //
-        assertThat(dto.tipo(), equalTo("CREDITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -1012,30 +794,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.valor("1000,00");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        //
-        assertThat(dto.valor(), equalTo("1.000,00"));
-        assertThat(dto.parcelado(), equalTo("S"));
-        assertThat(dto.parcela(), equalTo("1"));
-        assertThat(dto.parcelas(), equalTo("7"));
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
+                null);
     }
 
     @Test
@@ -1045,42 +813,22 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.parcelado("N");
         business.atualizar(dto);
 
         dto = business.buscarPorId(codigo);
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo("Suplementos comprados pela Carol"));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        //
-        assertThat(dto.parcelado(), equalTo("N"));
-        assertThat(dto.parcela(), nullValue());
-        assertThat(dto.parcelas(), nullValue());
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), nullValue());
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "S", "0744",
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarContabilidadeRecursivamenteNaoParcelado() throws BusinessException {
+    public void alterarContabilidadesSubsequentesException() throws BusinessException {
         try {
-            List<Long> codigos = criarContabilidadeNaoParcelada();
-            Long codigo = codigos.get(0);
-
-            ContabilidadeDTO dto = business.buscarPorId(codigo);
-
-            dto.descricao("Outra descrição");
-            business.atualizarRecursivamente(dto);
+            business.atualizarSubsequentes(null);
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível atualizar recursivamente."));
@@ -1089,16 +837,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeRecursivamente() throws BusinessException {
+    public void alterarContabilidadeSubsequentesParceladas() throws BusinessException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, null, "S", "1", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "1", null);
 
         dto.descricao("Outra descrição");
-        business.atualizarRecursivamente(dto);
+        business.atualizarSubsequentes(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
 
@@ -1108,7 +856,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             dto = dtos.get(i);
             String parcela = String.valueOf(i + 1);
 
-            assertEntityDTO(dto, codigoPai, "Outra descrição", "S", parcela, "7");
+            assertParcelado(dto, "Outra descrição", parcela, codigoPai);
 
             if (i == 0) {
                 codigoPai = dtos.get(0).codigo();
@@ -1117,16 +865,33 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeRecursivamenteParcial() throws BusinessException {
+    public void alterarContabilidadeSubsequentesRecorrentes() throws BusinessException {
+        List<Long> codigos = criarContabilidadeRecorrente();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertRecorrente(dto, "27/04/2018", "Aluguel mensal do apartamento", "1");
+
+        dto.descricao("Outra descrição");
+        business.atualizarSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+
+        assertRecorrentes(dtos, "27/04/2018", "Outra descrição");
+    }
+
+    @Test
+    public void alterarContabilidadeSubsequentesParceladasParciais() throws BusinessException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(1);
 
         ContabilidadeDTO dto = business.buscarPorId(codigo);
 
-        assertEntityDTO(dto, "0", "S", "2", "7");
+        assertParcelado(dto, "Suplementos comprados pela Carol", "2", "0");
 
         dto.descricao("Outra descrição");
-        business.atualizarRecursivamente(dto);
+        business.atualizarSubsequentes(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(Long.parseLong(dto.codigoPai()));
 
@@ -1137,16 +902,50 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String parcela = String.valueOf(i + 1);
 
             if (i == 0) {
-                assertEntityDTO(dto, codigoPai, "Suplementos comprados pela Carol", "S", parcela, "7");
+                assertParcelado(dto, "Suplementos comprados pela Carol", parcela, codigoPai);
             }
             else {
-                assertEntityDTO(dto, codigoPai, "Outra descrição", "S", parcela, "7");
+                assertParcelado(dto, "Outra descrição", parcela, codigoPai);
             }
 
             if (i == 0) {
                 codigoPai = dtos.get(0).codigo();
             }
         }
+    }
+
+    @Test
+    public void alterarContabilidadeSubsequentesRecorrentesParciais() throws BusinessException {
+        List<Long> codigos = criarContabilidadeRecorrente();
+        Long codigo = codigos.get(1);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertRecorrente(dto, "27/05/2018", "Aluguel mensal do apartamento", "2");
+
+        dto.descricao("Outra descrição");
+        business.atualizarSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+
+        assertRecorrentes(dtos, "27/05/2018", "Outra descrição");
+    }
+
+    @Test
+    public void alterarContabilidadeSubsequentesNaoParcelado() throws BusinessException {
+        List<Long> codigos = criarContabilidadeNaoParcelada();
+        Long codigo = codigos.get(0);
+
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
+
+        dto.descricao("Outra descrição");
+        business.atualizarSubsequentes(dto);
+
+        dto = business.buscarPorId(codigo);
+
+        assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Outra descrição");
     }
 
     @Test(expected = BusinessException.class)
@@ -1170,6 +969,94 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertThat(dto, nullValue());
+    }
+
+    @Test(expected = BusinessException.class)
+    public void incrementarContabilidadesRecorrentesComMenosDe1Ano() throws BusinessException {
+        try {
+            ContabilidadeDTO dto = contabilidadeDTORecorrente();
+            business.criar(dto);
+            ContabilidadeDTO dto2 = contabilidadeDTORecorrente2();
+            business.criar(dto2);
+
+            business.incrementarRecorrentes(0);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recorrentes."));
+            assertThat(e.getCause().getMessage(), equalTo("O valor de anos deve ser maior ou igual a 1."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void incrementarContabilidadesRecorrentesComMaisDe1Ano() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrente();
+        business.criar(dto);
+
+        List<Long> codigosAtualizados = business.incrementarRecorrentes(2);
+
+        assertRecorrentesTotais("27/12/2018", codigosAtualizados, 13, 1);
+    }
+
+    @Test(expected = BusinessException.class)
+    public void excluirSubsequentesException() throws BusinessException {
+        try {
+            business.excluirSubsequentes(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível excluir subsequentes."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void excluirSubsequentesParceladas() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        Long codigo = codigos.get(0);
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        business.excluirSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+        assertThat(dtos.size(), equalTo(0));
+    }
+
+    @Test
+    public void excluirSubsequentesParceladasParcial() throws BusinessException {
+        List<Long> codigos = criarContabilidades();
+        ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
+
+        business.excluirSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
+        assertThat(dtos.size(), equalTo(1));
+
+        assertParcelado(dtos.get(0), "Suplementos comprados pela Carol", "1", null);
+    }
+
+    @Test
+    public void excluirSubsequentesRecorrentes() throws BusinessException {
+        List<Long> codigos = criarContabilidadeRecorrente();
+        Long codigo = codigos.get(0);
+        ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+        business.excluirSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+        assertThat(dtos.size(), equalTo(0));
+    }
+
+    @Test
+    public void excluirSubsequentesRecorrentesParcial() throws BusinessException {
+        List<Long> codigos = criarContabilidadeRecorrente();
+        ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
+
+        business.excluirSubsequentes(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigos.get(0));
+        assertThat(dtos.size(), equalTo(1));
+
+        assertRecorrente(dtos.get(0), "27/04/2018", "Aluguel mensal do apartamento", null);
     }
 
     @Test(expected = BusinessException.class)
@@ -1223,15 +1110,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void buscarContabilidades() throws BusinessException {
         criarContabilidades();
-        criarContabilidadeNaoParcelada();
+        criarContabilidadeRecorrente();
 
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         dtos.sort(Comparator
-                .comparing(ContabilidadeDTO::codigo));
-        assertThat(dtos.size(), equalTo(8));
+                .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
 
-        assertEntitiesDTOS(dtos.subList(0, 7));
-        assertContabilidadeNaoParcelada(dtos.get(7), "27/04/2018", null);
+        assertThat(dtos.size(), equalTo(16));
+
+        assertEntitiesParceladas(dtos.subList(0, 7));
+        assertEntitiesRecorrentes(dtos.subList(7, 16));
     }
 
     @Test(expected = BusinessException.class)
@@ -1246,13 +1134,25 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
+    @Test(expected = BusinessException.class)
+    public void buscarTodasAsRecorrentesException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            business.buscarTodasAsRecorrentes(null);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscas todas as recorrentes."));
+            throw e;
+        }
+    }
+
     @Test
     public void buscarTodasAsParcelas() throws BusinessException {
         Long codigo = criarContabilidades().get(0);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
         assertThat(dtos.size(), equalTo(7));
-        assertEntitiesDTOS(dtos);
+        assertEntitiesParceladas(dtos);
     }
 
     private List<Long> criarContabilidades() throws BusinessException {
@@ -1262,9 +1162,15 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     private List<Long> criarContabilidadeNaoParcelada() throws BusinessException {
-        ContabilidadeDTO dto = contabilidadeDTORecorrenteNaoParcelada();
+        ContabilidadeDTO dto = contabilidadeDTONaoRecorrenteNaoParcelada();
         List<Long> codigos = business.criar(dto);
         return assertCodigos(codigos, 1);
+    }
+
+    private List<Long> criarContabilidadeRecorrente() throws BusinessException {
+        ContabilidadeDTO dto = contabilidadeDTORecorrente();
+        List<Long> codigos = business.criar(dto);
+        return assertCodigos(codigos, 9);
     }
 
     private List<Long> assertCodigos(List<Long> codigos, int size) {
@@ -1275,112 +1181,67 @@ public class ContabilidadeBusinessTest extends GenericTest {
         return codigos;
     }
 
-    private void assertEntities(List<Long> codigos) throws BusinessException {
+    private void assertCodigos(List<Long> codigos) throws BusinessException {
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
-        assertEntitiesDTOS(dtos);
+        assertEntitiesParceladas(dtos);
     }
 
-    private void assertEntitiesDTOS(List<ContabilidadeDTO> dtos) {
+    private void assertEntitiesParceladas(List<ContabilidadeDTO> dtos) {
         String codigoPai = null;
         for (int i = 0; i < dtos.size(); i++) {
             ContabilidadeDTO dto = dtos.get(i);
-            assertEntityDTO(dto, codigoPai, i);
+            assertParcelado(dto, "Suplementos comprados pela Carol", String.valueOf(i + 1), codigoPai);
             if (i == 0) {
                 codigoPai = dto.codigo();
             }
         }
     }
 
-    private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, int i) {
-        String parcelado = "S";
-        String parcela = String.valueOf(i + 1);
-        String parcelas = "7";
-        assertEntityDTO(dto, codigoPai, parcelado, parcela, parcelas);
+    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws BusinessException {
+        List<Long> codigos = new ArrayList<>();
+        for (ContabilidadeDTO dto : dtos) {
+            long codigo = Long.parseLong(dto.codigo());
+            codigos.add(codigo);
+        }
+        assertCodigosRecorrentes(codigos);
     }
 
-    private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, String parcelado, String parcela, String parcelas) {
-        assertEntityDTO(dto, codigoPai, "Suplementos comprados pela Carol", parcelado, parcela, parcelas);
-    }
+    private void assertRecorrentes(List<ContabilidadeDTO> dtos, String dataVencimento, String descricao) throws BusinessException {
+        String dataVencimentoLocal = dataVencimento;
+        int teto = dtos.size();
+        for (int i = 0; i < teto; i++) {
+            ContabilidadeDTO dto = dtos.get(i);
+            Long codigo = Long.parseLong(dto.codigo());
 
-    private void assertEntityDTO(ContabilidadeDTO dto, String codigoPai, String descricao, String parcelado, String parcela, String parcelas) {
-        assertThat(dto.codigo(), not(nullValue()));
-        assertThat(dto.dataLancamento(), not(nullValue()));
-        assertThat(dto.dataAtualizacao(), not(nullValue()));
-        assertThat(dto.dataVencimento(), equalTo("27/04/2018"));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("N"));
-        assertThat(dto.grupo(), equalTo("Saúde"));
-        assertThat(dto.subGrupo(), equalTo("Suplementos"));
-        assertThat(dto.descricao(), equalTo(descricao));
-        assertThat(dto.usouCartao(), equalTo("S"));
-        assertThat(dto.cartao(), equalTo("0744"));
-        assertThat(dto.conta(), equalTo("CAROL"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("24,04"));
-        assertThat(dto.parcelado(), equalTo(parcelado));
-        assertThat(dto.parcela(), equalTo(parcela));
-        assertThat(dto.parcelas(), equalTo(parcelas));
-        assertThat(dto.codigoPai(), equalTo(codigoPai));
-        assertThat(dto.proximoLancamento(), nullValue());
-    }
-
-    private void assertContabilidadeNaoParcelada(ContabilidadeDTO dto, String dataVencimento, String proximoLancamento) {
-        assertThat(dto.codigo(), not(nullValue()));
-        assertThat(dto.dataLancamento(), not(nullValue()));
-        assertThat(dto.dataAtualizacao(), not(nullValue()));
-        assertThat(dto.dataVencimento(), equalTo(dataVencimento));
-        assertThat(dto.dataPagamento(), nullValue());
-        assertThat(dto.recorrente(), equalTo("S"));
-        assertThat(dto.grupo(), equalTo("Apartamento"));
-        assertThat(dto.subGrupo(), equalTo("Aluguel"));
-        assertThat(dto.descricao(), equalTo("Aluguel mensal do apartamento"));
-        assertThat(dto.usouCartao(), equalTo("N"));
-        assertThat(dto.cartao(), nullValue());
-        assertThat(dto.conta(), equalTo("MORADIA"));
-        assertThat(dto.tipo(), equalTo("DEBITO"));
-        assertThat(dto.valor(), equalTo("1.000,00"));
-        assertThat(dto.parcelado(), equalTo("N"));
-        assertThat(dto.parcela(), nullValue());
-        assertThat(dto.parcelas(), nullValue());
-        assertThat(dto.codigoPai(), nullValue());
-        assertThat(dto.proximoLancamento(), equalTo(proximoLancamento));
-    }
-
-    private void assertCriarContabilidadeRecorrente(List<Long> codigos) throws BusinessException {
-        Long codigo1 = codigos.get(0);
-        ContabilidadeDTO dto1 = business.buscarPorId(codigo1);
-
-        Long codigo2 = codigos.get(1);
-        ContabilidadeDTO dto2 = business.buscarPorId(codigo2);
-
-        Long codigo3 = codigos.get(2);
-        ContabilidadeDTO dto3 = business.buscarPorId(codigo3);
-
-        assertContabilidadeNaoParcelada(dto1, "27/04/2018", codigo2.toString());
-        assertContabilidadeNaoParcelada(dto2, "27/05/2018", codigo3.toString());
-        assertContabilidadeNaoParcelada(dto3, "27/06/2018", null);
-    }
-
-    private void assertContabilidadeRecorrenteParcial(List<Long> codigosAtualizados, String dataVencimento, int inicio,
-                                                      int teto, int ultimoLancamento, int passoProximoLancamento) throws BusinessException {
-        ContabilidadeDTO dto;
-        for (; inicio < teto; inicio++) {
-            Long codigo = codigosAtualizados.get(inicio);
-            dto = business.buscarPorId(codigo);
-            dataVencimento = getStringFromDateNextMonth(dataVencimento);
-            String proximoLancamento;
-            if (inicio == ultimoLancamento) {
-                proximoLancamento = null;
+            if (i == (teto - 1)) {
+                assertRecorrente(dto, dataVencimentoLocal, descricao, null);
             }
             else {
-                proximoLancamento = String.valueOf(inicio + passoProximoLancamento);
+                assertRecorrente(dto, dataVencimentoLocal, descricao, String.valueOf(codigo + 1));
             }
-            assertContabilidadeNaoParcelada(dto, dataVencimento, proximoLancamento);
+            dataVencimentoLocal = getStringNextMonth(dataVencimentoLocal);
         }
     }
 
-    private void assertContabilidadeRecorrenteTotal(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
-                                                    int passoProximoRegistro) throws BusinessException {
+    private void assertCodigosRecorrentes(List<Long> codigos) throws BusinessException {
+        String dataVencimento = "27/04/2018";
+        int teto = 9;
+        for (int i = 0; i < teto; i++) {
+            Long codigo = codigos.get(i);
+            ContabilidadeDTO dto = business.buscarPorId(codigo);
+
+            if (i == (teto - 1)) {
+                assertRecorrente(dto, dataVencimento, "Aluguel mensal do apartamento", null);
+            }
+            else {
+                assertRecorrente(dto, dataVencimento, "Aluguel mensal do apartamento", String.valueOf(codigo + 1));
+            }
+            dataVencimento = getStringNextMonth(dataVencimento);
+        }
+    }
+
+    private void assertRecorrentesTotais(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
+                                         int passoProximoRegistro) throws BusinessException {
         String dataVencimentoLocal = dataVencimento;
         ContabilidadeDTO dto;
         for (int i = 0; i < totalDeRegistros; i++) {
@@ -1391,10 +1252,104 @@ public class ContabilidadeBusinessTest extends GenericTest {
                 proximoLancamento = null;
             }
             else {
-                proximoLancamento = String.valueOf(i + passoProximoRegistro);
+                proximoLancamento = String.valueOf(codigo + passoProximoRegistro);
             }
-            assertContabilidadeNaoParcelada(dto, dataVencimentoLocal, proximoLancamento);
-            dataVencimentoLocal = getStringFromDateNextMonth(dataVencimentoLocal);
+
+            assertRecorrente(dto, dataVencimentoLocal, "Aluguel mensal do apartamento", proximoLancamento);
+
+            LocalDate localDate = getDateFromString(dataVencimentoLocal);
+            localDate = localDate.plusMonths(1L);
+            dataVencimentoLocal = getStringFromDate(localDate);
+        }
+    }
+
+    private void assertNaoRecorrenteNaoParceladoNaoCartao(ContabilidadeDTO dto, String descricao) {
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Apartamento",
+                "Aluguel", descricao, "N", null, "N", null, null,
+                "MORADIA", "DEBITO", "1.000,00", null, null);
+    }
+
+    private void assertNaoParcelado(ContabilidadeDTO dto) {
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", "Suplementos comprados pela Carol", "N", null,
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
+    }
+
+    private void assertRecorrente(ContabilidadeDTO dto, String dataVencimento, String descricao, String proximoLancamento) {
+        assertEntityDTO(dto, dataVencimento, null, "S", "Apartamento",
+                "Aluguel", descricao, "N", null,
+                "N", null, null, "MORADIA", "DEBITO", "1.000,00",
+                null, proximoLancamento);
+    }
+
+    private void assertParcelado(ContabilidadeDTO dto, String descricao, String parcela, String codigoPai) {
+        assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
+                "Suplementos", descricao, "S", "0744",
+                "S", parcela, "7", "CAROL", "DEBITO", "24,04", codigoPai,
+                null);
+    }
+
+    private void assertEntityDTO(ContabilidadeDTO dto, String dataVencimento, String dataPagamento, String recorrente,
+                                 String grupo, String subGrupo, String descricao, String usouCartao, String cartao,
+                                 String parcelado, String parcela, String parcelas, String conta, String tipo,
+                                 String valor, String codigoPai, String proximoLancamento) {
+        assertThat(dto.codigo(), not(nullValue()));
+        assertThat(dto.dataLancamento(), not(nullValue()));
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataVencimento(), equalTo(dataVencimento));
+
+        if (isBlankOrNull(dataPagamento)) {
+            assertThat(dto.dataPagamento(), nullValue());
+        }
+        else {
+            assertThat(dto.dataPagamento(), equalTo(dataPagamento));
+        }
+
+        assertThat(dto.recorrente(), equalTo(recorrente));
+        assertThat(dto.grupo(), equalTo(grupo));
+        assertThat(dto.subGrupo(), equalTo(subGrupo));
+        assertThat(dto.descricao(), equalTo(descricao));
+        assertThat(dto.usouCartao(), equalTo(usouCartao));
+
+        if (isBlankOrNull(cartao)) {
+            assertThat(dto.cartao(), nullValue());
+        }
+        else {
+            assertThat(dto.cartao(), equalTo(cartao));
+        }
+
+        assertThat(dto.conta(), equalTo(conta));
+        assertThat(dto.tipo(), equalTo(tipo));
+        assertThat(dto.valor(), equalTo(valor));
+        assertThat(dto.parcelado(), equalTo(parcelado));
+
+        if (isBlankOrNull(parcela)) {
+            assertThat(dto.parcela(), nullValue());
+        }
+        else {
+            assertThat(dto.parcela(), equalTo(parcela));
+        }
+
+        if (isBlankOrNull(parcelas)) {
+            assertThat(dto.parcelas(), nullValue());
+        }
+        else {
+            assertThat(dto.parcelas(), equalTo(parcelas));
+        }
+
+        if (isBlankOrNull(codigoPai)) {
+            assertThat(dto.codigoPai(), nullValue());
+        }
+        else {
+            assertThat(dto.codigoPai(), equalTo(codigoPai));
+        }
+
+        if (isBlankOrNull(proximoLancamento)) {
+            assertThat(dto.proximoLancamento(), nullValue());
+        }
+        else {
+            assertThat(dto.proximoLancamento(), equalTo(proximoLancamento));
         }
     }
 }

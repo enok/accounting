@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Grupo implements Entity {
+public class Grupo implements Entity, Serializable {
     private Long codigo;
     private String nome;
     private String descricao;

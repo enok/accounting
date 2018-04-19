@@ -22,7 +22,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     private String diretorio;
 
     @Override
-    public void ordenarPorDataVencimentoGrupoSubGrupo(List<Contabilidade> entities) {
+    public void ordenarPorDataVencimentoGrupoSubGrupo(final List<Contabilidade> entities) {
         entities.sort(Comparator
                 .comparing((Contabilidade c) -> c.dataVencimento())
                 .thenComparing(c -> c.grupo().nome())
@@ -30,18 +30,28 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     }
 
     @Override
-    public List<Contabilidade> filtrarPorCodigoPai(List<Contabilidade> entities, Long codigoPai) {
+    public List<Contabilidade> filtrarPorCodigoPai(final List<Contabilidade> entities, final Long codigoPai) {
         return entities
                 .stream()
-                .filter(c -> (
-                        ((c.codigoPai() == null) && (c.codigo() == codigoPai)) ||
-                                (c.codigoPai() == codigoPai))
+                .filter(c -> dentroDasParcelas(codigoPai, c)
                 )
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Contabilidade> filtrarRecorrentesNaoLancados(List<Contabilidade> entities) {
+    public List<Contabilidade> filtrarParcelasPosteriores(final List<Contabilidade> entities, final Long codigoPai,
+                                                          final Integer parcelaAtual) {
+        return entities
+                .stream()
+                .filter(c -> (
+                        dentroDasParcelas(codigoPai, c) &&
+                                (c.parcelamento().parcela() >= parcelaAtual))
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Contabilidade> filtrarRecorrentesNaoLancados(final List<Contabilidade> entities) {
         return entities
                 .stream()
                 .filter(c -> (
@@ -131,5 +141,10 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .withCodigoPai(registro.get(17))
                 .withProximoLancamento(registro.get(18))
                 .build();
+    }
+
+    private boolean dentroDasParcelas(Long codigoPai, Contabilidade c) {
+        return ((c.codigoPai() == null) && (c.codigo() == codigoPai)) ||
+                (c.codigoPai() == codigoPai);
     }
 }

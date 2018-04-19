@@ -6,13 +6,15 @@ import br.com.accounting.business.exception.BusinessException;
 import java.util.List;
 
 public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO> {
-    List<Long> criarRecorrente(ContabilidadeDTO dto, Integer meses) throws BusinessException;
+    void atualizarSubsequentes(ContabilidadeDTO dto) throws BusinessException;
 
-    List<Long> atualizarRecorrentes(Integer anos) throws BusinessException;
+    void excluirSubsequentes(ContabilidadeDTO dto) throws BusinessException;
 
-    void atualizarRecursivamente(ContabilidadeDTO dto) throws BusinessException;
+    List<Long> incrementarRecorrentes(Integer anos) throws BusinessException;
 
     void realizarPagamento(Long codigo) throws BusinessException;
 
     List<ContabilidadeDTO> buscarTodasAsParcelas(Long codigo) throws BusinessException;
+
+    List<ContabilidadeDTO> buscarTodasAsRecorrentes(Long codigo) throws BusinessException;
 }

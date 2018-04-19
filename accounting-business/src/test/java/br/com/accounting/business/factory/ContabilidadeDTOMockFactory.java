@@ -26,7 +26,7 @@ public final class ContabilidadeDTOMockFactory {
                 .build();
     }
 
-    public static ContabilidadeDTO contabilidadeDTORecorrenteNaoParcelada() {
+    public static ContabilidadeDTO contabilidadeDTORecorrente() {
         return ContabilidadeDTOFactory
                 .create()
                 .withDataVencimento("27/04/2018")
@@ -40,11 +40,10 @@ public final class ContabilidadeDTOMockFactory {
                 .build();
     }
 
-    public static ContabilidadeDTO contabilidadeDTORecorrenteNaoParcelada2() {
+    public static ContabilidadeDTO contabilidadeDTORecorrenteUltimoMes() {
         return ContabilidadeDTOFactory
                 .create()
-                .withDataVencimento("27/10/2018")
-                .withDataPagamento("27/10/2018")
+                .withDataVencimento("27/12/2018")
                 .withRecorrente(getStringFromBoolean(true))
                 .withGrupo("Apartamento", "Aluguel")
                 .withDescricao("Aluguel mensal do apartamento")
@@ -54,7 +53,7 @@ public final class ContabilidadeDTOMockFactory {
                 .build();
     }
 
-    public static ContabilidadeDTO contabilidadeDTORecorrenteNaoParceladaComProximoLancamento() {
+    public static ContabilidadeDTO contabilidadeDTORecorrenteComProximoLancamento() {
         return ContabilidadeDTOFactory
                 .create()
                 .withDataVencimento("27/04/2018")
@@ -66,6 +65,33 @@ public final class ContabilidadeDTOMockFactory {
                 .withTipo("DEBITO")
                 .withValor("1000,00")
                 .withProximoLancamento("1")
+                .build();
+    }
+
+    public static ContabilidadeDTO contabilidadeDTONaoRecorrenteNaoParcelada() {
+        return ContabilidadeDTOFactory
+                .create()
+                .withDataVencimento("27/04/2018")
+                .withDataPagamento("27/04/2018")
+                .withGrupo("Apartamento", "Aluguel")
+                .withDescricao("Aluguel mensal do apartamento")
+                .withConta("MORADIA")
+                .withTipo("DEBITO")
+                .withValor("1000,00")
+                .build();
+    }
+
+    public static ContabilidadeDTO contabilidadeDTORecorrente2() {
+        return ContabilidadeDTOFactory
+                .create()
+                .withDataVencimento("27/10/2018")
+                .withDataPagamento("27/10/2018")
+                .withRecorrente(getStringFromBoolean(true))
+                .withGrupo("Apartamento", "Aluguel")
+                .withDescricao("Aluguel mensal do apartamento")
+                .withConta("MORADIA")
+                .withTipo("DEBITO")
+                .withValor("1000,00")
                 .build();
     }
 

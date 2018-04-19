@@ -4,6 +4,7 @@ import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.ContaRepository;
 import br.com.accounting.core.service.ContaService;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     @Override
     public void atualizarSaldo(final Conta conta, final Double saldo) throws ServiceException {
         try {
-            Conta contaAtualizada = conta.clone();
+            Conta contaAtualizada = SerializationUtils.clone(conta);
             Double novoSaldo = buscarSaldo(conta) + saldo;
             contaAtualizada.saldo(novoSaldo);
 

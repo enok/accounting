@@ -9,5 +9,8 @@ public interface ContabilidadeRepository extends GenericRepository<Contabilidade
 
     List<Contabilidade> filtrarPorCodigoPai(List<Contabilidade> entities, Long codigoPai);
 
+    List<Contabilidade> filtrarParcelasPosteriores(List<Contabilidade> entities, Long codigoPai,
+                                                   Integer parcelaAtual);
+
     List<Contabilidade> filtrarRecorrentesNaoLancados(List<Contabilidade> entities);
 }

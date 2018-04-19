@@ -9,7 +9,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class ContabilidadeDTO implements EntityDTO, Serializable {
+public class ContabilidadeDTO implements EntityDTO {
     private String codigo;
     private String dataLancamento;
     private String dataAtualizacao;

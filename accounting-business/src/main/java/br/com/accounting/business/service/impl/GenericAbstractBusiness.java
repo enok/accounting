@@ -101,7 +101,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     public D buscarPorId(final Long codigo) throws BusinessException {
         try {
             E entity = (E) service.buscarPorCodigo(codigo);
-            return criarDTOEntity(dtoFactory, entity);
+            return criarDTO(dtoFactory, entity);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar por id.";
@@ -113,7 +113,7 @@ public abstract class GenericAbstractBusiness<D, E> {
         List<D> entitiesDTO;
         try {
             List<E> entities = service.buscarTodas();
-            entitiesDTO = criarListaEntitiesDTO(dtoFactory, entities);
+            entitiesDTO = criarListaDTO(dtoFactory, entities);
         }
         catch (Exception e) {
             String message = "Não foi possível buscar todas.";
@@ -122,17 +122,17 @@ public abstract class GenericAbstractBusiness<D, E> {
         return entitiesDTO;
     }
 
-    public D criarDTOEntity(final GenericDTOFactory genericDTOFactory, final E entity) {
+    public D criarDTO(final GenericDTOFactory genericDTOFactory, final E entity) {
         return (D) genericDTOFactory
                 .begin()
                 .preencherCampos(entity)
                 .build();
     }
 
-    protected List<D> criarListaEntitiesDTO(final GenericDTOFactory genericDTOFactory, final List<E> entities) {
+    protected List<D> criarListaDTO(final GenericDTOFactory genericDTOFactory, final List<E> entities) {
         List<D> entityesDTO = new ArrayList<>();
         for (E entity : entities) {
-            entityesDTO.add(criarDTOEntity(genericDTOFactory, entity));
+            entityesDTO.add(criarDTO(genericDTOFactory, entity));
         }
         return entityesDTO;
     }

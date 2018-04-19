@@ -4,12 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Contabilidade implements Entity {
+public class Contabilidade implements Entity, Serializable {
     private Long codigo;
     private LocalDate dataLancamento;
     private LocalDate dataAtualizacao;

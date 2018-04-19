@@ -5,10 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Conta implements Entity, Cloneable {
+public class Conta implements Entity, Serializable {
     private Long codigo;
     private String nome;
     private String descricao;
@@ -36,10 +38,5 @@ public class Conta implements Entity, Cloneable {
         return new EqualsBuilder()
                 .append(nome, conta.nome)
                 .isEquals();
-    }
-
-    @Override
-    public Conta clone() throws CloneNotSupportedException {
-        return (Conta) super.clone();
     }
 }
