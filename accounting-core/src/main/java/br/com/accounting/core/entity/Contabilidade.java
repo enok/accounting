@@ -18,6 +18,7 @@ public class Contabilidade implements Entity, Serializable {
     private LocalDate dataPagamento;
     private Boolean recorrente;
     private Grupo grupo;
+    private Local local;
     private String descricao;
     private Boolean usouCartao;
     private Cartao cartao;

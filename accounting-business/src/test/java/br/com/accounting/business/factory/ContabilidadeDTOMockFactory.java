@@ -15,6 +15,7 @@ public final class ContabilidadeDTOMockFactory {
                 .withDataPagamento("27/04/2018")
                 .withRecorrente(getStringFromBoolean(false))
                 .withGrupo("Saúde", "Suplementos")
+                .withLocal("Site")
                 .withDescricao("Suplementos comprados pela Carol")
                 .withUsouCartao(getStringFromBoolean(true))
                 .withCartao("0744")
@@ -118,6 +119,11 @@ public final class ContabilidadeDTOMockFactory {
     public static ContabilidadeDTO contabilidadeDTOSemSubGrupo() {
         return contabilidadeDTO()
                 .subGrupo(null);
+    }
+
+    public static ContabilidadeDTO contabilidadeDTOSemLocal() {
+        return contabilidadeDTO()
+                .local(null);
     }
 
     public static ContabilidadeDTO contabilidadeDTOSemDescricao() {

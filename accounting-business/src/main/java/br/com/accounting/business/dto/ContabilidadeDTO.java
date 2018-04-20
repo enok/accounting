@@ -18,6 +18,7 @@ public class ContabilidadeDTO implements EntityDTO {
     private String recorrente;
     private String grupo;
     private String subGrupo;
+    private String local;
     private String descricao;
     private String usouCartao;
     private String cartao;

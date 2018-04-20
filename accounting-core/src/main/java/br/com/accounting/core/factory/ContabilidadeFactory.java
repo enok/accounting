@@ -130,6 +130,17 @@ public final class ContabilidadeFactory {
         return this;
     }
 
+    public ContabilidadeFactory withLocal(String local) {
+        if (!isBlankOrNull(local)) {
+            Local localObj = LocalFactory
+                    .begin()
+                    .withNome(local)
+                    .build();
+            entity.local(localObj);
+        }
+        return this;
+    }
+
     public ContabilidadeFactory withDescricao(String descricao) {
         if (!isBlankOrNull(descricao)) {
             entity.descricao(descricao);

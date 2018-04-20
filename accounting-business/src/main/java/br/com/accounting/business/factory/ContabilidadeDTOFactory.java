@@ -40,6 +40,7 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
         withDataPagamento(entity.dataPagamento());
         withRecorrente(entity.recorrente());
         withGrupo(entity.grupo());
+        withLocal(entity.local());
         withDescricao(entity.descricao());
         withUsouCartao(entity.usouCartao());
         withCartao(entity.cartao());
@@ -156,6 +157,20 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
         return this;
     }
 
+    public ContabilidadeDTOFactory withLocal(String local) {
+        if (!isBlankOrNull(local)) {
+            dto.local(local);
+        }
+        return this;
+    }
+
+    private ContabilidadeDTOFactory withLocal(Local local) {
+        if (local != null) {
+            dto.local(local.nome());
+        }
+        return this;
+    }
+
     public ContabilidadeDTOFactory withDescricao(String descricao) {
         if (!isBlankOrNull(descricao)) {
             dto.descricao(descricao);
@@ -171,8 +186,8 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
     }
 
     public ContabilidadeDTOFactory withUsouCartao(Boolean usouCartao) {
+        withUsouCartao(getStringFromBoolean(usouCartao));
         if (usouCartao != null) {
-            withUsouCartao(getStringFromBoolean(usouCartao));
         }
         return this;
     }

@@ -33,7 +33,8 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     public List<Contabilidade> filtrarPorCodigoPai(final List<Contabilidade> entities, final Long codigoPai) {
         return entities
                 .stream()
-                .filter(c -> dentroDasParcelas(codigoPai, c)
+                .filter(c ->
+                        dentroDasParcelas(codigoPai, c)
                 )
                 .collect(Collectors.toList());
     }
@@ -77,6 +78,10 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
         if (entity.dataPagamento() != null) {
             dataPagamento = getStringFromDate(entity.dataPagamento());
         }
+        String local = null;
+        if (entity.local() != null) {
+            local = entity.local().nome();
+        }
         String usouCartao = null;
         String numeroCartao = null;
         if (entity.usouCartao()) {
@@ -101,6 +106,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .append(getStringFromBoolean(entity.recorrente())).append(SEPARADOR)
                 .append(entity.grupo().nome()).append(SEPARADOR)
                 .append(entity.grupo().subGrupos().get(0).nome()).append(SEPARADOR)
+                .append(local).append(SEPARADOR)
                 .append(entity.descricao()).append(SEPARADOR)
                 .append(usouCartao).append(SEPARADOR)
                 .append(numeroCartao).append(SEPARADOR)
@@ -121,25 +127,27 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)
                 .collect(Collectors.toList());
+        int i = 0;
         return ContabilidadeFactory
                 .begin()
-                .withCodigo(registro.get(0))
-                .withDataLancamento(registro.get(1))
-                .withDataAtualizacao(registro.get(2))
-                .withDataVencimento(registro.get(3))
-                .withDataPagamento(registro.get(4))
-                .withRecorrente(registro.get(5))
-                .withGrupo(registro.get(6), registro.get(7))
-                .withDescricao(registro.get(8))
-                .withUsouCartao(registro.get(9))
-                .withCartao(registro.get(10))
-                .withParcelado(registro.get(11))
-                .withParcelamento(registro.get(12), registro.get(13))
-                .withConta(registro.get(14))
-                .withTipo(registro.get(15))
-                .withValor(registro.get(16))
-                .withCodigoPai(registro.get(17))
-                .withProximoLancamento(registro.get(18))
+                .withCodigo(registro.get(i++))
+                .withDataLancamento(registro.get(i++))
+                .withDataAtualizacao(registro.get(i++))
+                .withDataVencimento(registro.get(i++))
+                .withDataPagamento(registro.get(i++))
+                .withRecorrente(registro.get(i++))
+                .withGrupo(registro.get(i++), registro.get(i++))
+                .withLocal(registro.get(i++))
+                .withDescricao(registro.get(i++))
+                .withUsouCartao(registro.get(i++))
+                .withCartao(registro.get(i++))
+                .withParcelado(registro.get(i++))
+                .withParcelamento(registro.get(i++), registro.get(i++))
+                .withConta(registro.get(i++))
+                .withTipo(registro.get(i++))
+                .withValor(registro.get(i++))
+                .withCodigoPai(registro.get(i++))
+                .withProximoLancamento(registro.get(i++))
                 .build();
     }
 
