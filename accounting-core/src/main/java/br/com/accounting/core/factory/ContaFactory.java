@@ -1,13 +1,11 @@
 package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.util.Utils;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 
 import static br.com.accounting.core.util.Utils.*;
-import static br.com.accounting.core.util.Utils.getDoubleFromString;
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
 
 public final class ContaFactory {
     private static ContaFactory factory;
@@ -26,6 +24,7 @@ public final class ContaFactory {
         if (entity.saldo() == null) {
             entity.saldo(0.0);
         }
+        entity.dataAtualizacao(LocalDate.now());
         return entity;
     }
 
@@ -74,6 +73,13 @@ public final class ContaFactory {
     private ContaFactory withCumulativo(Boolean cumulativo) {
         if (cumulativo != null) {
             entity.cumulativo(cumulativo);
+        }
+        return this;
+    }
+
+    public ContaFactory withDataAtualizacao(String dataAtualizacao) {
+        if (!isBlankOrNull(dataAtualizacao)) {
+            entity.dataAtualizacao(getDateFromString(dataAtualizacao));
         }
         return this;
     }

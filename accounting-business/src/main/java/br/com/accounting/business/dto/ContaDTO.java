@@ -13,6 +13,7 @@ public class ContaDTO implements EntityDTO {
     private String descricao;
     private String saldo;
     private String cumulativo;
+    private String dataAtualizacao;
 
     @Override
     public String getCodigo() {

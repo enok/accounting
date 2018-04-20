@@ -3,8 +3,9 @@ package br.com.accounting.business.factory;
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.core.entity.Conta;
 
-import static br.com.accounting.core.util.Utils.getStringFromBoolean;
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
+import java.time.LocalDate;
+
+import static br.com.accounting.core.util.Utils.*;
 
 public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
     private static ContaDTOFactory factory;
@@ -36,6 +37,7 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
         withDescricao(conta.descricao());
         withSaldo(conta.saldo());
         withCumulativo(conta.cumulativo());
+        withDataAtualizacao(conta.dataAtualizacao());
         return this;
     }
 
@@ -82,6 +84,13 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
     public ContaDTOFactory withCumulativo(Boolean cumulativo) {
         if (cumulativo != null) {
             withCumulativo(getStringFromBoolean(cumulativo));
+        }
+        return this;
+    }
+
+    public ContaDTOFactory withDataAtualizacao(LocalDate dataAtualizacao) {
+        if (dataAtualizacao != null) {
+            dto.dataAtualizacao(getStringFromDate(dataAtualizacao));
         }
         return this;
     }

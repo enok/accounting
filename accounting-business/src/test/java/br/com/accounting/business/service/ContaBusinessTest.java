@@ -3,6 +3,7 @@ package br.com.accounting.business.service;
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
+import br.com.accounting.core.util.Utils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static br.com.accounting.business.factory.ContaDTOMockFactory.*;
+import static br.com.accounting.core.util.Utils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -452,6 +454,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
         assertThat(dto.saldo(), equalTo("0.0"));
         assertThat(dto.cumulativo(), equalTo("N"));
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
     }
 
     private ContaDTO assertContaEnok(Long codigo) throws BusinessException {
@@ -464,6 +467,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(dto.saldo(), equalTo("0.0"));
         assertThat(dto.cumulativo(), equalTo("S"));
+        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
         return dto;
     }
 }

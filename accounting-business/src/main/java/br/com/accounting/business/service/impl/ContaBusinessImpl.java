@@ -121,6 +121,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
                 .withDescricao(dto.descricao())
                 .withSaldo(dto.saldo())
                 .withCumulativo(dto.cumulativo())
+                .withDataAtualizacao(dto.dataAtualizacao())
                 .build());
     }
 }

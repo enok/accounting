@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
@@ -16,6 +17,7 @@ public class Conta implements Entity, Serializable {
     private String descricao;
     private Double saldo;
     private Boolean cumulativo;
+    private LocalDate dataAtualizacao;
 
     @Override
     public Long getCodigo() {
