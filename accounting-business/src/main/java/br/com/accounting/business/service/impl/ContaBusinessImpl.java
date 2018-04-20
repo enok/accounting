@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.accounting.core.util.Utils.getDoubleFromString;
+import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -33,10 +35,25 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
+    public List<Long> criar(ContaDTO dto) throws BusinessException {
+        dto.dataAtualizacao(getStringFromCurrentDate());
+        return super.criar(dto);
+    }
+
+    @History
+    @Override
+    public void atualizar(ContaDTO dto) throws BusinessException {
+        dto.dataAtualizacao(getStringFromCurrentDate());
+        super.atualizar(dto);
+    }
+
+    @History
+    @Override
     public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
         try {
             Conta entity = criarEntities(dto).get(0);
             Double saldo = getDoubleFromString(credito);
+            entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, saldo);
         }
         catch (Exception e) {
@@ -51,6 +68,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         try {
             Conta entity = criarEntities(dto).get(0);
             Double saldo = getDoubleFromString(debito);
+            entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, -saldo);
         }
         catch (Exception e) {
