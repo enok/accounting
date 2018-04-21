@@ -23,6 +23,7 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
     @Override
     public ContaDTOFactory begin() {
         factory = new ContaDTOFactory();
+        dto.dataAtualizacao(getStringFromCurrentDate());
         return factory;
     }
 
@@ -88,9 +89,16 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
         return this;
     }
 
+    public ContaDTOFactory withDataAtualizacao(String dataAtualizacao) {
+        if (!isBlankOrNull(dataAtualizacao)) {
+            dto.dataAtualizacao(dataAtualizacao);
+        }
+        return this;
+    }
+
     public ContaDTOFactory withDataAtualizacao(LocalDate dataAtualizacao) {
         if (dataAtualizacao != null) {
-            dto.dataAtualizacao(getStringFromDate(dataAtualizacao));
+            withDataAtualizacao(getStringFromDate(dataAtualizacao));
         }
         return this;
     }

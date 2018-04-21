@@ -9,4 +9,6 @@ public interface ContaBusiness extends GenericBusiness<ContaDTO> {
     void adicionarDebito(ContaDTO contaDTO, String debito) throws BusinessException;
 
     void transferir(ContaDTO contaOrigemDTO, ContaDTO contaDestinoDTO, String valorDeTransferencia) throws BusinessException;
+
+    void atualizarContas() throws BusinessException;
 }

@@ -35,20 +35,6 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public List<Long> criar(ContaDTO dto) throws BusinessException {
-        dto.dataAtualizacao(getStringFromCurrentDate());
-        return super.criar(dto);
-    }
-
-    @History
-    @Override
-    public void atualizar(ContaDTO dto) throws BusinessException {
-        dto.dataAtualizacao(getStringFromCurrentDate());
-        super.atualizar(dto);
-    }
-
-    @History
-    @Override
     public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
         try {
             Conta entity = criarEntities(dto).get(0);
@@ -93,6 +79,18 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         }
         catch (Exception e) {
             String message = "Não foi possível tranferir o valor entre as contas.";
+            throw new BusinessException(message, e);
+        }
+    }
+
+    @Override
+    public void atualizarContas() throws BusinessException {
+        try {
+            List<Conta> entitiesBuscadas = service.buscarCumulativas();
+            // TODO criar valores default para as contas primeiro
+        }
+        catch (Exception e) {
+            String message = "Não foi possível atualizar as contas.";
             throw new BusinessException(message, e);
         }
     }

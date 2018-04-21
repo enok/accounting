@@ -43,12 +43,13 @@ public final class ContaDTOMockFactory {
                 .build();
     }
 
-    public static ContaDTO conta2DTO() {
+    public static ContaDTO contaEnok() {
         return ContaDTOFactory
                 .create()
                 .withNome("Enok")
                 .withDescricao("Valor separado para o Enok")
                 .withCumulativo("S")
+                .withDataAtualizacao("10/03/2018")
                 .build();
     }
 }

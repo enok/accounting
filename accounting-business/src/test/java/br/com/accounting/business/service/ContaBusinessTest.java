@@ -3,7 +3,6 @@ package br.com.accounting.business.service;
 import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.core.util.Utils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -334,7 +333,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarCredito(dto1, "500.0");
         dto1 = business.buscarPorId(codigo1);
 
-        ContaDTO dto2 = conta2DTO();
+        ContaDTO dto2 = contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
         dto2 = business.buscarPorId(codigo2);
 
@@ -355,7 +354,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarCredito(dto1, "1000.0");
         dto1 = business.buscarPorId(codigo1);
 
-        ContaDTO dto2 = conta2DTO();
+        ContaDTO dto2 = contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
         dto2 = business.buscarPorId(codigo2);
 
@@ -426,6 +425,32 @@ public class ContaBusinessTest extends GenericTest {
         assertContaSalario(dtos.get(1));
     }
 
+    @Test(expected = BusinessException.class)
+    public void atualizarContasException() throws IOException, BusinessException {
+        deletarDiretorioEArquivos();
+        try {
+            business.atualizarContas();
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar as contas."));
+            throw e;
+        }
+    }
+
+    @Test
+    public void atualizarContasSemCumulativos() throws BusinessException {
+        criarContaSalario();
+        business.atualizarContas();
+        // TODO completar o teste
+    }
+
+    @Test
+    public void atualizarContas() throws BusinessException {
+        criarContaEnok();
+        business.atualizarContas();
+        // TODO completar o teste
+    }
+
     private Long criarContaSalario() throws BusinessException {
         ContaDTO dto = contaDTO();
         List<Long> codigos = business.criar(dto);
@@ -436,7 +461,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     private Long criarContaEnok() throws BusinessException {
-        ContaDTO dto = conta2DTO();
+        ContaDTO dto = contaEnok();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);

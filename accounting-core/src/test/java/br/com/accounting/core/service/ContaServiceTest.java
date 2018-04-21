@@ -31,4 +31,10 @@ public class ContaServiceTest extends GenericTest {
     public void deletarException() throws ServiceException {
         contaService.deletar(null);
     }
+
+    @Test(expected = ServiceException.class)
+    public void buscarCumulativasException() throws IOException, ServiceException {
+        deletarDiretorioEArquivos();
+        contaService.buscarCumulativas();
+    }
 }

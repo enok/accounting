@@ -38,6 +38,18 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
+    public List<Conta> filtrarCumulativas(List<Conta> entities) {
+        List<Conta> entitiesFiltradas = entities
+                .stream()
+                .filter(c -> (c.cumulativo()))
+                .collect(Collectors.toList());
+        if (isEmpty(entitiesFiltradas)) {
+            return null;
+        }
+        return entitiesFiltradas;
+    }
+
+    @Override
     public void ordenarPorNome(List<Conta> entities) {
         entities.sort(Comparator.comparing(Conta::nome));
     }
