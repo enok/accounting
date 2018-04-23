@@ -11,6 +11,7 @@ public class ContaDTO implements EntityDTO {
     private String codigo;
     private String nome;
     private String descricao;
+    private String valorDefault;
     private String saldo;
     private String cumulativo;
     private String dataAtualizacao;

@@ -13,7 +13,7 @@ public final class Utils {
     public static final String SEPARADOR = ";";
     public static final Locale LOCALE = new Locale("pt", "BR");
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public static final String DECIMAL_PATTERN = "###,###.00";
+    public static final String DECIMAL_PATTERN = "###,##0.00";
 
     private static DecimalFormat decimalFormat;
 

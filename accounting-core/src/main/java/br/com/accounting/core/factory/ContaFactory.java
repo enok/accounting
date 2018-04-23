@@ -49,6 +49,13 @@ public final class ContaFactory {
         return this;
     }
 
+    public ContaFactory withValorDefault(String valorDefault) throws ParseException {
+        if (!isBlankOrNull(valorDefault)) {
+            entity.valorDefault(getDoubleFromString(valorDefault));
+        }
+        return this;
+    }
+
     public ContaFactory withSaldo(String saldo) throws ParseException {
         if (!isBlankOrNull(saldo)) {
             withSaldo(getDoubleFromString(saldo));

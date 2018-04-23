@@ -70,7 +70,8 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(entity.nome()).append(SEPARADOR)
                 .append(entity.descricao()).append(SEPARADOR)
-                .append(entity.saldo()).append(SEPARADOR)
+                .append(getStringFromDouble(entity.valorDefault())).append(SEPARADOR)
+                .append(getStringFromDouble(entity.saldo())).append(SEPARADOR)
                 .append(getStringFromBoolean(entity.cumulativo())).append(SEPARADOR)
                 .append(getStringFromDate(entity.dataAtualizacao()));
         return builder.toString();
@@ -88,6 +89,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
                 .withCodigo(registro.get(i++))
                 .withNome(registro.get(i++))
                 .withDescricao(registro.get(i++))
+                .withValorDefault(registro.get(i++))
                 .withSaldo(registro.get(i++))
                 .withCumulativo(registro.get(i++))
                 .withDataAtualizacao(registro.get(i++))

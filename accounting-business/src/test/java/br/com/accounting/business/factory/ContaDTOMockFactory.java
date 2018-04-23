@@ -11,27 +11,23 @@ public final class ContaDTOMockFactory {
     }
 
     public static ContaDTO contaDTOSemNome() {
-        return ContaDTOFactory
-                .create()
-                .withDescricao("Salário mensal recebido pela Sysmap")
-                .withCumulativo("N")
-                .build();
+        return contaDTO()
+                .nome(null);
     }
 
     public static ContaDTO contaDTOSemDescricao() {
-        return ContaDTOFactory
-                .create()
-                .withNome("Salário")
-                .withCumulativo("N")
-                .build();
+        return contaDTO()
+                .descricao(null);
+    }
+
+    public static ContaDTO contaDTOSemValorDefault() {
+        return contaDTO()
+                .valorDefault(null);
     }
 
     public static ContaDTO contaDTOSemCumulativo() {
-        return ContaDTOFactory
-                .create()
-                .withNome("Salário")
-                .withDescricao("Salário mensal recebido pela Sysmap")
-                .build();
+        return contaDTO()
+                .cumulativo(null);
     }
 
     public static ContaDTO contaDTO() {
@@ -39,6 +35,7 @@ public final class ContaDTOMockFactory {
                 .create()
                 .withNome("Salário")
                 .withDescricao("Salário mensal recebido pela Sysmap")
+                .withValorDefault("1000,00")
                 .withCumulativo("N")
                 .build();
     }
@@ -48,6 +45,7 @@ public final class ContaDTOMockFactory {
                 .create()
                 .withNome("Enok")
                 .withDescricao("Valor separado para o Enok")
+                .withValorDefault("500,00")
                 .withCumulativo("S")
                 .withDataAtualizacao("10/03/2018")
                 .build();

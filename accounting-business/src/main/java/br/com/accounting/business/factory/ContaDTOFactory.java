@@ -36,6 +36,7 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
         withCodigo(conta.codigo());
         withNome(conta.nome());
         withDescricao(conta.descricao());
+        withValorDefault(conta.valorDefault());
         withSaldo(conta.saldo());
         withCumulativo(conta.cumulativo());
         withDataAtualizacao(conta.dataAtualizacao());
@@ -68,9 +69,23 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
         return this;
     }
 
+    public ContaDTOFactory withValorDefault(String valorDefault) {
+        if (!isBlankOrNull(valorDefault)) {
+            dto.valorDefault(valorDefault);
+        }
+        return this;
+    }
+
+    private ContaDTOFactory withValorDefault(Double valorDefault) {
+        if (valorDefault != null) {
+            withValorDefault(getStringFromDouble(valorDefault));
+        }
+        return this;
+    }
+
     public ContaDTOFactory withSaldo(Double saldo) {
         if (saldo != null) {
-            dto.saldo(saldo.toString());
+            dto.saldo(getStringFromDouble(saldo));
         }
         return this;
     }

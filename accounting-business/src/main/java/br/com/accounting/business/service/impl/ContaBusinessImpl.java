@@ -67,8 +67,8 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void transferir(final ContaDTO origemDTO, final ContaDTO destinoDTO, final String valor) throws BusinessException {
         try {
-            Double saldoOrigem = Double.parseDouble(origemDTO.saldo());
-            Double valorTransferencia = Double.parseDouble(valor);
+            Double saldoOrigem = getDoubleFromString(origemDTO.saldo());
+            Double valorTransferencia = getDoubleFromString(valor);
 
             if (saldoOrigem < valorTransferencia) {
                 throw new InsufficientFundsException("Saldo insuficiente.");
@@ -103,6 +103,9 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         if (isBlank(dto.descricao())) {
             erros.add(format(msg, "descrição"));
         }
+        if (isBlank(dto.valorDefault())) {
+            erros.add(format(msg, "valorDefault"));
+        }
         if (isBlank(dto.cumulativo())) {
             erros.add(format(msg, "cumulativo"));
         }
@@ -135,6 +138,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
+                .withValorDefault(dto.valorDefault())
                 .withSaldo(dto.saldo())
                 .withCumulativo(dto.cumulativo())
                 .withDataAtualizacao(dto.dataAtualizacao())

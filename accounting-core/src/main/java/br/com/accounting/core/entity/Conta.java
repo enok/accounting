@@ -15,6 +15,7 @@ public class Conta implements Entity, Serializable {
     private Long codigo;
     private String nome;
     private String descricao;
+    private Double valorDefault;
     private Double saldo;
     private Boolean cumulativo;
     private LocalDate dataAtualizacao;

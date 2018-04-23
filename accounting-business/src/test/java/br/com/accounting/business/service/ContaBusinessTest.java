@@ -54,6 +54,17 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
+    public void criarUmaContaSemValorDefault() throws BusinessException {
+        try {
+            ContaDTO dto = contaDTOSemValorDefault();
+            business.criar(dto);
+        }
+        catch (BusinessException e) {
+            assertCreationAndMandatoryFields(e, "valorDefault");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void criarUmaContaSemCumulativo() throws BusinessException {
         try {
             ContaDTO dto = contaDTOSemCumulativo();
@@ -71,7 +82,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "nome", "descrição", "cumulativo");
+            assertCreationAndMandatoryFields(e, "nome", "descrição", "valorDefault", "cumulativo");
         }
     }
 
@@ -142,6 +153,19 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
+    public void alterarSemValorDefault() throws BusinessException {
+        try {
+            Long codigo = criarContaEnok();
+            ContaDTO dtoBuscado = business.buscarPorId(codigo);
+            dtoBuscado.valorDefault(null);
+            business.atualizar(dtoBuscado);
+        }
+        catch (BusinessException e) {
+            assertUpdateAndMandatoryFields(e, "valorDefault");
+        }
+    }
+
+    @Test(expected = BusinessException.class)
     public void alterarSemCumulativo() throws BusinessException {
         Long codigo = criarContaEnok();
 
@@ -179,7 +203,8 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado = business.buscarPorId(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Carol"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
-        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
+        assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
+        assertThat(dtoBuscado.saldo(), equalTo("0,00"));
         assertThat(dtoBuscado.cumulativo(), equalTo("S"));
     }
 
@@ -195,7 +220,25 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado = business.buscarPorId(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Enok"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
-        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
+        assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
+        assertThat(dtoBuscado.saldo(), equalTo("0,00"));
+        assertThat(dtoBuscado.cumulativo(), equalTo("S"));
+    }
+
+    @Test
+    public void alterarValorDefaultDaConta() throws BusinessException {
+        Long codigo = criarContaEnok();
+
+        ContaDTO dtoBuscado = assertContaEnok(codigo);
+
+        dtoBuscado.valorDefault("100,00");
+        business.atualizar(dtoBuscado);
+
+        dtoBuscado = business.buscarPorId(codigo);
+        assertThat(dtoBuscado.nome(), equalTo("Enok"));
+        assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
+        assertThat(dtoBuscado.valorDefault(), equalTo("100,00"));
+        assertThat(dtoBuscado.saldo(), equalTo("0,00"));
         assertThat(dtoBuscado.cumulativo(), equalTo("S"));
     }
 
@@ -211,12 +254,13 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado = business.buscarPorId(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Enok"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
-        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
+        assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
+        assertThat(dtoBuscado.saldo(), equalTo("0,00"));
         assertThat(dtoBuscado.cumulativo(), equalTo("N"));
     }
 
     @Test
-    public void alterarNomeDescricaoCumulativo() throws BusinessException {
+    public void alterarNomeDescricaoValorDefaultCumulativo() throws BusinessException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
@@ -224,12 +268,14 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.nome("Carol");
         dtoBuscado.descricao("Valor separado para a Carol");
         dtoBuscado.cumulativo("N");
+        dtoBuscado.valorDefault("150,00");
         business.atualizar(dtoBuscado);
 
         dtoBuscado = business.buscarPorId(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Carol"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
-        assertThat(dtoBuscado.saldo(), equalTo("0.0"));
+        assertThat(dtoBuscado.valorDefault(), equalTo("150,00"));
+        assertThat(dtoBuscado.saldo(), equalTo("0,00"));
         assertThat(dtoBuscado.cumulativo(), equalTo("N"));
     }
 
@@ -257,7 +303,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarCredito(dtoBuscado, "500,00");
         dtoBuscado = business.buscarPorId(codigo);
 
-        assertThat(dtoBuscado.saldo(), equalTo("500.0"));
+        assertThat(dtoBuscado.saldo(), equalTo("500,00"));
     }
 
     @Test
@@ -271,7 +317,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarCredito(dtoBuscado, "500,00");
         dtoBuscado = business.buscarPorId(codigo);
 
-        assertThat(dtoBuscado.saldo(), equalTo("1000.0"));
+        assertThat(dtoBuscado.saldo(), equalTo("1.000,00"));
     }
 
     @Test(expected = BusinessException.class)
@@ -298,7 +344,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarDebito(dtoBuscado, "100,00");
         dtoBuscado = business.buscarPorId(codigo);
 
-        assertThat(dtoBuscado.saldo(), equalTo("-100.0"));
+        assertThat(dtoBuscado.saldo(), equalTo("-100,00"));
     }
 
     @Test
@@ -312,7 +358,7 @@ public class ContaBusinessTest extends GenericTest {
         business.adicionarDebito(dtoBuscado, "100,00");
         dtoBuscado = business.buscarPorId(codigo);
 
-        assertThat(dtoBuscado.saldo(), equalTo("-200.0"));
+        assertThat(dtoBuscado.saldo(), equalTo("-200,00"));
     }
 
     @Test(expected = BusinessException.class)
@@ -330,7 +376,7 @@ public class ContaBusinessTest extends GenericTest {
     public void transferirSaldoDeUmaContaParaOutraSaldoInsuficiente() throws BusinessException {
         ContaDTO dto1 = contaDTO();
         Long codigo1 = business.criar(dto1).get(0);
-        business.adicionarCredito(dto1, "500.0");
+        business.adicionarCredito(dto1, "500,00");
         dto1 = business.buscarPorId(codigo1);
 
         ContaDTO dto2 = contaEnok();
@@ -338,7 +384,7 @@ public class ContaBusinessTest extends GenericTest {
         dto2 = business.buscarPorId(codigo2);
 
         try {
-            business.transferir(dto1, dto2, "600.0");
+            business.transferir(dto1, dto2, "600,00");
         }
         catch (BusinessException e) {
             assertThat(e.getCause().getMessage(), equalTo("Saldo insuficiente."));
@@ -351,20 +397,20 @@ public class ContaBusinessTest extends GenericTest {
         ContaDTO dto1 = contaDTO();
         Long codigo1 = business.criar(dto1).get(0);
         dto1 = business.buscarPorId(codigo1);
-        business.adicionarCredito(dto1, "1000.0");
+        business.adicionarCredito(dto1, "1.000,00");
         dto1 = business.buscarPorId(codigo1);
 
         ContaDTO dto2 = contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
         dto2 = business.buscarPorId(codigo2);
 
-        business.transferir(dto1, dto2, "600.0");
+        business.transferir(dto1, dto2, "600,00");
 
         dto1 = business.buscarPorId(codigo1);
-        assertThat(dto1.saldo(), equalTo("400.0"));
+        assertThat(dto1.saldo(), equalTo("400,00"));
 
         dto2 = business.buscarPorId(codigo2);
-        assertThat(dto2.saldo(), equalTo("600.0"));
+        assertThat(dto2.saldo(), equalTo("600,00"));
     }
 
     @Test(expected = BusinessException.class)
@@ -477,7 +523,8 @@ public class ContaBusinessTest extends GenericTest {
     private void assertContaSalario(ContaDTO dto) {
         assertThat(dto.nome(), equalTo("Salário"));
         assertThat(dto.descricao(), equalTo("Salário mensal recebido pela Sysmap"));
-        assertThat(dto.saldo(), equalTo("0.0"));
+        assertThat(dto.valorDefault(), equalTo("1.000,00"));
+        assertThat(dto.saldo(), equalTo("0,00"));
         assertThat(dto.cumulativo(), equalTo("N"));
         assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
     }
@@ -490,7 +537,8 @@ public class ContaBusinessTest extends GenericTest {
     private ContaDTO assertContaEnok(ContaDTO dto) {
         assertThat(dto.nome(), equalTo("Enok"));
         assertThat(dto.descricao(), equalTo("Valor separado para o Enok"));
-        assertThat(dto.saldo(), equalTo("0.0"));
+        assertThat(dto.valorDefault(), equalTo("500,00"));
+        assertThat(dto.saldo(), equalTo("0,00"));
         assertThat(dto.cumulativo(), equalTo("S"));
         assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
         return dto;
