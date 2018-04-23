@@ -25,7 +25,6 @@ import java.util.List;
 
 import static br.com.accounting.core.util.Utils.*;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -45,14 +44,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
             validarEntrada(dto, erros);
 
-            List<Contabilidade> entities = criarEntities(dto);
+            Contabilidade entity = criarEntity(dto);
             List<Long> codigos = new ArrayList<>();
             Long codigoPai = null;
 
-            Contabilidade entity = entities.get(0);
             entity.dataPagamento(null);
             if (entity.parcelado()) {
-                List<Long> codigosParcelados = criarParcelados(entities, codigoPai, entity);
+                List<Long> codigosParcelados = criarParcelados(entity, codigoPai);
                 codigos.addAll(codigosParcelados);
             }
             else if (entity.recorrente()) {
@@ -268,8 +266,8 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public List<Contabilidade> criarEntities(final ContabilidadeDTO dto) throws ParseException {
-        return asList(ContabilidadeFactory
+    public Contabilidade criarEntity(final ContabilidadeDTO dto) {
+        return ContabilidadeFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withDataVencimento(dto.dataVencimento())
@@ -287,12 +285,17 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
                 .withValor(dto.valor())
                 .withCodigoPai(dto.codigoPai())
                 .withProximoLancamento(dto.proximoLancamento())
-                .build());
+                .build();
     }
 
-    private List<Long> criarParcelados(List<Contabilidade> entities, Long codigoPai, Contabilidade entity) throws ServiceException {
+    @Override
+    protected Contabilidade criarEntity(ContabilidadeDTO dto, Contabilidade entityBuscado) {
+        return criarEntity(dto);
+    }
+
+    private List<Long> criarParcelados(Contabilidade entity, Long codigoPai) throws ServiceException {
         List<Long> codigos = new ArrayList<>();
-        for (int i = 0; i < entities.get(0).parcelamento().parcelas(); i++) {
+        for (int i = 0; i < entity.parcelamento().parcelas(); i++) {
             entity.codigoPai(codigoPai);
             entity.parcelamento().parcela(i + 1);
 

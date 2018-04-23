@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Arrays.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -61,12 +60,17 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
     }
 
     @Override
-    public List<SubGrupo> criarEntities(final SubGrupoDTO dto) {
-        return asList(SubGrupoFactory
+    public SubGrupo criarEntity(final SubGrupoDTO dto) {
+        return SubGrupoFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
-                .build());
+                .build();
+    }
+
+    @Override
+    protected SubGrupo criarEntity(SubGrupoDTO dto, SubGrupo entityBuscado) {
+        return criarEntity(dto);
     }
 }

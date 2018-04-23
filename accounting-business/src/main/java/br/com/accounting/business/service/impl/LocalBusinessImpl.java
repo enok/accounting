@@ -13,7 +13,6 @@ import br.com.accounting.core.service.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,11 +58,16 @@ public class LocalBusinessImpl extends GenericAbstractBusiness<LocalDTO, Local> 
     }
 
     @Override
-    public List<Local> criarEntities(final LocalDTO dto) {
-        return asList(LocalFactory
+    public Local criarEntity(final LocalDTO dto) {
+        return LocalFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
-                .build());
+                .build();
+    }
+
+    @Override
+    protected Local criarEntity(LocalDTO dto, Local entityBuscado) {
+        return criarEntity(dto);
     }
 }

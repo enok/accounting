@@ -8,7 +8,6 @@ import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.service.GenericService;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +26,15 @@ public abstract class GenericAbstractBusiness<D, E> {
         this.dtoFactory = dtoFactory;
     }
 
-    public abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException;
+    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException;
 
-    public abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
+    protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
-    public abstract void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException;
+    protected abstract void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException;
 
-    public abstract List<E> criarEntities(D entity) throws ParseException;
+    protected abstract E criarEntity(D entity);
+
+    protected abstract E criarEntity(D dto, E entityBuscado);
 
     @History
     public List<Long> criar(final D dto) throws BusinessException {
@@ -42,13 +43,12 @@ public abstract class GenericAbstractBusiness<D, E> {
 
             validarEntrada(dto, erros);
 
-            List<E> entities = criarEntities(dto);
-
+            E entity = criarEntity(dto);
             List<Long> codigos = new ArrayList<>();
-            for (E entity : entities) {
-                validaRegistroDuplicado(entity);
-                codigos.add(service.salvar(entity));
-            }
+
+            validaRegistroDuplicado(entity);
+            codigos.add(service.salvar(entity));
+
             return codigos;
         }
         catch (Exception e) {
@@ -69,14 +69,12 @@ public abstract class GenericAbstractBusiness<D, E> {
             if (!isBlank(codigoString)) {
                 codigo = Long.parseLong(codigoString);
             }
-            E entity = (E) service.buscarPorCodigo(codigo);
+            E entityBuscado = (E) service.buscarPorCodigo(codigo);
 
-            validarEntradaUpdate(dto, entity, erros);
+            validarEntradaUpdate(dto, entityBuscado, erros);
 
-            List<E> entities = criarEntities(dto);
-            for (E e : entities) {
-                service.atualizar(e);
-            }
+            E entity = criarEntity(dto, entityBuscado);
+            service.atualizar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar.";
@@ -87,10 +85,8 @@ public abstract class GenericAbstractBusiness<D, E> {
     @History
     public void excluir(final D dto) throws BusinessException {
         try {
-            List<E> entities = criarEntities(dto);
-            for (E entity : entities) {
-                service.deletar(entity);
-            }
+            E entity = criarEntity(dto);
+            service.deletar(entity);
         }
         catch (Exception e) {
             String message = "Não foi possível excluir.";

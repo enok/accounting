@@ -13,12 +13,10 @@ import br.com.accounting.core.service.CartaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -74,8 +72,8 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public List<Cartao> criarEntities(CartaoDTO dto) throws ParseException {
-        return asList(CartaoFactory
+    public Cartao criarEntity(CartaoDTO dto) {
+        return CartaoFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withNumero(dto.numero())
@@ -84,6 +82,11 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
                 .withPortador(dto.portador())
                 .withTipo(dto.tipo())
                 .withLimite(dto.limite())
-                .build());
+                .build();
+    }
+
+    @Override
+    protected Cartao criarEntity(CartaoDTO dto, Cartao entityBuscado) {
+        return criarEntity(dto);
     }
 }

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -65,13 +64,18 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public List<Grupo> criarEntities(final GrupoDTO dto) {
-        return asList(GrupoFactory
+    public Grupo criarEntity(final GrupoDTO dto) {
+        return GrupoFactory
                 .begin()
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
                 .withSubGrupos(dto.subGrupos())
-                .build());
+                .build();
+    }
+
+    @Override
+    protected Grupo criarEntity(GrupoDTO dto, Grupo entityBuscado) {
+        return criarEntity(dto);
     }
 }

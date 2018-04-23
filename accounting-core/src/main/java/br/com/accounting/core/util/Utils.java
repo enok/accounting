@@ -2,7 +2,6 @@ package br.com.accounting.core.util;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -40,12 +39,20 @@ public final class Utils {
         return LocalDate.parse(date, DATE_FORMATTER);
     }
 
-    public static Double getDoubleFromString(final String value) throws ParseException {
+    public static Double getDoubleFromString(final String value) {
+        if (isBlankOrNull(value)) {
+            return null;
+        }
         try {
             return Double.parseDouble(value.replaceAll(",", "."));
         }
         catch (NumberFormatException e) {
-            return decimalFormat.parse(value).doubleValue();
+            try {
+                return decimalFormat.parse(value).doubleValue();
+            }
+            catch (Exception e1) {
+                throw new RuntimeException(e1);
+            }
         }
     }
 
@@ -75,9 +82,14 @@ public final class Utils {
         return decimalFormat.format(value);
     }
 
-
     public static boolean isBlankOrNull(final String value) {
         return isBlank(value) || value.equals("null");
+    }
+
+    public static boolean isMonthChanged(LocalDate date) {
+        int currentMonth = LocalDate.now().getMonth().getValue();
+        int dateMonth = date.getMonth().getValue();
+        return currentMonth > dateMonth;
     }
 
     public static String removeLast(final StringBuilder builder, final String value) {

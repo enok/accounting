@@ -45,6 +45,11 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
 
     @Override
     public ContaDTO build() {
+        if (dto != null) {
+            if (dto.saldo() == null) {
+                dto.saldo(dto.valorDefault());
+            }
+        }
         return dto;
     }
 

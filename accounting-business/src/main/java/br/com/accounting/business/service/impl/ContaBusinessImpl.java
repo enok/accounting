@@ -12,15 +12,13 @@ import br.com.accounting.core.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.accounting.core.util.Utils.getDoubleFromString;
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static br.com.accounting.core.util.Utils.isMonthChanged;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -37,7 +35,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
         try {
-            Conta entity = criarEntities(dto).get(0);
+            Conta entity = criarEntity(dto);
             Double saldo = getDoubleFromString(credito);
             entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, saldo);
@@ -52,7 +50,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarDebito(final ContaDTO dto, final String debito) throws BusinessException {
         try {
-            Conta entity = criarEntities(dto).get(0);
+            Conta entity = criarEntity(dto);
             Double saldo = getDoubleFromString(debito);
             entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, -saldo);
@@ -87,7 +85,14 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     public void atualizarContas() throws BusinessException {
         try {
             List<Conta> entitiesBuscadas = service.buscarCumulativas();
-            // TODO criar valores default para as contas primeiro
+            for (Conta entity : entitiesBuscadas) {
+                LocalDate dataAtualizacao = entity.dataAtualizacao();
+                if (isMonthChanged(dataAtualizacao)) {
+                    Double novoSaldo = entity.valorDefault() + entity.saldo();
+                    entity.saldo(novoSaldo);
+                    service.atualizar(entity);
+                }
+            }
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar as contas.";
@@ -132,16 +137,32 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public List<Conta> criarEntities(final ContaDTO dto) throws ParseException {
-        return asList(ContaFactory
+    public Conta criarEntity(final ContaDTO dto) {
+        ContaFactory factory = ContaFactory
+                .begin();
+        preenderFactory(factory, dto);
+        return factory
+                .build();
+    }
+
+    @Override
+    protected Conta criarEntity(ContaDTO dto, Conta entityBuscado) {
+        ContaFactory factory = ContaFactory
                 .begin()
+                .preencherCamposBuscados(entityBuscado);
+        preenderFactory(factory, dto);
+        return factory
+                .build();
+    }
+
+    private void preenderFactory(final ContaFactory factory, final ContaDTO dto) {
+        factory
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())
                 .withDescricao(dto.descricao())
                 .withValorDefault(dto.valorDefault())
                 .withSaldo(dto.saldo())
                 .withCumulativo(dto.cumulativo())
-                .withDataAtualizacao(dto.dataAtualizacao())
-                .build());
+                .withDataAtualizacao(dto.dataAtualizacao());
     }
 }

@@ -2,7 +2,6 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Conta;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 
 import static br.com.accounting.core.util.Utils.*;
@@ -10,6 +9,8 @@ import static br.com.accounting.core.util.Utils.*;
 public final class ContaFactory {
     private static ContaFactory factory;
     private Conta entity;
+    private boolean atualizacao = false;
+    private Double valorDefaultAnterior;
 
     private ContaFactory() {
         entity = new Conta();
@@ -20,17 +21,52 @@ public final class ContaFactory {
         return factory;
     }
 
+    public ContaFactory preencherCamposBuscados(Conta conta) {
+//        if (conta == null) {
+//            return this;
+//        }
+        atualizacao = true;
+        valorDefaultAnterior = conta.valorDefault();
+        return this;
+    }
+
     public Conta build() {
-        if (entity.saldo() == null) {
-            entity.saldo(0.0);
+        if (!atualizacao) {
+            entity.dataAtualizacao(LocalDate.now());
         }
-        entity.dataAtualizacao(LocalDate.now());
+        else {
+            if (entity != null) {
+                if (atualizacao) {
+                    Double valorDefaultNovo = entity.valorDefault();
+                    Double diffValorDefault = valorDefaultNovo - valorDefaultAnterior;
+                    Double saldo = entity.saldo();
+                    Double novoSaldo;
+//                    if (saldo == null) {
+//                        novoSaldo = diffValorDefault;
+//                    }
+//                    else {
+//                    }
+                    novoSaldo = saldo + diffValorDefault;
+                    entity.saldo(novoSaldo);
+                }
+//                else if (entity.saldo() == null) {
+//                    entity.saldo(entity.valorDefault());
+//                }
+            }
+        }
         return entity;
+    }
+
+    private ContaFactory withCodigo(Long codigo) {
+        if (codigo != null) {
+            entity.codigo(codigo);
+        }
+        return this;
     }
 
     public ContaFactory withCodigo(String codigo) {
         if (!isBlankOrNull(codigo)) {
-            entity.codigo(Long.parseLong(codigo));
+            withCodigo(Long.parseLong(codigo));
         }
         return this;
     }
@@ -49,14 +85,21 @@ public final class ContaFactory {
         return this;
     }
 
-    public ContaFactory withValorDefault(String valorDefault) throws ParseException {
-        if (!isBlankOrNull(valorDefault)) {
-            entity.valorDefault(getDoubleFromString(valorDefault));
+    public ContaFactory withValorDefault(Double valorDefault) {
+        if (valorDefault != null) {
+            entity.valorDefault(valorDefault);
         }
         return this;
     }
 
-    public ContaFactory withSaldo(String saldo) throws ParseException {
+    public ContaFactory withValorDefault(String valorDefault) {
+        if (!isBlankOrNull(valorDefault)) {
+            withValorDefault(getDoubleFromString(valorDefault));
+        }
+        return this;
+    }
+
+    public ContaFactory withSaldo(String saldo) {
         if (!isBlankOrNull(saldo)) {
             withSaldo(getDoubleFromString(saldo));
         }
@@ -84,9 +127,16 @@ public final class ContaFactory {
         return this;
     }
 
+    private ContaFactory withDataAtualizacao(LocalDate dataAtualizacao) {
+        if (dataAtualizacao != null) {
+            entity.dataAtualizacao(dataAtualizacao);
+        }
+        return this;
+    }
+
     public ContaFactory withDataAtualizacao(String dataAtualizacao) {
         if (!isBlankOrNull(dataAtualizacao)) {
-            entity.dataAtualizacao(getDateFromString(dataAtualizacao));
+            withDataAtualizacao(getDateFromString(dataAtualizacao));
         }
         return this;
     }
