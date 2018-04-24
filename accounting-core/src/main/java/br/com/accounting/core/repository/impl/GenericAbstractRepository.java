@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -172,7 +171,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         linhasSream.close();
     }
 
-    public List<T> criarRegistros(final List<String> linhas) throws ParseException {
+    public List<T> criarRegistros(final List<String> linhas) {
         List<T> entities = new ArrayList<>();
         for (String linha : linhas) {
             T entity = criarEntity(linha);
@@ -187,5 +186,5 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
 
     public abstract String criarLinha(T entity);
 
-    public abstract T criarEntity(final String linha) throws ParseException;
+    public abstract T criarEntity(final String linha);
 }

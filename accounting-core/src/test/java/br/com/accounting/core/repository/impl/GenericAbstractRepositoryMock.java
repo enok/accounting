@@ -1,6 +1,5 @@
 package br.com.accounting.core.repository.impl;
 
-import java.text.ParseException;
 import java.util.List;
 
 public class GenericAbstractRepositoryMock extends GenericAbstractRepository {
@@ -20,12 +19,12 @@ public class GenericAbstractRepositoryMock extends GenericAbstractRepository {
     }
 
     @Override
-    public Object criarEntity(String linha) throws ParseException {
+    public Object criarEntity(String linha) {
         return null;
     }
 
     @Override
-    public List criarRegistros(List linhas) throws ParseException {
+    public List criarRegistros(List linhas) {
         return null;
     }
 }

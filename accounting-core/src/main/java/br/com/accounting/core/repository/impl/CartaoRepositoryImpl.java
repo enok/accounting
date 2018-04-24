@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -63,7 +62,7 @@ public class CartaoRepositoryImpl extends GenericAbstractRepository<Cartao> impl
     }
 
     @Override
-    public Cartao criarEntity(final String linha) throws ParseException {
+    public Cartao criarEntity(final String linha) {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.plugin.dom.exception.InvalidStateException;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -524,7 +523,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void atualizarRecorrentes(ContabilidadeDTO dto) throws ServiceException, ParseException {
+    private void atualizarRecorrentes(ContabilidadeDTO dto) throws ServiceException {
         Long codigo = Long.parseLong(dto.codigo());
         List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
 
