@@ -32,7 +32,9 @@ public final class ContaFactory {
 
     public Conta build() {
         if (!atualizacao) {
-            entity.dataAtualizacao(LocalDate.now());
+            if (entity.dataAtualizacao() == null) {
+                entity.dataAtualizacao(LocalDate.now());
+            }
         }
         else {
             if (entity != null) {

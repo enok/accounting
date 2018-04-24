@@ -466,7 +466,7 @@ public class ContaBusinessTest extends GenericTest {
         List<ContaDTO> dtos = business.buscarTodas();
         assertThat(dtos.size(), equalTo(2));
 
-        assertContaEnok(dtos.get(0));
+        assertContaEnok(dtos.get(0), "500,00", "10/03/2018");
         assertContaSalario(dtos.get(1));
     }
 
@@ -482,20 +482,28 @@ public class ContaBusinessTest extends GenericTest {
         }
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void atualizarContasSemCumulativos() throws BusinessException {
-        Long condigoSalario = criarContaSalario();
-        Long codigoEnok = criarContaEnok();
-        business.atualizarContas();
-
-        // TODO completar o teste
+        try {
+            criarContaSalario();
+            business.atualizarContas();
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível atualizar as contas."));
+            throw e;
+        }
     }
 
     @Test
     public void atualizarContas() throws BusinessException {
-        criarContaEnok();
+        Long codigoEnok = criarContaEnok();
+        Long codigoSalario = criarContaSalario();
         business.atualizarContas();
-        // TODO completar o teste
+        ContaDTO dtoEnok = business.buscarPorId(codigoEnok);
+        ContaDTO dtoSalario = business.buscarPorId(codigoSalario);
+
+        assertContaEnok(dtoEnok, "1.000,00", getStringFromCurrentDate());
+        assertContaSalario(dtoSalario);
     }
 
     private Long criarContaSalario() throws BusinessException {
@@ -527,21 +535,21 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.valorDefault(), equalTo("1.000,00"));
         assertThat(dto.saldo(), equalTo("1.000,00"));
         assertThat(dto.cumulativo(), equalTo("N"));
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataAtualizacao(), equalTo("15/03/2018"));
     }
 
     private ContaDTO assertContaEnok(Long codigo) throws BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
-        return assertContaEnok(dtoBuscado);
+        return assertContaEnok(dtoBuscado, "500,00", "10/03/2018");
     }
 
-    private ContaDTO assertContaEnok(ContaDTO dto) {
+    private ContaDTO assertContaEnok(ContaDTO dto, String saldo, String dataAtualizacao) {
         assertThat(dto.nome(), equalTo("Enok"));
         assertThat(dto.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(dto.valorDefault(), equalTo("500,00"));
-        assertThat(dto.saldo(), equalTo("500,00"));
+        assertThat(dto.saldo(), equalTo(saldo));
         assertThat(dto.cumulativo(), equalTo("S"));
-        assertThat(dto.dataAtualizacao(), equalTo(getStringFromCurrentDate()));
+        assertThat(dto.dataAtualizacao(), equalTo(dataAtualizacao));
         return dto;
     }
 }

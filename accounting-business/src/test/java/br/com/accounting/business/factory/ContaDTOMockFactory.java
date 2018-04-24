@@ -38,7 +38,7 @@ public final class ContaDTOMockFactory {
                 .withDescricao("Salário mensal recebido pela Sysmap")
                 .withValorDefault("1000,00")
                 .withCumulativo("N")
-                .withDataAtualizacao("15/04/2018")
+                .withDataAtualizacao("15/03/2018")
                 .build();
     }
 

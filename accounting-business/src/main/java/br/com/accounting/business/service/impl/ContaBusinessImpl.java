@@ -90,6 +90,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
                 if (isMonthChanged(dataAtualizacao)) {
                     Double novoSaldo = entity.valorDefault() + entity.saldo();
                     entity.saldo(novoSaldo);
+                    entity.dataAtualizacao(LocalDate.now());
                     service.atualizar(entity);
                 }
             }

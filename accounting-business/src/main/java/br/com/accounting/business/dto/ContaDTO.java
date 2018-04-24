@@ -32,11 +32,6 @@ public class ContaDTO implements EntityDTO {
         return this;
     }
 
-    public ContaDTO saldo(String saldo) {
-        this.saldo = saldo;
-        return this;
-    }
-
     @Override
     public String getCodigo() {
         return codigo;
