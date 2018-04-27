@@ -31,11 +31,11 @@ public abstract class GenericAbstractBusiness<D, E> {
 
     protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
-    protected abstract void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException;
+    protected abstract void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException, StoreException;
 
-    protected abstract E criarEntity(D entity);
+    protected abstract E criarEntity(D entity) throws ValidationException;
 
-    protected abstract E criarEntity(D dto, E entityBuscado);
+    protected abstract E criarEntity(D dto, E entityBuscado) throws ValidationException;
 
     @History
     public List<Long> criar(final D dto) throws ValidationException, StoreException, BusinessException, GenericException {
@@ -54,6 +54,9 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
         catch (MissingFieldException | CreateException | DuplicatedRegistryException e) {
             throw new ValidationException(e);
+        }
+        catch (ValidationException e) {
+            throw e;
         }
         catch (StoreException e) {
             throw e;

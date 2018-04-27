@@ -1,8 +1,8 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.ContaRepository;
 import br.com.accounting.core.service.ContaService;
 import org.apache.commons.lang3.SerializationUtils;
@@ -37,10 +37,13 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     }
 
     @Override
-    public Conta buscarPorNome(final String nome) throws ServiceException {
+    public Conta buscarPorNome(final String nome) throws ServiceException, StoreException {
         try {
             List<Conta> contas = repository.buscarRegistros();
             return repository.filtrarPorNome(contas, nome);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar a conta.";
@@ -49,10 +52,13 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     }
 
     @Override
-    public List<Conta> buscarCumulativas() throws ServiceException {
+    public List<Conta> buscarCumulativas() throws ServiceException, StoreException {
         try {
             List<Conta> entities = repository.buscarRegistros();
             return repository.filtrarCumulativas(entities);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar cumulativas.";

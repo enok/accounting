@@ -4,15 +4,20 @@ import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.SubGrupoDTOFactory;
 import br.com.accounting.business.service.SubGrupoBusiness;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.core.factory.LocalFactory;
 import br.com.accounting.core.factory.SubGrupoFactory;
 import br.com.accounting.core.service.SubGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +56,7 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
     }
 
     @Override
-    public void validaRegistroDuplicado(final SubGrupo entity) throws ServiceException, DuplicatedRegistryException {
+    public void validaRegistroDuplicado(final SubGrupo entity) throws ServiceException, DuplicatedRegistryException, StoreException {
         SubGrupo entityBuscada = service.buscarPorNome(entity.nome());
 
         if (entity.equals(entityBuscada)) {
@@ -60,17 +65,22 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
     }
 
     @Override
-    public SubGrupo criarEntity(final SubGrupoDTO dto) {
-        return SubGrupoFactory
-                .begin()
-                .withCodigo(dto.codigo())
-                .withNome(dto.nome())
-                .withDescricao(dto.descricao())
-                .build();
+    public SubGrupo criarEntity(final SubGrupoDTO dto) throws ValidationException {
+        try {
+            return SubGrupoFactory
+                    .begin()
+                    .withCodigo(dto.codigo())
+                    .withNome(dto.nome())
+                    .withDescricao(dto.descricao())
+                    .build();
+        }
+        catch (DateTimeParseException | IllegalArgumentException e) {
+            throw new ValidationException(e);
+        }
     }
 
     @Override
-    protected SubGrupo criarEntity(SubGrupoDTO dto, SubGrupo entityBuscado) {
+    protected SubGrupo criarEntity(SubGrupoDTO dto, SubGrupo entityBuscado) throws ValidationException {
         return criarEntity(dto);
     }
 }

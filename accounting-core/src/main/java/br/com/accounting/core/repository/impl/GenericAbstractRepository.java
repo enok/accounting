@@ -8,8 +8,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,14 +107,17 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     @Override
-    public List<T> buscarRegistros() throws RepositoryException {
+    public List<T> buscarRegistros() throws StoreException, RepositoryException {
+        final String message = "Não foi possível buscar os registros.";
         try {
             Path caminhoArquivo = buscarCaminhoArquivo();
             List<String> linhas = readAllLines(caminhoArquivo);
             return criarRegistros(linhas);
         }
+        catch (NoSuchFileException e) {
+            throw new StoreException(message, e);
+        }
         catch (Exception e) {
-            String message = "Não foi possível buscar os registros";
             throw new RepositoryException(message, e);
         }
     }
@@ -179,7 +184,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         linhasSream.close();
     }
 
-    public List<T> criarRegistros(final List<String> linhas) {
+    public List<T> criarRegistros(final List<String> linhas) throws ParseException {
         List<T> entities = new ArrayList<>();
         for (String linha : linhas) {
             T entity = criarEntity(linha);
@@ -194,5 +199,5 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
 
     public abstract String criarLinha(T entity);
 
-    public abstract T criarEntity(final String linha);
+    public abstract T criarEntity(final String linha) throws ParseException;
 }

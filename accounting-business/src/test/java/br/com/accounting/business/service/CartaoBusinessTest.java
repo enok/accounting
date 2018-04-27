@@ -18,14 +18,14 @@ public class CartaoBusinessTest extends GenericTest {
     @Autowired
     private CartaoBusiness business;
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void criarUmCartaoSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarCartaoFisicoEnok();
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }
@@ -90,13 +90,13 @@ public class CartaoBusinessTest extends GenericTest {
         }
     }
 
-    @Test(expected = GenericException.class)
+    @Test(expected = ValidationException.class)
     public void criarUmaCartaoComTipoErrado() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660TipoErrado();
             business.criar(dto);
         }
-        catch (GenericException e) {
+        catch (ValidationException e) {
             assertThat(e.getCause().getMessage(), equalTo("No enum constant br.com.accounting.core.entity.TipoCartao.OUTRO"));
             throw e;
         }

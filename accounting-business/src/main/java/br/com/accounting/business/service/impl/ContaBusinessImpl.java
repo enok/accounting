@@ -7,12 +7,16 @@ import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContaFactory;
+import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,7 +133,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException {
+    public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException, StoreException {
         Conta contaBuscada = service.buscarPorNome(conta.nome());
 
         if (conta.equals(contaBuscada)) {
@@ -138,25 +142,35 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public Conta criarEntity(final ContaDTO dto) {
-        ContaFactory factory = ContaFactory
-                .begin();
-        preenderFactory(factory, dto);
-        return factory
-                .build();
+    public Conta criarEntity(final ContaDTO dto) throws ValidationException {
+        try {
+            ContaFactory factory = ContaFactory
+                    .begin();
+            preenderFactory(factory, dto);
+            return factory
+                    .build();
+        }
+        catch (DateTimeParseException | ParseException | IllegalArgumentException e) {
+            throw new ValidationException(e);
+        }
     }
 
     @Override
-    protected Conta criarEntity(ContaDTO dto, Conta entityBuscado) {
-        ContaFactory factory = ContaFactory
-                .begin()
-                .preencherCamposBuscados(entityBuscado);
-        preenderFactory(factory, dto);
-        return factory
-                .build();
+    protected Conta criarEntity(ContaDTO dto, Conta entityBuscado) throws ValidationException {
+        try {
+            ContaFactory factory = ContaFactory
+                    .begin()
+                    .preencherCamposBuscados(entityBuscado);
+            preenderFactory(factory, dto);
+            return factory
+                    .build();
+        }
+        catch (DateTimeParseException | ParseException | IllegalArgumentException e) {
+            throw new ValidationException(e);
+        }
     }
 
-    private void preenderFactory(final ContaFactory factory, final ContaDTO dto) {
+    private void preenderFactory(final ContaFactory factory, final ContaDTO dto) throws ValidationException, ParseException {
         factory
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())

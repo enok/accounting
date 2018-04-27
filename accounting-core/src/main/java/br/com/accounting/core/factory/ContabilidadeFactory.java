@@ -2,6 +2,7 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.*;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 
 import static br.com.accounting.core.util.Utils.*;
@@ -209,7 +210,7 @@ public final class ContabilidadeFactory {
         return this;
     }
 
-    public ContabilidadeFactory withValor(String valor) {
+    public ContabilidadeFactory withValor(String valor) throws ParseException {
         if (!isBlankOrNull(valor)) {
             entity.valor(getDoubleFromString(valor));
         }

@@ -2,8 +2,10 @@ package br.com.accounting.core.util;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -35,11 +37,11 @@ public final class Utils {
         return date.plusMonths(1L);
     }
 
-    public static LocalDate getDateFromString(final String date) {
+    public static LocalDate getDateFromString(final String date) throws DateTimeParseException {
         return LocalDate.parse(date, DATE_FORMATTER);
     }
 
-    public static Double getDoubleFromString(final String value) {
+    public static Double getDoubleFromString(final String value) throws ParseException {
         if (isBlankOrNull(value)) {
             return null;
         }
@@ -47,12 +49,7 @@ public final class Utils {
             return Double.parseDouble(value.replaceAll(",", "."));
         }
         catch (NumberFormatException e) {
-            try {
-                return decimalFormat.parse(value).doubleValue();
-            }
-            catch (Exception e1) {
-                throw new RuntimeException(e1);
-            }
+            return decimalFormat.parse(value).doubleValue();
         }
     }
 

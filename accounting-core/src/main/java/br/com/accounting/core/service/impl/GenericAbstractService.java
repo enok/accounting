@@ -50,10 +50,13 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public E buscarPorCodigo(final Long codigo) throws ServiceException {
+    public E buscarPorCodigo(final Long codigo) throws ServiceException, StoreException {
         try {
             List<E> registros = repository.buscarRegistros();
             return (E) repository.filtrarCodigo(registros, codigo);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar o registro por código.";
@@ -61,11 +64,14 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public List<E> buscarTodas() throws ServiceException {
+    public List<E> buscarTodas() throws ServiceException, StoreException {
         try {
             List<E> entities = repository.buscarRegistros();
             ordenarTodas(entities);
             return entities;
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar todas.";

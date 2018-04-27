@@ -2,6 +2,7 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Conta;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 
 import static br.com.accounting.core.util.Utils.*;
@@ -22,9 +23,6 @@ public final class ContaFactory {
     }
 
     public ContaFactory preencherCamposBuscados(Conta conta) {
-//        if (conta == null) {
-//            return this;
-//        }
         atualizacao = true;
         valorDefaultAnterior = conta.valorDefault();
         return this;
@@ -43,17 +41,9 @@ public final class ContaFactory {
                     Double diffValorDefault = valorDefaultNovo - valorDefaultAnterior;
                     Double saldo = entity.saldo();
                     Double novoSaldo;
-//                    if (saldo == null) {
-//                        novoSaldo = diffValorDefault;
-//                    }
-//                    else {
-//                    }
                     novoSaldo = saldo + diffValorDefault;
                     entity.saldo(novoSaldo);
                 }
-//                else if (entity.saldo() == null) {
-//                    entity.saldo(entity.valorDefault());
-//                }
             }
         }
         return entity;
@@ -94,14 +84,14 @@ public final class ContaFactory {
         return this;
     }
 
-    public ContaFactory withValorDefault(String valorDefault) {
+    public ContaFactory withValorDefault(String valorDefault) throws ParseException {
         if (!isBlankOrNull(valorDefault)) {
             withValorDefault(getDoubleFromString(valorDefault));
         }
         return this;
     }
 
-    public ContaFactory withSaldo(String saldo) {
+    public ContaFactory withSaldo(String saldo) throws ParseException {
         if (!isBlankOrNull(saldo)) {
             withSaldo(getDoubleFromString(saldo));
         }

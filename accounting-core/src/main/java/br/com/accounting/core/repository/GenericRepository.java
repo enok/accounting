@@ -16,7 +16,7 @@ public interface GenericRepository<T> {
 
     void deletar(T entity) throws RepositoryException;
 
-    List<T> buscarRegistros() throws RepositoryException;
+    List<T> buscarRegistros() throws StoreException, RepositoryException;
 
     T filtrarCodigo(List<T> entities, Long codigo);
 }

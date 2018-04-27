@@ -4,7 +4,6 @@ import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOMockFactory;
 import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,15 +19,15 @@ public class ContaBusinessTest extends GenericTest {
     @Autowired
     private ContaBusiness business;
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void criarUmaContaSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             ContaDTO dto = ContaDTOMockFactory.contaSalario();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }

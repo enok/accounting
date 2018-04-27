@@ -15,7 +15,9 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +77,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws BusinessException {
+    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws BusinessException, ValidationException {
         try {
             if (dto.parcelado().equals("S")) {
                 atualizarParcelas(dto);
@@ -86,6 +88,9 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             else {
                 atualizar(dto);
             }
+        }
+        catch (DateTimeParseException | ParseException e) {
+            throw new ValidationException(e);
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar recursivamente.";
@@ -261,30 +266,35 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public Contabilidade criarEntity(final ContabilidadeDTO dto) {
-        return ContabilidadeFactory
-                .begin()
-                .withCodigo(dto.codigo())
-                .withDataVencimento(dto.dataVencimento())
-                .withDataPagamento(dto.dataPagamento())
-                .withRecorrente(dto.recorrente())
-                .withGrupo(dto.grupo(), dto.subGrupo())
-                .withLocal(dto.local())
-                .withDescricao(dto.descricao())
-                .withUsouCartao(dto.usouCartao())
-                .withCartao(dto.cartao())
-                .withParcelado(dto.parcelado())
-                .withParcelamento(dto.parcela(), dto.parcelas())
-                .withConta(dto.conta())
-                .withTipo(dto.tipo())
-                .withValor(dto.valor())
-                .withCodigoPai(dto.codigoPai())
-                .withProximoLancamento(dto.proximoLancamento())
-                .build();
+    public Contabilidade criarEntity(final ContabilidadeDTO dto) throws ValidationException {
+        try {
+            return ContabilidadeFactory
+                    .begin()
+                    .withCodigo(dto.codigo())
+                    .withDataVencimento(dto.dataVencimento())
+                    .withDataPagamento(dto.dataPagamento())
+                    .withRecorrente(dto.recorrente())
+                    .withGrupo(dto.grupo(), dto.subGrupo())
+                    .withLocal(dto.local())
+                    .withDescricao(dto.descricao())
+                    .withUsouCartao(dto.usouCartao())
+                    .withCartao(dto.cartao())
+                    .withParcelado(dto.parcelado())
+                    .withParcelamento(dto.parcela(), dto.parcelas())
+                    .withConta(dto.conta())
+                    .withTipo(dto.tipo())
+                    .withValor(dto.valor())
+                    .withCodigoPai(dto.codigoPai())
+                    .withProximoLancamento(dto.proximoLancamento())
+                    .build();
+        }
+        catch (DateTimeParseException | ParseException | IllegalArgumentException e) {
+            throw new ValidationException(e);
+        }
     }
 
     @Override
-    protected Contabilidade criarEntity(ContabilidadeDTO dto, Contabilidade entityBuscado) {
+    protected Contabilidade criarEntity(ContabilidadeDTO dto, Contabilidade entityBuscado) throws ValidationException {
         return criarEntity(dto);
     }
 
@@ -386,7 +396,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return dto.parcela().equals("1");
     }
 
-    private void excluirParcelas(ContabilidadeDTO dto) throws RepositoryException, br.com.accounting.core.exception.ServiceException {
+    private void excluirParcelas(ContabilidadeDTO dto) throws RepositoryException, br.com.accounting.core.exception.ServiceException, StoreException {
         if (dto.parcelado().equals("S")) {
             List<Contabilidade> entities = buscarParcelasSeguintes(dto);
             for (Contabilidade entity : entities) {
@@ -395,13 +405,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private List<Contabilidade> buscarParcelasSeguintes(ContabilidadeDTO dto) throws RepositoryException {
+    private List<Contabilidade> buscarParcelasSeguintes(ContabilidadeDTO dto) throws RepositoryException, StoreException {
         Long codigoPai = Long.parseLong(buscarCodigoPai(dto));
         int parcelaAtual = Integer.parseInt(dto.parcela());
         return service.buscarParcelasSeguintesInclusivo(codigoPai, parcelaAtual);
     }
 
-    private void excluirRecorrentes(ContabilidadeDTO dto) throws ServiceException {
+    private void excluirRecorrentes(ContabilidadeDTO dto) throws ServiceException, StoreException {
         if (dto.recorrente().equals("S")) {
             long codigo = Long.parseLong(dto.codigo());
             List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
@@ -519,7 +529,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void atualizarRecorrentes(ContabilidadeDTO dto) throws ServiceException {
+    private void atualizarRecorrentes(ContabilidadeDTO dto) throws ServiceException, StoreException, ParseException {
         Long codigo = Long.parseLong(dto.codigo());
         List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
 

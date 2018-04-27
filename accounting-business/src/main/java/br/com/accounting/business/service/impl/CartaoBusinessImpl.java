@@ -4,15 +4,19 @@ import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.CartaoDTOFactory;
 import br.com.accounting.business.service.CartaoBusiness;
 import br.com.accounting.core.entity.Cartao;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.CartaoFactory;
 import br.com.accounting.core.service.CartaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +67,7 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public void validaRegistroDuplicado(final Cartao entity) throws ServiceException, DuplicatedRegistryException {
+    public void validaRegistroDuplicado(final Cartao entity) throws ServiceException, DuplicatedRegistryException, StoreException {
         Cartao entityBuscado = service.buscarPorNumero(entity.numero());
 
         if (entity.equals(entityBuscado)) {
@@ -72,21 +76,26 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public Cartao criarEntity(CartaoDTO dto) {
-        return CartaoFactory
-                .begin()
-                .withCodigo(dto.codigo())
-                .withNumero(dto.numero())
-                .withVencimento(dto.vencimento())
-                .withDiaMelhorCompra(dto.diaMelhorCompra())
-                .withPortador(dto.portador())
-                .withTipo(dto.tipo())
-                .withLimite(dto.limite())
-                .build();
+    public Cartao criarEntity(CartaoDTO dto) throws ValidationException {
+        try {
+            return CartaoFactory
+                    .begin()
+                    .withCodigo(dto.codigo())
+                    .withNumero(dto.numero())
+                    .withVencimento(dto.vencimento())
+                    .withDiaMelhorCompra(dto.diaMelhorCompra())
+                    .withPortador(dto.portador())
+                    .withTipo(dto.tipo())
+                    .withLimite(dto.limite())
+                    .build();
+        }
+        catch (DateTimeParseException | ParseException | IllegalArgumentException e) {
+            throw new ValidationException(e);
+        }
     }
 
     @Override
-    protected Cartao criarEntity(CartaoDTO dto, Cartao entityBuscado) {
+    protected Cartao criarEntity(CartaoDTO dto, Cartao entityBuscado) throws ValidationException {
         return criarEntity(dto);
     }
 }

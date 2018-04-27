@@ -17,8 +17,8 @@ public class ContaServiceTest extends GenericTest {
         contaService.salvar(null);
     }
 
-    @Test(expected = ServiceException.class)
-    public void buscarPorCodigoException() throws IOException, ServiceException {
+    @Test(expected = StoreException.class)
+    public void buscarPorCodigoException() throws IOException, ServiceException, StoreException {
         deletarDiretorioEArquivos();
         contaService.buscarPorCodigo(null);
     }
@@ -33,8 +33,8 @@ public class ContaServiceTest extends GenericTest {
         contaService.deletar(null);
     }
 
-    @Test(expected = ServiceException.class)
-    public void buscarCumulativasException() throws IOException, ServiceException {
+    @Test(expected = StoreException.class)
+    public void buscarCumulativasException() throws IOException, ServiceException, StoreException {
         deletarDiretorioEArquivos();
         contaService.buscarCumulativas();
     }

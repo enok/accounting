@@ -48,14 +48,14 @@ public class GrupoServiceTest extends GenericTest {
         }
     }
 
-    @Test(expected = ServiceException.class)
-    public void buscarPorCodigoException() throws IOException, ServiceException {
+    @Test(expected = StoreException.class)
+    public void buscarPorCodigoException() throws IOException, ServiceException, StoreException {
         try {
             deletarDiretorioEArquivos();
             service.buscarPorCodigo(null);
         }
-        catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar o registro por código."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }

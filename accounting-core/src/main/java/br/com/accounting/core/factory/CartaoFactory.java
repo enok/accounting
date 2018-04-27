@@ -3,6 +3,8 @@ package br.com.accounting.core.factory;
 import br.com.accounting.core.entity.Cartao;
 import br.com.accounting.core.entity.TipoCartao;
 
+import java.text.ParseException;
+
 import static br.com.accounting.core.util.Utils.*;
 
 public class CartaoFactory {
@@ -64,7 +66,7 @@ public class CartaoFactory {
         return this;
     }
 
-    public CartaoFactory withLimite(String limite) {
+    public CartaoFactory withLimite(String limite) throws ParseException {
         if (!isBlankOrNull(limite)) {
             entity.limite(getDoubleFromString(limite));
         }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +75,7 @@ public class ContaRepositoryImpl extends GenericAbstractRepository<Conta> implem
     }
 
     @Override
-    public Conta criarEntity(String linha) {
+    public Conta criarEntity(String linha) throws ParseException {
         List<String> registro = Stream
                 .of(linha)
                 .map(w -> w.split(SEPARADOR)).flatMap(Arrays::stream)

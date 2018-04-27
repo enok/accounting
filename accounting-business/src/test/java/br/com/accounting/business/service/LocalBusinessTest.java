@@ -18,15 +18,15 @@ public class LocalBusinessTest extends GenericTest {
     @Autowired
     private LocalBusiness business;
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void criarUmLocalSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             LocalDTO dto = LocalDTOMockFactory.localDTOCarrefour();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }

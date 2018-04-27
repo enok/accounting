@@ -3,17 +3,18 @@ package br.com.accounting.core.service;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
 
 import java.util.List;
 
 public interface ContabilidadeService extends GenericService<Contabilidade> {
-    List<Contabilidade> buscarTodasAsParcelas(Long codigoPai) throws RepositoryException;
+    List<Contabilidade> buscarTodasAsParcelas(Long codigoPai) throws RepositoryException, StoreException;
 
-    List<Contabilidade> buscarParcelasSeguintesInclusivo(Long codigoPai, Integer parcelaAtual) throws RepositoryException;
+    List<Contabilidade> buscarParcelasSeguintesInclusivo(Long codigoPai, Integer parcelaAtual) throws RepositoryException, StoreException;
 
-    List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws RepositoryException;
+    List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws RepositoryException, StoreException;
 
-    List<Contabilidade> buscarTodasRecorrentesSeguintesInclusivo(Long codigo) throws ServiceException;
+    List<Contabilidade> buscarTodasRecorrentesSeguintesInclusivo(Long codigo) throws ServiceException, StoreException;
 
-    void normalizarProximosLancamentos() throws ServiceException;
+    void normalizarProximosLancamentos() throws ServiceException, StoreException;
 }

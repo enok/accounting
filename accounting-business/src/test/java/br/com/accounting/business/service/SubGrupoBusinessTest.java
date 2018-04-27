@@ -18,14 +18,14 @@ public class SubGrupoBusinessTest extends GenericTest {
     @Autowired
     private SubGrupoBusiness business;
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void criarSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarSubGrupoAluguel();
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }

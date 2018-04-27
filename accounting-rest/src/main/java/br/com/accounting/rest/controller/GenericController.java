@@ -2,9 +2,9 @@ package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.entity.Error;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,10 @@ public abstract class GenericController {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    ResponseEntity handleMissingFieldException(MissingFieldException e) {
+    ResponseEntity handleMissingFieldException(ValidationException e) {
         getLog().error(getMensagem(), e);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        Error error = new Error(HttpStatus.BAD_REQUEST.value(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(StoreException.class)
@@ -30,7 +31,8 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity handleReadingException(StoreException e) {
         getLog().error(getMensagem(), e);
-        return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(e);
+        Error error = new Error(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(error);
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -38,7 +40,8 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity handleBusinessException(BusinessException e) {
         getLog().error(getMensagem(), e);
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e);
+        Error error = new Error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(error);
     }
 
     @ExceptionHandler(GenericException.class)
@@ -46,6 +49,7 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity handleGenericException(GenericException e) {
         getLog().error(getMensagem(), e);
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e);
+        Error error = new Error(HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
     }
 }

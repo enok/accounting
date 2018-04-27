@@ -3,7 +3,6 @@ package br.com.accounting.business.service;
 import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.GrupoDTOMockFactory;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,14 @@ public class GrupoBusinessTest extends GenericTest {
     @Autowired
     private GrupoBusiness business;
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void criarSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarGrupoMoradia();
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }
