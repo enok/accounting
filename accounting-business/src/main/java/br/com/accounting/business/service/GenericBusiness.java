@@ -8,7 +8,7 @@ import br.com.accounting.core.exception.StoreException;
 import java.util.List;
 
 public interface GenericBusiness<D> {
-    List<Long> criar(D dto) throws ValidationException, StoreException, BusinessException, GenericException;
+    List<Long> criar(D dto) throws StoreException, BusinessException, GenericException;
 
     void atualizar(D dto) throws BusinessException;
 

@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public abstract class GenericController {
     protected abstract Logger getLog();
 
-    protected abstract String getMensagem();
-
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
     ResponseEntity handleMissingFieldException(ValidationException e) {
-        getLog().error(getMensagem(), e);
+        getLog().error(e.getMessage(), e);
         Error error = new Error(HttpStatus.BAD_REQUEST.value(), e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -30,7 +28,7 @@ public abstract class GenericController {
     @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
     public @ResponseBody
     ResponseEntity handleReadingException(StoreException e) {
-        getLog().error(getMensagem(), e);
+        getLog().error(e.getMessage(), e);
         Error error = new Error(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(error);
     }
@@ -39,7 +37,7 @@ public abstract class GenericController {
     @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
     public @ResponseBody
     ResponseEntity handleBusinessException(BusinessException e) {
-        getLog().error(getMensagem(), e);
+        getLog().error(e.getMessage(), e);
         Error error = new Error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(error);
     }
@@ -48,7 +46,7 @@ public abstract class GenericController {
     @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
     public @ResponseBody
     ResponseEntity handleGenericException(GenericException e) {
-        getLog().error(getMensagem(), e);
+        getLog().error(e.getMessage(), e);
         Error error = new Error(HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
     }

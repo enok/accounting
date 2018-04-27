@@ -38,7 +38,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     protected abstract E criarEntity(D dto, E entityBuscado) throws ValidationException;
 
     @History
-    public List<Long> criar(final D dto) throws ValidationException, StoreException, BusinessException, GenericException {
+    public List<Long> criar(final D dto) throws StoreException, BusinessException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -51,9 +51,6 @@ public abstract class GenericAbstractBusiness<D, E> {
             codigos.add(service.salvar(entity));
 
             return codigos;
-        }
-        catch (MissingFieldException | CreateException | DuplicatedRegistryException e) {
-            throw new ValidationException(e);
         }
         catch (ValidationException e) {
             throw e;

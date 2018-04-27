@@ -21,7 +21,7 @@ public class GrupoBusinessTest extends GenericTest {
     private GrupoBusiness business;
 
     @Test(expected = StoreException.class)
-    public void criarSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void criarSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarGrupoMoradia();
@@ -33,74 +33,74 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             GrupoDTO dto = GrupoDTOMockFactory.grupoMoradiaSemNome();
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "nome");
         }
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             GrupoDTO dto = GrupoDTOMockFactory.grupoMoradiaSemDescricao();
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "descrição");
         }
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarSemGrupo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarSemGrupo() throws StoreException, BusinessException, GenericException {
         try {
             GrupoDTO dto = GrupoDTOMockFactory.grupoMoradiaSemGrupos();
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "subGrupos");
         }
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarSemCamposObrigatorios() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarSemCamposObrigatorios() throws StoreException, BusinessException, GenericException {
         try {
             GrupoDTO dto = GrupoDTOMockFactory.grupoMoradiaSemCamposObrigatorios();
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "nome", "descrição", "subGrupos");
         }
     }
 
     @Test
-    public void criar() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criar() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
     }
 
     @Test(expected = ValidationException.class)
-    public void criarDoisComNomesIguais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDoisComNomesIguais() throws StoreException, BusinessException, GenericException {
         try {
             criarGrupoMoradia();
             criarGrupoMoradia();
         }
         catch (ValidationException e) {
-            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
+            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e;
             assertThat(e1.getMessage(), equalTo("Grupo duplicado."));
             throw e;
         }
     }
 
     @Test
-    public void criarDois() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDois() throws StoreException, BusinessException, GenericException {
         Long codigo1 = criarGrupoMoradia();
         assertGrupoMoradia(codigo1);
 
@@ -111,7 +111,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
             GrupoDTO dto = business.buscarPorId(codigo);
@@ -124,7 +124,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
             GrupoDTO dto = business.buscarPorId(codigo);
@@ -137,7 +137,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
             GrupoDTO dto = business.buscarPorId(codigo);
@@ -150,7 +150,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
             String codigoAnterior = String.valueOf(codigo);
@@ -166,7 +166,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNome() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarNome() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
@@ -181,7 +181,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDescricao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
@@ -196,7 +196,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNomeDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarNomeDescricao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
@@ -212,7 +212,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirException() throws BusinessException {
         try {
             business.excluir(null);
         }
@@ -223,7 +223,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluir() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluir() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
         GrupoDTO dto = business.buscarPorId(codigo);
 
@@ -234,7 +234,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarPorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarPorIdException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarPorId(null);
@@ -246,7 +246,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarTodosException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarTodosException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodas();
@@ -258,7 +258,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarTodos() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void buscarTodos() throws StoreException, BusinessException, GenericException {
         criarGrupoMoradia();
         criarGrupoTransporte();
 
@@ -269,7 +269,7 @@ public class GrupoBusinessTest extends GenericTest {
         assertGrupoTransporte(entities.get(1));
     }
 
-    private Long criarGrupoMoradia() throws StoreException, ValidationException, BusinessException, GenericException {
+    private Long criarGrupoMoradia() throws StoreException, BusinessException, GenericException {
         GrupoDTO dto = GrupoDTOMockFactory.grupoMoradia();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
@@ -278,7 +278,7 @@ public class GrupoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private Long criarGrupoTransporte() throws StoreException, ValidationException, BusinessException, GenericException {
+    private Long criarGrupoTransporte() throws StoreException, BusinessException, GenericException {
         GrupoDTO dto = GrupoDTOMockFactory.grupoTransporte();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
@@ -287,12 +287,12 @@ public class GrupoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertGrupoMoradia(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertGrupoMoradia(Long codigo) throws BusinessException {
         GrupoDTO dto = business.buscarPorId(codigo);
         assertGrupoMoradia(dto);
     }
 
-    private void assertGrupoTransporte(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertGrupoTransporte(Long codigo) throws BusinessException {
         GrupoDTO dto = business.buscarPorId(codigo);
         assertGrupoTransporte(dto);
     }

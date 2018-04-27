@@ -9,7 +9,6 @@ import br.com.accounting.core.entity.Conta;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContaFactory;
-import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,7 +169,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         }
     }
 
-    private void preenderFactory(final ContaFactory factory, final ContaDTO dto) throws ValidationException, ParseException {
+    private void preenderFactory(final ContaFactory factory, final ContaDTO dto) throws ParseException {
         factory
                 .withCodigo(dto.codigo())
                 .withNome(dto.nome())

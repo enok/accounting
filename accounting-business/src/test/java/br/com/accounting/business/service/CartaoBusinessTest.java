@@ -37,7 +37,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "número");
         }
     }
@@ -49,7 +49,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "vencimento");
         }
     }
@@ -61,7 +61,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "diaMelhorCompra");
         }
     }
@@ -73,7 +73,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "portador");
         }
     }
@@ -85,7 +85,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "tipo");
         }
     }
@@ -109,7 +109,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "limite");
         }
     }
@@ -121,7 +121,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "número", "vencimento", "diaMelhorCompra", "portador", "tipo", "limite");
         }
     }
@@ -158,7 +158,7 @@ public class CartaoBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
+            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e;
             assertThat(e1.getMessage(), equalTo("Cartão duplicado."));
             throw e;
         }

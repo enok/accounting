@@ -3,7 +3,6 @@ package br.com.accounting.rest.controller;
 import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.service.CartaoBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.entity.Codigos;
@@ -21,14 +20,12 @@ import java.util.List;
 public class CartaoController extends GenericController {
     private Logger log = LoggerFactory.getLogger(CartaoController.class);
 
-    private final String mensagem = "Erro ao criar cartão";
-
     @Autowired
     private CartaoBusiness cartaoBusiness;
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity criar(@RequestBody CartaoDTO cartaoDTO) throws StoreException, BusinessException, ValidationException, GenericException {
+    public ResponseEntity criar(@RequestBody CartaoDTO cartaoDTO) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = cartaoBusiness.criar(cartaoDTO);
         Codigos codigosObj = new Codigos(codigos);
         return ResponseEntity.status(HttpStatus.CREATED).body(codigosObj);
@@ -37,10 +34,5 @@ public class CartaoController extends GenericController {
     @Override
     protected Logger getLog() {
         return log;
-    }
-
-    @Override
-    protected String getMensagem() {
-        return mensagem;
     }
 }

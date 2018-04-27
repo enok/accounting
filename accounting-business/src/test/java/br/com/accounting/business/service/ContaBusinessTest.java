@@ -39,7 +39,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "nome");
         }
     }
@@ -51,7 +51,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "descrição");
         }
     }
@@ -63,7 +63,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "valorDefault");
         }
     }
@@ -75,7 +75,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "cumulativo");
         }
     }
@@ -87,7 +87,7 @@ public class ContaBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (ValidationException e) {
-            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            MissingFieldException e1 = (MissingFieldException) e;
             assertCreationAndMandatoryFields(e1, "nome", "descrição", "valorDefault", "cumulativo");
         }
     }
@@ -105,7 +105,7 @@ public class ContaBusinessTest extends GenericTest {
             criarContaSalario();
         }
         catch (ValidationException e) {
-            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
+            DuplicatedRegistryException e1 = (DuplicatedRegistryException) e;
             assertThat(e1.getMessage(), equalTo("Conta duplicada."));
             throw e;
         }

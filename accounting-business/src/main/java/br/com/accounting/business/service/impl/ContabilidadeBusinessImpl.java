@@ -77,7 +77,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws BusinessException, ValidationException {
+    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws BusinessException {
         try {
             if (dto.parcelado().equals("S")) {
                 atualizarParcelas(dto);
