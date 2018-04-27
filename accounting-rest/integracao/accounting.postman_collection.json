@@ -9,10 +9,23 @@
 			"name": "Salvar Cartão",
 			"request": {
 				"method": "POST",
-				"header": [],
-				"body": {},
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "UTF-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"numero\": \"7660\",\r\n\t\"vencimento\": \"27/03/2018\",\r\n\t\"diaMelhorCompra\": \"17/04/2018\",\r\n\t\"portador\": \"Enok\",\r\n\t\"tipo\": \"FISICO\",\r\n\t\"limite\": \"2.000,00\"\r\n}"
+				},
 				"url": {
-					"raw": "{{host}}/cartao",
+					"raw": "http://{{host}}/cartao",
+					"protocol": "http",
 					"host": [
 						"{{host}}"
 					],
