@@ -1,15 +1,15 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.SubGrupoDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.DuplicatedRegistryException;
+import br.com.accounting.business.exception.*;
+import br.com.accounting.business.factory.SubGrupoDTOMockFactory;
+import br.com.accounting.core.exception.StoreException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
 
-import static br.com.accounting.business.factory.SubGrupoDTOMockFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -19,62 +19,66 @@ public class SubGrupoBusinessTest extends GenericTest {
     private SubGrupoBusiness business;
 
     @Test(expected = BusinessException.class)
-    public void criarSemDiretorio() throws IOException, BusinessException {
+    public void criarSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarSubGrupoAluguel();
         }
         catch (BusinessException e) {
-            assertCreation(e);
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+            throw e;
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarSemNome() throws BusinessException {
+    @Test(expected = MissingFieldException.class)
+    public void criarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
-            SubGrupoDTO dto = subGrupoAluguelSemNome();
+            SubGrupoDTO dto = SubGrupoDTOMockFactory.subGrupoAluguelSemNome();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "nome");
+        catch (ValidationException e) {
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            assertCreationAndMandatoryFields(e1, "nome");
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarSemDescricao() throws BusinessException {
+    @Test(expected = MissingFieldException.class)
+    public void criarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
-            SubGrupoDTO dto = subGrupoAluguelSemDescricao();
+            SubGrupoDTO dto = SubGrupoDTOMockFactory.subGrupoAluguelSemDescricao();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "descrição");
+        catch (ValidationException e) {
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            assertCreationAndMandatoryFields(e1, "descrição");
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarSemCamposObrigatorios() throws BusinessException {
+    @Test(expected = MissingFieldException.class)
+    public void criarSemCamposObrigatorios() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
-            SubGrupoDTO dto = subGrupoAluguelSemCamposObrigatorios();
+            SubGrupoDTO dto = SubGrupoDTOMockFactory.subGrupoAluguelSemCamposObrigatorios();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "nome", "descrição");
+        catch (ValidationException e) {
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            assertCreationAndMandatoryFields(e1, "nome", "descrição");
         }
     }
 
     @Test
-    public void criar() throws BusinessException {
+    public void criar() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarDoisComNomesIguais() throws BusinessException {
+    @Test(expected = ValidationException.class)
+    public void criarDoisComNomesIguais() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             criarSubGrupoAluguel();
             criarSubGrupoAluguel();
         }
-        catch (BusinessException e) {
+        catch (ValidationException e) {
             DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
             assertThat(e1.getMessage(), equalTo("SubGrupo duplicado."));
             throw e;
@@ -82,7 +86,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarDois() throws BusinessException {
+    public void criarDois() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo1 = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo1);
 
@@ -93,7 +97,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws BusinessException {
+    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
             SubGrupoDTO dto = business.buscarPorId(codigo);
@@ -106,7 +110,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemNome() throws BusinessException {
+    public void alterarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
             SubGrupoDTO dto = business.buscarPorId(codigo);
@@ -119,7 +123,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDescricao() throws BusinessException {
+    public void alterarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
             SubGrupoDTO dto = business.buscarPorId(codigo);
@@ -132,7 +136,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
             String codigoAnterior = String.valueOf(codigo);
@@ -148,7 +152,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNome() throws BusinessException {
+    public void alterarNome() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
@@ -162,7 +166,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarDescricao() throws BusinessException {
+    public void alterarDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
@@ -176,7 +180,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNomeDescricao() throws BusinessException {
+    public void alterarNomeDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
@@ -191,7 +195,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirException() throws BusinessException {
+    public void excluirException() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             business.excluir(null);
         }
@@ -202,7 +206,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluir() throws BusinessException {
+    public void excluir() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
         SubGrupoDTO dto = business.buscarPorId(codigo);
 
@@ -213,7 +217,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarPorIdException() throws IOException, BusinessException {
+    public void buscarPorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarPorId(null);
@@ -226,7 +230,7 @@ public class SubGrupoBusinessTest extends GenericTest {
 
 
     @Test(expected = BusinessException.class)
-    public void buscarTodosException() throws IOException, BusinessException {
+    public void buscarTodosException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodas();
@@ -238,7 +242,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarTodos() throws BusinessException {
+    public void buscarTodos() throws StoreException, ValidationException, BusinessException, GenericException {
         criarSubGrupoAluguel();
         criarSubGrupoInternet();
 
@@ -249,25 +253,27 @@ public class SubGrupoBusinessTest extends GenericTest {
         assertSubGrupoInternet(entities.get(1));
     }
 
-    private Long criarSubGrupoAluguel() throws BusinessException {
-        SubGrupoDTO dto = subGrupoAluguel();
+    private Long criarSubGrupoAluguel() throws StoreException, ValidationException, BusinessException, GenericException {
+        SubGrupoDTO dto = SubGrupoDTOMockFactory.subGrupoAluguel();
         List<Long> codigos = business.criar(dto);
+
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);
         assertTrue(codigo >= 0);
         return codigo;
     }
 
-    private Long criarSubGrupoInternet() throws BusinessException {
-        SubGrupoDTO dto = subGrupoInternet();
+    private Long criarSubGrupoInternet() throws StoreException, ValidationException, BusinessException, GenericException {
+        SubGrupoDTO dto = SubGrupoDTOMockFactory.subGrupoInternet();
         List<Long> codigos = business.criar(dto);
+
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);
         assertTrue(codigo >= 0);
         return codigo;
     }
 
-    private void assertSubGrupoAluguel(Long codigo) throws BusinessException {
+    private void assertSubGrupoAluguel(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
         SubGrupoDTO dto = business.buscarPorId(codigo);
         assertSubGrupoAluguel(dto);
     }
@@ -277,7 +283,7 @@ public class SubGrupoBusinessTest extends GenericTest {
         assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
     }
 
-    private void assertSubGrupoInternet(Long codigo) throws BusinessException {
+    private void assertSubGrupoInternet(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
         SubGrupoDTO dto = business.buscarPorId(codigo);
         assertSubGrupoInternet(dto);
     }

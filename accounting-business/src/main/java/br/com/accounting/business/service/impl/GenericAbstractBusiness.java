@@ -5,6 +5,7 @@ import br.com.accounting.business.dto.EntityDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Entity;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.service.GenericService;
 
@@ -37,7 +38,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     protected abstract E criarEntity(D dto, E entityBuscado);
 
     @History
-    public List<Long> criar(final D dto) throws BusinessException {
+    public List<Long> criar(final D dto) throws ValidationException, StoreException, BusinessException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -51,9 +52,18 @@ public abstract class GenericAbstractBusiness<D, E> {
 
             return codigos;
         }
-        catch (Exception e) {
+        catch (MissingFieldException | CreateException | DuplicatedRegistryException e) {
+            throw new ValidationException(e);
+        }
+        catch (StoreException e) {
+            throw e;
+        }
+        catch (ServiceException | BusinessException e) {
             String message = "Não foi possível criar.";
             throw new BusinessException(message, e);
+        }
+        catch (Exception e) {
+            throw new GenericException(e);
         }
     }
 

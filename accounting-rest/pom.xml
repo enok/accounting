@@ -9,14 +9,14 @@
         <artifactId>accounting</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>accounting-business</artifactId>
-    <name>Accouting Business</name>
+    <artifactId>accounting-rest</artifactId>
+    <name>Accouting Rest</name>
 
     <dependencies>
         <!-- financial -->
         <dependency>
             <groupId>br.com.financial</groupId>
-            <artifactId>accounting-core</artifactId>
+            <artifactId>accounting-business</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -28,12 +28,8 @@
 
         <!-- spring -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- lombok -->
@@ -54,7 +50,29 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
-            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- SPRING BOOT -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

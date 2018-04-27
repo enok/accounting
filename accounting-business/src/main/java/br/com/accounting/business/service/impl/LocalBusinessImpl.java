@@ -1,9 +1,9 @@
 package br.com.accounting.business.service.impl;
 
-import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.factory.LocalDTOFactory;
 import br.com.accounting.business.service.LocalBusiness;
 import br.com.accounting.core.entity.Local;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service

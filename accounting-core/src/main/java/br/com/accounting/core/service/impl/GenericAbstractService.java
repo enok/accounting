@@ -1,6 +1,7 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Entity;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.GenericRepository;
@@ -14,10 +15,13 @@ public abstract class GenericAbstractService<E> {
         this.repository = repository;
     }
 
-    public Long salvar(final E entity) throws ServiceException {
+    public Long salvar(final E entity) throws StoreException, ServiceException {
         try {
             setarProximoCodigo(entity);
             repository.salvar(entity);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível salvar.";
@@ -71,7 +75,7 @@ public abstract class GenericAbstractService<E> {
 
     public abstract void ordenarTodas(List<E> entities);
 
-    protected void setarProximoCodigo(final E entity) throws RepositoryException {
+    protected void setarProximoCodigo(final E entity) throws StoreException, RepositoryException {
         Long proximoCodigo = repository.proximoCodigo();
         repository.incrementarCodigo(proximoCodigo);
         ((Entity) entity).setCodigo(proximoCodigo);

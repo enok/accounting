@@ -1,15 +1,15 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.LocalDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.DuplicatedRegistryException;
+import br.com.accounting.business.exception.*;
+import br.com.accounting.business.factory.LocalDTOMockFactory;
+import br.com.accounting.core.exception.StoreException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
 
-import static br.com.accounting.business.factory.LocalDTOMockFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -19,41 +19,43 @@ public class LocalBusinessTest extends GenericTest {
     private LocalBusiness business;
 
     @Test(expected = BusinessException.class)
-    public void criarUmLocalSemDiretorio() throws BusinessException, IOException {
+    public void criarUmLocalSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
-            LocalDTO dto = localDTOCarrefour();
+            LocalDTO dto = LocalDTOMockFactory.localDTOCarrefour();
             business.criar(dto);
         }
         catch (BusinessException e) {
-            assertCreation(e);
+            assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+            throw e;
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarUmLocalSemNome() throws BusinessException {
+    @Test(expected = MissingFieldException.class)
+    public void criarUmLocalSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
-            LocalDTO dto = localDTOCarrefourSemNome();
+            LocalDTO dto = LocalDTOMockFactory.localDTOCarrefourSemNome();
             business.criar(dto);
         }
-        catch (BusinessException e) {
-            assertCreationAndMandatoryFields(e, "nome");
+        catch (ValidationException e) {
+            MissingFieldException e1 = (MissingFieldException) e.getCause();
+            assertCreationAndMandatoryFields(e1, "nome");
         }
     }
 
     @Test
-    public void criarUmLocal() throws BusinessException {
+    public void criarUmLocal() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarLocalCarrefour();
         assertLocalCarrefour(codigo);
     }
 
-    @Test(expected = BusinessException.class)
-    public void criarDoisLocaisComNomesIguais() throws BusinessException {
+    @Test(expected = ValidationException.class)
+    public void criarDoisLocaisComNomesIguais() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             criarLocalCarrefour();
             criarLocalCarrefour();
         }
-        catch (BusinessException e) {
+        catch (ValidationException e) {
             DuplicatedRegistryException e1 = (DuplicatedRegistryException) e.getCause();
             assertThat(e1.getMessage(), equalTo("Local duplicado."));
             throw e;
@@ -61,7 +63,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarDoisLocais() throws BusinessException {
+    public void criarDoisLocais() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarLocalCarrefour();
         Long codigo2 = criarLocalAmericanas();
 
@@ -69,7 +71,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws BusinessException {
+    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarLocalAmericanas();
             LocalDTO dtoBuscado = business.buscarPorId(codigo);
@@ -82,7 +84,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemNome() throws BusinessException {
+    public void alterarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarLocalAmericanas();
             LocalDTO dtoBuscado = business.buscarPorId(codigo);
@@ -95,7 +97,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws BusinessException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             Long codigo = criarLocalAmericanas();
             String codigoAnterior = String.valueOf(codigo);
@@ -111,7 +113,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNomeDoLocal() throws BusinessException {
+    public void alterarNomeDoLocal() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarLocalAmericanas();
 
         LocalDTO dtoBuscado = assertLocalAmericanas(codigo);
@@ -124,7 +126,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmLocalException() throws BusinessException {
+    public void excluirUmLocalException() throws StoreException, ValidationException, BusinessException, GenericException {
         try {
             business.excluir(null);
         }
@@ -135,7 +137,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirUmLocal() throws BusinessException {
+    public void excluirUmLocal() throws StoreException, ValidationException, BusinessException, GenericException {
         Long codigo = criarLocalCarrefour();
         LocalDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -146,7 +148,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarLocalPorIdException() throws IOException, BusinessException {
+    public void buscarLocalPorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarPorId(null);
@@ -158,7 +160,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarLocaisException() throws IOException, BusinessException {
+    public void buscarLocaisException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodas();
@@ -170,7 +172,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarLocais() throws BusinessException {
+    public void buscarLocais() throws StoreException, ValidationException, BusinessException, GenericException {
         criarLocalCarrefour();
         criarLocalAmericanas();
 
@@ -181,8 +183,8 @@ public class LocalBusinessTest extends GenericTest {
         assertLocalCarrefour(dtos.get(1));
     }
 
-    private Long criarLocalCarrefour() throws BusinessException {
-        LocalDTO dto = localDTOCarrefour();
+    private Long criarLocalCarrefour() throws StoreException, ValidationException, BusinessException, GenericException {
+        LocalDTO dto = LocalDTOMockFactory.localDTOCarrefour();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);
@@ -190,8 +192,8 @@ public class LocalBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private Long criarLocalAmericanas() throws BusinessException {
-        LocalDTO dto = localAmericanas();
+    private Long criarLocalAmericanas() throws StoreException, ValidationException, BusinessException, GenericException {
+        LocalDTO dto = LocalDTOMockFactory.localAmericanas();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
         Long codigo = codigos.get(0);
@@ -199,7 +201,7 @@ public class LocalBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertLocalCarrefour(Long codigo) throws BusinessException {
+    private void assertLocalCarrefour(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
         LocalDTO dtoBuscado = business.buscarPorId(codigo);
         assertLocalCarrefour(dtoBuscado);
     }
@@ -208,7 +210,7 @@ public class LocalBusinessTest extends GenericTest {
         assertThat(dto.nome(), equalTo("Carrefour"));
     }
 
-    private LocalDTO assertLocalAmericanas(Long codigo) throws BusinessException {
+    private LocalDTO assertLocalAmericanas(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
         LocalDTO dtoBuscado = business.buscarPorId(codigo);
         return assertLocalAmericanas(dtoBuscado);
     }

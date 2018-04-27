@@ -1,6 +1,7 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.Entity;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.repository.GenericRepository;
 import org.springframework.util.CollectionUtils;
@@ -26,16 +27,23 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public abstract class GenericAbstractRepository<T> implements GenericRepository<T> {
 
     @Override
-    public Long proximoCodigo() throws RepositoryException {
-        Long proximoCodigo = null;
+    public Long proximoCodigo() throws StoreException, RepositoryException {
+        Long proximoCodigo;
+        List<String> lines;
+        final String message = "Não foi possível ler as linhas do arquivo: " + getArquivoContagem();
 
         try {
             Path path = buscarArquivoContagem();
-            List<String> lines = readAllLines(path);
+            lines = readAllLines(path);
+        }
+        catch (Exception e) {
+            throw new StoreException(message, e);
+        }
+
+        try {
             proximoCodigo = buscarProximoCodigo(lines);
         }
         catch (Exception e) {
-            String message = "Não foi possível ler as linhas do arquivo: " + getArquivoContagem();
             throw new RepositoryException(message, e);
         }
 

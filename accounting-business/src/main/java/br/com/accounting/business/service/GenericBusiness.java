@@ -1,11 +1,14 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.business.exception.ValidationException;
+import br.com.accounting.core.exception.StoreException;
 
 import java.util.List;
 
 public interface GenericBusiness<D> {
-    List<Long> criar(D dto) throws BusinessException;
+    List<Long> criar(D dto) throws ValidationException, StoreException, BusinessException, GenericException;
 
     void atualizar(D dto) throws BusinessException;
 

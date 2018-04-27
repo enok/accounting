@@ -1,6 +1,7 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.GenericTest;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,14 @@ public class HistoricoServiceTest extends GenericTest {
     @Autowired
     private HistoricoService historicoService;
 
-    @Test(expected = ServiceException.class)
-    public void salvarException() throws IOException, ServiceException {
+    @Test(expected = StoreException.class)
+    public void salvarException() throws IOException, ServiceException, StoreException {
         deletarDiretorioEArquivos();
         try {
             historicoService.salvar(null, null);
         }
-        catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível salvar o histórico."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível ler as linhas do arquivo: D:\\tmp\\arquivos\\historico-contagem.txt"));
             throw e;
         }
     }

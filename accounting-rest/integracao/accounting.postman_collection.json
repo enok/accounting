@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "26e8e81d-14f5-4af1-b2be-9830b6651b5f",
+		"name": "accounting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Salvar Cartão",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{host}}/cartao",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"cartao"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

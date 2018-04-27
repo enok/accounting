@@ -1,6 +1,7 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.GenericTest;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import org.junit.Test;
 
@@ -11,8 +12,8 @@ public class GenericAbstractRepositoryTest extends GenericTest {
         genericAbstractRepository = new GenericAbstractRepositoryMock();
     }
 
-    @Test(expected = RepositoryException.class)
-    public void proximoCodigoNoiFoiPossivelLerAsLinhas() throws RepositoryException {
+    @Test(expected = StoreException.class)
+    public void proximoCodigoNaoFoiPossivelLerAsLinhas() throws StoreException, RepositoryException {
         genericAbstractRepository.proximoCodigo();
     }
 

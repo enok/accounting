@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @ComponentScan("br.com.accounting.core")
-@PropertySource(value = {"file:application.properties", "classpath:application.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value = {"classpath:application.properties"}, ignoreResourceNotFound = true)
 @Lazy
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ConfigCore {

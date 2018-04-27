@@ -1,6 +1,7 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.GenericTest;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class CartaoServiceTest extends GenericTest {
     private CartaoService cartaoService;
 
     @Test(expected = ServiceException.class)
-    public void salvarException() throws ServiceException {
+    public void salvarException() throws StoreException, ServiceException {
         try {
             cartaoService.salvar(null);
         }

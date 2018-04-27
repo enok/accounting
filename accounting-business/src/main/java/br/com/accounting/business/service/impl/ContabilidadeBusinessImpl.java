@@ -1,22 +1,19 @@
 package br.com.accounting.business.service.impl;
 
-import br.com.accounting.business.annotation.History;
-import br.com.accounting.business.dto.ContabilidadeDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.CreateException;
-import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.UpdateException;
-import br.com.accounting.business.factory.ContabilidadeDTOFactory;
-import br.com.accounting.business.service.ContabilidadeBusiness;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
+import br.com.accounting.business.annotation.History;
+import br.com.accounting.business.dto.ContabilidadeDTO;
+import br.com.accounting.business.factory.ContabilidadeDTOFactory;
+import br.com.accounting.business.service.ContabilidadeBusiness;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,7 +34,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @History
-    public List<Long> criar(final ContabilidadeDTO dto) throws BusinessException {
+    public List<Long> criar(final ContabilidadeDTO dto) throws ValidationException, StoreException, BusinessException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -64,9 +61,8 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
             return codigos;
         }
-        catch (Exception e) {
-            String message = "Não foi possível criar.";
-            throw new BusinessException(message, e);
+        catch (ServiceException e) {
+            throw new BusinessException(e);
         }
     }
 
@@ -261,7 +257,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @Override
     public void validaRegistroDuplicado(final Contabilidade contabilidade) {
-        throw new InvalidStateException("Uma contabilidade não valida duplicidade de registro.");
+        throw new RuntimeException("Uma contabilidade não valida duplicidade de registro.");
     }
 
     @Override
@@ -292,7 +288,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return criarEntity(dto);
     }
 
-    private List<Long> criarParcelados(Contabilidade entity, Long codigoPai) throws ServiceException {
+    private List<Long> criarParcelados(Contabilidade entity, Long codigoPai) throws StoreException, ServiceException {
         List<Long> codigos = new ArrayList<>();
         for (int i = 0; i < entity.parcelamento().parcelas(); i++) {
             entity.codigoPai(codigoPai);
@@ -308,7 +304,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigos;
     }
 
-    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws BusinessException, ServiceException {
+    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws StoreException, ServiceException, BusinessException {
         validaRecorrente(entity, meses);
 
         List<Long> codigos = new ArrayList<>();

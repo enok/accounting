@@ -1,6 +1,7 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Historico;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.HistoricoFactory;
@@ -17,7 +18,7 @@ public class HistoricoServiceImpl implements HistoricoService {
     private HistoricoRepository repository;
 
     @Override
-    public Long salvar(final String metodo, final Map<String, Object> parametros) throws ServiceException {
+    public Long salvar(final String metodo, final Map<String, Object> parametros) throws StoreException, ServiceException {
         Historico historico;
         try {
             historico = HistoricoFactory
@@ -28,6 +29,9 @@ public class HistoricoServiceImpl implements HistoricoService {
             setarProximoCodigo(historico);
             repository.salvar(historico);
         }
+        catch (StoreException e) {
+            throw e;
+        }
         catch (Exception e) {
             String message = "Não foi possível salvar o histórico.";
             throw new ServiceException(message, e);
@@ -35,7 +39,7 @@ public class HistoricoServiceImpl implements HistoricoService {
         return historico.codigo();
     }
 
-    private void setarProximoCodigo(final Historico entity) throws RepositoryException {
+    private void setarProximoCodigo(final Historico entity) throws StoreException, RepositoryException {
         Long proximoCodigo = repository.proximoCodigo();
         repository.incrementarCodigo(proximoCodigo);
         entity.codigo(proximoCodigo);

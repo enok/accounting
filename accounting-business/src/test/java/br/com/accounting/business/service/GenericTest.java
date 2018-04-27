@@ -72,13 +72,7 @@ public abstract class GenericTest {
         }
     }
 
-    protected void assertCreation(BusinessException e) throws BusinessException {
-        assertThat(e.getMessage(), equalTo("Não foi possível criar."));
-        throw e;
-    }
-
-    protected void assertCreationAndMandatoryFields(BusinessException e, String... campos) throws BusinessException {
-        assertThat(e.getMessage(), equalTo("Não foi possível criar."));
+    protected void assertCreationAndMandatoryFields(MissingFieldException e, String... campos) throws BusinessException {
         assertMandatoryFields(e, campos);
         throw e;
     }
@@ -93,12 +87,14 @@ public abstract class GenericTest {
         List<String> campos = Arrays.asList(camposArray);
         String mensagem = "O campo %s é obrigatório.";
 
-        MissingFieldException e1 = (MissingFieldException) e.getCause();
-        List<String> erros = e1.getErros();
-        assertThat(erros.size(), equalTo(campos.size()));
+        if (e instanceof MissingFieldException) {
+            MissingFieldException e1 = (MissingFieldException) e;
+            List<String> erros = e1.getErros();
+            assertThat(erros.size(), equalTo(campos.size()));
 
-        for (int i = 0; i < campos.size(); i++) {
-            assertThat(erros.get(i), equalTo(String.format(mensagem, campos.get(i))));
+            for (int i = 0; i < campos.size(); i++) {
+                assertThat(erros.get(i), equalTo(String.format(mensagem, campos.get(i))));
+            }
         }
     }
 

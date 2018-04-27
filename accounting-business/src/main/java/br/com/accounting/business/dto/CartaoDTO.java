@@ -20,4 +20,39 @@ public class CartaoDTO implements EntityDTO {
     public String getCodigo() {
         return codigo;
     }
+
+    public CartaoDTO setCodigo(String codigo) {
+        this.codigo = codigo;
+        return this;
+    }
+
+    public CartaoDTO setNumero(String numero) {
+        this.numero = numero;
+        return this;
+    }
+
+    public CartaoDTO setVencimento(String vencimento) {
+        this.vencimento = vencimento;
+        return this;
+    }
+
+    public CartaoDTO setDiaMelhorCompra(String diaMelhorCompra) {
+        this.diaMelhorCompra = diaMelhorCompra;
+        return this;
+    }
+
+    public CartaoDTO setPortador(String portador) {
+        this.portador = portador;
+        return this;
+    }
+
+    public CartaoDTO setTipo(String tipo) {
+        this.tipo = tipo;
+        return this;
+    }
+
+    public CartaoDTO setLimite(String limite) {
+        this.limite = limite;
+        return this;
+    }
 }
