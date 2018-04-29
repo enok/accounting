@@ -1,7 +1,10 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
-import br.com.accounting.business.exception.*;
+import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.CreateException;
+import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.factory.ContabilidadeDTOMockFactory;
 import br.com.accounting.business.service.impl.ContabilidadeBusinessImpl;
 import br.com.accounting.core.exception.StoreException;
@@ -24,7 +27,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     private ContabilidadeBusiness business;
 
     @Test(expected = StoreException.class)
-    public void criarUmaContabilidadeSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void criarUmaContabilidadeSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTO();
@@ -48,7 +51,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemDataVencimento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemDataVencimento() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemDataVencimento();
             business.criar(dto);
@@ -59,7 +62,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaContabilidadeSemDataPagamento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemDataPagamento() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemDataPagamento();
         Long codigo = business.criar(dto).get(0);
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
@@ -67,7 +70,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemRecorrente() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemRecorrente() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemRecorrente();
             business.criar(dto);
@@ -78,7 +81,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemGrupo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemGrupo() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemGrupo();
             business.criar(dto);
@@ -89,7 +92,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemSubGrupo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemSubGrupo() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemSubGrupo();
             business.criar(dto);
@@ -100,7 +103,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaContabilidadeSemLocal() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemLocal() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemLocal();
         Long codigo = business.criar(dto).get(0);
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
@@ -108,7 +111,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemDescricao();
             business.criar(dto);
@@ -119,7 +122,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaContabilidadeSemUsouCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemUsouCartao() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemUsouCartao();
         Long codigo = business.criar(dto).get(0);
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
@@ -127,7 +130,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaContabilidadeNaoUsouCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeNaoUsouCartao() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTONaoUsouCartao();
         Long codigo = business.criar(dto).get(0);
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
@@ -135,7 +138,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemCartao() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemCartao();
             business.criar(dto);
@@ -146,7 +149,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemParcelado() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemParcelado() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemParcelado();
             business.criar(dto);
@@ -157,7 +160,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemParcelas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemParcelas() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemParcelas();
             business.criar(dto);
@@ -168,7 +171,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemConta() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemConta();
             business.criar(dto);
@@ -179,7 +182,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemTipo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemTipo() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemTipo();
             business.criar(dto);
@@ -190,7 +193,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemValor() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemValor() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemValor();
             business.criar(dto);
@@ -201,26 +204,26 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContabilidadeSemCamposObrigatorios() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeSemCamposObrigatorios() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemCamposObrigatorios();
             business.criar(dto);
         }
         catch (MissingFieldException e) {
             assertCreationAndMandatoryFields(e, "dataVencimento", "grupo", "subGrupo", "descrição", "conta",
-                    "tipo", "valor");
+                                             "tipo", "valor");
             throw e;
         }
     }
 
     @Test
-    public void criarUmaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         assertCodigos(codigos);
     }
 
     @Test
-    public void criarDuasContabilidades() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDuasContabilidades() throws StoreException, BusinessException, GenericException {
         List<Long> codigos1 = criarContabilidades();
         List<Long> codigos2 = criarContabilidades();
 
@@ -232,7 +235,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaContabilidadeNaoParcelada() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContabilidadeNaoParcelada() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeNaoParcelada();
 
         Long codigo = codigos.get(0);
@@ -242,7 +245,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void criarContabilidadeRecorrenteComProximoLancamento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarContabilidadeRecorrenteComProximoLancamento() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrenteComProximoLancamento();
             business.criar(dto);
@@ -254,7 +257,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarContabilidadeRecorrenteTest() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarContabilidadeRecorrenteTest() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrente();
         List<Long> codigos = business.criar(dto);
         assertCodigos(codigos, 9);
@@ -262,7 +265,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarContabilidadeRecorrenteUltimoMes() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarContabilidadeRecorrenteUltimoMes() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrenteUltimoMes();
 
         List<Long> codigos = business.criar(dto);
@@ -273,7 +276,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -286,7 +289,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDataLancamento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDataLancamento() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -299,7 +302,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDataVencimento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDataVencimento() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -312,7 +315,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemRecorrente() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemRecorrente() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -325,7 +328,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemGrupo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemGrupo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -338,7 +341,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemSubGrupo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemSubGrupo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -351,7 +354,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -364,7 +367,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemUsouCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemUsouCartao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -377,7 +380,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCartao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -390,7 +393,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemParcelado() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemParcelado() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -403,7 +406,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemParcela() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemParcela() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -416,7 +419,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemParcelas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemParcelas() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -429,7 +432,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemConta() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -442,7 +445,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemTipo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemTipo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -455,7 +458,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemValor() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemValor() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
@@ -468,7 +471,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarSemCodigoPaiTestandoPai() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigoPaiTestandoPai() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
         dtoBuscado.codigoPai(null);
@@ -476,7 +479,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigoPaiTestandoFilho() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigoPaiTestandoFilho() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(1));
@@ -489,7 +492,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigoAnterior = String.valueOf(codigos.get(0));
@@ -506,7 +509,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDaDataLancamento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDaDataLancamento() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(0));
@@ -522,7 +525,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarRecorrenteDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarRecorrenteDaContabilidade() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             Long codigo = codigos.get(0);
@@ -543,7 +546,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDaParcelas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDaParcelas() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(1));
@@ -559,7 +562,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDaParcelaPai() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDaParcelaPai() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(0));
@@ -575,7 +578,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDaParcelaFilho() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDaParcelaFilho() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(1));
@@ -591,7 +594,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigoPaiUsandoPai() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigoPaiUsandoPai() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(0));
@@ -607,7 +610,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigoPaiUsandoFilho() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigoPaiUsandoFilho() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
             String codigo = String.valueOf(codigos.get(1));
@@ -623,7 +626,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarDataVencimentoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDataVencimentoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -636,13 +639,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/05/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarDataPagamentoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDataPagamentoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -655,13 +658,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", getStringFromCurrentDate(), "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarGrupoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarGrupoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -674,13 +677,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Um grupo",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarSubGrupoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSubGrupoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -693,13 +696,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Um subGrupo", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Um subGrupo", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarLocalDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarLocalDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -712,13 +715,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Outro local", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Outro local", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarDescricaoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDescricaoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -731,13 +734,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Nova descrição", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Nova descrição", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarUsouCartaoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarUsouCartaoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -750,13 +753,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
-                "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
+                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarCartaoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarCartaoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -769,13 +772,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "1234",
-                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "1234",
+                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarContaDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContaDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -788,13 +791,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarTipoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarTipoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -807,13 +810,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
+                        null);
     }
 
     @Test
-    public void alterarValorDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarValorDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -826,13 +829,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
+                        null);
     }
 
     @Test
-    public void alterarParceladoDaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarParceladoDaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -845,13 +848,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarContabilidadesSubsequentesException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadesSubsequentesException() throws BusinessException {
         try {
             business.atualizarSubsequentes(null);
         }
@@ -862,7 +865,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeSubsequentesParceladas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadeSubsequentesParceladas() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -890,7 +893,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeSubsequentesRecorrentes() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadeSubsequentesRecorrentes() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(0);
 
@@ -907,7 +910,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeSubsequentesParceladasParciais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadeSubsequentesParceladasParciais() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(1);
 
@@ -940,7 +943,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeSubsequentesRecorrentesParciais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadeSubsequentesRecorrentesParciais() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(1);
 
@@ -957,7 +960,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarContabilidadeSubsequentesNaoParcelado() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarContabilidadeSubsequentesNaoParcelado() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeNaoParcelada();
         Long codigo = codigos.get(0);
 
@@ -974,7 +977,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmaContabilidadeException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmaContabilidadeException() throws BusinessException {
         try {
             business.excluir(null);
         }
@@ -985,7 +988,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirUmaContabilidade() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorId(codigo);
@@ -997,7 +1000,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void incrementarContabilidadesRecorrentesComMenosDe1Ano() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void incrementarContabilidadesRecorrentesComMenosDe1Ano() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrente();
             business.criar(dto);
@@ -1015,7 +1018,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void incrementarContabilidadesRecorrentesComMaisDe1Ano() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void incrementarContabilidadesRecorrentesComMaisDe1Ano() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrente();
         business.criar(dto);
         List<Long> codigosAtualizados = business.incrementarRecorrentes(2);
@@ -1023,7 +1026,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirSubsequentesException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirSubsequentesException() throws BusinessException {
         try {
             business.excluirSubsequentes(null);
         }
@@ -1034,7 +1037,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesParceladas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirSubsequentesParceladas() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorId(codigo);
@@ -1046,7 +1049,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesParceladasParcial() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirSubsequentesParceladasParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
 
@@ -1059,7 +1062,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesRecorrentes() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirSubsequentesRecorrentes() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorId(codigo);
@@ -1071,7 +1074,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesRecorrentesParcial() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirSubsequentesRecorrentesParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
 
@@ -1084,7 +1087,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void realizarPagamentoException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void realizarPagamentoException() throws BusinessException {
         try {
             business.realizarPagamento(null);
         }
@@ -1095,7 +1098,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void realizarPagamento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void realizarPagamento() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
@@ -1108,7 +1111,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarContabilidadePorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarContabilidadePorIdException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarPorId(null);
@@ -1120,7 +1123,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarContabilidadesException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarContabilidadesException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodas();
@@ -1132,13 +1135,13 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarContabilidades() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void buscarContabilidades() throws StoreException, BusinessException, GenericException {
         criarContabilidades();
         criarContabilidadeRecorrente();
 
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         dtos.sort(Comparator
-                .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
+                          .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
 
         assertThat(dtos.size(), equalTo(16));
 
@@ -1147,7 +1150,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarTodasAsParcelasException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarTodasAsParcelasException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodasAsParcelas(null);
@@ -1159,7 +1162,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarTodasAsRecorrentesException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarTodasAsRecorrentesException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodasAsRecorrentes(null);
@@ -1171,7 +1174,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarTodasAsParcelas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void buscarTodasAsParcelas() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContabilidades().get(0);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
@@ -1179,19 +1182,19 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertEntitiesParceladas(dtos);
     }
 
-    private List<Long> criarContabilidades() throws StoreException, ValidationException, BusinessException, GenericException {
+    private List<Long> criarContabilidades() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTO();
         List<Long> codigos = business.criar(dto);
         return assertCodigos(codigos, 7);
     }
 
-    private List<Long> criarContabilidadeNaoParcelada() throws StoreException, ValidationException, BusinessException, GenericException {
+    private List<Long> criarContabilidadeNaoParcelada() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTONaoRecorrenteNaoParcelada();
         List<Long> codigos = business.criar(dto);
         return assertCodigos(codigos, 1);
     }
 
-    private List<Long> criarContabilidadeRecorrente() throws StoreException, ValidationException, BusinessException, GenericException {
+    private List<Long> criarContabilidadeRecorrente() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrente();
         List<Long> codigos = business.criar(dto);
         return assertCodigos(codigos, 9);
@@ -1205,7 +1208,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         return codigos;
     }
 
-    private void assertCodigos(List<Long> codigos) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertCodigos(List<Long> codigos) throws BusinessException {
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
         assertEntitiesParceladas(dtos);
     }
@@ -1221,7 +1224,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = new ArrayList<>();
         for (ContabilidadeDTO dto : dtos) {
             long codigo = Long.parseLong(dto.codigo());
@@ -1247,7 +1250,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertCodigosRecorrentes(List<Long> codigos) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertCodigosRecorrentes(List<Long> codigos) throws BusinessException {
         String dataVencimento = "27/04/2018";
         int teto = 9;
         for (int i = 0; i < teto; i++) {
@@ -1265,7 +1268,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     private void assertRecorrentesTotais(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
-                                         int passoProximoRegistro) throws StoreException, ValidationException, BusinessException, GenericException {
+                                         int passoProximoRegistro) throws BusinessException {
         String dataVencimentoLocal = dataVencimento;
         ContabilidadeDTO dto;
         for (int i = 0; i < totalDeRegistros; i++) {
@@ -1289,29 +1292,29 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
     private void assertNaoRecorrenteNaoParceladoNaoCartao(ContabilidadeDTO dto, String descricao) {
         assertEntityDTO(dto, "27/04/2018", null, "N", "Apartamento",
-                "Aluguel", null, descricao, "N", null, "N", null, null,
-                "MORADIA", "DEBITO", "1.000,00", null, null);
+                        "Aluguel", null, descricao, "N", null, "N", null, null,
+                        "MORADIA", "DEBITO", "1.000,00", null, null);
     }
 
     private void assertNaoParcelado(ContabilidadeDTO dto) {
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
-                "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                null);
+                        "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
+                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                        null);
     }
 
     private void assertRecorrente(ContabilidadeDTO dto, String dataVencimento, String descricao, String proximoLancamento) {
         assertEntityDTO(dto, dataVencimento, null, "S", "Apartamento",
-                "Aluguel", null, descricao, "N", null,
-                "N", null, null, "MORADIA", "DEBITO", "1.000,00",
-                null, proximoLancamento);
+                        "Aluguel", null, descricao, "N", null,
+                        "N", null, null, "MORADIA", "DEBITO", "1.000,00",
+                        null, proximoLancamento);
     }
 
     private void assertParcelado(ContabilidadeDTO dto, String descricao, String parcela, String codigoPai) {
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                "Suplementos", "Site", descricao, "S", "0744",
-                "S", parcela, "7", "CAROL", "DEBITO", "24,04", codigoPai,
-                null);
+                        "Suplementos", "Site", descricao, "S", "0744",
+                        "S", parcela, "7", "CAROL", "DEBITO", "24,04", codigoPai,
+                        null);
     }
 
     private void assertEntityDTO(ContabilidadeDTO dto, String dataVencimento, String dataPagamento, String recorrente,

@@ -1,16 +1,16 @@
 package br.com.accounting.business.service.impl;
 
-import br.com.accounting.business.exception.*;
-import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.core.exception.RepositoryException;
-import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.factory.ContabilidadeFactory;
-import br.com.accounting.core.service.ContabilidadeService;
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContabilidadeDTO;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContabilidadeDTOFactory;
 import br.com.accounting.business.service.ContabilidadeBusiness;
+import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.exception.RepositoryException;
+import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.core.factory.ContabilidadeFactory;
+import br.com.accounting.core.service.ContabilidadeService;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @History
-    public List<Long> criar(final ContabilidadeDTO dto) throws ValidationException, StoreException, BusinessException {
+    public List<Long> criar(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -63,8 +63,20 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
             return codigos;
         }
+        catch (ValidationException e) {
+            throw e;
+        }
+        catch (StoreException e) {
+            throw e;
+        }
         catch (ServiceException e) {
             throw new BusinessException(e);
+        }
+        catch (BusinessException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new GenericException(e);
         }
     }
 
