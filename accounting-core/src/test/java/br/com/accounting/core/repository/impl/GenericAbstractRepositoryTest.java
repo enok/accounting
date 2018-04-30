@@ -22,8 +22,8 @@ public class GenericAbstractRepositoryTest extends GenericTest {
         genericAbstractRepository.incrementarCodigo(null);
     }
 
-    @Test(expected = RepositoryException.class)
-    public void salvarException() throws RepositoryException {
+    @Test(expected = StoreException.class)
+    public void salvarException() throws StoreException {
         genericAbstractRepository.salvar(null);
     }
 }

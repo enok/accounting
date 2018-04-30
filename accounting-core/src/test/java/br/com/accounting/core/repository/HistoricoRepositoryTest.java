@@ -18,7 +18,7 @@ public class HistoricoRepositoryTest extends GenericTest {
         historicoRepository.buscarRegistros();
     }
 
-    private void criarHistorico() throws RepositoryException {
+    private void criarHistorico() throws StoreException {
         Historico historico = HistoricoFactory
                 .begin()
                 .withCodigo("1")

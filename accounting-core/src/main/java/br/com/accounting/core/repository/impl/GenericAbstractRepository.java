@@ -66,7 +66,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     @Override
-    public void salvar(final T entity) throws RepositoryException {
+    public void salvar(final T entity) throws StoreException {
         String linha = null;
 
         try {
@@ -76,7 +76,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         }
         catch (Exception e) {
             String message = "Não foi possível salvar a linha: " + linha;
-            throw new RepositoryException(message, e);
+            throw new StoreException(message, e);
         }
     }
 

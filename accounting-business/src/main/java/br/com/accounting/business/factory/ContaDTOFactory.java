@@ -76,7 +76,7 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
 
     public ContaDTOFactory withValorDefault(String valorDefault) {
         if (!isBlankOrNull(valorDefault)) {
-            dto.valorDefault(valorDefault);
+            dto.setValorDefault(valorDefault);
         }
         return this;
     }

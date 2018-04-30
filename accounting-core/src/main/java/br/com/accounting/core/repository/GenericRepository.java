@@ -10,7 +10,7 @@ public interface GenericRepository<T> {
 
     void incrementarCodigo(Long codigo) throws RepositoryException;
 
-    void salvar(T entity) throws RepositoryException;
+    void salvar(T entity) throws StoreException;
 
     void atualizar(T entity) throws RepositoryException;
 

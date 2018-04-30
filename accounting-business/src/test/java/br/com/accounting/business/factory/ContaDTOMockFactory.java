@@ -22,7 +22,7 @@ public final class ContaDTOMockFactory {
 
     public static ContaDTO contaDTOSemValorDefault() {
         return contaSalario()
-                .valorDefault(null);
+                .setValorDefault(null);
     }
 
     public static ContaDTO contaDTOSemCumulativo() {

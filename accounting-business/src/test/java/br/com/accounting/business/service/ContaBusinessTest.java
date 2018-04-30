@@ -20,7 +20,7 @@ public class ContaBusinessTest extends GenericTest {
     private ContaBusiness business;
 
     @Test(expected = StoreException.class)
-    public void criarUmaContaSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void criarUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             ContaDTO dto = ContaDTOMockFactory.contaSalario();
@@ -33,7 +33,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContaSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContaSemNome() throws StoreException, BusinessException, GenericException {
         try {
             ContaDTO dto = ContaDTOMockFactory.contaDTOSemNome();
             business.criar(dto);
@@ -45,7 +45,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContaSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContaSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             ContaDTO dto = ContaDTOMockFactory.contaDTOSemDescricao();
             business.criar(dto);
@@ -57,7 +57,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContaSemValorDefault() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContaSemValorDefault() throws StoreException, BusinessException, GenericException {
         try {
             ContaDTO dto = ContaDTOMockFactory.contaDTOSemValorDefault();
             business.criar(dto);
@@ -69,7 +69,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContaSemCumulativo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContaSemCumulativo() throws StoreException, BusinessException, GenericException {
         try {
             ContaDTO dto = ContaDTOMockFactory.contaDTOSemCumulativo();
             business.criar(dto);
@@ -81,7 +81,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaContaSemCamposObrigatorios() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaContaSemCamposObrigatorios() throws StoreException, BusinessException, GenericException {
         try {
             ContaDTO dto = ContaDTOMockFactory.contaDTOSemCamposObrigatorios();
             business.criar(dto);
@@ -93,13 +93,13 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         assertContaSalario(codigo);
     }
 
     @Test(expected = ValidationException.class)
-    public void criarDuasContasComNomesIguais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDuasContasComNomesIguais() throws StoreException, BusinessException, GenericException {
         try {
             criarContaSalario();
             criarContaSalario();
@@ -112,7 +112,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarDuasContas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDuasContas() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         Long codigo2 = criarContaEnok();
 
@@ -120,7 +120,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
             ContaDTO dtoBuscado = business.buscarPorId(codigo);
@@ -133,7 +133,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemNome() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
             ContaDTO dtoBuscado = business.buscarPorId(codigo);
@@ -146,7 +146,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDescricao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
             ContaDTO dtoBuscado = business.buscarPorId(codigo);
@@ -159,11 +159,11 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemValorDefault() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemValorDefault() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
             ContaDTO dtoBuscado = business.buscarPorId(codigo);
-            dtoBuscado.valorDefault(null);
+            dtoBuscado.setValorDefault(null);
             business.atualizar(dtoBuscado);
         }
         catch (BusinessException e) {
@@ -172,7 +172,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCumulativo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCumulativo() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
@@ -182,7 +182,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
             String codigoAnterior = String.valueOf(codigo);
@@ -198,7 +198,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNomeDaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarNomeDaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
@@ -215,7 +215,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarDescricaoDaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDescricaoDaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
@@ -232,12 +232,12 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarValorDefaultDaContaParaMais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarValorDefaultDaContaParaMais() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
 
-        dtoBuscado.valorDefault("600,00");
+        dtoBuscado.setValorDefault("600,00");
         business.atualizar(dtoBuscado);
 
         dtoBuscado = business.buscarPorId(codigo);
@@ -249,7 +249,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarCumulativoDaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarCumulativoDaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
@@ -266,7 +266,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarNomeDescricaoValorDefaultCumulativo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarNomeDescricaoValorDefaultCumulativo() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
@@ -274,7 +274,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.nome("Carol");
         dtoBuscado.descricao("Valor separado para a Carol");
         dtoBuscado.cumulativo("N");
-        dtoBuscado.valorDefault("150,00");
+        dtoBuscado.setValorDefault("150,00");
         business.atualizar(dtoBuscado);
 
         dtoBuscado = business.buscarPorId(codigo);
@@ -286,7 +286,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void adicionarCreditoEmUmaContaSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void adicionarCreditoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -302,7 +302,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoEmUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void adicionarCreditoEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -313,7 +313,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void adicionarVariosCreditosEmUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void adicionarVariosCreditosEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -327,7 +327,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void adicionarDebitoEmUmaContaSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void adicionarDebitoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -343,7 +343,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void adicionarDebitoEmUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void adicionarDebitoEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -354,7 +354,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void adicionarVariosDebitosEmUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void adicionarVariosDebitosEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -368,7 +368,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void transferirSaldoDeUmaContaParaOutraException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void transferirSaldoDeUmaContaParaOutraException() throws BusinessException {
         try {
             business.transferir(null, null, null);
         }
@@ -379,7 +379,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void transferirSaldoDeUmaContaParaOutraSaldoInsuficiente() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void transferirSaldoDeUmaContaParaOutraSaldoInsuficiente() throws StoreException, BusinessException, GenericException {
         ContaDTO dto1 = ContaDTOMockFactory.contaSalario();
         Long codigo1 = business.criar(dto1).get(0);
         dto1 = business.buscarPorId(codigo1);
@@ -398,7 +398,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void transferirSaldoDeUmaContaParaOutra() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void transferirSaldoDeUmaContaParaOutra() throws StoreException, BusinessException, GenericException {
         ContaDTO dto1 = ContaDTOMockFactory.contaSalario();
         Long codigo1 = business.criar(dto1).get(0);
         dto1 = business.buscarPorId(codigo1);
@@ -419,7 +419,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmaContaException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmaContaException() throws BusinessException {
         try {
             business.excluir(null);
         }
@@ -430,7 +430,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirUmaConta() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
 
@@ -441,7 +441,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarContaPorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarContaPorIdException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarPorId(null);
@@ -453,7 +453,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void buscarContasException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void buscarContasException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.buscarTodas();
@@ -465,7 +465,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarContas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void buscarContas() throws StoreException, BusinessException, GenericException {
         criarContaSalario();
         criarContaEnok();
 
@@ -477,7 +477,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void atualizarContasException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void atualizarContasException() throws BusinessException, IOException {
         deletarDiretorioEArquivos();
         try {
             business.atualizarContas();
@@ -489,7 +489,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void atualizarContasSemCumulativos() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void atualizarContasSemCumulativos() throws StoreException, BusinessException, GenericException {
         try {
             criarContaSalario();
             business.atualizarContas();
@@ -501,7 +501,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test
-    public void atualizarContas() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void atualizarContas() throws StoreException, BusinessException, GenericException {
         Long codigoEnok = criarContaEnok();
         Long codigoSalario = criarContaSalario();
         business.atualizarContas();
@@ -512,7 +512,7 @@ public class ContaBusinessTest extends GenericTest {
         assertContaSalario(dtoSalario);
     }
 
-    private Long criarContaSalario() throws StoreException, ValidationException, BusinessException, GenericException {
+    private Long criarContaSalario() throws StoreException, BusinessException, GenericException {
         ContaDTO dto = ContaDTOMockFactory.contaSalario();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
@@ -521,7 +521,7 @@ public class ContaBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private Long criarContaEnok() throws StoreException, ValidationException, BusinessException, GenericException {
+    private Long criarContaEnok() throws StoreException, BusinessException, GenericException {
         ContaDTO dto = ContaDTOMockFactory.contaEnok();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
@@ -530,7 +530,7 @@ public class ContaBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertContaSalario(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
+    private void assertContaSalario(Long codigo) throws BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
         assertContaSalario(dtoBuscado);
     }
@@ -544,7 +544,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.dataAtualizacao(), equalTo("15/03/2018"));
     }
 
-    private ContaDTO assertContaEnok(Long codigo) throws StoreException, ValidationException, BusinessException, GenericException {
+    private ContaDTO assertContaEnok(Long codigo) throws BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
         return assertContaEnok(dtoBuscado, "500,00", "10/03/2018");
     }

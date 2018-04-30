@@ -20,7 +20,27 @@ public class ContaDTO implements EntityDTO {
     private String dataAtualizacao;
     private boolean atualizacao = false;
 
-    public ContaDTO valorDefault(String valorDefault) {
+    @Override
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public ContaDTO setCodigo(String codigo) {
+        this.codigo = codigo;
+        return this;
+    }
+
+    public ContaDTO setNome(String nome) {
+        this.nome = nome;
+        return this;
+    }
+
+    public ContaDTO setDescricao(String descricao) {
+        this.descricao = descricao;
+        return this;
+    }
+
+    public ContaDTO setValorDefault(String valorDefault) {
         if (isBlankOrNull(this.valorDefault)) {
             this.valorDefault = valorDefault;
         }
@@ -32,8 +52,23 @@ public class ContaDTO implements EntityDTO {
         return this;
     }
 
-    @Override
-    public String getCodigo() {
-        return codigo;
+    public ContaDTO setSaldo(String saldo) {
+        this.saldo = saldo;
+        return this;
+    }
+
+    public ContaDTO setCumulativo(String cumulativo) {
+        this.cumulativo = cumulativo;
+        return this;
+    }
+
+    public ContaDTO setDataAtualizacao(String dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+        return this;
+    }
+
+    public ContaDTO setAtualizacao(boolean atualizacao) {
+        this.atualizacao = atualizacao;
+        return this;
     }
 }

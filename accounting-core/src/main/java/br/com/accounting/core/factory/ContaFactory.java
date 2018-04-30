@@ -33,6 +33,9 @@ public final class ContaFactory {
             if (entity.dataAtualizacao() == null) {
                 entity.dataAtualizacao(LocalDate.now());
             }
+            if (entity.saldo() == null) {
+                entity.saldo(entity.valorDefault());
+            }
         }
         else {
             if (entity != null) {

@@ -62,20 +62,79 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"numero\": \"7660\",\r\n  \"vencimento\": \"27/03/2018\",\r\n  \"diaMelhorCompra\": \"17/04/2018\",\r\n  \"portador\": \"Enok\",\r\n  \"tipo\": \"FISICO\",\r\n  \"limite\": \"2.000,00\"\r\n}"
+							"raw": "{\r\n  \"dataVencimento\": \"27/04/2018\",\r\n  \"recorrente\": \"N\",\r\n  \"grupo\": \"Saúde\",\r\n  \"subGrupo\": \"Suplementos\",\r\n  \"local\": \"Site\",\r\n  \"descricao\": \"Suplementos comprados pela Carol\",\r\n  \"usouCartao\": \"S\",\r\n  \"cartao\": \"0744\",\r\n  \"parcelado\": \"S\",\r\n  \"parcelas\": \"7\",\r\n  \"conta\": \"CAROL\",\r\n  \"tipo\": \"DEBITO\",\r\n  \"valor\": \"24,04\"\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}/cartao",
+							"raw": "http://{{host}}/contabilidade",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"cartao"
+								"contabilidade"
 							]
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conta",
+			"description": "",
+			"item": [
+				{
+					"name": "Salvar Conta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"numero\": \"7660\",\r\n  \"vencimento\": \"27/03/2018\",\r\n  \"diaMelhorCompra\": \"17/04/2018\",\r\n  \"portador\": \"Enok\",\r\n  \"tipo\": \"FISICO\",\r\n  \"limite\": \"2.000,00\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/conta",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"conta"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0bba387d-ae5a-40b5-adab-e38babbe2af4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d7bbad-d0b4-4823-a3b3-b328bcd26520",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
