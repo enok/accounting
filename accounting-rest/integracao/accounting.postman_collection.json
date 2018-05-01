@@ -99,7 +99,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"numero\": \"7660\",\r\n  \"vencimento\": \"27/03/2018\",\r\n  \"diaMelhorCompra\": \"17/04/2018\",\r\n  \"portador\": \"Enok\",\r\n  \"tipo\": \"FISICO\",\r\n  \"limite\": \"2.000,00\"\r\n}"
+							"raw": "{\r\n  \"nome\": \"Salário\",\r\n  \"descricao\": \"Salário mensal recebido pela Sysmap\",\r\n  \"valorDefault\": \"1.000,00\",\r\n  \"cumulativo\": \"N\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/conta",
@@ -109,6 +109,65 @@
 							],
 							"path": [
 								"conta"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0bba387d-ae5a-40b5-adab-e38babbe2af4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d7bbad-d0b4-4823-a3b3-b328bcd26520",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Grupo",
+			"description": "",
+			"item": [
+				{
+					"name": "Salvar Grupo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Moradia\",\r\n  \"descricao\": \"Gastos gerais com moradia\",\r\n  \"subGrupos\": [\r\n  \t\"Aluguel\",\r\n  \t\"Internet\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/grupo",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"grupo"
 							]
 						}
 					},

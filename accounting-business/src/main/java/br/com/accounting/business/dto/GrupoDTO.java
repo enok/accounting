@@ -27,4 +27,24 @@ public class GrupoDTO implements EntityDTO {
     public String getCodigo() {
         return codigo;
     }
+
+    public GrupoDTO setCodigo(String codigo) {
+        this.codigo = codigo;
+        return this;
+    }
+
+    public GrupoDTO setNome(String nome) {
+        this.nome = nome;
+        return this;
+    }
+
+    public GrupoDTO setDescricao(String descricao) {
+        this.descricao = descricao;
+        return this;
+    }
+
+    public GrupoDTO setSubGrupos(List<String> subGrupos) {
+        this.subGrupos = subGrupos;
+        return this;
+    }
 }
