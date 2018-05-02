@@ -15,4 +15,14 @@ public class LocalDTO implements EntityDTO {
     public String getCodigo() {
         return codigo;
     }
+
+    public LocalDTO setCodigo(String codigo) {
+        this.codigo = codigo;
+        return this;
+    }
+
+    public LocalDTO setNome(String nome) {
+        this.nome = nome;
+        return this;
+    }
 }

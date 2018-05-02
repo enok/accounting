@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "26e8e81d-14f5-4af1-b2be-9830b6651b5f",
+		"_postman_id": "06c26060-4435-4c0b-b205-d950528470af",
 		"name": "accounting",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Cartão",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Salvar Cartão",
@@ -44,7 +44,7 @@
 		},
 		{
 			"name": "Contabilidade",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Salvar Contabilidade",
@@ -81,7 +81,7 @@
 		},
 		{
 			"name": "Conta",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Salvar Conta",
@@ -140,7 +140,7 @@
 		},
 		{
 			"name": "Grupo",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "Salvar Grupo",
@@ -168,6 +168,65 @@
 							],
 							"path": [
 								"grupo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0bba387d-ae5a-40b5-adab-e38babbe2af4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d7bbad-d0b4-4823-a3b3-b328bcd26520",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Local",
+			"description": null,
+			"item": [
+				{
+					"name": "Salvar Local",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Carrefour\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/local",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"local"
 							]
 						}
 					},
