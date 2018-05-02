@@ -21,7 +21,7 @@ public class GrupoServiceImpl extends GenericAbstractService<Grupo> implements G
     }
 
     @Override
-    public Grupo buscarPorNome(final String nome) throws ServiceException, StoreException {
+    public Grupo buscarPorNome(final String nome) throws StoreException, ServiceException {
         try {
             List<Grupo> entities = repository.buscarRegistros();
             return repository.filtrarPorNome(entities, nome);

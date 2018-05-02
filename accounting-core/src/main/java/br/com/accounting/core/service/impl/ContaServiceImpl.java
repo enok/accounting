@@ -52,7 +52,7 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     }
 
     @Override
-    public List<Conta> buscarCumulativas() throws ServiceException, StoreException {
+    public List<Conta> buscarCumulativas() throws StoreException, ServiceException {
         try {
             List<Conta> entities = repository.buscarRegistros();
             return repository.filtrarCumulativas(entities);

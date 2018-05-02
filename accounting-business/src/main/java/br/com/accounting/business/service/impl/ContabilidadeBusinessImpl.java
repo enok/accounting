@@ -82,14 +82,14 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizar(final ContabilidadeDTO dto) throws BusinessException {
+    public void atualizar(final ContabilidadeDTO dto) throws StoreException, BusinessException {
         dto.dataAtualizacao(getStringFromCurrentDate());
         super.atualizar(dto);
     }
 
     @History
     @Override
-    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws BusinessException {
+    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws StoreException, BusinessException {
         try {
             if (dto.parcelado().equals("S")) {
                 atualizarParcelas(dto);
@@ -100,6 +100,9 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             else {
                 atualizar(dto);
             }
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (DateTimeParseException | ParseException e) {
             throw new ValidationException(e);
@@ -112,7 +115,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public List<Long> incrementarRecorrentes(final Integer anos) throws BusinessException {
+    public List<Long> incrementarRecorrentes(final Integer anos) throws StoreException, BusinessException {
         try {
             if (anos < 1) {
                 throw new BusinessException("O valor de anos deve ser maior ou igual a 1.");
@@ -131,6 +134,9 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
             return codigos;
         }
+        catch (StoreException e) {
+            throw e;
+        }
         catch (Exception e) {
             String message = "Não foi possível atualizar recorrentes.";
             throw new BusinessException(message, e);
@@ -139,10 +145,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void excluirSubsequentes(final ContabilidadeDTO dto) throws BusinessException {
+    public void excluirSubsequentes(final ContabilidadeDTO dto) throws StoreException, BusinessException {
         try {
             excluirParcelas(dto);
             excluirRecorrentes(dto);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível excluir subsequentes.";
@@ -152,11 +161,14 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void realizarPagamento(final Long codigo) throws BusinessException {
+    public void realizarPagamento(final Long codigo) throws StoreException, BusinessException {
         try {
             ContabilidadeDTO dto = buscarPorId(codigo);
             dto.dataPagamento(getStringFromCurrentDate());
             atualizar(dto);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível realizar o pagamento.";
@@ -273,7 +285,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validaRegistroDuplicado(final Contabilidade contabilidade) {
+    public void validaRegistroDuplicado(final Contabilidade contabilidade) throws StoreException, DuplicatedRegistryException, ServiceException {
         throw new RuntimeException("Uma contabilidade não valida duplicidade de registro.");
     }
 
@@ -359,7 +371,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigos;
     }
 
-    private void atualizarEntity(final Contabilidade entity) throws BusinessException {
+    private void atualizarEntity(final Contabilidade entity) throws StoreException, BusinessException {
         entity.dataAtualizacao(LocalDate.now());
         ContabilidadeDTO dto = criarDTO(entity);
         super.atualizar(dto);
@@ -408,7 +420,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return dto.parcela().equals("1");
     }
 
-    private void excluirParcelas(ContabilidadeDTO dto) throws RepositoryException, br.com.accounting.core.exception.ServiceException, StoreException {
+    private void excluirParcelas(ContabilidadeDTO dto) throws StoreException, RepositoryException, ServiceException {
         if (dto.parcelado().equals("S")) {
             List<Contabilidade> entities = buscarParcelasSeguintes(dto);
             for (Contabilidade entity : entities) {
@@ -423,7 +435,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return service.buscarParcelasSeguintesInclusivo(codigoPai, parcelaAtual);
     }
 
-    private void excluirRecorrentes(ContabilidadeDTO dto) throws ServiceException, StoreException {
+    private void excluirRecorrentes(ContabilidadeDTO dto) throws StoreException, ServiceException {
         if (dto.recorrente().equals("S")) {
             long codigo = Long.parseLong(dto.codigo());
             List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
@@ -526,7 +538,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return isBlank(dto.parcelas());
     }
 
-    private void atualizarParcelas(ContabilidadeDTO dto) throws BusinessException {
+    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, BusinessException {
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = buscarCodigoPai(dto);
 
@@ -541,7 +553,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void atualizarRecorrentes(ContabilidadeDTO dto) throws ServiceException, StoreException, ParseException {
+    private void atualizarRecorrentes(ContabilidadeDTO dto) throws StoreException, ParseException, ServiceException {
         Long codigo = Long.parseLong(dto.codigo());
         List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
 

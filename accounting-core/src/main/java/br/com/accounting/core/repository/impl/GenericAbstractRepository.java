@@ -1,14 +1,13 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.Entity;
-import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.GenericRepository;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -27,10 +26,17 @@ import static java.util.Arrays.asList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public abstract class GenericAbstractRepository<T> implements GenericRepository<T> {
+    public abstract String getArquivo();
+
+    public abstract String getArquivoContagem();
+
+    public abstract String criarLinha(T entity);
+
+    public abstract T criarEntity(final String linha) throws ParseException;
 
     @Override
-    public Long proximoCodigo() throws StoreException, RepositoryException {
-        Long proximoCodigo;
+    public Long proximoCodigo() throws StoreException {
+
         List<String> lines;
         final String message = "Não foi possível ler as linhas do arquivo: " + getArquivoContagem();
 
@@ -42,35 +48,33 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             throw new StoreException(message, e);
         }
 
-        try {
-            proximoCodigo = buscarProximoCodigo(lines);
-        }
-        catch (Exception e) {
-            throw new RepositoryException(message, e);
-        }
-
-        return proximoCodigo;
+        return buscarProximoCodigo(lines);
     }
 
     @Override
-    public void incrementarCodigo(final Long codigo) throws RepositoryException {
+    public void incrementarCodigo(final Long codigo) throws StoreException, RepositoryException {
+        final String message = "Não foi possível incrementar o código: " + codigo;
+        String linha;
         try {
             Long novoCodigo = codigo;
-            String linha = String.valueOf(++novoCodigo);
+            linha = String.valueOf(++novoCodigo);
+        }
+        catch (Exception e) {
+            throw new RepositoryException(message, e);
+        }
+
+        try {
             write(get(getArquivoContagem()), linha.getBytes(), CREATE);
         }
         catch (Exception e) {
-            String message = "Não foi possível incrementar o código: " + codigo;
-            throw new RepositoryException(message, e);
+            throw new StoreException(message, e);
         }
     }
 
     @Override
     public void salvar(final T entity) throws StoreException {
-        String linha = null;
-
+        String linha = criarLinha(entity);
         try {
-            linha = criarLinha(entity);
             Path caminhoArquivo = buscarCaminhoArquivo();
             write(caminhoArquivo, asList(linha), UTF_8, APPEND, CREATE);
         }
@@ -81,41 +85,45 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     @Override
-    public void atualizar(final T entity) throws RepositoryException {
+    public void atualizar(final T entity) throws StoreException {
+        String linha = criarLinha(entity);
         try {
-            String linha = criarLinha(entity);
             Path caminhoArquivo = buscarCaminhoArquivo();
             atualizarLinha(caminhoArquivo, ((Entity) entity).getCodigo(), linha);
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar a linha.";
-            throw new RepositoryException(message, e);
+            throw new StoreException(message, e);
         }
     }
 
     @Override
-    public void deletar(final T entity) throws RepositoryException {
+    public void deletar(final T entity) throws StoreException {
+        String linha = criarLinha(entity);
         try {
-            String linha = criarLinha(entity);
             Path caminhoArquivo = buscarCaminhoArquivo();
             deletarLinha(caminhoArquivo, linha);
         }
         catch (Exception e) {
             String message = "Não foi possível deletar a linha.";
-            throw new RepositoryException(message, e);
+            throw new StoreException(message, e);
         }
     }
 
     @Override
     public List<T> buscarRegistros() throws StoreException, RepositoryException {
         final String message = "Não foi possível buscar os registros.";
+        List<String> linhas;
         try {
             Path caminhoArquivo = buscarCaminhoArquivo();
-            List<String> linhas = readAllLines(caminhoArquivo);
-            return criarRegistros(linhas);
+            linhas = readAllLines(caminhoArquivo);
         }
-        catch (NoSuchFileException e) {
+        catch (Exception e) {
             throw new StoreException(message, e);
+        }
+
+        try {
+            return criarRegistros(linhas);
         }
         catch (Exception e) {
             throw new RepositoryException(message, e);
@@ -184,7 +192,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         linhasSream.close();
     }
 
-    public List<T> criarRegistros(final List<String> linhas) throws ParseException {
+    private List<T> criarRegistros(final List<String> linhas) throws ParseException {
         List<T> entities = new ArrayList<>();
         for (String linha : linhas) {
             T entity = criarEntity(linha);
@@ -192,12 +200,4 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         }
         return entities;
     }
-
-    public abstract String getArquivo();
-
-    public abstract String getArquivoContagem();
-
-    public abstract String criarLinha(T entity);
-
-    public abstract T criarEntity(final String linha) throws ParseException;
 }

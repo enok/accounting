@@ -10,9 +10,9 @@ import java.util.List;
 public interface ContabilidadeService extends GenericService<Contabilidade> {
     List<Contabilidade> buscarTodasAsParcelas(Long codigoPai) throws RepositoryException, StoreException;
 
-    List<Contabilidade> buscarParcelasSeguintesInclusivo(Long codigoPai, Integer parcelaAtual) throws RepositoryException, StoreException;
+    List<Contabilidade> buscarParcelasSeguintesInclusivo(Long codigoPai, Integer parcelaAtual) throws StoreException, RepositoryException;
 
-    List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws RepositoryException, StoreException;
+    List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws StoreException, RepositoryException;
 
     List<Contabilidade> buscarTodasRecorrentesSeguintesInclusivo(Long codigo) throws ServiceException, StoreException;
 

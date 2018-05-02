@@ -6,15 +6,15 @@ import br.com.accounting.core.exception.RepositoryException;
 import java.util.List;
 
 public interface GenericRepository<T> {
-    Long proximoCodigo() throws StoreException, RepositoryException;
+    Long proximoCodigo() throws StoreException;
 
-    void incrementarCodigo(Long codigo) throws RepositoryException;
+    void incrementarCodigo(Long codigo) throws StoreException, RepositoryException;
 
     void salvar(T entity) throws StoreException;
 
-    void atualizar(T entity) throws RepositoryException;
+    void atualizar(T entity) throws StoreException;
 
-    void deletar(T entity) throws RepositoryException;
+    void deletar(T entity) throws StoreException;
 
     List<T> buscarRegistros() throws StoreException, RepositoryException;
 

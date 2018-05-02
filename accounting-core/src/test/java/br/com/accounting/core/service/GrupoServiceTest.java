@@ -27,7 +27,7 @@ public class GrupoServiceTest extends GenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void atualizarException() throws ServiceException {
+    public void atualizarException() throws ServiceException, StoreException {
         try {
             service.atualizar(null);
         }
@@ -38,7 +38,7 @@ public class GrupoServiceTest extends GenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void deletarException() throws ServiceException {
+    public void deletarException() throws ServiceException, StoreException {
         try {
             service.deletar(null);
         }

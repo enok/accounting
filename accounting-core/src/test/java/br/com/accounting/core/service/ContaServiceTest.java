@@ -29,7 +29,7 @@ public class ContaServiceTest extends GenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void deletarException() throws ServiceException {
+    public void deletarException() throws ServiceException, StoreException {
         contaService.deletar(null);
     }
 

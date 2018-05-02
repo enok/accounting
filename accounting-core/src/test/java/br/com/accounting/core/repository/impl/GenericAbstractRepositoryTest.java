@@ -13,12 +13,12 @@ public class GenericAbstractRepositoryTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void proximoCodigoNaoFoiPossivelLerAsLinhas() throws StoreException, RepositoryException {
+    public void proximoCodigoNaoFoiPossivelLerAsLinhas() throws StoreException {
         genericAbstractRepository.proximoCodigo();
     }
 
     @Test(expected = RepositoryException.class)
-    public void incrementarCodigoException() throws RepositoryException {
+    public void incrementarCodigoException() throws StoreException, RepositoryException {
         genericAbstractRepository.incrementarCodigo(null);
     }
 

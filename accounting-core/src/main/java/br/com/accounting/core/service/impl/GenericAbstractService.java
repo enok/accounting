@@ -1,8 +1,8 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Entity;
-import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.GenericRepository;
 
@@ -30,9 +30,12 @@ public abstract class GenericAbstractService<E> {
         return ((Entity) entity).getCodigo();
     }
 
-    public void atualizar(final E entity) throws ServiceException {
+    public void atualizar(final E entity) throws StoreException, ServiceException {
         try {
             repository.atualizar(entity);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar.";
@@ -40,9 +43,12 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public void deletar(final E entity) throws ServiceException {
+    public void deletar(final E entity) throws StoreException, ServiceException {
         try {
             repository.deletar(entity);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível deletar.";
@@ -50,7 +56,7 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public E buscarPorCodigo(final Long codigo) throws ServiceException, StoreException {
+    public E buscarPorCodigo(final Long codigo) throws StoreException, ServiceException {
         try {
             List<E> registros = repository.buscarRegistros();
             return (E) repository.filtrarCodigo(registros, codigo);
@@ -64,7 +70,7 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public List<E> buscarTodas() throws ServiceException, StoreException {
+    public List<E> buscarTodas() throws StoreException, ServiceException {
         try {
             List<E> entities = repository.buscarRegistros();
             ordenarTodas(entities);

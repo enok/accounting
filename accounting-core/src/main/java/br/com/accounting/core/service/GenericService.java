@@ -8,11 +8,11 @@ import java.util.List;
 public interface GenericService<E> {
     Long salvar(E entity) throws StoreException, ServiceException;
 
-    void atualizar(E entity) throws ServiceException;
+    void atualizar(E entity) throws StoreException, ServiceException;
 
-    void deletar(E entity) throws ServiceException;
+    void deletar(E entity) throws StoreException, ServiceException;
 
-    E buscarPorCodigo(Long codigo) throws ServiceException, StoreException;
+    E buscarPorCodigo(Long codigo) throws StoreException, ServiceException;
 
-    List<E> buscarTodas() throws ServiceException, StoreException;
+    List<E> buscarTodas() throws StoreException, ServiceException;
 }

@@ -21,7 +21,7 @@ public class LocalServiceImpl extends GenericAbstractService<Local> implements L
     }
 
     @Override
-    public Local buscarPorNome(final String nome) throws ServiceException, StoreException {
+    public Local buscarPorNome(final String nome) throws StoreException, ServiceException {
         try {
             List<Local> entities = repository.buscarRegistros();
             return repository.filtrarPorNome(entities, nome);

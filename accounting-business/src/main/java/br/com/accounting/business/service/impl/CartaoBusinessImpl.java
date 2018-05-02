@@ -67,7 +67,7 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public void validaRegistroDuplicado(final Cartao entity) throws ServiceException, DuplicatedRegistryException, StoreException {
+    public void validaRegistroDuplicado(final Cartao entity) throws StoreException, DuplicatedRegistryException, ServiceException {
         Cartao entityBuscado = service.buscarPorNumero(entity.numero());
 
         if (entity.equals(entityBuscado)) {

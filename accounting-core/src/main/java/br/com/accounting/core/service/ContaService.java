@@ -11,5 +11,5 @@ public interface ContaService extends GenericService<Conta> {
 
     Conta buscarPorNome(String nome) throws ServiceException, StoreException;
 
-    List<Conta> buscarCumulativas() throws ServiceException, StoreException;
+    List<Conta> buscarCumulativas() throws StoreException, ServiceException;
 }

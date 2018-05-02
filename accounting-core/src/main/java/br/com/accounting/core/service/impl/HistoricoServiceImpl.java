@@ -1,8 +1,8 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Historico;
-import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
+import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.factory.HistoricoFactory;
 import br.com.accounting.core.repository.HistoricoRepository;

@@ -419,7 +419,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmaContaException() throws BusinessException {
+    public void excluirUmaContaException() throws BusinessException, StoreException {
         try {
             business.excluir(null);
         }
@@ -476,14 +476,14 @@ public class ContaBusinessTest extends GenericTest {
         assertContaSalario(dtos.get(1));
     }
 
-    @Test(expected = BusinessException.class)
-    public void atualizarContasException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void atualizarContasException() throws BusinessException, IOException, StoreException {
         deletarDiretorioEArquivos();
         try {
             business.atualizarContas();
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar as contas."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
             throw e;
         }
     }

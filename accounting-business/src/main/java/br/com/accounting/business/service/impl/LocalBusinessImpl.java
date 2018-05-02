@@ -10,13 +10,11 @@ import br.com.accounting.business.service.LocalBusiness;
 import br.com.accounting.core.entity.Local;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.factory.LocalFactory;
 import br.com.accounting.core.service.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +51,7 @@ public class LocalBusinessImpl extends GenericAbstractBusiness<LocalDTO, Local> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Local local) throws ServiceException, DuplicatedRegistryException, StoreException {
+    public void validaRegistroDuplicado(final Local local) throws StoreException, DuplicatedRegistryException, ServiceException {
         Local localBuscada = service.buscarPorNome(local.nome());
 
         if (local.equals(localBuscada)) {

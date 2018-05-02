@@ -25,7 +25,7 @@ public class CartaoServiceTest extends GenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void atualizarException() throws ServiceException {
+    public void atualizarException() throws ServiceException, StoreException {
         try {
             cartaoService.atualizar(null);
         }
@@ -36,7 +36,7 @@ public class CartaoServiceTest extends GenericTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void deletarException() throws ServiceException {
+    public void deletarException() throws ServiceException, StoreException {
         try {
             cartaoService.deletar(null);
         }

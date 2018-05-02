@@ -85,7 +85,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void atualizarContas() throws BusinessException {
+    public void atualizarContas() throws StoreException, BusinessException {
         try {
             List<Conta> entitiesBuscadas = service.buscarCumulativas();
             for (Conta entity : entitiesBuscadas) {
@@ -97,6 +97,9 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
                     service.atualizar(entity);
                 }
             }
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar as contas.";
@@ -132,7 +135,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Conta conta) throws ServiceException, DuplicatedRegistryException, StoreException {
+    public void validaRegistroDuplicado(final Conta conta) throws StoreException, DuplicatedRegistryException, ServiceException {
         Conta contaBuscada = service.buscarPorNome(conta.nome());
 
         if (conta.equals(contaBuscada)) {

@@ -31,7 +31,7 @@ public abstract class GenericAbstractBusiness<D, E> {
 
     protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
-    protected abstract void validaRegistroDuplicado(E entity) throws ServiceException, DuplicatedRegistryException, StoreException;
+    protected abstract void validaRegistroDuplicado(E entity) throws StoreException, DuplicatedRegistryException, ServiceException;
 
     protected abstract E criarEntity(D entity) throws ValidationException;
 
@@ -70,7 +70,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void atualizar(final D dto) throws BusinessException {
+    public void atualizar(final D dto) throws StoreException, BusinessException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -88,6 +88,9 @@ public abstract class GenericAbstractBusiness<D, E> {
             E entity = criarEntity(dto, entityBuscado);
             service.atualizar(entity);
         }
+        catch (StoreException e) {
+            throw e;
+        }
         catch (Exception e) {
             String message = "Não foi possível atualizar.";
             throw new BusinessException(message, e);
@@ -95,10 +98,13 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void excluir(final D dto) throws BusinessException {
+    public void excluir(final D dto) throws StoreException, BusinessException {
         try {
             E entity = criarEntity(dto);
             service.deletar(entity);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível excluir.";

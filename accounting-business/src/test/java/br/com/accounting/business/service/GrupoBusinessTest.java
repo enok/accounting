@@ -212,7 +212,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirException() throws BusinessException {
+    public void excluirException() throws BusinessException, StoreException {
         try {
             business.excluir(null);
         }

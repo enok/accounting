@@ -1,12 +1,10 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.CreateException;
-import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContabilidadeDTOMockFactory;
 import br.com.accounting.business.service.impl.ContabilidadeBusinessImpl;
+import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void criarUmaContabilidadeNaoValidaRegistroDuplicado() {
+    public void criarUmaContabilidadeNaoValidaRegistroDuplicado() throws StoreException, DuplicatedRegistryException, ServiceException {
         try {
             ((ContabilidadeBusinessImpl) business).validaRegistroDuplicado(null);
         }
@@ -854,7 +852,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarContabilidadesSubsequentesException() throws BusinessException {
+    public void alterarContabilidadesSubsequentesException() throws BusinessException, StoreException {
         try {
             business.atualizarSubsequentes(null);
         }
@@ -977,7 +975,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmaContabilidadeException() throws BusinessException {
+    public void excluirUmaContabilidadeException() throws BusinessException, StoreException {
         try {
             business.excluir(null);
         }
@@ -1026,7 +1024,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirSubsequentesException() throws BusinessException {
+    public void excluirSubsequentesException() throws BusinessException, StoreException {
         try {
             business.excluirSubsequentes(null);
         }
@@ -1087,7 +1085,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void realizarPagamentoException() throws BusinessException {
+    public void realizarPagamentoException() throws BusinessException, StoreException {
         try {
             business.realizarPagamento(null);
         }

@@ -58,7 +58,7 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Grupo entity) throws ServiceException, DuplicatedRegistryException, StoreException {
+    public void validaRegistroDuplicado(final Grupo entity) throws StoreException, DuplicatedRegistryException, ServiceException {
         Grupo entityBuscada = service.buscarPorNome(entity.nome());
 
         if (entity.equals(entityBuscada)) {

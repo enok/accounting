@@ -126,7 +126,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmLocalException() throws BusinessException {
+    public void excluirUmLocalException() throws BusinessException, StoreException {
         try {
             business.excluir(null);
         }

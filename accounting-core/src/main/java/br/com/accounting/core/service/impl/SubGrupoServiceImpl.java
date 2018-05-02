@@ -21,7 +21,7 @@ public class SubGrupoServiceImpl extends GenericAbstractService<SubGrupo> implem
     }
 
     @Override
-    public SubGrupo buscarPorNome(final String nome) throws ServiceException, StoreException {
+    public SubGrupo buscarPorNome(final String nome) throws StoreException, ServiceException {
         try {
             List<SubGrupo> entities = repository.buscarRegistros();
             return repository.filtrarPorNome(entities, nome);

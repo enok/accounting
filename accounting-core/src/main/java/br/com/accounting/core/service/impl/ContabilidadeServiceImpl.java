@@ -40,13 +40,13 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
     }
 
     @Override
-    public List<Contabilidade> buscarParcelasSeguintesInclusivo(final Long codigoPai, final Integer parcelaAtual) throws RepositoryException, StoreException {
+    public List<Contabilidade> buscarParcelasSeguintesInclusivo(final Long codigoPai, final Integer parcelaAtual) throws StoreException, RepositoryException {
         List<Contabilidade> entities = repository.buscarRegistros();
         return repository.filtrarParcelasPosteriores(entities, codigoPai, parcelaAtual);
     }
 
     @Override
-    public List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws RepositoryException, StoreException {
+    public List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws StoreException, RepositoryException {
         List<Contabilidade> entities = repository.buscarRegistros();
         return repository.filtrarRecorrentesNaoLancados(entities);
     }

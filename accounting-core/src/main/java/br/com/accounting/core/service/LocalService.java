@@ -5,5 +5,5 @@ import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 
 public interface LocalService extends GenericService<Local> {
-    Local buscarPorNome(String nome) throws ServiceException, StoreException;
+    Local buscarPorNome(String nome) throws StoreException, ServiceException;
 }
