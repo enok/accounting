@@ -255,6 +255,65 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "SubGrupo",
+			"description": null,
+			"item": [
+				{
+					"name": "Salvar SubGrupo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Aluguel\",\r\n  \"descricao\": \"Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/subgrupo",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"subgrupo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0bba387d-ae5a-40b5-adab-e38babbe2af4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d7bbad-d0b4-4823-a3b3-b328bcd26520",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	]
 }
