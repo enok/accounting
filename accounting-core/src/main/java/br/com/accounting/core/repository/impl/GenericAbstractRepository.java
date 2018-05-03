@@ -142,6 +142,15 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
         return entityesBuscadas.get(0);
     }
 
+    public List<T> criarRegistros(final List<String> linhas) throws ParseException {
+        List<T> entities = new ArrayList<>();
+        for (String linha : linhas) {
+            T entity = criarEntity(linha);
+            entities.add(entity);
+        }
+        return entities;
+    }
+
     private Path buscarArquivoContagem() throws IOException {
         String caminhoArquivoContagem = getArquivoContagem();
         return buscarArquivo(caminhoArquivoContagem);
@@ -190,14 +199,5 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
                 .collect(Collectors.toList());
         write(caminho, linhasAtualizadas);
         linhasSream.close();
-    }
-
-    private List<T> criarRegistros(final List<String> linhas) throws ParseException {
-        List<T> entities = new ArrayList<>();
-        for (String linha : linhas) {
-            T entity = criarEntity(linha);
-            entities.add(entity);
-        }
-        return entities;
     }
 }

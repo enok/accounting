@@ -8,6 +8,10 @@ public class BusinessException extends Exception {
     @Getter
     private List<String> erros;
 
+    public BusinessException(List<String> erros) {
+        this.erros = erros;
+    }
+
     public BusinessException(List<String> erros, String erro) {
         super(erro);
         this.erros = erros;

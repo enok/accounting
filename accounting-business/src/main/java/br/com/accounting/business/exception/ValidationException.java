@@ -7,6 +7,10 @@ public class ValidationException extends BusinessException {
         super(e);
     }
 
+    public ValidationException(List<String> erros) {
+        super(erros);
+    }
+
     public ValidationException(List<String> erros, String erro) {
         super(erros, erro);
     }

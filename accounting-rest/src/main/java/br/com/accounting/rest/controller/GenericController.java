@@ -16,7 +16,7 @@ public abstract class GenericController {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    ResponseEntity handleMissingFieldException(ValidationException e) {
+    ResponseEntity<Error> handleMissingFieldException(ValidationException e) {
         Error error = new Error(HttpStatus.BAD_REQUEST.value(), e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -24,23 +24,23 @@ public abstract class GenericController {
     @ExceptionHandler(StoreException.class)
     @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
     public @ResponseBody
-    ResponseEntity handleReadingException(StoreException e) {
+    ResponseEntity<Error> handleReadingException(StoreException e) {
         Error error = new Error(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(error);
     }
 
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
     public @ResponseBody
-    ResponseEntity handleBusinessException(BusinessException e) {
+    ResponseEntity<Error> handleBusinessException(BusinessException e) {
         Error error = new Error(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(error);
     }
 
     @ExceptionHandler(GenericException.class)
-    @ResponseStatus(value = HttpStatus.INSUFFICIENT_STORAGE)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     public @ResponseBody
-    ResponseEntity handleGenericException(GenericException e) {
+    ResponseEntity<Error> handleGenericException(GenericException e) {
         Error error = new Error(HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
     }

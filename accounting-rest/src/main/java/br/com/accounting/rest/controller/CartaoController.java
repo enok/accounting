@@ -21,7 +21,7 @@ public class CartaoController extends GenericController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity criar(@RequestBody CartaoDTO cartaoDTO) throws StoreException, BusinessException, GenericException {
+    public ResponseEntity<Codigos> criar(@RequestBody CartaoDTO cartaoDTO) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = cartaoBusiness.criar(cartaoDTO);
         Codigos codigosObj = new Codigos(codigos);
         return ResponseEntity.status(HttpStatus.CREATED).body(codigosObj);
