@@ -1,4 +1,4 @@
-package br.com.accounting.rest.entity;
+package br.com.accounting.rest.vo;
 
 import br.com.accounting.business.exception.ValidationException;
 import lombok.NoArgsConstructor;
@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
-public class Error {
+public class ErrorVO {
     private Integer codigo;
     private List<String> mensagens = new ArrayList<>();
 
-    public Error(Integer codigo, String mensagem) {
+    public ErrorVO(Integer codigo, String mensagem) {
         this.codigo = codigo;
         mensagens.add(mensagem);
     }
 
-    public Error(Integer codigo, Exception e) {
+    public ErrorVO(Integer codigo, Exception e) {
         this.codigo = codigo;
         handlerValidationException(e);
     }

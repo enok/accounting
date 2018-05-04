@@ -1,14 +1,14 @@
-package br.com.accounting.rest.entity;
+package br.com.accounting.rest.vo;
 
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @NoArgsConstructor
-public class Codigos {
+public class CodigosVO {
     private List<Long> codigos;
 
-    public Codigos(List<Long> codigos) {
+    public CodigosVO(List<Long> codigos) {
         this.codigos = codigos;
     }
 
@@ -16,7 +16,7 @@ public class Codigos {
         return codigos;
     }
 
-    public Codigos setCodigos(List<Long> codigos) {
+    public CodigosVO setCodigos(List<Long> codigos) {
         this.codigos = codigos;
         return this;
     }

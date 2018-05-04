@@ -5,7 +5,7 @@ import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.rest.entity.Codigos;
+import br.com.accounting.rest.vo.CodigosVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class ContabilidadeController extends GenericController {
     @ResponseBody
     public ResponseEntity criar(@RequestBody ContabilidadeDTO contabilidadeDTO) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = contabilidadeBusiness.criar(contabilidadeDTO);
-        Codigos codigosObj = new Codigos(codigos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(codigosObj);
+        CodigosVO codigosVO = new CodigosVO(codigos);
+        return ResponseEntity.status(HttpStatus.CREATED).body(codigosVO);
     }
 }

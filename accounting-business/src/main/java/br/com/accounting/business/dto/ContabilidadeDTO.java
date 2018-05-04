@@ -34,83 +34,179 @@ public class ContabilidadeDTO implements EntityDTO {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public String getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public String getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public String getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public String getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public String getRecorrente() {
+        return recorrente;
+    }
+
+    public String getGrupo() {
+        return grupo;
+    }
+
+    public String getSubGrupo() {
+        return subGrupo;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getUsouCartao() {
+        return usouCartao;
+    }
+
+    public String getCartao() {
+        return cartao;
+    }
+
+    public String getParcelado() {
+        return parcelado;
+    }
+
+    public String getParcela() {
+        return parcela;
+    }
+
+    public String getParcelas() {
+        return parcelas;
+    }
+
+    public String getConta() {
+        return conta;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public String getCodigoPai() {
+        return codigoPai;
+    }
+
+    public String getProximoLancamento() {
+        return proximoLancamento;
+    }
+
+    public ContabilidadeDTO setCodigo(String codigo) {
         this.codigo = codigo;
+        return this;
     }
 
-    public void setDataLancamento(String dataLancamento) {
+    public ContabilidadeDTO setDataLancamento(String dataLancamento) {
         this.dataLancamento = dataLancamento;
+        return this;
     }
 
-    public void setDataAtualizacao(String dataAtualizacao) {
+    public ContabilidadeDTO setDataAtualizacao(String dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
+        return this;
     }
 
-    public void setDataVencimento(String dataVencimento) {
+    public ContabilidadeDTO setDataVencimento(String dataVencimento) {
         this.dataVencimento = dataVencimento;
+        return this;
     }
 
-    public void setDataPagamento(String dataPagamento) {
+    public ContabilidadeDTO setDataPagamento(String dataPagamento) {
         this.dataPagamento = dataPagamento;
+        return this;
     }
 
-    public void setRecorrente(String recorrente) {
+    public ContabilidadeDTO setRecorrente(String recorrente) {
         this.recorrente = recorrente;
+        return this;
     }
 
-    public void setGrupo(String grupo) {
+    public ContabilidadeDTO setGrupo(String grupo) {
         this.grupo = grupo;
+        return this;
     }
 
-    public void setSubGrupo(String subGrupo) {
+    public ContabilidadeDTO setSubGrupo(String subGrupo) {
         this.subGrupo = subGrupo;
+        return this;
     }
 
-    public void setLocal(String local) {
+    public ContabilidadeDTO setLocal(String local) {
         this.local = local;
+        return this;
     }
 
-    public void setDescricao(String descricao) {
+    public ContabilidadeDTO setDescricao(String descricao) {
         this.descricao = descricao;
+        return this;
     }
 
-    public void setUsouCartao(String usouCartao) {
+    public ContabilidadeDTO setUsouCartao(String usouCartao) {
         this.usouCartao = usouCartao;
+        return this;
     }
 
-    public void setCartao(String cartao) {
+    public ContabilidadeDTO setCartao(String cartao) {
         this.cartao = cartao;
+        return this;
     }
 
-    public void setParcelado(String parcelado) {
+    public ContabilidadeDTO setParcelado(String parcelado) {
         this.parcelado = parcelado;
+        return this;
     }
 
-    public void setParcela(String parcela) {
+    public ContabilidadeDTO setParcela(String parcela) {
         this.parcela = parcela;
+        return this;
     }
 
-    public void setParcelas(String parcelas) {
+    public ContabilidadeDTO setParcelas(String parcelas) {
         this.parcelas = parcelas;
+        return this;
     }
 
-    public void setConta(String conta) {
+    public ContabilidadeDTO setConta(String conta) {
         this.conta = conta;
+        return this;
     }
 
-    public void setTipo(String tipo) {
+    public ContabilidadeDTO setTipo(String tipo) {
         this.tipo = tipo;
+        return this;
     }
 
-    public void setValor(String valor) {
+    public ContabilidadeDTO setValor(String valor) {
         this.valor = valor;
+        return this;
     }
 
-    public void setCodigoPai(String codigoPai) {
+    public ContabilidadeDTO setCodigoPai(String codigoPai) {
         this.codigoPai = codigoPai;
+        return this;
     }
 
-    public void setProximoLancamento(String proximoLancamento) {
+    public ContabilidadeDTO setProximoLancamento(String proximoLancamento) {
         this.proximoLancamento = proximoLancamento;
+        return this;
     }
 }

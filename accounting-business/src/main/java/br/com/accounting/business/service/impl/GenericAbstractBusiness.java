@@ -27,7 +27,7 @@ public abstract class GenericAbstractBusiness<D, E> {
         this.dtoFactory = dtoFactory;
     }
 
-    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException;
+    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException, StoreException, ServiceException;
 
     protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
@@ -194,6 +194,12 @@ public abstract class GenericAbstractBusiness<D, E> {
     protected void conferirCodigoAlterado(D dto, E entity, List<String> errosUpdate) {
         if (entity == null || codigosDiferentes(((EntityDTO) dto).getCodigo(), ((Entity) entity).getCodigo())) {
             errosUpdate.add("O campo código não pode ser alterado.");
+        }
+    }
+
+    protected void conferirValorBooleano(List<String> errosCreate, String valorBooleano, String campo) {
+        if (!("S".equals(valorBooleano) || "N".equals(valorBooleano))) {
+            errosCreate.add(String.format("O valor do campo %s é diferente de 'S' ou 'N'.", campo));
         }
     }
 }

@@ -6,11 +6,13 @@ import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContabilidadeDTOFactory;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.service.ContabilidadeService;
+import br.com.accounting.core.service.GrupoService;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,11 +30,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Service
 public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<ContabilidadeDTO, Contabilidade> implements ContabilidadeBusiness {
     private ContabilidadeService service;
+    private GrupoService grupoService;
 
     @Autowired
-    public ContabilidadeBusinessImpl(final ContabilidadeService service) {
+    public ContabilidadeBusinessImpl(final ContabilidadeService service, final GrupoService grupoService) {
         super(service, ContabilidadeDTOFactory.create());
         this.service = service;
+        this.grupoService = grupoService;
     }
 
     @History
@@ -205,7 +209,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException, CreateException {
+    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException, CreateException, StoreException, ServiceException {
         if (isBlank(dto.dataVencimento())) {
             erros.add(format(msg, "dataVencimento"));
         }
@@ -252,7 +256,15 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
         List<String> errosCreate = new ArrayList<>();
 
+        conferirValorBooleano(errosCreate, dto.recorrente(), "recorrente");
+
+        conferirValorBooleano(errosCreate, dto.usouCartao(), "usouCartao");
+
+        conferirValorBooleano(errosCreate, dto.parcelado(), "parcelado");
+
         conferirRecorrenteEParcelado(dto, errosCreate);
+
+        conferirGrupoSeCadastrado(dto, errosCreate);
 
         conferirErrosCreate(errosCreate);
     }
@@ -581,6 +593,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             dataVencimento = getStringNextMonth(dataVencimento);
 
             service.atualizar(entityCreated);
+        }
+    }
+
+    private void conferirGrupoSeCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        Grupo grupo = grupoService.buscarPorNome(dto.grupo());
+        if (grupo == null) {
+            errosCreate.add("Grupo não cadastrado.");
         }
     }
 }

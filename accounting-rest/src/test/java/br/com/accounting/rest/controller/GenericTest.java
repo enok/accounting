@@ -1,7 +1,13 @@
 package br.com.accounting.rest.controller;
 
+import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.ConfigRest;
 import org.junit.After;
 import org.junit.Before;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +17,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
+@ContextConfiguration(classes = ConfigRest.class, loader = AnnotationConfigContextLoader.class)
 public abstract class GenericTest {
 
-    private final String diretorio = "D:\\\\tmp\\\\arquivos";
+    private final String diretorio = "D:\\tmp\\arquivos";
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, StoreException, BusinessException, GenericException {
         criarDiretorio();
         deletarArquivosDoDiretorio();
     }

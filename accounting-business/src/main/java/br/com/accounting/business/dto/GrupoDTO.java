@@ -17,12 +17,6 @@ public class GrupoDTO implements EntityDTO {
     private String descricao;
     private List<String> subGrupos = new ArrayList<>();
 
-    public void addSubGrupo(String subGrupo) {
-        if (!StringUtils.isBlank(subGrupo)) {
-            this.subGrupos.add(subGrupo);
-        }
-    }
-
     @Override
     public String getCodigo() {
         return codigo;
@@ -45,6 +39,13 @@ public class GrupoDTO implements EntityDTO {
 
     public GrupoDTO setSubGrupos(List<String> subGrupos) {
         this.subGrupos = subGrupos;
+        return this;
+    }
+
+    public GrupoDTO addSubGrupo(String subGrupo) {
+        if (!StringUtils.isBlank(subGrupo)) {
+            this.subGrupos.add(subGrupo);
+        }
         return this;
     }
 }
