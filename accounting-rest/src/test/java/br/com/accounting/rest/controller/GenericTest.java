@@ -6,6 +6,7 @@ import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.ConfigRest;
 import org.junit.After;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
@@ -19,8 +20,8 @@ import java.util.Comparator;
 
 @ContextConfiguration(classes = ConfigRest.class, loader = AnnotationConfigContextLoader.class)
 public abstract class GenericTest {
-
-    private final String diretorio = "D:\\tmp\\arquivos";
+    @Autowired
+    private String diretorio;
 
     @Before
     public void setUp() throws IOException, StoreException, BusinessException, GenericException {
