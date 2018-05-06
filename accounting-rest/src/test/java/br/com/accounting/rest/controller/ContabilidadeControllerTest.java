@@ -1,11 +1,12 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.ContabilidadeDTO;
-import br.com.accounting.business.dto.GrupoDTO;
+import br.com.accounting.business.dto.*;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.business.factory.*;
 import br.com.accounting.core.exception.StoreException;
 import com.google.gson.Gson;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,14 @@ public class ContabilidadeControllerTest extends GenericTest {
     private ContabilidadeController controller;
     @Autowired
     private GrupoController grupoController;
+    @Autowired
+    private SubGrupoController subGrupoController;
+    @Autowired
+    private LocalController localController;
+    @Autowired
+    private CartaoController cartaoController;
+    @Autowired
+    private ContaController contaController;
 
     private MockMvc mvc;
     private Gson gson;
@@ -43,6 +52,10 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void setUp() throws IOException, StoreException, BusinessException, GenericException {
         super.setUp();
         criarGrupo();
+        criarSubGrupo();
+        criarLocal();
+        criarCartao();
+        criarConta();
     }
 
     @Test
@@ -53,13 +66,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInsufficientStorage())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Não foi possível buscar os registros.")));
@@ -73,13 +86,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")));
@@ -93,13 +106,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(2)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -115,13 +128,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(3)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -139,13 +152,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(4)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -165,13 +178,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(4)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -192,13 +205,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(5)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -221,13 +234,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(6)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -253,13 +266,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(6)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -283,13 +296,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(6)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -315,13 +328,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(7)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -349,13 +362,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(7)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -382,13 +395,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(6)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -416,13 +429,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(8)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -453,13 +466,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(9)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -492,13 +505,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(10)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
@@ -520,13 +533,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("java.time.format.DateTimeParseException: Text '27-04/2018' could not be parsed at index 2")));
@@ -539,13 +552,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")));
@@ -559,13 +572,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(2)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
@@ -581,13 +594,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(3)))
                 .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
@@ -596,19 +609,19 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void criarComParcelasIncorreta() throws Exception {
+    public void criarComParcelasIncorretas() throws Exception {
         ContabilidadeDTO dto = getDTO()
                 .parcelas("uma");
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("java.lang.NumberFormatException: For input string: \"uma\"")));
@@ -621,13 +634,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("java.lang.IllegalArgumentException: No enum constant br.com.accounting.core.entity.TipoContabilidade.DEBITOS")));
@@ -640,13 +653,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("java.text.ParseException: Unparseable number: \"a24,04\"")));
@@ -660,13 +673,13 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Uma contabilidade não pode ser recorrente e parcelada.")));
@@ -679,41 +692,198 @@ public class ContabilidadeControllerTest extends GenericTest {
         String json = gson.toJson(dto);
 
         mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Grupo não cadastrado.")));
     }
 
-//
-//    @Test
-//    public void criar() throws Exception {
-//        ContabilidadeDTO dto = getDTO();
-//        String json = gson.toJson(dto);
-//
-//        List<Long> codigos = Arrays.asList(0L);
-//
-//        given(contabilidadeBusiness.criar(dto))
-//                .willReturn(codigos);
-//
-//        mvc.perform(post("/contabilidade")
-//                .characterEncoding("UTF-8")
-//                .content(json)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated())
-//                .andExpect(content()
-//                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.codigos", hasSize(1)))
-//                .andExpect(jsonPath("$.codigos[0]", is(0)))
-//                .andDo(print());
-//    }
+    @Test
+    public void criarSubGrupoNaoCadastrado() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .subGrupo("Um subgrupo");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("SubGrupo não cadastrado.")));
+    }
+
+    @Test
+    public void criarLocalNaoCadastrado() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .local("Um outro local");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Local não cadastrado.")));
+    }
+
+    @Test
+    public void criarCartaoNaoCadastrado() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .cartao("1324");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Cartão não cadastrado.")));
+    }
+
+    @Test
+    public void criarContaNaoCadastrada() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .conta("Uma conta");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Conta não cadastrada.")));
+    }
+
+    @Test
+    public void criarDuplicado() throws Exception {
+        ContabilidadeDTO dto = getDTO();
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(7)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)))
+                .andExpect(jsonPath("$.codigos[1]", is(1)))
+                .andExpect(jsonPath("$.codigos[2]", is(2)))
+                .andExpect(jsonPath("$.codigos[3]", is(3)))
+                .andExpect(jsonPath("$.codigos[4]", is(4)))
+                .andExpect(jsonPath("$.codigos[5]", is(5)))
+                .andExpect(jsonPath("$.codigos[6]", is(6)));
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Contabilidade duplicada.")));
+    }
+
+    @Test
+    public void criarSemCartao() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .recorrente("N")
+                .parcelado("N")
+                .usouCartao("N");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(1)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)));
+    }
+
+    @Test
+    public void criarParcelada() throws Exception {
+        ContabilidadeDTO dto = getDTO();
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(7)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)))
+                .andExpect(jsonPath("$.codigos[1]", is(1)))
+                .andExpect(jsonPath("$.codigos[2]", is(2)))
+                .andExpect(jsonPath("$.codigos[3]", is(3)))
+                .andExpect(jsonPath("$.codigos[4]", is(4)))
+                .andExpect(jsonPath("$.codigos[5]", is(5)))
+                .andExpect(jsonPath("$.codigos[6]", is(6)));
+    }
+
+    @Test
+    public void criarRecorrente() throws Exception {
+        ContabilidadeDTO dto = getDTO()
+                .recorrente("S")
+                .parcelado("N");
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/contabilidade")
+                            .characterEncoding("UTF-8")
+                            .content(json)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(9)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)))
+                .andExpect(jsonPath("$.codigos[1]", is(1)))
+                .andExpect(jsonPath("$.codigos[2]", is(2)))
+                .andExpect(jsonPath("$.codigos[3]", is(3)))
+                .andExpect(jsonPath("$.codigos[4]", is(4)))
+                .andExpect(jsonPath("$.codigos[5]", is(5)))
+                .andExpect(jsonPath("$.codigos[6]", is(6)))
+                .andExpect(jsonPath("$.codigos[7]", is(7)))
+                .andExpect(jsonPath("$.codigos[8]", is(8)));
+    }
 
     private ContabilidadeDTO getDTO() {
         return new ContabilidadeDTO()
@@ -733,10 +903,54 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
-        GrupoDTO grupoDTO = new GrupoDTO()
-                .nome("Saúde")
-                .descricao("Grupo que gere gastos com saúde")
-                .addSubGrupo("Suplementos");
+        GrupoDTO grupoDTO = GrupoDTOFactory
+                .create()
+                .withNome("Saúde")
+                .withDescricao("Grupo que gere gastos com saúde")
+                .withSubGrupo("Suplementos")
+                .build();
         grupoController.criar(grupoDTO);
+    }
+
+    private void criarSubGrupo() throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO subGrupoDTO = SubGrupoDTOFactory
+                .create()
+                .withNome("Suplementos")
+                .withDescricao("Subgrupo de suplementos")
+                .build();
+        subGrupoController.criar(subGrupoDTO);
+    }
+
+    private void criarLocal() throws StoreException, BusinessException, GenericException {
+        LocalDTO localDTO = LocalDTOFactory
+                .create()
+                .withNome("Site")
+                .build();
+        localController.criar(localDTO);
+    }
+
+    private void criarCartao() throws StoreException, BusinessException, GenericException {
+        CartaoDTO cartaoDTO = CartaoDTOFactory
+                .create()
+                .withNumero("0744")
+                .withVencimento("27/03/2018")
+                .withDiaMelhorCompra("17/04/2018")
+                .withPortador("Carol")
+                .withTipo("FISICO")
+                .withLimite("2.000,00")
+                .build();
+        cartaoController.criar(cartaoDTO);
+    }
+
+    private void criarConta() throws StoreException, BusinessException, GenericException {
+        ContaDTO contaDTO = ContaDTOFactory
+                .create()
+                .begin()
+                .withNome("CAROL")
+                .withDescricao("Valor separado para a Carol")
+                .withValorDefault("500,00")
+                .withCumulativo("S")
+                .build();
+        contaController.criar(contaDTO);
     }
 }

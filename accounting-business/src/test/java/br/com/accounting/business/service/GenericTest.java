@@ -2,8 +2,10 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.ConfigBusiness;
 import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.core.exception.StoreException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -33,7 +35,7 @@ public abstract class GenericTest {
     protected String diretorio;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, StoreException, BusinessException, GenericException {
         criarDiretorio();
         deletarArquivosDoDiretorio();
     }

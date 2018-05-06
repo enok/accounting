@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "06c26060-4435-4c0b-b205-d950528470af",
+		"_postman_id": "88bd8332-f8b3-4bba-8dc8-e00f59229f1a",
 		"name": "accounting",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"numero\": \"7660\",\r\n  \"vencimento\": \"27/03/2018\",\r\n  \"diaMelhorCompra\": \"17/04/2018\",\r\n  \"portador\": \"Enok\",\r\n  \"tipo\": \"FISICO\",\r\n  \"limite\": \"2.000,00\"\r\n}"
+							"raw": "{\r\n  \"numero\": \"0744\",\r\n  \"vencimento\": \"27/03/2018\",\r\n  \"diaMelhorCompra\": \"17/04/2018\",\r\n  \"portador\": \"Carol\",\r\n  \"tipo\": \"FISICO\",\r\n  \"limite\": \"2.000,00\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/cartao",
@@ -47,7 +47,38 @@
 			"description": null,
 			"item": [
 				{
-					"name": "Salvar Contabilidade",
+					"name": "Salvar Contabilidade [Sem Cartão]",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"dataVencimento\": \"27/04/2018\",\r\n  \"recorrente\": \"N\",\r\n  \"grupo\": \"Saúde\",\r\n  \"subGrupo\": \"Suplementos\",\r\n  \"local\": \"Site\",\r\n  \"descricao\": \"Suplementos comprados pela Carol\",\r\n  \"usouCartao\": \"N\",\r\n  \"parcelado\": \"N\",\r\n  \"conta\": \"CAROL\",\r\n  \"tipo\": \"DEBITO\",\r\n  \"valor\": \"24,04\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/contabilidade",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"contabilidade"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Contabilidade [Parcelada]",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -63,6 +94,37 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"dataVencimento\": \"27/04/2018\",\r\n  \"recorrente\": \"N\",\r\n  \"grupo\": \"Saúde\",\r\n  \"subGrupo\": \"Suplementos\",\r\n  \"local\": \"Site\",\r\n  \"descricao\": \"Suplementos comprados pela Carol\",\r\n  \"usouCartao\": \"S\",\r\n  \"cartao\": \"0744\",\r\n  \"parcelado\": \"S\",\r\n  \"parcelas\": \"7\",\r\n  \"conta\": \"CAROL\",\r\n  \"tipo\": \"DEBITO\",\r\n  \"valor\": \"24,04\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}/contabilidade",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"contabilidade"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Contabilidade [Recorrente]",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"dataVencimento\": \"27/04/2018\",\r\n  \"recorrente\": \"S\",\r\n  \"grupo\": \"Saúde\",\r\n  \"subGrupo\": \"Suplementos\",\r\n  \"local\": \"Site\",\r\n  \"descricao\": \"Suplementos comprados pela Carol\",\r\n  \"usouCartao\": \"S\",\r\n  \"cartao\": \"0744\",\r\n  \"parcelado\": \"N\",\r\n  \"conta\": \"CAROL\",\r\n  \"tipo\": \"DEBITO\",\r\n  \"valor\": \"24,04\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/contabilidade",
@@ -99,7 +161,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Salário\",\r\n  \"descricao\": \"Salário mensal recebido pela Sysmap\",\r\n  \"valorDefault\": \"1.000,00\",\r\n  \"cumulativo\": \"N\"\r\n}"
+							"raw": "{\r\n  \"nome\": \"CAROL\",\r\n  \"descricao\": \"Valores passados para a Carol\",\r\n  \"valorDefault\": \"500,00\",\r\n  \"cumulativo\": \"S\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/conta",
@@ -217,7 +279,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Carrefour\"\r\n}"
+							"raw": "{\r\n  \"nome\": \"Site\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/local",
@@ -276,7 +338,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Aluguel\",\r\n  \"descricao\": \"Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio\"\r\n}"
+							"raw": "{\r\n  \"nome\": \"Suplementos\",\r\n  \"descricao\": \"Sumplemntos comprados\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}/subgrupo",

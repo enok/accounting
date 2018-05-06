@@ -5,14 +5,12 @@ import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContabilidadeDTOFactory;
 import br.com.accounting.business.service.ContabilidadeBusiness;
-import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.Grupo;
+import br.com.accounting.core.entity.*;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContabilidadeFactory;
-import br.com.accounting.core.service.ContabilidadeService;
-import br.com.accounting.core.service.GrupoService;
+import br.com.accounting.core.service.*;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +28,21 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Service
 public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<ContabilidadeDTO, Contabilidade> implements ContabilidadeBusiness {
     private ContabilidadeService service;
+    @Autowired
     private GrupoService grupoService;
+    @Autowired
+    private SubGrupoService subGrupoService;
+    @Autowired
+    private LocalService localService;
+    @Autowired
+    private CartaoService cartaoService;
+    @Autowired
+    private ContaService contaService;
 
     @Autowired
-    public ContabilidadeBusinessImpl(final ContabilidadeService service, final GrupoService grupoService) {
+    public ContabilidadeBusinessImpl(final ContabilidadeService service) {
         super(service, ContabilidadeDTOFactory.create());
         this.service = service;
-        this.grupoService = grupoService;
     }
 
     @History
@@ -51,6 +57,9 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             Long codigoPai = null;
 
             entity.dataPagamento(null);
+
+            validaRegistroDuplicado(entity);
+
             if (entity.parcelado()) {
                 List<Long> codigosParcelados = criarParcelados(entity, codigoPai);
                 codigos.addAll(codigosParcelados);
@@ -257,14 +266,15 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         List<String> errosCreate = new ArrayList<>();
 
         conferirValorBooleano(errosCreate, dto.recorrente(), "recorrente");
-
         conferirValorBooleano(errosCreate, dto.usouCartao(), "usouCartao");
-
         conferirValorBooleano(errosCreate, dto.parcelado(), "parcelado");
 
         conferirRecorrenteEParcelado(dto, errosCreate);
-
-        conferirGrupoSeCadastrado(dto, errosCreate);
+        conferirSeGrupoCadastrado(dto, errosCreate);
+        conferirSeSubGrupoCadastrado(dto, errosCreate);
+        conferirSeLocalCadastrado(dto, errosCreate);
+        conferirSeCartaoCadastrado(dto, errosCreate);
+        conferirSeContaCadastrada(dto, errosCreate);
 
         conferirErrosCreate(errosCreate);
     }
@@ -297,8 +307,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validaRegistroDuplicado(final Contabilidade contabilidade) throws StoreException, DuplicatedRegistryException, ServiceException {
-        throw new RuntimeException("Uma contabilidade não valida duplicidade de registro.");
+    public void validaRegistroDuplicado(final Contabilidade entity) throws StoreException, DuplicatedRegistryException, ServiceException {
+        Contabilidade entityBuscada = service.buscar(entity.dataVencimento(), entity.recorrente(), entity.grupo(), entity.local(),
+                                                     entity.descricao(), entity.usouCartao(), entity.parcelado(), entity.parcelamento(),
+                                                     entity.conta(), entity.tipo(), entity.valor());
+        if (entity.equals(entityBuscada)) {
+            throw new DuplicatedRegistryException("Contabilidade duplicada.");
+        }
     }
 
     @Override
@@ -336,13 +351,16 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     private List<Long> criarParcelados(Contabilidade entity, Long codigoPai) throws StoreException, ServiceException {
         List<Long> codigos = new ArrayList<>();
+        LocalDate dataVencimento = entity.dataVencimento();
         for (int i = 0; i < entity.parcelamento().parcelas(); i++) {
-            entity.codigoPai(codigoPai);
+            entity.dataVencimento(dataVencimento);
             entity.parcelamento().parcela(i + 1);
+            entity.codigoPai(codigoPai);
 
             Long codigo = service.salvar(entity);
             codigos.add(codigo);
 
+            dataVencimento = getDateNextMonth(dataVencimento);
             if (codigoPai == null) {
                 codigoPai = codigo;
             }
@@ -551,10 +569,12 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, BusinessException {
+        String dataVencimento = dto.dataVencimento();
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = buscarCodigoPai(dto);
 
         for (int i = primeiraParcela(dto); i < parcelas; i++) {
+            dto.dataVencimento(dataVencimento);
             String parcela = String.valueOf(i + 1);
             dto.parcela(parcela);
 
@@ -562,6 +582,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             gravarCodigoPai(dto, codigoPai, parcela);
 
             atualizar(dto);
+            dataVencimento = getStringNextMonth(dataVencimento);
         }
     }
 
@@ -590,16 +611,50 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
                     .withProximoLancamento(entity.proximoLancamento())
                     .build();
 
-            dataVencimento = getStringNextMonth(dataVencimento);
-
             service.atualizar(entityCreated);
+
+            dataVencimento = getStringNextMonth(dataVencimento);
         }
     }
 
-    private void conferirGrupoSeCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
         Grupo grupo = grupoService.buscarPorNome(dto.grupo());
         if (grupo == null) {
             errosCreate.add("Grupo não cadastrado.");
+        }
+    }
+
+    private void conferirSeSubGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        SubGrupo subGrupo = subGrupoService.buscarPorNome(dto.subGrupo());
+        if (subGrupo == null) {
+            errosCreate.add("SubGrupo não cadastrado.");
+        }
+    }
+
+    private void conferirSeLocalCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        String localString = dto.local();
+        if (!isBlankOrNull(localString)) {
+            Local local = localService.buscarPorNome(localString);
+            if (local == null) {
+                errosCreate.add("Local não cadastrado.");
+            }
+        }
+    }
+
+    private void conferirSeCartaoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        String cartaoString = dto.cartao();
+        if (!isBlankOrNull(cartaoString)) {
+            Cartao cartao = cartaoService.buscarPorNumero(cartaoString);
+            if (cartao == null) {
+                errosCreate.add("Cartão não cadastrado.");
+            }
+        }
+    }
+
+    private void conferirSeContaCadastrada(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        Conta conta = contaService.buscarPorNome(dto.conta());
+        if (conta == null) {
+            errosCreate.add("Conta não cadastrada.");
         }
     }
 }

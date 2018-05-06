@@ -5,10 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Data
 @Accessors(fluent = true)
-public class Local implements Entity {
+public class Local implements Entity, Serializable {
     private Long codigo;
     private String nome;
 

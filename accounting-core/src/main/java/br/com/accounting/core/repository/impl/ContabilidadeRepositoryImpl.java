@@ -1,6 +1,7 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.TipoContabilidade;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -24,9 +26,9 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     @Override
     public void ordenarPorDataVencimentoGrupoSubGrupo(final List<Contabilidade> entities) {
         entities.sort(Comparator
-                .comparing((Contabilidade c) -> c.dataVencimento())
-                .thenComparing(c -> c.grupo().nome())
-                .thenComparing(c -> c.grupo().subGrupos().get(0).nome()));
+                              .comparing((Contabilidade c) -> c.dataVencimento())
+                              .thenComparing(c -> c.grupo().nome())
+                              .thenComparing(c -> c.grupo().subGrupos().get(0).nome()));
     }
 
     @Override
@@ -34,7 +36,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
         return entities
                 .stream()
                 .filter(c ->
-                        dentroDasParcelas(codigoPai, c)
+                                dentroDasParcelas(codigoPai, c)
                 )
                 .collect(Collectors.toList());
     }
@@ -58,6 +60,30 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .filter(c -> (
                         (c.recorrente()) &&
                                 (c.proximoLancamento() == null))
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Contabilidade> filtrarPorCampos(List<Contabilidade> entities, LocalDate dataVencimento, Boolean recorrente,
+                                                String grupo, String local, String descricao, Boolean usouCartao,
+                                                Boolean parcelado, Integer parcelas, String conta, TipoContabilidade tipo,
+                                                Double valor) {
+        String local_ = isBlankOrNull(local) ? "" : local;
+        Integer parcelas_ = (parcelas == null) ? -1 : parcelas;
+        return entities
+                .stream()
+                .filter(c -> (dataVencimento.equals(c.dataVencimento()) &&
+                        recorrente.equals(c.recorrente()) &&
+                        grupo.equals(c.grupo().nome()) &&
+                        (((c.local() == null) && isBlankOrNull(local)) || local_.equals(c.local().nome())) &&
+                        descricao.equals(c.descricao()) &&
+                        usouCartao.equals(c.usouCartao()) &&
+                        parcelado.equals(c.parcelado()) &&
+                        (((c.parcelamento() == null) && (parcelas == null)) || parcelas_.equals(c.parcelamento().parcelas())) &&
+                        conta.equals(c.conta().nome()) &&
+                        tipo.equals(c.tipo()) &&
+                        valor.equals(c.valor()))
                 )
                 .collect(Collectors.toList());
     }

@@ -1,6 +1,6 @@
 package br.com.accounting.core.service.impl;
 
-import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.*;
 import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
@@ -8,7 +8,9 @@ import br.com.accounting.core.repository.ContabilidadeRepository;
 import br.com.accounting.core.service.ContabilidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,30 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
         }
         while (proximoLancamento != null);
         return entities;
+    }
+
+    @Override
+    public Contabilidade buscar(LocalDate dataVencimento, Boolean recorrente, Grupo grupo, Local local, String descricao,
+                                Boolean usouCartao, Boolean parcelado, Parcelamento parcelamento, Conta conta,
+                                TipoContabilidade tipo, Double valor) throws StoreException, ServiceException {
+        try {
+            List<Contabilidade> entities = repository.buscarRegistros();
+            String local_ = (local == null) ? "" : local.nome();
+            Integer parcelas = (parcelamento != null) ? parcelamento.parcelas() : null;
+            List<Contabilidade> contabilidades = repository.filtrarPorCampos(entities, dataVencimento, recorrente, grupo.nome(), local_, descricao,
+                                                                             usouCartao, parcelado, parcelas, conta.nome(), tipo, valor);
+            if (CollectionUtils.isEmpty(contabilidades)) {
+                return null;
+            }
+            return contabilidades.get(0);
+        }
+        catch (StoreException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            String message = "Não foi possível buscar a contabilidade.";
+            throw new ServiceException(message, e);
+        }
     }
 
     @Override
