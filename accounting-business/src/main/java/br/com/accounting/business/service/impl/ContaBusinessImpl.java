@@ -108,7 +108,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validarEntrada(final ContaDTO dto, final List<String> erros) throws MissingFieldException {
+    public void validarEntrada(final ContaDTO dto, final List<String> erros) throws MissingFieldException, CreateException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
@@ -122,6 +122,12 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
             erros.add(format(msg, "cumulativo"));
         }
         conferirErrosCamposObrigatorios(erros);
+
+        List<String> errosCreate = new ArrayList<>();
+
+        conferirValorBooleano(errosCreate, dto.cumulativo(), "cumulativo");
+
+        conferirErrosCreate(errosCreate);
     }
 
     @Override
