@@ -276,6 +276,8 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         conferirSeCartaoCadastrado(dto, errosCreate);
         conferirSeContaCadastrada(dto, errosCreate);
 
+        conferirSeGrupoESubGrupoEstaoAssociados(dto, errosCreate);
+
         conferirErrosCreate(errosCreate);
     }
 
@@ -655,6 +657,22 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         Conta conta = contaService.buscarPorNome(dto.conta());
         if (conta == null) {
             errosCreate.add("Conta não cadastrada.");
+        }
+    }
+
+    private void conferirSeGrupoESubGrupoEstaoAssociados(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+        Grupo grupo = grupoService.buscarPorNome(dto.grupo());
+        if (grupo != null) {
+            boolean subGrupoEncontrado = false;
+            for (SubGrupo subGrupo : grupo.subGrupos()) {
+                if (subGrupo.nome().equals(dto.subGrupo())) {
+                    subGrupoEncontrado = true;
+                    break;
+                }
+            }
+            if (!subGrupoEncontrado) {
+                errosCreate.add("Grupo e SubGrupo não estão associados.");
+            }
         }
     }
 }

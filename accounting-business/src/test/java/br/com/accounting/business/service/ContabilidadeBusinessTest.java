@@ -7,7 +7,6 @@ import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.factory.*;
 import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.core.util.Utils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +228,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
         catch (MissingFieldException e) {
             assertCreationAndMandatoryFields(e, "dataVencimento", "grupo", "subGrupo", "descrição", "conta",
-                                             "tipo", "valor");
+                    "tipo", "valor");
             throw e;
         }
     }
@@ -646,9 +645,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/05/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -665,9 +664,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", getStringFromCurrentDate(), "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -684,9 +683,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Um grupo",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -703,9 +702,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Um subGrupo", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Um subGrupo", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -722,9 +721,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Outro local", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Outro local", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -741,9 +740,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Nova descrição", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Nova descrição", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -760,9 +759,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
-                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -779,9 +778,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "1234",
-                        "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "1234",
+                "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -798,9 +797,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -817,9 +816,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
+                null);
     }
 
     @Test
@@ -836,9 +835,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
+                null);
     }
 
     @Test
@@ -855,9 +854,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         dto = business.buscarPorId(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
-                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     @Test(expected = BusinessException.class)
@@ -1150,7 +1149,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         dtos.sort(Comparator
-                          .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
+                .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
 
         assertThat(dtos.size(), equalTo(16));
 
@@ -1305,29 +1304,29 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
     private void assertNaoRecorrenteNaoParceladoNaoCartao(ContabilidadeDTO dto, String descricao) {
         assertEntityDTO(dto, "27/04/2018", null, "N", "Apartamento",
-                        "Aluguel", null, descricao, "N", null, "N", null, null,
-                        "MORADIA", "DEBITO", "1.000,00", null, null);
+                "Aluguel", null, descricao, "N", null, "N", null, null,
+                "MORADIA", "DEBITO", "1.000,00", null, null);
     }
 
     private void assertNaoParcelado(ContabilidadeDTO dto) {
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
-                        "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
-                        "N", null, null, "CAROL", "DEBITO", "24,04", null,
-                        null);
+                "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
+                "N", null, null, "CAROL", "DEBITO", "24,04", null,
+                null);
     }
 
     private void assertRecorrente(ContabilidadeDTO dto, String dataVencimento, String descricao, String proximoLancamento) {
         assertEntityDTO(dto, dataVencimento, null, "S", "Apartamento",
-                        "Aluguel", null, descricao, "N", null,
-                        "N", null, null, "MORADIA", "DEBITO", "1.000,00",
-                        null, proximoLancamento);
+                "Aluguel", null, descricao, "N", null,
+                "N", null, null, "MORADIA", "DEBITO", "1.000,00",
+                null, proximoLancamento);
     }
 
     private void assertParcelado(ContabilidadeDTO dto, String dataVencimento, String descricao, String parcela, String codigoPai) {
         assertEntityDTO(dto, dataVencimento, null, "N", "Saúde",
-                        "Suplementos", "Site", descricao, "S", "0744",
-                        "S", parcela, "7", "CAROL", "DEBITO", "24,04", codigoPai,
-                        null);
+                "Suplementos", "Site", descricao, "S", "0744",
+                "S", parcela, "7", "CAROL", "DEBITO", "24,04", codigoPai,
+                null);
     }
 
     private void assertEntityDTO(ContabilidadeDTO dto, String dataVencimento, String dataPagamento, String recorrente,
@@ -1405,6 +1404,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
                 .withNome("Saúde")
                 .withDescricao("Grupo que gere gastos com saúde")
                 .withSubGrupo("Suplementos")
+                .withSubGrupo("Um subGrupo")
                 .build();
         grupoBusiness.criar(grupoDTO);
     }
@@ -1425,6 +1425,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
                 .withNome("Um grupo")
                 .withDescricao("...")
                 .withSubGrupo("Um subgrupo")
+                .withSubGrupo("Suplementos")
                 .build();
         grupoBusiness.criar(grupoDTO);
     }
