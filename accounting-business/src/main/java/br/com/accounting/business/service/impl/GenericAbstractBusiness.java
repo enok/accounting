@@ -30,7 +30,7 @@ public abstract class GenericAbstractBusiness<D, E> {
 
     protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, StoreException, ServiceException, ParseException, CreateException;
 
-    protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
+    protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws ValidationException;
 
     protected abstract void validaRegistroDuplicado(E entity) throws StoreException, ParseException, DuplicatedRegistryException;
 
@@ -57,10 +57,7 @@ public abstract class GenericAbstractBusiness<D, E> {
             throw e;
         }
         catch (StoreException e) {
-            throw e;
-        }
-        catch (BusinessException e) {
-            throw e;
+            throw new StoreException("Erro de persistência ao salvar.", e);
         }
         catch (Exception e) {
             throw new GenericException(e);
@@ -68,7 +65,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void atualizar(final D dto) throws StoreException, BusinessException {
+    public void atualizar(final D dto) throws StoreException, BusinessException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -86,12 +83,14 @@ public abstract class GenericAbstractBusiness<D, E> {
             E entity = criarEntity(dto, entityBuscado);
             service.atualizar(entity);
         }
-        catch (StoreException e) {
+        catch (ValidationException e) {
             throw e;
         }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao atualizar.", e);
+        }
         catch (Exception e) {
-            String message = "Não foi possível atualizar.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
@@ -159,7 +158,7 @@ public abstract class GenericAbstractBusiness<D, E> {
         if (!isEmpty(erros)) {
             StringBuilder builder = new StringBuilder();
             for (String erro : erros) {
-                builder.append("\n\t").append(erro);
+                builder.append(erro);
             }
             throw new MissingFieldException(erros, builder.toString());
         }
@@ -175,13 +174,13 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    protected void conferirErrosUpdate(final List<String> erros) throws UpdateException {
+    protected void conferirErrosUpdate(final List<String> erros) throws ValidationException {
         if (!isEmpty(erros)) {
             StringBuilder builder = new StringBuilder();
             for (String erro : erros) {
-                builder.append("\n\t").append(erro);
+                builder.append(erro);
             }
-            throw new UpdateException(erros, builder.toString());
+            throw new ValidationException(erros, builder.toString());
         }
     }
 

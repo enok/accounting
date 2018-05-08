@@ -9,7 +9,7 @@ import java.util.List;
 public interface GenericBusiness<D> {
     List<Long> criar(D dto) throws StoreException, BusinessException, GenericException;
 
-    void atualizar(D dto) throws StoreException, BusinessException;
+    void atualizar(D dto) throws StoreException, BusinessException, GenericException;
 
     void excluir(D dto) throws StoreException, BusinessException;
 

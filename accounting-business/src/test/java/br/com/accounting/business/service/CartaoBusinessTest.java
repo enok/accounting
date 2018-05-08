@@ -19,19 +19,19 @@ public class CartaoBusinessTest extends GenericTest {
     private CartaoBusiness business;
 
     @Test(expected = StoreException.class)
-    public void criarUmCartaoSemDiretorio() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    public void criarUmCartaoSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         try {
             deletarDiretorioEArquivos();
             criarCartaoFisicoEnok();
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao salvar."));
             throw e;
         }
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemNumero() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemNumero() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemNumero();
             business.criar(dto);
@@ -43,7 +43,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemVencimento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemVencimento() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemVencimento();
             business.criar(dto);
@@ -55,7 +55,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemDiaMelhorCompra() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemDiaMelhorCompra() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemDiaMelhorCompra();
             business.criar(dto);
@@ -67,7 +67,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemPortador() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemPortador() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemPortador();
             business.criar(dto);
@@ -79,7 +79,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemTipo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemTipo() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemTipo();
             business.criar(dto);
@@ -91,7 +91,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = ValidationException.class)
-    public void criarUmaCartaoComTipoErrado() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoComTipoErrado() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660TipoErrado();
             business.criar(dto);
@@ -103,7 +103,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemLimite() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemLimite() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemLimite();
             business.criar(dto);
@@ -115,7 +115,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = MissingFieldException.class)
-    public void criarUmaCartaoSemCamposObrigatorios() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmaCartaoSemCamposObrigatorios() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660SemCamposObrigatorios();
             business.criar(dto);
@@ -127,14 +127,14 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarUmCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
         assertCartaoFisicoEnok(cartaoDTOBuscado);
     }
 
     @Test
-    public void criarUmCartaoVirtual() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarUmCartaoVirtual() throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = CartaoDTOMockFactory.criarCartaoVirtual7339();
 
         assertThat(dto.numero(), equalTo("7339"));
@@ -151,7 +151,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = ValidationException.class)
-    public void criarDoisCartoesComNumerosIguais() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDoisCartoesComNumerosIguais() throws StoreException, BusinessException, GenericException {
         try {
             CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660();
             business.criar(dto);
@@ -165,7 +165,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void criarDoisCartaos() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void criarDoisCartaos() throws StoreException, BusinessException, GenericException {
         Long codigo1 = criarCartaoFisicoEnok();
 
         CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico0744();
@@ -179,7 +179,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -192,7 +192,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemNumero() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemNumero() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -205,7 +205,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemVencimento() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemVencimento() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -218,7 +218,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemDiaMelhorCompra() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemDiaMelhorCompra() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -231,7 +231,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemPortador() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemPortador() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -244,7 +244,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alterarSemTipo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarSemTipo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -257,7 +257,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alteracaoNaoPermitidaDoCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarCartaoFisicoEnok();
             String codigoAnterior = String.valueOf(codigo);
@@ -272,9 +272,8 @@ public class CartaoBusinessTest extends GenericTest {
         }
     }
 
-
     @Test
-    public void alterarNumeroDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarNumeroDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -293,7 +292,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarVencimentoDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarVencimentoDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -312,7 +311,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarDiaMelhorCompraDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarDiaMelhorCompraDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -331,7 +330,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarPortadorDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarPortadorDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -350,7 +349,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarTipoDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarTipoDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -369,7 +368,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void alterarLimiteDoCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void alterarLimiteDoCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
 
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
@@ -388,7 +387,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void excluirUmCartaoException() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmCartaoException() throws StoreException, BusinessException {
         try {
             business.excluir(null);
         }
@@ -399,7 +398,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirUmCartao() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void excluirUmCartao() throws StoreException, BusinessException, GenericException {
         Long codigo = criarCartaoFisicoEnok();
         CartaoDTO cartaoDTOBuscado = business.buscarPorId(codigo);
 
@@ -423,7 +422,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test
-    public void buscarCartoes() throws StoreException, ValidationException, BusinessException, GenericException {
+    public void buscarCartoes() throws StoreException, BusinessException, GenericException {
         criarCartaoFisicoEnok();
         criarCartaoFisicoCarol();
 
@@ -434,7 +433,7 @@ public class CartaoBusinessTest extends GenericTest {
         assertCartaoFisicoEnok(cartoesDTO.get(1));
     }
 
-    private Long criarCartaoFisicoEnok() throws StoreException, ValidationException, BusinessException, GenericException {
+    private Long criarCartaoFisicoEnok() throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico7660();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));
@@ -443,7 +442,7 @@ public class CartaoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void criarCartaoFisicoCarol() throws StoreException, ValidationException, BusinessException, GenericException {
+    private void criarCartaoFisicoCarol() throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = CartaoDTOMockFactory.criarCartaoFisico0744();
         List<Long> codigos = business.criar(dto);
         assertThat(codigos.size(), equalTo(1));

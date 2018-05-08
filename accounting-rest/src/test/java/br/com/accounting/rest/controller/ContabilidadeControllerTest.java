@@ -5,6 +5,7 @@ import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.factory.*;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.vo.CartaoVO;
 import com.google.gson.Gson;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
@@ -75,7 +76,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Não foi possível buscar os registros.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao salvar.")));
 
     }
 
@@ -643,7 +644,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("java.lang.IllegalArgumentException: No enum constant br.com.accounting.core.entity.TipoContabilidade.DEBITOS")));
+                .andExpect(jsonPath("$.mensagens[0]", is("java.lang.IllegalArgumentException: No enum constant TipoContabilidade.DEBITOS")));
     }
 
     @Test
@@ -963,16 +964,14 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarCartao() throws StoreException, BusinessException, GenericException {
-        CartaoDTO cartaoDTO = CartaoDTOFactory
-                .create()
-                .withNumero("0744")
-                .withVencimento("27/03/2018")
-                .withDiaMelhorCompra("17/04/2018")
-                .withPortador("Carol")
-                .withTipo("FISICO")
-                .withLimite("2.000,00")
-                .build();
-        cartaoController.criar(cartaoDTO);
+        CartaoVO cartaoVO = new CartaoVO()
+                .numero("0744")
+                .vencimento("27/03/2018")
+                .diaMelhorCompra("17/04/2018")
+                .portador("Carol")
+                .tipo("FISICO")
+                .limite("2.000,00");
+        cartaoController.criar(cartaoVO);
     }
 
     private void criarConta() throws StoreException, BusinessException, GenericException {

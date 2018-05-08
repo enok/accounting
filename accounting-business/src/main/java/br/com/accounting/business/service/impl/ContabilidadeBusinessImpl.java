@@ -79,7 +79,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             throw e;
         }
         catch (StoreException e) {
-            throw e;
+            throw new StoreException("Erro de persistência ao salvar.", e);
         }
         catch (BusinessException e) {
             throw e;
@@ -91,7 +91,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizar(final ContabilidadeDTO dto) throws StoreException, BusinessException {
+    public void atualizar(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
         dto.dataAtualizacao(getStringFromCurrentDate());
         super.atualizar(dto);
     }
@@ -279,7 +279,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validarEntradaUpdate(final ContabilidadeDTO dto, final Contabilidade entity, final List<String> erros) throws MissingFieldException, UpdateException {
+    public void validarEntradaUpdate(final ContabilidadeDTO dto, final Contabilidade entity, final List<String> erros) throws ValidationException {
         conferirCodigo(dto, erros);
         if (isBlank(dto.dataLancamento())) {
             erros.add(format(msg, "dataLançamento"));
@@ -367,7 +367,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigos;
     }
 
-    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws StoreException, ParseException, ServiceException, BusinessException {
+    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws StoreException, ParseException, ServiceException, BusinessException, GenericException {
         validaRecorrente(entity, meses);
 
         List<Long> codigos = new ArrayList<>();
@@ -400,7 +400,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigos;
     }
 
-    private void atualizarEntity(final Contabilidade entity) throws StoreException, BusinessException {
+    private void atualizarEntity(final Contabilidade entity) throws StoreException, BusinessException, GenericException {
         entity.dataAtualizacao(LocalDate.now());
         ContabilidadeDTO dto = criarDTO(entity);
         super.atualizar(dto);
@@ -567,7 +567,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return isBlank(dto.parcelas());
     }
 
-    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, BusinessException {
+    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
         String dataVencimento = dto.dataVencimento();
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = buscarCodigoPai(dto);

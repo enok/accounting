@@ -26,7 +26,7 @@ public class LocalBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao salvar."));
             throw e;
         }
     }

@@ -48,7 +48,7 @@ public class LocalControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Não foi possível buscar os registros.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao salvar.")));
     }
 
     @Test

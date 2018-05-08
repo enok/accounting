@@ -3,7 +3,6 @@ package br.com.accounting.business.service.impl;
 import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.UpdateException;
 import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.GrupoDTOFactory;
 import br.com.accounting.business.service.GrupoBusiness;
@@ -48,12 +47,13 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public void validarEntradaUpdate(final GrupoDTO dto, final Grupo entity, final List<String> erros) throws MissingFieldException, UpdateException {
+    public void validarEntradaUpdate(final GrupoDTO dto, final Grupo entity, final List<String> erros) throws ValidationException {
         conferirCodigo(dto, erros);
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);
+
         conferirErrosUpdate(errosUpdate);
     }
 

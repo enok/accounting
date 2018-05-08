@@ -26,11 +26,11 @@ public class ErrorVO {
             ValidationException e1 = (ValidationException) e;
             List<String> erros = e1.getErros();
             if (CollectionUtils.isEmpty(erros)) {
-                mensagens.add(e.getMessage());
+                mensagens.add(getMessage(e.getMessage()));
             }
             else {
                 for (String erro : erros) {
-                    mensagens.add(erro);
+                    mensagens.add(getMessage(erro));
                 }
             }
         }
@@ -42,5 +42,9 @@ public class ErrorVO {
 
     public List<String> getMensagens() {
         return mensagens;
+    }
+
+    private String getMessage(String message) {
+        return message.replaceAll("br.com.accounting.core.entity.", "");
     }
 }

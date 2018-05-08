@@ -1,10 +1,7 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.ConfigBusiness;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.UpdateException;
+import br.com.accounting.business.exception.*;
 import br.com.accounting.core.exception.StoreException;
 import org.junit.After;
 import org.junit.Before;
@@ -80,7 +77,6 @@ public abstract class GenericTest {
     }
 
     protected void assertUpdateAndMandatoryFields(BusinessException e, String... campos) throws BusinessException {
-        assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
         assertMandatoryFields(e, campos);
         throw e;
     }
@@ -102,17 +98,18 @@ public abstract class GenericTest {
 
     protected void assertUpdateNotModifiebleFields(BusinessException e, String... camposArray) throws BusinessException {
         List<String> campos = Arrays.asList(camposArray);
-        assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
 
-        UpdateException e1 = (UpdateException) e.getCause();
-        List<String> erros = e1.getErros();
-        assertThat(erros.size(), equalTo(campos.size()));
+        if (e instanceof ValidationException) {
+            ValidationException e1 = (ValidationException) e;
+            List<String> erros = e1.getErros();
+            assertThat(erros.size(), equalTo(campos.size()));
 
-        for (int i = 0; i < campos.size(); i++) {
-            assertThat(erros.get(i), equalTo("O campo " + campos.get(i) + " não pode ser alterado."));
+            for (int i = 0; i < campos.size(); i++) {
+                assertThat(erros.get(i), equalTo("O campo " + campos.get(i) + " não pode ser alterado."));
+            }
+
+            throw e;
         }
-
-        throw e;
     }
 
     private boolean diretorioExiste() {

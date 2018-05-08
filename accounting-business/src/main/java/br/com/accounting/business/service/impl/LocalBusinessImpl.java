@@ -2,7 +2,6 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.UpdateException;
 import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.LocalDTOFactory;
@@ -41,12 +40,13 @@ public class LocalBusinessImpl extends GenericAbstractBusiness<LocalDTO, Local> 
     }
 
     @Override
-    public void validarEntradaUpdate(final LocalDTO dto, final Local entity, final List<String> erros) throws MissingFieldException, UpdateException {
+    public void validarEntradaUpdate(final LocalDTO dto, final Local entity, final List<String> erros) throws ValidationException {
         conferirCodigo(dto, erros);
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);
+
         conferirErrosUpdate(errosUpdate);
     }
 

@@ -62,7 +62,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             business.criar(dto);
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao salvar."));
             throw e;
         }
     }
@@ -544,9 +544,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             business.atualizar(dto);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar."));
-            CreateException e1 = (CreateException) e.getCause();
-            assertThat(e1.getMessage(), equalTo("Uma contabilidade não pode ser recorrente e parcelada."));
+            assertThat(e.getMessage(), equalTo("Uma contabilidade não pode ser recorrente e parcelada."));
             throw e;
         }
     }

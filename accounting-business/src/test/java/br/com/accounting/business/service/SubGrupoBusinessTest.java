@@ -25,7 +25,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             criarSubGrupoAluguel();
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao salvar."));
             throw e;
         }
     }

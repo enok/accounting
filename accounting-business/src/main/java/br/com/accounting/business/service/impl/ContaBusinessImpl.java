@@ -130,12 +130,13 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws MissingFieldException, UpdateException {
+    public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws ValidationException {
         conferirCodigo(dto, erros);
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
         conferirCodigoAlterado(dto, entity, errosUpdate);
+
         conferirErrosUpdate(errosUpdate);
     }
 
