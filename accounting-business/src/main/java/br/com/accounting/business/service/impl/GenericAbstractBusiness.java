@@ -39,7 +39,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     protected abstract E criarEntity(D dto, E entityBuscado) throws ValidationException;
 
     @History
-    public List<Long> criar(final D dto) throws StoreException, BusinessException, GenericException {
+    public List<Long> criar(final D dto) throws ValidationException, StoreException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void atualizar(final D dto) throws StoreException, BusinessException, GenericException {
+    public void atualizar(final D dto) throws ValidationException, StoreException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 

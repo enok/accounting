@@ -2,7 +2,6 @@ package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.*;
 import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.factory.*;
@@ -249,11 +248,10 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
     }
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = GenericException.class)
     public void criarContabilidadeRecorrenteComProximoLancamento() throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrenteComProximoLancamento();
-
             business.criar(dto);
         }
         catch (BusinessException e) {

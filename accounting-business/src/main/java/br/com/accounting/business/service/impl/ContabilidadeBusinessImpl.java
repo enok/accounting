@@ -45,7 +45,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @History
-    public List<Long> criar(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
+    public List<Long> criar(final ContabilidadeDTO dto) throws ValidationException, StoreException, GenericException {
         try {
             final List<String> erros = new ArrayList<>();
 
@@ -81,9 +81,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         catch (StoreException e) {
             throw new StoreException("Erro de persistência ao salvar.", e);
         }
-        catch (BusinessException e) {
-            throw e;
-        }
         catch (Exception e) {
             throw new GenericException(e);
         }
@@ -91,7 +88,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizar(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
+    public void atualizar(final ContabilidadeDTO dto) throws ValidationException, StoreException, GenericException {
         dto.dataAtualizacao(getStringFromCurrentDate());
         super.atualizar(dto);
     }
