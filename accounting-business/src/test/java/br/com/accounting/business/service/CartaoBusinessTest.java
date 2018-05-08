@@ -409,29 +409,17 @@ public class CartaoBusinessTest extends GenericTest {
         assertThat(cartaoDTOBuscado, nullValue());
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarCartaoPorIdException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarCartaoPorIdException() throws StoreException, BusinessException, IOException {
         deletarDiretorioEArquivos();
-        try {
-            CartaoDTO dto = business.buscarPorId(null);
-            assertThat(dto, nullValue());
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-            throw e;
-        }
+        CartaoDTO dto = business.buscarPorId(null);
+        assertThat(dto, nullValue());
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarCartoesException() throws StoreException, ValidationException, BusinessException, GenericException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarCartoesException() throws StoreException, BusinessException, IOException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarTodas();
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-            throw e;
-        }
+        business.buscarTodas();
     }
 
     @Test

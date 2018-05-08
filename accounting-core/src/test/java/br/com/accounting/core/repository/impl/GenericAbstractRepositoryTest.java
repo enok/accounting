@@ -5,6 +5,8 @@ import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.RepositoryException;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class GenericAbstractRepositoryTest extends GenericTest {
     private GenericAbstractRepository genericAbstractRepository;
 
@@ -23,7 +25,18 @@ public class GenericAbstractRepositoryTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
+    public void incrementarCodigoExceptionSemDiretorio() throws IOException, StoreException, RepositoryException {
+        deletarDiretorioEArquivos();
+        genericAbstractRepository.incrementarCodigo(1L);
+    }
+
+    @Test(expected = StoreException.class)
     public void salvarException() throws StoreException {
         genericAbstractRepository.salvar(null);
+    }
+
+    @Test(expected = StoreException.class)
+    public void deletarException() throws StoreException {
+        genericAbstractRepository.deletar(null);
     }
 }

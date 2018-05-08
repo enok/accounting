@@ -8,13 +8,13 @@ import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.GrupoDTOFactory;
 import br.com.accounting.business.service.GrupoBusiness;
 import br.com.accounting.core.entity.Grupo;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Grupo entity) throws StoreException, DuplicatedRegistryException, ServiceException {
+    public void validaRegistroDuplicado(final Grupo entity) throws StoreException, ParseException, DuplicatedRegistryException {
         Grupo entityBuscada = service.buscarPorNome(entity.nome());
 
         if (entity.equals(entityBuscada)) {

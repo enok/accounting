@@ -111,7 +111,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
     }
 
     @Override
-    public List<T> buscarRegistros() throws StoreException, RepositoryException {
+    public List<T> buscarRegistros() throws StoreException, ParseException {
         final String message = "Não foi possível buscar os registros.";
         List<String> linhas;
         try {
@@ -122,12 +122,7 @@ public abstract class GenericAbstractRepository<T> implements GenericRepository<
             throw new StoreException(message, e);
         }
 
-        try {
-            return criarRegistros(linhas);
-        }
-        catch (Exception e) {
-            throw new RepositoryException(message, e);
-        }
+        return criarRegistros(linhas);
     }
 
     @Override

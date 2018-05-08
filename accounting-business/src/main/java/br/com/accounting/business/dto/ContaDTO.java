@@ -25,11 +25,6 @@ public class ContaDTO implements EntityDTO {
         return codigo;
     }
 
-    public ContaDTO setCodigo(String codigo) {
-        this.codigo = codigo;
-        return this;
-    }
-
     public ContaDTO setNome(String nome) {
         this.nome = nome;
         return this;
@@ -52,18 +47,8 @@ public class ContaDTO implements EntityDTO {
         return this;
     }
 
-    public ContaDTO setSaldo(String saldo) {
-        this.saldo = saldo;
-        return this;
-    }
-
     public ContaDTO setCumulativo(String cumulativo) {
         this.cumulativo = cumulativo;
-        return this;
-    }
-
-    public ContaDTO setDataAtualizacao(String dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
         return this;
     }
 

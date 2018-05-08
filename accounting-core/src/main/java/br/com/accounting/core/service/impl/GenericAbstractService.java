@@ -6,6 +6,7 @@ import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.repository.GenericRepository;
 
+import java.text.ParseException;
 import java.util.List;
 
 public abstract class GenericAbstractService<E> {
@@ -56,7 +57,7 @@ public abstract class GenericAbstractService<E> {
         }
     }
 
-    public E buscarPorCodigo(final Long codigo) throws StoreException, ServiceException {
+    public E buscarPorCodigo(final Long codigo) throws StoreException, ParseException {
         try {
             List<E> registros = repository.buscarRegistros();
             return (E) repository.filtrarCodigo(registros, codigo);
@@ -64,13 +65,9 @@ public abstract class GenericAbstractService<E> {
         catch (StoreException e) {
             throw e;
         }
-        catch (Exception e) {
-            String message = "Não foi possível buscar o registro por código.";
-            throw new ServiceException(message, e);
-        }
     }
 
-    public List<E> buscarTodas() throws StoreException, ServiceException {
+    public List<E> buscarTodas() throws StoreException, ParseException {
         try {
             List<E> entities = repository.buscarRegistros();
             ordenarTodas(entities);
@@ -78,10 +75,6 @@ public abstract class GenericAbstractService<E> {
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar todas.";
-            throw new ServiceException(message, e);
         }
     }
 

@@ -2,18 +2,19 @@ package br.com.accounting.core.repository;
 
 import br.com.accounting.core.GenericTest;
 import br.com.accounting.core.entity.Historico;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.HistoricoFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.ParseException;
 
 public class HistoricoRepositoryTest extends GenericTest {
     @Autowired
     private HistoricoRepository historicoRepository;
 
     @Test
-    public void buscarRegistros() throws StoreException, RepositoryException {
+    public void buscarRegistros() throws StoreException, ParseException {
         criarHistorico();
         historicoRepository.buscarRegistros();
     }

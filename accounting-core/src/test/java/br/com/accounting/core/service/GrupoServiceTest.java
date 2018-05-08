@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -49,10 +50,10 @@ public class GrupoServiceTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarPorCodigoException() throws IOException, ServiceException, StoreException {
+    public void buscarPorCodigoException() throws IOException, StoreException, ParseException {
         try {
             deletarDiretorioEArquivos();
-            service.buscarPorCodigo(null);
+            service.buscarPorCodigo(1L);
         }
         catch (StoreException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));

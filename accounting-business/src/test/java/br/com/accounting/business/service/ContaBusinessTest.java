@@ -440,28 +440,16 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dtoBuscado, nullValue());
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarContaPorIdException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarContaPorIdException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarPorId(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-            throw e;
-        }
+        business.buscarPorId(null);
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarContasException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarContasException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarTodas();
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-            throw e;
-        }
+        business.buscarTodas();
     }
 
     @Test
@@ -530,7 +518,7 @@ public class ContaBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertContaSalario(Long codigo) throws BusinessException {
+    private void assertContaSalario(Long codigo) throws StoreException, BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
         assertContaSalario(dtoBuscado);
     }
@@ -544,7 +532,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.dataAtualizacao(), equalTo("15/03/2018"));
     }
 
-    private ContaDTO assertContaEnok(Long codigo) throws BusinessException {
+    private ContaDTO assertContaEnok(Long codigo) throws StoreException, BusinessException {
         ContaDTO dtoBuscado = business.buscarPorId(codigo);
         return assertContaEnok(dtoBuscado, "500,00", "10/03/2018");
     }

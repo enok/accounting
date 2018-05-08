@@ -21,35 +21,6 @@ public class CartaoDTO implements EntityDTO {
         return codigo;
     }
 
-    public String getNumero() {
-        return numero;
-    }
-
-    public String getVencimento() {
-        return vencimento;
-    }
-
-    public String getDiaMelhorCompra() {
-        return diaMelhorCompra;
-    }
-
-    public String getPortador() {
-        return portador;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public String getLimite() {
-        return limite;
-    }
-
-    public CartaoDTO setCodigo(String codigo) {
-        this.codigo = codigo;
-        return this;
-    }
-
     public CartaoDTO setNumero(String numero) {
         this.numero = numero;
         return this;

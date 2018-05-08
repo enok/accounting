@@ -6,7 +6,6 @@ import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.service.ContaService;
@@ -141,7 +140,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validaRegistroDuplicado(final Conta conta) throws StoreException, DuplicatedRegistryException, ServiceException {
+    public void validaRegistroDuplicado(final Conta conta) throws StoreException, ParseException, DuplicatedRegistryException {
         Conta contaBuscada = service.buscarPorNome(conta.nome());
 
         if (conta.equals(contaBuscada)) {

@@ -6,7 +6,6 @@ import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContabilidadeDTOFactory;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.entity.*;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContabilidadeFactory;
@@ -81,9 +80,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (ServiceException e) {
-            throw new BusinessException(e);
         }
         catch (BusinessException e) {
             throw e;
@@ -218,7 +214,8 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException, CreateException, StoreException, ServiceException {
+    public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException,
+            StoreException, ServiceException, ParseException, CreateException {
         if (isBlank(dto.dataVencimento())) {
             erros.add(format(msg, "dataVencimento"));
         }
@@ -309,10 +306,10 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public void validaRegistroDuplicado(final Contabilidade entity) throws StoreException, DuplicatedRegistryException, ServiceException {
+    public void validaRegistroDuplicado(final Contabilidade entity) throws StoreException, ParseException, DuplicatedRegistryException {
         Contabilidade entityBuscada = service.buscar(entity.dataVencimento(), entity.recorrente(), entity.grupo(), entity.local(),
-                                                     entity.descricao(), entity.usouCartao(), entity.parcelado(), entity.parcelamento(),
-                                                     entity.conta(), entity.tipo(), entity.valor());
+                entity.descricao(), entity.usouCartao(), entity.parcelado(), entity.parcelamento(),
+                entity.conta(), entity.tipo(), entity.valor());
         if (entity.equals(entityBuscada)) {
             throw new DuplicatedRegistryException("Contabilidade duplicada.");
         }
@@ -370,7 +367,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return codigos;
     }
 
-    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws StoreException, ServiceException, BusinessException {
+    private List<Long> criarRecorrente(final Contabilidade entity, final Integer meses) throws StoreException, ParseException, ServiceException, BusinessException {
         validaRecorrente(entity, meses);
 
         List<Long> codigos = new ArrayList<>();
@@ -452,7 +449,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return dto.parcela().equals("1");
     }
 
-    private void excluirParcelas(ContabilidadeDTO dto) throws StoreException, RepositoryException, ServiceException {
+    private void excluirParcelas(ContabilidadeDTO dto) throws StoreException, ParseException, ServiceException {
         if (dto.parcelado().equals("S")) {
             List<Contabilidade> entities = buscarParcelasSeguintes(dto);
             for (Contabilidade entity : entities) {
@@ -461,13 +458,13 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private List<Contabilidade> buscarParcelasSeguintes(ContabilidadeDTO dto) throws RepositoryException, StoreException {
+    private List<Contabilidade> buscarParcelasSeguintes(ContabilidadeDTO dto) throws StoreException, ParseException {
         Long codigoPai = Long.parseLong(buscarCodigoPai(dto));
         int parcelaAtual = Integer.parseInt(dto.parcela());
         return service.buscarParcelasSeguintesInclusivo(codigoPai, parcelaAtual);
     }
 
-    private void excluirRecorrentes(ContabilidadeDTO dto) throws StoreException, ServiceException {
+    private void excluirRecorrentes(ContabilidadeDTO dto) throws StoreException, ServiceException, ParseException {
         if (dto.recorrente().equals("S")) {
             long codigo = Long.parseLong(dto.codigo());
             List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
@@ -619,21 +616,21 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void conferirSeGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         Grupo grupo = grupoService.buscarPorNome(dto.grupo());
         if (grupo == null) {
             errosCreate.add("Grupo não cadastrado.");
         }
     }
 
-    private void conferirSeSubGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeSubGrupoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         SubGrupo subGrupo = subGrupoService.buscarPorNome(dto.subGrupo());
         if (subGrupo == null) {
             errosCreate.add("SubGrupo não cadastrado.");
         }
     }
 
-    private void conferirSeLocalCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeLocalCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         String localString = dto.local();
         if (!isBlankOrNull(localString)) {
             Local local = localService.buscarPorNome(localString);
@@ -643,7 +640,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void conferirSeCartaoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeCartaoCadastrado(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         String cartaoString = dto.cartao();
         if (!isBlankOrNull(cartaoString)) {
             Cartao cartao = cartaoService.buscarPorNumero(cartaoString);
@@ -653,14 +650,14 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void conferirSeContaCadastrada(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeContaCadastrada(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         Conta conta = contaService.buscarPorNome(dto.conta());
         if (conta == null) {
             errosCreate.add("Conta não cadastrada.");
         }
     }
 
-    private void conferirSeGrupoESubGrupoEstaoAssociados(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ServiceException {
+    private void conferirSeGrupoESubGrupoEstaoAssociados(ContabilidadeDTO dto, List<String> errosCreate) throws StoreException, ParseException {
         Grupo grupo = grupoService.buscarPorNome(dto.grupo());
         if (grupo != null) {
             boolean subGrupoEncontrado = false;

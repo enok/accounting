@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 public class ContaServiceTest extends GenericTest {
     @Autowired
@@ -18,13 +19,13 @@ public class ContaServiceTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarPorCodigoException() throws IOException, ServiceException, StoreException {
+    public void buscarPorCodigoException() throws IOException, StoreException, ParseException {
         deletarDiretorioEArquivos();
-        contaService.buscarPorCodigo(null);
+        contaService.buscarPorCodigo(1L);
     }
 
     @Test(expected = ServiceException.class)
-    public void atualizarSaldoException() throws ServiceException {
+    public void atualizarSaldoException() throws ServiceException, StoreException {
         contaService.atualizarSaldo(null, null);
     }
 
@@ -34,7 +35,7 @@ public class ContaServiceTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarCumulativasException() throws IOException, ServiceException, StoreException {
+    public void buscarCumulativasException() throws IOException, StoreException, ParseException {
         deletarDiretorioEArquivos();
         contaService.buscarCumulativas();
     }

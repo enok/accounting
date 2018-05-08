@@ -1,13 +1,13 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.Local;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.LocalRepository;
 import br.com.accounting.core.service.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -21,17 +21,13 @@ public class LocalServiceImpl extends GenericAbstractService<Local> implements L
     }
 
     @Override
-    public Local buscarPorNome(final String nome) throws StoreException, ServiceException {
+    public Local buscarPorNome(final String nome) throws StoreException, ParseException {
         try {
             List<Local> entities = repository.buscarRegistros();
             return repository.filtrarPorNome(entities, nome);
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar o local.";
-            throw new ServiceException(message, e);
         }
     }
 

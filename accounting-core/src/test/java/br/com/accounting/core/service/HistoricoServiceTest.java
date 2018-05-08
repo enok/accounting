@@ -1,6 +1,7 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.GenericTest;
+import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class HistoricoServiceTest extends GenericTest {
     private HistoricoService historicoService;
 
     @Test(expected = StoreException.class)
-    public void salvarException() throws IOException, ServiceException, StoreException {
+    public void salvarException() throws IOException, StoreException, RepositoryException {
         deletarDiretorioEArquivos();
         try {
             historicoService.salvar(null, null);

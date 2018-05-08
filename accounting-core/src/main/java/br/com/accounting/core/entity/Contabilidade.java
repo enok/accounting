@@ -68,22 +68,4 @@ public class Contabilidade implements Entity, Serializable {
                 .append(valor, that.valor)
                 .isEquals();
     }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(dataVencimento)
-                .append(recorrente)
-                .append(grupo)
-                .append(local)
-                .append(descricao)
-                .append(usouCartao)
-                .append(cartao)
-                .append(parcelado)
-                .append(parcelamento)
-                .append(conta)
-                .append(tipo)
-                .append(valor)
-                .toHashCode();
-    }
 }

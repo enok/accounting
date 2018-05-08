@@ -13,7 +13,7 @@ public interface GenericBusiness<D> {
 
     void excluir(D dto) throws StoreException, BusinessException;
 
-    D buscarPorId(Long codigo) throws BusinessException;
+    D buscarPorId(Long codigo) throws StoreException, BusinessException;
 
-    List<D> buscarTodas() throws BusinessException;
+    List<D> buscarTodas() throws StoreException, BusinessException;
 }

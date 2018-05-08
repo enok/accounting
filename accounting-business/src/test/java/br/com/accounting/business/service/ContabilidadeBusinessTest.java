@@ -1118,28 +1118,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarContabilidadePorIdException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarContabilidadePorIdException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarPorId(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-            throw e;
-        }
+        business.buscarPorId(null);
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarContabilidadesException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarContabilidadesException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarTodas();
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-            throw e;
-        }
+        business.buscarTodas();
     }
 
     @Test
@@ -1236,7 +1224,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, BusinessException, GenericException {
+    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, BusinessException {
         List<Long> codigos = new ArrayList<>();
         for (ContabilidadeDTO dto : dtos) {
             long codigo = Long.parseLong(dto.codigo());
@@ -1262,7 +1250,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertCodigosRecorrentes(List<Long> codigos) throws BusinessException {
+    private void assertCodigosRecorrentes(List<Long> codigos) throws StoreException, BusinessException {
         String dataVencimento = "27/04/2018";
         int teto = 9;
         for (int i = 0; i < teto; i++) {
@@ -1280,7 +1268,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     private void assertRecorrentesTotais(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
-                                         int passoProximoRegistro) throws BusinessException {
+                                         int passoProximoRegistro) throws StoreException, BusinessException {
         String dataVencimentoLocal = dataVencimento;
         ContabilidadeDTO dto;
         for (int i = 0; i < totalDeRegistros; i++) {

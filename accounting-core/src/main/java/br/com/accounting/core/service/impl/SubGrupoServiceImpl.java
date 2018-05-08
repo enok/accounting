@@ -1,13 +1,13 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.SubGrupo;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.SubGrupoRepository;
 import br.com.accounting.core.service.SubGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -21,17 +21,13 @@ public class SubGrupoServiceImpl extends GenericAbstractService<SubGrupo> implem
     }
 
     @Override
-    public SubGrupo buscarPorNome(final String nome) throws StoreException, ServiceException {
+    public SubGrupo buscarPorNome(final String nome) throws StoreException, ParseException {
         try {
             List<SubGrupo> entities = repository.buscarRegistros();
             return repository.filtrarPorNome(entities, nome);
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar o subGrupo.";
-            throw new ServiceException(message, e);
         }
     }
 

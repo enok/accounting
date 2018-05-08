@@ -9,6 +9,7 @@ import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.service.GenericService;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +28,11 @@ public abstract class GenericAbstractBusiness<D, E> {
         this.dtoFactory = dtoFactory;
     }
 
-    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, CreateException, StoreException, ServiceException;
+    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, StoreException, ServiceException, ParseException, CreateException;
 
     protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws MissingFieldException, UpdateException;
 
-    protected abstract void validaRegistroDuplicado(E entity) throws StoreException, DuplicatedRegistryException, ServiceException;
+    protected abstract void validaRegistroDuplicado(E entity) throws StoreException, ParseException, DuplicatedRegistryException;
 
     protected abstract E criarEntity(D entity) throws ValidationException;
 
@@ -57,9 +58,6 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (ServiceException e) {
-            throw new BusinessException(e);
         }
         catch (BusinessException e) {
             throw e;
@@ -112,10 +110,13 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    public D buscarPorId(final Long codigo) throws BusinessException {
+    public D buscarPorId(final Long codigo) throws StoreException, BusinessException {
         try {
             E entity = (E) service.buscarPorCodigo(codigo);
             return criarDTO(dtoFactory, entity);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar por id.";
@@ -123,11 +124,14 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    public List<D> buscarTodas() throws BusinessException {
+    public List<D> buscarTodas() throws StoreException, BusinessException {
         List<D> entitiesDTO;
         try {
             List<E> entities = service.buscarTodas();
             entitiesDTO = criarListaDTO(dtoFactory, entities);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível buscar todas.";

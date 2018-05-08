@@ -7,7 +7,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 public class ErrorVO {
     private Integer codigo;
     private List<String> mensagens = new ArrayList<>();

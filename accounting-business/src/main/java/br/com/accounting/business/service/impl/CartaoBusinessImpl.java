@@ -8,7 +8,6 @@ import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.CartaoDTOFactory;
 import br.com.accounting.business.service.CartaoBusiness;
 import br.com.accounting.core.entity.Cartao;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.CartaoFactory;
 import br.com.accounting.core.service.CartaoService;
@@ -67,7 +66,7 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public void validaRegistroDuplicado(final Cartao entity) throws StoreException, DuplicatedRegistryException, ServiceException {
+    public void validaRegistroDuplicado(final Cartao entity) throws StoreException, ParseException, DuplicatedRegistryException {
         Cartao entityBuscado = service.buscarPorNumero(entity.numero());
 
         if (entity.equals(entityBuscado)) {

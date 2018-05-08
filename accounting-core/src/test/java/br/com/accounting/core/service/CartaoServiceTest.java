@@ -1,8 +1,8 @@
 package br.com.accounting.core.service;
 
 import br.com.accounting.core.GenericTest;
-import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.exception.ServiceException;
+import br.com.accounting.core.exception.StoreException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

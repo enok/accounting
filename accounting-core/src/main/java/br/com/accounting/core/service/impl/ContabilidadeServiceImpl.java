@@ -1,7 +1,6 @@
 package br.com.accounting.core.service.impl;
 
 import br.com.accounting.core.entity.*;
-import br.com.accounting.core.exception.RepositoryException;
 import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.ContabilidadeRepository;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,31 +30,25 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
     }
 
     @Override
-    public List<Contabilidade> buscarTodasAsParcelas(final Long codigoPai) throws RepositoryException, StoreException {
-        List<Contabilidade> entities = null;
-        try {
-            entities = repository.buscarRegistros();
-        }
-        catch (StoreException e) {
-            throw e;
-        }
+    public List<Contabilidade> buscarTodasAsParcelas(final Long codigoPai) throws StoreException, ParseException {
+        List<Contabilidade> entities = repository.buscarRegistros();
         return repository.filtrarPorCodigoPai(entities, codigoPai);
     }
 
     @Override
-    public List<Contabilidade> buscarParcelasSeguintesInclusivo(final Long codigoPai, final Integer parcelaAtual) throws StoreException, RepositoryException {
+    public List<Contabilidade> buscarParcelasSeguintesInclusivo(final Long codigoPai, final Integer parcelaAtual) throws StoreException, ParseException {
         List<Contabilidade> entities = repository.buscarRegistros();
         return repository.filtrarParcelasPosteriores(entities, codigoPai, parcelaAtual);
     }
 
     @Override
-    public List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws StoreException, RepositoryException {
+    public List<Contabilidade> buscarTodasRecorrentesNaoLancadas() throws StoreException, ParseException {
         List<Contabilidade> entities = repository.buscarRegistros();
         return repository.filtrarRecorrentesNaoLancados(entities);
     }
 
     @Override
-    public List<Contabilidade> buscarTodasRecorrentesSeguintesInclusivo(final Long codigo) throws ServiceException, StoreException {
+    public List<Contabilidade> buscarTodasRecorrentesSeguintesInclusivo(final Long codigo) throws StoreException, ParseException {
         List<Contabilidade> entities = new ArrayList<>();
         Long proximoLancamento = codigo;
         do {
@@ -72,29 +66,20 @@ public class ContabilidadeServiceImpl extends GenericAbstractService<Contabilida
     @Override
     public Contabilidade buscar(LocalDate dataVencimento, Boolean recorrente, Grupo grupo, Local local, String descricao,
                                 Boolean usouCartao, Boolean parcelado, Parcelamento parcelamento, Conta conta,
-                                TipoContabilidade tipo, Double valor) throws StoreException, ServiceException {
-        try {
-            List<Contabilidade> entities = repository.buscarRegistros();
-            String local_ = (local == null) ? "" : local.nome();
-            Integer parcelas = (parcelamento != null) ? parcelamento.parcelas() : null;
-            List<Contabilidade> contabilidades = repository.filtrarPorCampos(entities, dataVencimento, recorrente, grupo.nome(), local_, descricao,
-                                                                             usouCartao, parcelado, parcelas, conta.nome(), tipo, valor);
-            if (CollectionUtils.isEmpty(contabilidades)) {
-                return null;
-            }
-            return contabilidades.get(0);
+                                TipoContabilidade tipo, Double valor) throws StoreException, ParseException {
+        List<Contabilidade> entities = repository.buscarRegistros();
+        String local_ = (local == null) ? "" : local.nome();
+        Integer parcelas = (parcelamento != null) ? parcelamento.parcelas() : null;
+        List<Contabilidade> contabilidades = repository.filtrarPorCampos(entities, dataVencimento, recorrente, grupo.nome(), local_, descricao,
+                usouCartao, parcelado, parcelas, conta.nome(), tipo, valor);
+        if (CollectionUtils.isEmpty(contabilidades)) {
+            return null;
         }
-        catch (StoreException e) {
-            throw e;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar a contabilidade.";
-            throw new ServiceException(message, e);
-        }
+        return contabilidades.get(0);
     }
 
     @Override
-    public void normalizarProximosLancamentos() throws ServiceException, StoreException {
+    public void normalizarProximosLancamentos() throws ServiceException, StoreException, ParseException {
         List<Contabilidade> entities = buscarTodas();
         for (Contabilidade entity : entities) {
             Contabilidade entityBuscada = buscarPorCodigo(entity.proximoLancamento());

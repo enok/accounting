@@ -9,6 +9,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -22,13 +23,16 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     }
 
     @Override
-    public void atualizarSaldo(final Conta conta, final Double saldo) throws ServiceException {
+    public void atualizarSaldo(final Conta conta, final Double saldo) throws StoreException, ServiceException {
         try {
             Conta contaAtualizada = SerializationUtils.clone(conta);
             Double novoSaldo = buscarSaldo(conta) + saldo;
             contaAtualizada.saldo(novoSaldo);
 
             atualizar(contaAtualizada);
+        }
+        catch (StoreException e) {
+            throw e;
         }
         catch (Exception e) {
             String message = "Não foi possível atualizar o saldo da conta.";
@@ -37,7 +41,7 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
     }
 
     @Override
-    public Conta buscarPorNome(final String nome) throws ServiceException, StoreException {
+    public Conta buscarPorNome(final String nome) throws StoreException, ParseException {
         try {
             List<Conta> contas = repository.buscarRegistros();
             return repository.filtrarPorNome(contas, nome);
@@ -45,24 +49,16 @@ public class ContaServiceImpl extends GenericAbstractService<Conta> implements C
         catch (StoreException e) {
             throw e;
         }
-        catch (Exception e) {
-            String message = "Não foi possível buscar a conta.";
-            throw new ServiceException(message, e);
-        }
     }
 
     @Override
-    public List<Conta> buscarCumulativas() throws StoreException, ServiceException {
+    public List<Conta> buscarCumulativas() throws StoreException, ParseException {
         try {
             List<Conta> entities = repository.buscarRegistros();
             return repository.filtrarCumulativas(entities);
         }
         catch (StoreException e) {
             throw e;
-        }
-        catch (Exception e) {
-            String message = "Não foi possível buscar cumulativas.";
-            throw new ServiceException(message, e);
         }
     }
 

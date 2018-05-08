@@ -216,29 +216,17 @@ public class SubGrupoBusinessTest extends GenericTest {
         assertThat(dto, nullValue());
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarPorIdException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarPorIdException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarPorId(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-            throw e;
-        }
+        business.buscarPorId(null);
     }
 
 
-    @Test(expected = BusinessException.class)
-    public void buscarTodosException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarTodosException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarTodas();
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-            throw e;
-        }
+        business.buscarTodas();
     }
 
     @Test
@@ -273,7 +261,7 @@ public class SubGrupoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertSubGrupoAluguel(Long codigo) throws BusinessException {
+    private void assertSubGrupoAluguel(Long codigo) throws StoreException, BusinessException {
         SubGrupoDTO dto = business.buscarPorId(codigo);
         assertSubGrupoAluguel(dto);
     }
@@ -283,7 +271,7 @@ public class SubGrupoBusinessTest extends GenericTest {
         assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
     }
 
-    private void assertSubGrupoInternet(Long codigo) throws BusinessException {
+    private void assertSubGrupoInternet(Long codigo) throws StoreException, BusinessException {
         SubGrupoDTO dto = business.buscarPorId(codigo);
         assertSubGrupoInternet(dto);
     }

@@ -147,28 +147,16 @@ public class LocalBusinessTest extends GenericTest {
         assertThat(dtoBuscado, nullValue());
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarLocalPorIdException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarLocalPorIdException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarPorId(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar por id."));
-            throw e;
-        }
+        business.buscarPorId(null);
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarLocaisException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarLocaisException() throws IOException, StoreException, BusinessException {
         deletarDiretorioEArquivos();
-        try {
-            business.buscarTodas();
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar todas."));
-            throw e;
-        }
+        business.buscarTodas();
     }
 
     @Test
@@ -201,7 +189,7 @@ public class LocalBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertLocalCarrefour(Long codigo) throws BusinessException {
+    private void assertLocalCarrefour(Long codigo) throws StoreException, BusinessException {
         LocalDTO dtoBuscado = business.buscarPorId(codigo);
         assertLocalCarrefour(dtoBuscado);
     }
@@ -210,7 +198,7 @@ public class LocalBusinessTest extends GenericTest {
         assertThat(dto.nome(), equalTo("Carrefour"));
     }
 
-    private LocalDTO assertLocalAmericanas(Long codigo) throws BusinessException {
+    private LocalDTO assertLocalAmericanas(Long codigo) throws BusinessException, StoreException {
         LocalDTO dtoBuscado = business.buscarPorId(codigo);
         return assertLocalAmericanas(dtoBuscado);
     }
