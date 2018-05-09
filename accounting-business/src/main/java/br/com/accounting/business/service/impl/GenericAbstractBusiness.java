@@ -5,7 +5,6 @@ import br.com.accounting.business.dto.EntityDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Entity;
-import br.com.accounting.core.exception.ServiceException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.service.GenericService;
 
@@ -28,7 +27,7 @@ public abstract class GenericAbstractBusiness<D, E> {
         this.dtoFactory = dtoFactory;
     }
 
-    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, StoreException, ServiceException, ParseException, CreateException;
+    protected abstract void validarEntrada(D dto, List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException;
 
     protected abstract void validarEntradaUpdate(D dto, E entity, List<String> erros) throws ValidationException;
 

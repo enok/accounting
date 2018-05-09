@@ -18,13 +18,13 @@ import java.util.List;
 @RequestMapping("/cartao")
 public class CartaoController extends GenericController {
     @Autowired
-    private CartaoBusiness cartaoBusiness;
+    private CartaoBusiness business;
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<CodigosVO> criar(@RequestBody CartaoVO vo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(vo);
-        List<Long> codigos = cartaoBusiness.criar(dto);
+        List<Long> codigos = business.criar(dto);
         CodigosVO codigosVO = new CodigosVO(codigos);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -35,21 +35,21 @@ public class CartaoController extends GenericController {
     @ResponseBody
     public ResponseEntity atualizar(@RequestBody CartaoVO vo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(vo);
-        cartaoBusiness.atualizar(dto);
+        business.atualizar(dto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 
-    private CartaoDTO createDTO(CartaoVO cartaoVO) {
+    private CartaoDTO createDTO(CartaoVO vo) {
         return new CartaoDTO()
-                .codigo(cartaoVO.codigo())
-                .numero(cartaoVO.numero())
-                .vencimento(cartaoVO.vencimento())
-                .diaMelhorCompra(cartaoVO.diaMelhorCompra())
-                .portador(cartaoVO.portador())
-                .tipo(cartaoVO.tipo())
-                .limite(cartaoVO.limite());
+                .codigo(vo.codigo())
+                .numero(vo.numero())
+                .vencimento(vo.vencimento())
+                .diaMelhorCompra(vo.diaMelhorCompra())
+                .portador(vo.portador())
+                .tipo(vo.tipo())
+                .limite(vo.limite());
 
     }
 }

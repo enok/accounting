@@ -1,6 +1,7 @@
 package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.dto.CartaoDTO;
+import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.ValidationException;
@@ -32,7 +33,7 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public void validarEntrada(final CartaoDTO dto, final List<String> erros) throws MissingFieldException {
+    public void validarEntrada(final CartaoDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
         if (isBlank(dto.numero())) {
             erros.add(format(msg, "número"));
         }

@@ -212,7 +212,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @Override
     public void validarEntrada(final ContabilidadeDTO dto, final List<String> erros) throws MissingFieldException,
-            StoreException, ServiceException, ParseException, CreateException {
+            StoreException, ParseException, CreateException {
         if (isBlank(dto.dataVencimento())) {
             erros.add(format(msg, "dataVencimento"));
         }
@@ -374,8 +374,10 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             Contabilidade entityBuscada = null;
             if (codigoAnterior != null) {
                 entityBuscada = service.buscarPorCodigo(codigoAnterior);
-                LocalDate novaDataVencimento = buscarNovaDataDeVencimento(entityBuscada);
-                copiaEntity.dataVencimento(novaDataVencimento);
+                if (entityBuscada != null) {
+                    LocalDate novaDataVencimento = buscarNovaDataDeVencimento(entityBuscada);
+                    copiaEntity.dataVencimento(novaDataVencimento);
+                }
             }
 
             Long codigo;
@@ -387,7 +389,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             }
             codigos.add(codigo);
 
-            if (codigoAnterior != null) {
+            if (codigoAnterior != null && (entityBuscada != null)) {
                 entityBuscada.proximoLancamento(codigo);
                 atualizarEntity(entityBuscada);
             }

@@ -107,7 +107,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void validarEntrada(final ContaDTO dto, final List<String> erros) throws MissingFieldException, CreateException {
+    public void validarEntrada(final ContaDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }

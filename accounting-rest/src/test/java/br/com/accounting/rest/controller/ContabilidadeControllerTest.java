@@ -1,11 +1,19 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.*;
+import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.business.dto.GrupoDTO;
+import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.factory.*;
+import br.com.accounting.business.factory.ContaDTOFactory;
+import br.com.accounting.business.factory.GrupoDTOFactory;
+import br.com.accounting.business.factory.LocalDTOFactory;
+import br.com.accounting.business.factory.SubGrupoDTOFactory;
+import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.CartaoVO;
+import br.com.accounting.rest.vo.ContabilidadeVO;
 import com.google.gson.Gson;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
@@ -19,10 +27,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
 
+import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -63,8 +72,8 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void criarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContabilidadeDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        ContabilidadeVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -82,9 +91,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimento() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -101,10 +110,10 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrente() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -122,11 +131,11 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupo() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -145,12 +154,12 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupo() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
                 .subGrupo(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -170,13 +179,13 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocal() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
                 .subGrupo(null)
                 .local(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -196,14 +205,14 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricao() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
                 .subGrupo(null)
                 .local(null)
                 .descricao(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -224,7 +233,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartao() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -232,7 +241,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .local(null)
                 .descricao(null)
                 .usouCartao(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -249,13 +258,12 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
                 .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
                 .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
-                .andDo(print());
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
     }
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartao() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -264,7 +272,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .descricao(null)
                 .usouCartao(null)
                 .cartao(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -286,7 +294,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoECartao() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -294,7 +302,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .local(null)
                 .descricao(null)
                 .cartao(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -316,7 +324,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -326,7 +334,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .usouCartao(null)
                 .cartao(null)
                 .parcelado(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -349,7 +357,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelas() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -360,7 +368,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .cartao(null)
                 .parcelado(null)
                 .parcelas(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -383,7 +391,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelas() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -393,7 +401,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .usouCartao(null)
                 .cartao(null)
                 .parcelas(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -415,7 +423,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEConta() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -427,7 +435,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .parcelado(null)
                 .parcelas(null)
                 .conta(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -451,7 +459,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEContaETipo() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -464,7 +472,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .parcelas(null)
                 .conta(null)
                 .tipo(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -489,7 +497,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemCampos() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -503,7 +511,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .conta(null)
                 .tipo(null)
                 .valor(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -528,10 +536,10 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void criarComDataVencimentoIncorreto() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+    public void criarComDataVencimentoIncorreta() throws Exception {
+        ContabilidadeVO vo = getVO()
                 .dataVencimento("27-04/2018");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -548,9 +556,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteIncorreto() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("NS");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -567,10 +575,10 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteEUsouCartaoIncorretos() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("NS")
                 .usouCartao("NS");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -588,11 +596,11 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("NS")
                 .usouCartao("NS")
                 .parcelado("NS");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -611,9 +619,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComParcelasIncorretas() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .parcelas("uma");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -630,9 +638,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComTipoIncorreto() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .tipo("DEBITOS");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -649,9 +657,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComValorIncorreto() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .valor("a24,04");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -668,10 +676,10 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarRecorrenteEParcelado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("S")
                 .parcelado("S");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -688,9 +696,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarGrupoNaoCadastrado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .grupo("Um grupo");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -707,9 +715,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSubGrupoNaoCadastrado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .subGrupo("Um subgrupo");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -727,9 +735,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarLocalNaoCadastrado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .local("Um outro local");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -746,9 +754,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarCartaoNaoCadastrado() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .cartao("1324");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -765,9 +773,9 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarContaNaoCadastrada() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .conta("Uma conta");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -786,11 +794,11 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void criarGrupoESubGrupoNaoAssociados() throws Exception {
         criarSubGrupoAluguel();
 
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .grupo("Saúde")
                 .subGrupo("Aluguel");
 
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -807,8 +815,8 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarDuplicado() throws Exception {
-        ContabilidadeDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        ContabilidadeVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -842,11 +850,11 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemCartao() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("N")
                 .parcelado("N")
                 .usouCartao("N");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -862,33 +870,15 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarParcelada() throws Exception {
-        ContabilidadeDTO dto = getDTO();
-        String json = gson.toJson(dto);
-
-        mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigos", hasSize(7)))
-                .andExpect(jsonPath("$.codigos[0]", is(0)))
-                .andExpect(jsonPath("$.codigos[1]", is(1)))
-                .andExpect(jsonPath("$.codigos[2]", is(2)))
-                .andExpect(jsonPath("$.codigos[3]", is(3)))
-                .andExpect(jsonPath("$.codigos[4]", is(4)))
-                .andExpect(jsonPath("$.codigos[5]", is(5)))
-                .andExpect(jsonPath("$.codigos[6]", is(6)));
+        criarContabilidadeParcelada();
     }
 
     @Test
     public void criarRecorrente() throws Exception {
-        ContabilidadeDTO dto = getDTO()
+        ContabilidadeVO vo = getVO()
                 .recorrente("S")
                 .parcelado("N");
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -910,21 +900,937 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[8]", is(8)));
     }
 
-    private ContabilidadeDTO getDTO() {
-        return new ContabilidadeDTO()
-                .dataVencimento("27/04/2018")
-                .recorrente("N")
+    @Test
+    public void atualizarSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVO();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar.")));
+
+    }
+
+    @Test
+    public void atualizarSemDataVencimento() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupo() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupo() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(4)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocal() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(4)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricao() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(5)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartao() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartao() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoECartao() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .cartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo cartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelado() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(7)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelas() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(7)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelas() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelas(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEConta() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(8)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEContaETipo() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null)
+                .tipo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(9)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[8]", is("O campo tipo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCampos() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null)
+                .tipo(null)
+                .valor(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(10)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[8]", is("O campo tipo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[9]", is("O campo valor é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigo() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigoEDataLancamento() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .codigo(null)
+                .dataLancamento(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigoEDataLancamentoEParcela() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .codigo(null)
+                .dataLancamento(null)
+                .parcela(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo parcela é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigoPai() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo códigoPai é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarComDataVencimentoIncorreta() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .dataVencimento("27-04/2018");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.time.format.DateTimeParseException: Text '27-04/2018' could not be parsed at index 2")));
+    }
+
+    @Test
+    public void atualizarComRecorrenteIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .recorrente("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarComRecorrenteEUsouCartaoIncorretos() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .recorrente("NS")
+                .usouCartao("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O valor do campo usouCartao é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .recorrente("NS")
+                .usouCartao("NS")
+                .parcelado("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O valor do campo usouCartao é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O valor do campo parcelado é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarComTipoIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .tipo("DEBITOS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.lang.IllegalArgumentException: No enum constant TipoContabilidade.DEBITOS")));
+    }
+
+    @Test
+    public void atualizarComValorIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .valor("a24,04");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.text.ParseException: Unparseable number: \"a24,04\"")));
+    }
+
+    @Test
+    public void atualizarRecorrenteEParcelado() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .recorrente("S")
+                .parcelado("S");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Uma contabilidade não pode ser recorrente e parcelada.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarCodigo() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("20");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarDataLancamento() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .dataLancamento("01/01/2000");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarParcelas() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .parcelas("10");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo parcelas não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarParcela() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .parcela("2");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo parcela não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarCodigoPai() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0")
+                .codigoPai("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo códigoPai não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarGrupoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .grupo("Um grupo");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Grupo não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarSubGrupoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .subGrupo("Um subgrupo");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("SubGrupo não cadastrado.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("Grupo e SubGrupo não estão associados.")));
+    }
+
+    @Test
+    public void atualizarLocalNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .local("Um outro local");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Local não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarCartaoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .cartao("1324");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Cartão não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarContaNaoCadastrada() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .conta("Uma conta");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Conta não cadastrada.")));
+    }
+
+    @Test
+    public void atualizarGrupoESubGrupoNaoAssociados() throws Exception {
+        criarSubGrupoAluguel();
+
+        ContabilidadeVO vo = getVO()
                 .grupo("Saúde")
-                .subGrupo("Suplementos")
-                .local("Site")
-                .descricao("Suplementos comprados pela Carol")
-                .usouCartao("S")
-                .cartao("0744")
-                .parcelado("S")
-                .parcelas("7")
-                .conta("CAROL")
-                .tipo("DEBITO")
-                .valor("24,04");
+                .subGrupo("Aluguel");
+
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Grupo e SubGrupo não estão associados.")));
+    }
+
+    @Test
+    public void atualizar() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVO()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
     }
 
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
@@ -984,5 +1890,46 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .withCumulativo("S")
                 .build();
         contaController.criar(contaDTO);
+    }
+
+    private void criarContabilidadeParcelada() throws Exception {
+        ContabilidadeVO vo = getVO();
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(7)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)))
+                .andExpect(jsonPath("$.codigos[1]", is(1)))
+                .andExpect(jsonPath("$.codigos[2]", is(2)))
+                .andExpect(jsonPath("$.codigos[3]", is(3)))
+                .andExpect(jsonPath("$.codigos[4]", is(4)))
+                .andExpect(jsonPath("$.codigos[5]", is(5)))
+                .andExpect(jsonPath("$.codigos[6]", is(6)));
+    }
+
+    private ContabilidadeVO getVO() {
+        return new ContabilidadeVO()
+                .dataLancamento(getStringFromCurrentDate())
+                .dataVencimento("27/04/2018")
+                .recorrente("N")
+                .grupo("Saúde")
+                .subGrupo("Suplementos")
+                .local("Site")
+                .descricao("Suplementos comprados pela Carol")
+                .usouCartao("S")
+                .cartao("0744")
+                .parcelado("S")
+                .parcela("1")
+                .parcelas("7")
+                .conta("CAROL")
+                .tipo("DEBITO")
+                .valor("24,04");
     }
 }

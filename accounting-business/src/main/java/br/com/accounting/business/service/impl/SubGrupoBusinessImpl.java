@@ -1,6 +1,7 @@
 package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
 import br.com.accounting.business.exception.ValidationException;
@@ -32,7 +33,7 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
     }
 
     @Override
-    public void validarEntrada(final SubGrupoDTO dto, final List<String> erros) throws MissingFieldException {
+    public void validarEntrada(final SubGrupoDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
