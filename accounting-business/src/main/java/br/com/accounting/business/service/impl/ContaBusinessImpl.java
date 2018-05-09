@@ -2,10 +2,12 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.business.dto.EntityDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
+import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.service.ContaService;
@@ -132,6 +134,12 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws ValidationException {
         conferirCodigo(dto, erros);
+        if (isBlank(dto.saldo())) {
+            erros.add(format(msg, "saldo"));
+        }
+        if (isBlank(dto.dataAtualizacao())) {
+            erros.add(format(msg, "dataAtualização"));
+        }
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();

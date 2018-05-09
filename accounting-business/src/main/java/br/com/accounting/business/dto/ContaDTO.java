@@ -25,17 +25,7 @@ public class ContaDTO implements EntityDTO {
         return codigo;
     }
 
-    public ContaDTO setNome(String nome) {
-        this.nome = nome;
-        return this;
-    }
-
-    public ContaDTO setDescricao(String descricao) {
-        this.descricao = descricao;
-        return this;
-    }
-
-    public ContaDTO setValorDefault(String valorDefault) {
+    public ContaDTO valorDefault(String valorDefault) {
         if (isBlankOrNull(this.valorDefault)) {
             this.valorDefault = valorDefault;
         }
@@ -44,16 +34,6 @@ public class ContaDTO implements EntityDTO {
             this.valorDefaultAnterior = this.valorDefault;
             this.valorDefault = valorDefault;
         }
-        return this;
-    }
-
-    public ContaDTO setCumulativo(String cumulativo) {
-        this.cumulativo = cumulativo;
-        return this;
-    }
-
-    public ContaDTO setAtualizacao(boolean atualizacao) {
-        this.atualizacao = atualizacao;
         return this;
     }
 }

@@ -42,7 +42,7 @@ public final class ContaFactory {
                 if (atualizacao) {
                     Double valorDefaultNovo = entity.valorDefault();
                     Double diffValorDefault = valorDefaultNovo - valorDefaultAnterior;
-                    Double saldo = entity.saldo();
+                    Double saldo = entity.saldo() == null ? 0 : entity.saldo();
                     Double novoSaldo;
                     novoSaldo = saldo + diffValorDefault;
                     entity.saldo(novoSaldo);

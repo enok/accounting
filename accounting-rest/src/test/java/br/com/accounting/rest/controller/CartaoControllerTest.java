@@ -493,6 +493,7 @@ public class CartaoControllerTest extends GenericTest {
         criarCartao();
 
         CartaoVO vo = getVO()
+                .codigo("0")
                 .vencimento("27-03/2018");
         String json = gson.toJson(vo);
 
@@ -514,6 +515,7 @@ public class CartaoControllerTest extends GenericTest {
         criarCartao();
 
         CartaoVO vo = getVO()
+                .codigo("0")
                 .diaMelhorCompra("17-04/2018");
         String json = gson.toJson(vo);
 
@@ -535,6 +537,7 @@ public class CartaoControllerTest extends GenericTest {
         criarCartao();
 
         CartaoVO vo = getVO()
+                .codigo("0")
                 .tipo("FISICO1");
         String json = gson.toJson(vo);
 
@@ -556,6 +559,7 @@ public class CartaoControllerTest extends GenericTest {
         criarCartao();
 
         CartaoVO vo = getVO()
+                .codigo("0")
                 .limite("a2.000,00");
         String json = gson.toJson(vo);
 
@@ -597,7 +601,8 @@ public class CartaoControllerTest extends GenericTest {
     public void atualizar() throws Exception {
         criarCartao();
 
-        CartaoVO vo = getVO();
+        CartaoVO vo = getVO()
+                .codigo("0");
         String json = gson.toJson(vo);
 
         mvc.perform(put("/cartao")
@@ -627,7 +632,6 @@ public class CartaoControllerTest extends GenericTest {
 
     private CartaoVO getVO() {
         return new CartaoVO()
-                .codigo("0")
                 .numero("7660")
                 .vencimento("27/03/2018")
                 .diaMelhorCompra("17/04/2018")

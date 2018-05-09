@@ -163,7 +163,7 @@ public class ContaBusinessTest extends GenericTest {
         try {
             Long codigo = criarContaEnok();
             ContaDTO dtoBuscado = business.buscarPorId(codigo);
-            dtoBuscado.setValorDefault(null);
+            dtoBuscado.valorDefault(null);
             business.atualizar(dtoBuscado);
         }
         catch (BusinessException e) {
@@ -237,7 +237,7 @@ public class ContaBusinessTest extends GenericTest {
 
         ContaDTO dtoBuscado = assertContaEnok(codigo);
 
-        dtoBuscado.setValorDefault("600,00");
+        dtoBuscado.valorDefault("600,00");
         business.atualizar(dtoBuscado);
 
         dtoBuscado = business.buscarPorId(codigo);
@@ -274,7 +274,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.nome("Carol");
         dtoBuscado.descricao("Valor separado para a Carol");
         dtoBuscado.cumulativo("N");
-        dtoBuscado.setValorDefault("150,00");
+        dtoBuscado.valorDefault("150,00");
         business.atualizar(dtoBuscado);
 
         dtoBuscado = business.buscarPorId(codigo);

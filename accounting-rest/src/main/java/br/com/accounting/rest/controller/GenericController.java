@@ -17,7 +17,9 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity<ErrorVO> handleMissingFieldException(ValidationException e) {
         ErrorVO errorVO = new ErrorVO(HttpStatus.BAD_REQUEST.value(), e);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorVO);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorVO);
     }
 
     @ExceptionHandler(StoreException.class)
@@ -25,7 +27,9 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity<ErrorVO> handleReadingException(StoreException e) {
         ErrorVO errorVO = new ErrorVO(HttpStatus.INSUFFICIENT_STORAGE.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).body(errorVO);
+        return ResponseEntity
+                .status(HttpStatus.INSUFFICIENT_STORAGE)
+                .body(errorVO);
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -33,7 +37,9 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity<ErrorVO> handleBusinessException(BusinessException e) {
         ErrorVO errorVO = new ErrorVO(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(errorVO);
+        return ResponseEntity
+                .status(HttpStatus.EXPECTATION_FAILED)
+                .body(errorVO);
     }
 
     @ExceptionHandler(GenericException.class)
@@ -41,6 +47,8 @@ public abstract class GenericController {
     public @ResponseBody
     ResponseEntity<ErrorVO> handleGenericException(GenericException e) {
         ErrorVO errorVO = new ErrorVO(HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorVO);
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(errorVO);
     }
 }

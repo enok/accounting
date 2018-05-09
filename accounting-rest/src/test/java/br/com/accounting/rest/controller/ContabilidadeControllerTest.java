@@ -13,6 +13,7 @@ import br.com.accounting.business.factory.SubGrupoDTOFactory;
 import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.CartaoVO;
+import br.com.accounting.rest.vo.ContaVO;
 import br.com.accounting.rest.vo.ContabilidadeVO;
 import com.google.gson.Gson;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -1881,15 +1882,12 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarConta() throws StoreException, BusinessException, GenericException {
-        ContaDTO contaDTO = ContaDTOFactory
-                .create()
-                .begin()
-                .withNome("CAROL")
-                .withDescricao("Valor separado para a Carol")
-                .withValorDefault("500,00")
-                .withCumulativo("S")
-                .build();
-        contaController.criar(contaDTO);
+        ContaVO vo = new ContaVO()
+                .nome("CAROL")
+                .descricao("Valor separado para a Carol")
+                .valorDefault("500,00")
+                .cumulativo("S");
+        contaController.criar(vo);
     }
 
     private void criarContabilidadeParcelada() throws Exception {
