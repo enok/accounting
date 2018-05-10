@@ -1,27 +1,26 @@
-package br.com.accounting.business.dto;
+package br.com.accounting.rest.vo;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent = true)
-public class SubGrupoDTO implements EntityDTO {
+public class SubGrupoVO {
     private String codigo;
     private String nome;
     private String descricao;
 
-    @Override
-    public String getCodigo() {
-        return codigo;
+    public SubGrupoVO setCodigo(String codigo) {
+        this.codigo = codigo;
+        return this;
     }
 
-    public SubGrupoDTO setNome(String nome) {
+    public SubGrupoVO setNome(String nome) {
         this.nome = nome;
         return this;
     }
 
-    public SubGrupoDTO setDescricao(String descricao) {
+    public SubGrupoVO setDescricao(String descricao) {
         this.descricao = descricao;
         return this;
     }

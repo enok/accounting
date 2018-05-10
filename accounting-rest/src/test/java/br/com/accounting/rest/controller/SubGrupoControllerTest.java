@@ -1,6 +1,6 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.rest.vo.SubGrupoVO;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -34,8 +35,8 @@ public class SubGrupoControllerTest extends GenericTest {
     public void criarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        SubGrupoDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        SubGrupoVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/subgrupo")
                 .characterEncoding("UTF-8")
@@ -52,9 +53,9 @@ public class SubGrupoControllerTest extends GenericTest {
 
     @Test
     public void criarSemNome() throws Exception {
-        SubGrupoDTO dto = getDTO()
+        SubGrupoVO vo = getVO()
                 .nome(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/subgrupo")
                 .characterEncoding("UTF-8")
@@ -71,10 +72,10 @@ public class SubGrupoControllerTest extends GenericTest {
 
     @Test
     public void criarSemNomeEDescricao() throws Exception {
-        SubGrupoDTO dto = getDTO()
+        SubGrupoVO vo = getVO()
                 .nome(null)
                 .descricao(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/subgrupo")
                 .characterEncoding("UTF-8")
@@ -92,8 +93,8 @@ public class SubGrupoControllerTest extends GenericTest {
 
     @Test
     public void criarDuplicado() throws Exception {
-        SubGrupoDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        SubGrupoVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/subgrupo")
                 .characterEncoding("UTF-8")
@@ -121,8 +122,135 @@ public class SubGrupoControllerTest extends GenericTest {
 
     @Test
     public void criar() throws Exception {
-        SubGrupoDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        criarSubGrupo();
+    }
+
+    @Test
+    public void atualizarSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        SubGrupoVO vo = getVO();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar.")));
+    }
+
+    @Test
+    public void atualizarSemNome() throws Exception {
+        SubGrupoVO vo = getVO()
+                .nome(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo nome é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemNomeEDescricao() throws Exception {
+        SubGrupoVO vo = getVO()
+                .nome(null)
+                .descricao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo nome é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo descrição é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigo() throws Exception {
+        SubGrupoVO vo = getVO()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarCodigo() throws Exception {
+        criarSubGrupo();
+
+        SubGrupoVO vo = getVO()
+                .codigo("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizar() throws Exception {
+        criarSubGrupo();
+
+        SubGrupoVO vo = getVO()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/subgrupo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    private SubGrupoVO getVO() {
+        return new SubGrupoVO()
+                .nome("Suplementos")
+                .descricao("Sumplemntos comprados");
+    }
+
+    private void criarSubGrupo() throws Exception {
+        SubGrupoVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/subgrupo")
                 .characterEncoding("UTF-8")
@@ -134,11 +262,5 @@ public class SubGrupoControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigos", hasSize(1)))
                 .andExpect(jsonPath("$.codigos[0]", is(0)));
-    }
-
-    private SubGrupoDTO getDTO() {
-        return new SubGrupoDTO()
-                .nome("Suplementos")
-                .descricao("Sumplemntos comprados");
     }
 }

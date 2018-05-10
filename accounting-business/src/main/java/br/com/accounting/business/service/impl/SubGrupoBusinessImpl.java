@@ -64,22 +64,17 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
     }
 
     @Override
-    public SubGrupo criarEntity(final SubGrupoDTO dto) throws ValidationException {
-        try {
-            return SubGrupoFactory
-                    .begin()
-                    .withCodigo(dto.codigo())
-                    .withNome(dto.nome())
-                    .withDescricao(dto.descricao())
-                    .build();
-        }
-        catch (DateTimeParseException | IllegalArgumentException e) {
-            throw new ValidationException(e);
-        }
+    public SubGrupo criarEntity(final SubGrupoDTO dto) {
+        return SubGrupoFactory
+                .begin()
+                .withCodigo(dto.codigo())
+                .withNome(dto.nome())
+                .withDescricao(dto.descricao())
+                .build();
     }
 
     @Override
-    protected SubGrupo criarEntity(SubGrupoDTO dto, SubGrupo entityBuscado) throws ValidationException {
+    protected SubGrupo criarEntity(SubGrupoDTO dto, SubGrupo entityBuscado) {
         return criarEntity(dto);
     }
 }

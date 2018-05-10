@@ -6,6 +6,7 @@ import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.SubGrupoBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.CodigosVO;
+import br.com.accounting.rest.vo.SubGrupoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,31 @@ import java.util.List;
 @RequestMapping("/subgrupo")
 public class SubGrupoController extends GenericController {
     @Autowired
-    private SubGrupoBusiness subGrupoBusiness;
+    private SubGrupoBusiness business;
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity criar(@RequestBody SubGrupoDTO subGrupoDTO) throws StoreException, BusinessException, GenericException {
-        List<Long> codigos = subGrupoBusiness.criar(subGrupoDTO);
+    public ResponseEntity criar(@RequestBody SubGrupoVO vo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = createDTO(vo);
+        List<Long> codigos = business.criar(dto);
         CodigosVO codigosVO = new CodigosVO(codigos);
         return ResponseEntity.status(HttpStatus.CREATED).body(codigosVO);
+    }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity atualizar(@RequestBody SubGrupoVO vo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = createDTO(vo);
+        business.atualizar(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    private SubGrupoDTO createDTO(SubGrupoVO vo) {
+        return new SubGrupoDTO()
+                .codigo(vo.codigo())
+                .nome(vo.nome())
+                .descricao(vo.descricao());
     }
 }

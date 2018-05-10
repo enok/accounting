@@ -1,11 +1,7 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.LocalDTO;
-import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.factory.LocalDTOFactory;
-import br.com.accounting.business.factory.SubGrupoDTOFactory;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.*;
 import com.google.gson.Gson;
@@ -20,10 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -1838,21 +1833,17 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarSubGrupo() throws StoreException, BusinessException, GenericException {
-        SubGrupoDTO subGrupoDTO = SubGrupoDTOFactory
-                .create()
-                .withNome("Suplementos")
-                .withDescricao("Subgrupo de suplementos")
-                .build();
-        subGrupoController.criar(subGrupoDTO);
+        SubGrupoVO vo = new SubGrupoVO()
+                .nome("Suplementos")
+                .descricao("Subgrupo de suplementos");
+        subGrupoController.criar(vo);
     }
 
     private void criarSubGrupoAluguel() throws StoreException, BusinessException, GenericException {
-        SubGrupoDTO subGrupoDTO = SubGrupoDTOFactory
-                .create()
-                .withNome("Aluguel")
-                .withDescricao("Subgrupo de aluguel")
-                .build();
-        subGrupoController.criar(subGrupoDTO);
+        SubGrupoVO vo = new SubGrupoVO()
+                .nome("Aluguel")
+                .descricao("Subgrupo de aluguel");
+        subGrupoController.criar(vo);
     }
 
     private void criarLocal() throws StoreException, BusinessException, GenericException {
