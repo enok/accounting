@@ -15,14 +15,4 @@ public class SubGrupoDTO implements EntityDTO {
     public String getCodigo() {
         return codigo;
     }
-
-    public SubGrupoDTO setNome(String nome) {
-        this.nome = nome;
-        return this;
-    }
-
-    public SubGrupoDTO setDescricao(String descricao) {
-        this.descricao = descricao;
-        return this;
-    }
 }
