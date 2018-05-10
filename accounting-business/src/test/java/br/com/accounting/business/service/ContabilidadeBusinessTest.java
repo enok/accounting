@@ -4,6 +4,7 @@ import br.com.accounting.business.dto.*;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.*;
 import br.com.accounting.core.exception.StoreException;
 import org.junit.Before;
@@ -982,13 +983,28 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Outra descrição");
     }
 
-    @Test(expected = BusinessException.class)
-    public void excluirUmaContabilidadeException() throws BusinessException, StoreException {
+    @Test(expected = GenericException.class)
+    public void excluirUmaContabilidadeException() throws BusinessException, StoreException, GenericException {
+        business.excluir(null);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void excluirValidationException() throws StoreException, BusinessException, GenericException {
+        ContabilidadeDTO dto = new ContabilidadeDTO()
+                .codigo("a");
+        business.excluir(dto);
+    }
+
+    @Test(expected = StoreException.class)
+    public void excluirStoreException() throws GenericException, BusinessException, IOException, StoreException {
         try {
-            business.excluir(null);
+            Long codigo = criarContabilidades().get(0);
+            ContabilidadeDTO dto = business.buscarPorId(codigo);
+            deletarDiretorioEArquivos();
+            business.excluir(dto);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao excluir."));
             throw e;
         }
     }

@@ -386,13 +386,21 @@ public class CartaoBusinessTest extends GenericTest {
         assertThat(cartaoDTOBuscado.limite(), equalTo("2.100,00"));
     }
 
-    @Test(expected = BusinessException.class)
-    public void excluirUmCartaoException() throws StoreException, BusinessException {
+    @Test(expected = GenericException.class)
+    public void excluirUmCartaoException() throws StoreException, BusinessException, GenericException {
+        business.excluir(null);
+    }
+
+    @Test(expected = StoreException.class)
+    public void excluirStoreException() throws IOException, BusinessException, GenericException, StoreException {
         try {
-            business.excluir(null);
+            Long codigo = criarCartaoFisicoEnok();
+            CartaoDTO dto = business.buscarPorId(codigo);
+            deletarDiretorioEArquivos();
+            business.excluir(dto);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao excluir."));
             throw e;
         }
     }

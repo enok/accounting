@@ -32,10 +32,18 @@ public class CartaoController extends GenericController {
     }
 
     @PutMapping
-    @ResponseBody
     public ResponseEntity atualizar(@RequestBody CartaoVO vo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(vo);
         business.atualizar(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        CartaoDTO dto = createDTO(codigo);
+        business.excluir(dto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
@@ -50,6 +58,10 @@ public class CartaoController extends GenericController {
                 .portador(vo.portador())
                 .tipo(vo.tipo())
                 .limite(vo.limite());
+    }
 
+    private CartaoDTO createDTO(Integer codigo) {
+        return new CartaoDTO()
+                .codigo(String.valueOf(codigo));
     }
 }

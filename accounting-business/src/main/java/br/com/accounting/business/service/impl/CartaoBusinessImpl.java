@@ -33,7 +33,7 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
     }
 
     @Override
-    public void validarEntrada(final CartaoDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
+    public void validarEntrada(final CartaoDTO dto, final List<String> erros) throws MissingFieldException {
         if (isBlank(dto.numero())) {
             erros.add(format(msg, "número"));
         }

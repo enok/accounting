@@ -72,10 +72,16 @@ public final class Utils {
     }
 
     public static String getStringFromDate(final LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
         return localDate.format(DATE_FORMATTER);
     }
 
     public static String getStringFromDouble(final Double value) {
+        if (value == null) {
+            return null;
+        }
         return decimalFormat.format(value);
     }
 

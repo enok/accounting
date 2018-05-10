@@ -125,13 +125,21 @@ public class LocalBusinessTest extends GenericTest {
         assertThat(dtoBuscado.nome(), equalTo("Americanas 2"));
     }
 
-    @Test(expected = BusinessException.class)
-    public void excluirUmLocalException() throws BusinessException, StoreException {
+    @Test(expected = GenericException.class)
+    public void excluirUmLocalException() throws BusinessException, StoreException, GenericException {
+        business.excluir(null);
+    }
+
+    @Test(expected = StoreException.class)
+    public void excluirStoreException() throws IOException, BusinessException, GenericException, StoreException {
         try {
-            business.excluir(null);
+            Long codigo = criarLocalCarrefour();
+            LocalDTO dto = business.buscarPorId(codigo);
+            deletarDiretorioEArquivos();
+            business.excluir(dto);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao excluir."));
             throw e;
         }
     }

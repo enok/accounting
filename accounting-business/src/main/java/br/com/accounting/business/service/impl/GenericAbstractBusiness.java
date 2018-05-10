@@ -94,17 +94,27 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void excluir(final D dto) throws StoreException, BusinessException {
+    public void excluir(final D dto) throws BusinessException, StoreException, GenericException {
         try {
             E entity = criarEntity(dto);
+            Long codigo = ((Entity) entity).getCodigo();
+            E entityBuscada = (E) service.buscarPorCodigo(codigo);
+            if (entityBuscada == null) {
+                throw new BusinessException("Registro inexistente.");
+            }
             service.deletar(entity);
         }
+        catch (ValidationException e) {
+            throw e;
+        }
         catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao excluir.", e);
+        }
+        catch (BusinessException e) {
             throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível excluir.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
@@ -200,7 +210,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     protected void conferirValorBooleano(List<String> errosCreate, String valorBooleano, String campo) {
-        if (!("S".equals(valorBooleano) || "N".equals(valorBooleano))) {
+        if (!("S" .equals(valorBooleano) || "N" .equals(valorBooleano))) {
             errosCreate.add(String.format("O valor do campo %s é diferente de 'S' ou 'N'.", campo));
         }
     }

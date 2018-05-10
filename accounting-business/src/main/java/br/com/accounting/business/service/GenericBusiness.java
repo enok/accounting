@@ -12,7 +12,7 @@ public interface GenericBusiness<D> {
 
     void atualizar(D dto) throws ValidationException, StoreException, GenericException;
 
-    void excluir(D dto) throws StoreException, BusinessException;
+    void excluir(D dto) throws BusinessException, StoreException, GenericException;
 
     D buscarPorId(Long codigo) throws StoreException, BusinessException;
 
