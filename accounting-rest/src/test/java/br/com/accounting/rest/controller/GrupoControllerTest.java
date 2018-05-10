@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -283,6 +282,78 @@ public class GrupoControllerTest extends GenericTest {
         mvc.perform(put("/grupo")
                 .characterEncoding("UTF-8")
                 .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        String codigo = "0";
+
+        mvc.perform(delete("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao excluir.")));
+    }
+
+    @Test
+    public void excluirSemCodigo() throws Exception {
+        String codigo = null;
+
+        mvc.perform(delete("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirComCodigoIncorreto() throws Exception {
+        String codigo = "a";
+
+        mvc.perform(delete("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirInexistente() throws Exception {
+        String codigo = "0";
+
+        mvc.perform(delete("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void excluir() throws Exception {
+        criarGrupo();
+
+        String codigo = "0";
+
+        mvc.perform(delete("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())

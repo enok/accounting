@@ -1,6 +1,7 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.GrupoDTO;
+import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.GrupoBusiness;
@@ -41,11 +42,25 @@ public class GrupoController extends GenericController {
                 .build();
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = createDTO(codigo);
+        business.excluir(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     private GrupoDTO createDTO(GrupoVO vo) {
         return new GrupoDTO()
                 .codigo(vo.codigo())
                 .nome(vo.nome())
                 .descricao(vo.descricao())
                 .subGrupos(vo.subGrupos());
+    }
+
+    private GrupoDTO createDTO(Integer codigo) {
+        return new GrupoDTO()
+                .codigo(String.valueOf(codigo));
     }
 }
