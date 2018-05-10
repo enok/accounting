@@ -1,11 +1,11 @@
 package br.com.accounting.core.repository.impl;
 
-import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.TipoContabilidade;
+import br.com.accounting.core.entity.*;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static br.com.accounting.core.util.Utils.*;
+import static org.springframework.util.CollectionUtils.*;
 
 @Repository
 public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Contabilidade> implements ContabilidadeRepository {
@@ -123,6 +124,23 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
             parcelas = entity.parcelamento().parcelas().toString();
         }
 
+        Grupo grupo = entity.grupo();
+        String grupoNome = null;
+        String subGrupoNome = null;
+        if (grupo != null) {
+            grupoNome = entity.grupo().nome();
+            List<SubGrupo> subGrupos = grupo.subGrupos();
+            if (!isEmpty(subGrupos)) {
+                subGrupoNome = subGrupos.get(0).nome();
+            }
+        }
+
+        Conta conta = entity.conta();
+        String contaNome = null;
+        if (conta != null) {
+            contaNome = conta.nome();
+        }
+
         StringBuilder builder = new StringBuilder()
                 .append(entity.codigo()).append(SEPARADOR)
                 .append(getStringFromDate(entity.dataLancamento())).append(SEPARADOR)
@@ -130,8 +148,8 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .append(getStringFromDate(entity.dataVencimento())).append(SEPARADOR)
                 .append(dataPagamento).append(SEPARADOR)
                 .append(getStringFromBoolean(entity.recorrente())).append(SEPARADOR)
-                .append(entity.grupo().nome()).append(SEPARADOR)
-                .append(entity.grupo().subGrupos().get(0).nome()).append(SEPARADOR)
+                .append(grupoNome).append(SEPARADOR)
+                .append(subGrupoNome).append(SEPARADOR)
                 .append(local).append(SEPARADOR)
                 .append(entity.descricao()).append(SEPARADOR)
                 .append(usouCartao).append(SEPARADOR)
@@ -139,7 +157,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
                 .append(parcelado).append(SEPARADOR)
                 .append(parcela).append(SEPARADOR)
                 .append(parcelas).append(SEPARADOR)
-                .append(entity.conta().nome()).append(SEPARADOR)
+                .append(contaNome).append(SEPARADOR)
                 .append(entity.tipo()).append(SEPARADOR)
                 .append(getStringFromDouble(entity.valor())).append(SEPARADOR)
                 .append(entity.codigoPai()).append(SEPARADOR)

@@ -32,10 +32,18 @@ public class ContabilidadeController extends GenericController {
     }
 
     @PutMapping
-    @ResponseBody
     public ResponseEntity atualizar(@RequestBody ContabilidadeVO vo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = createDTO(vo);
         business.atualizar(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        ContabilidadeDTO dto = createDTO(codigo);
+        business.excluir(dto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
@@ -60,5 +68,10 @@ public class ContabilidadeController extends GenericController {
                 .tipo(vo.tipo())
                 .valor(vo.valor())
                 .codigoPai(vo.codigoPai());
+    }
+
+    private ContabilidadeDTO createDTO(Integer codigo) {
+        return new ContabilidadeDTO()
+                .codigo(String.valueOf(codigo));
     }
 }
