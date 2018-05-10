@@ -2,6 +2,7 @@ package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.LocalBusiness;
@@ -43,9 +44,23 @@ public class LocalController extends GenericController {
                 .build();
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        LocalDTO dto = createDTO(codigo);
+        business.excluir(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     private LocalDTO createDTO(LocalVO vo) {
         return new LocalDTO()
                 .codigo(vo.codigo())
                 .nome(vo.nome());
+    }
+
+    private LocalDTO createDTO(Integer codigo) {
+        return new LocalDTO()
+                .codigo(String.valueOf(codigo));
     }
 }
