@@ -1,6 +1,7 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContaBusiness;
@@ -41,6 +42,15 @@ public class ContaController extends GenericController {
                 .build();
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dto = createDTO(codigo);
+        business.excluir(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     private ContaDTO createDTO(ContaVO vo) {
         return new ContaDTO()
                 .codigo(vo.codigo())
@@ -50,5 +60,10 @@ public class ContaController extends GenericController {
                 .saldo(vo.saldo())
                 .cumulativo(vo.cumulativo())
                 .dataAtualizacao(vo.dataAtualizacao());
+    }
+
+    private ContaDTO createDTO(Integer codigo) {
+        return new ContaDTO()
+                .codigo(String.valueOf(codigo));
     }
 }

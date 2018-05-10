@@ -1842,7 +1842,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void criarSemCodigo() throws Exception {
+    public void excluirSemCodigo() throws Exception {
         String codigo = null;
 
         mvc.perform(delete("/contabilidade/{codigo}", codigo)

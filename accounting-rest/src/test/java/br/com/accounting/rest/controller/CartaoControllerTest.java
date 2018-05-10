@@ -636,7 +636,7 @@ public class CartaoControllerTest extends GenericTest {
     }
 
     @Test
-    public void criarSemCodigo() throws Exception {
+    public void excluirSemCodigo() throws Exception {
         String codigo = null;
 
         mvc.perform(delete("/cartao/{codigo}", codigo)
