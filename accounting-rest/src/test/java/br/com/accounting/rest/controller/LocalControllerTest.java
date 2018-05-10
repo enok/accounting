@@ -1,8 +1,8 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.rest.vo.LocalVO;
+import br.com.accounting.rest.vo.LocalVO;
 import com.google.gson.Gson;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -35,8 +36,8 @@ public class LocalControllerTest extends GenericTest {
     public void criarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        LocalDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        LocalVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/local")
                 .characterEncoding("UTF-8")
@@ -53,9 +54,9 @@ public class LocalControllerTest extends GenericTest {
 
     @Test
     public void criarSemNome() throws Exception {
-        LocalDTO dto = getDTO()
+        LocalVO vo = getVO()
                 .nome(null);
-        String json = gson.toJson(dto);
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/local")
                 .characterEncoding("UTF-8")
@@ -72,8 +73,8 @@ public class LocalControllerTest extends GenericTest {
 
     @Test
     public void criarDuplicado() throws Exception {
-        LocalDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        LocalVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/local")
                 .characterEncoding("UTF-8")
@@ -101,8 +102,113 @@ public class LocalControllerTest extends GenericTest {
 
     @Test
     public void criar() throws Exception {
-        LocalDTO dto = getDTO();
-        String json = gson.toJson(dto);
+        criarLocal();
+    }
+
+    @Test
+    public void atualizarSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        LocalVO vo = getVO();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/local")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar.")));
+    }
+
+    @Test
+    public void atualizarSemNome() throws Exception {
+        LocalVO vo = getVO()
+                .nome(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/local")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo nome é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarSemCodigo() throws Exception {
+        LocalVO vo = getVO()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/local")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarProibidoAlterarCodigo() throws Exception {
+        criarLocal();
+
+        LocalVO vo = getVO()
+                .codigo("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/local")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizar() throws Exception {
+        criarLocal();
+
+        LocalVO vo = getVO()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/local")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    private LocalVO getVO() {
+        return new LocalVO()
+                .nome("Site");
+    }
+
+    private void criarLocal() throws Exception {
+        LocalVO vo = getVO();
+        String json = gson.toJson(vo);
 
         mvc.perform(post("/local")
                 .characterEncoding("UTF-8")
@@ -114,10 +220,5 @@ public class LocalControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigos", hasSize(1)))
                 .andExpect(jsonPath("$.codigos[0]", is(0)));
-    }
-
-    private LocalDTO getDTO() {
-        return new LocalDTO()
-                .nome("Site");
     }
 }

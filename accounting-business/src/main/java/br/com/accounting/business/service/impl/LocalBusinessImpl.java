@@ -1,9 +1,9 @@
 package br.com.accounting.business.service.impl;
 
+import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.exception.CreateException;
 import br.com.accounting.business.exception.DuplicatedRegistryException;
 import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.LocalDTOFactory;
 import br.com.accounting.business.service.LocalBusiness;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class LocalBusinessImpl extends GenericAbstractBusiness<LocalDTO, Local> 
     }
 
     @Override
-    public void validarEntrada(final LocalDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
+    public void validarEntrada(final LocalDTO dto, final List<String> erros) throws MissingFieldException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
@@ -61,21 +60,16 @@ public class LocalBusinessImpl extends GenericAbstractBusiness<LocalDTO, Local> 
     }
 
     @Override
-    public Local criarEntity(final LocalDTO dto) throws ValidationException {
-        try {
-            return LocalFactory
-                    .begin()
-                    .withCodigo(dto.codigo())
-                    .withNome(dto.nome())
-                    .build();
-        }
-        catch (DateTimeParseException | IllegalArgumentException e) {
-            throw new ValidationException(e);
-        }
+    public Local criarEntity(final LocalDTO dto) {
+        return LocalFactory
+                .begin()
+                .withCodigo(dto.codigo())
+                .withNome(dto.nome())
+                .build();
     }
 
     @Override
-    protected Local criarEntity(LocalDTO dto, Local entityBuscado) throws ValidationException {
+    protected Local criarEntity(LocalDTO dto, Local entityBuscado) {
         return criarEntity(dto);
     }
 }

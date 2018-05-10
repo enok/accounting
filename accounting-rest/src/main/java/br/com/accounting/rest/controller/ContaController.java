@@ -50,6 +50,5 @@ public class ContaController extends GenericController {
                 .saldo(vo.saldo())
                 .cumulativo(vo.cumulativo())
                 .dataAtualizacao(vo.dataAtualizacao());
-
     }
 }

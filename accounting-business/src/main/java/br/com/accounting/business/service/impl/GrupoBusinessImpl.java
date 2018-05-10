@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public void validarEntrada(final GrupoDTO dto, final List<String> erros) throws MissingFieldException, StoreException, ParseException, CreateException {
+    public void validarEntrada(final GrupoDTO dto, final List<String> erros) throws MissingFieldException {
         if (isBlank(dto.nome())) {
             erros.add(format(msg, "nome"));
         }
@@ -68,23 +67,18 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     }
 
     @Override
-    public Grupo criarEntity(final GrupoDTO dto) throws ValidationException {
-        try {
-            return GrupoFactory
-                    .begin()
-                    .withCodigo(dto.codigo())
-                    .withNome(dto.nome())
-                    .withDescricao(dto.descricao())
-                    .withSubGrupos(dto.subGrupos())
-                    .build();
-        }
-        catch (DateTimeParseException | IllegalArgumentException e) {
-            throw new ValidationException(e);
-        }
+    public Grupo criarEntity(final GrupoDTO dto) {
+        return GrupoFactory
+                .begin()
+                .withCodigo(dto.codigo())
+                .withNome(dto.nome())
+                .withDescricao(dto.descricao())
+                .withSubGrupos(dto.subGrupos())
+                .build();
     }
 
     @Override
-    protected Grupo criarEntity(GrupoDTO dto, Grupo entityBuscado) throws ValidationException {
+    protected Grupo criarEntity(GrupoDTO dto, Grupo entityBuscado) {
         return criarEntity(dto);
     }
 }

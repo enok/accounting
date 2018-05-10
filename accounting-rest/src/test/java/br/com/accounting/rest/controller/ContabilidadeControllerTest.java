@@ -7,10 +7,7 @@ import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.factory.LocalDTOFactory;
 import br.com.accounting.business.factory.SubGrupoDTOFactory;
 import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.rest.vo.CartaoVO;
-import br.com.accounting.rest.vo.ContaVO;
-import br.com.accounting.rest.vo.ContabilidadeVO;
-import br.com.accounting.rest.vo.GrupoVO;
+import br.com.accounting.rest.vo.*;
 import com.google.gson.Gson;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
@@ -1859,11 +1856,9 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarLocal() throws StoreException, BusinessException, GenericException {
-        LocalDTO localDTO = LocalDTOFactory
-                .create()
-                .withNome("Site")
-                .build();
-        localController.criar(localDTO);
+        LocalVO vo = new LocalVO()
+                .nome("Site");
+        localController.criar(vo);
     }
 
     private void criarCartao() throws StoreException, BusinessException, GenericException {
