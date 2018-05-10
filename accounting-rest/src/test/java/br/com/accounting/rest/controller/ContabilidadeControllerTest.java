@@ -1,20 +1,16 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.dto.LocalDTO;
 import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.factory.ContaDTOFactory;
-import br.com.accounting.business.factory.GrupoDTOFactory;
 import br.com.accounting.business.factory.LocalDTOFactory;
 import br.com.accounting.business.factory.SubGrupoDTOFactory;
-import br.com.accounting.core.entity.Contabilidade;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.CartaoVO;
 import br.com.accounting.rest.vo.ContaVO;
 import br.com.accounting.rest.vo.ContabilidadeVO;
+import br.com.accounting.rest.vo.GrupoVO;
 import com.google.gson.Gson;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
@@ -27,8 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static java.util.Arrays.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -1835,13 +1833,11 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
-        GrupoDTO grupoDTO = GrupoDTOFactory
-                .create()
-                .withNome("Saúde")
-                .withDescricao("Grupo que gere gastos com saúde")
-                .withSubGrupo("Suplementos")
-                .build();
-        grupoController.criar(grupoDTO);
+        GrupoVO vo = new GrupoVO()
+                .nome("Saúde")
+                .descricao("Grupo que gere gastos com saúde")
+                .subGrupos(asList("Suplementos"));
+        grupoController.criar(vo);
     }
 
     private void criarSubGrupo() throws StoreException, BusinessException, GenericException {

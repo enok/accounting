@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 @Data
 @Accessors(fluent = true)
 public class GrupoDTO implements EntityDTO {

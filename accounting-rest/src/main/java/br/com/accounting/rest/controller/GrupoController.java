@@ -6,6 +6,7 @@ import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.GrupoBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.CodigosVO;
+import br.com.accounting.rest.vo.GrupoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,34 @@ import java.util.List;
 @RequestMapping("/grupo")
 public class GrupoController extends GenericController {
     @Autowired
-    private GrupoBusiness grupoBusiness;
+    private GrupoBusiness business;
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity criar(@RequestBody GrupoDTO grupoDTO) throws StoreException, BusinessException, GenericException {
-        List<Long> codigos = grupoBusiness.criar(grupoDTO);
+    public ResponseEntity criar(@RequestBody GrupoVO vo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = createDTO(vo);
+        List<Long> codigos = business.criar(dto);
         CodigosVO codigosVO = new CodigosVO(codigos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(codigosVO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(codigosVO);
+    }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity atualizar(@RequestBody GrupoVO vo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = createDTO(vo);
+        business.atualizar(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    private GrupoDTO createDTO(GrupoVO vo) {
+        return new GrupoDTO()
+                .codigo(vo.codigo())
+                .nome(vo.nome())
+                .descricao(vo.descricao())
+                .subGrupos(vo.subGrupos());
     }
 }

@@ -26,7 +26,9 @@ public class ContaController extends GenericController {
         ContaDTO dto = createDTO(vo);
         List<Long> codigos = business.criar(dto);
         CodigosVO codigosVO = new CodigosVO(codigos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(codigosVO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(codigosVO);
     }
 
     @PutMapping
