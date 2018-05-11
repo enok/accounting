@@ -14,6 +14,34 @@ public class ContaVO {
     private String cumulativo;
     private String dataAtualizacao;
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getValorDefault() {
+        return valorDefault;
+    }
+
+    public String getSaldo() {
+        return saldo;
+    }
+
+    public String getCumulativo() {
+        return cumulativo;
+    }
+
+    public String getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
     public ContaVO setCodigo(String codigo) {
         this.codigo = codigo;
         return this;

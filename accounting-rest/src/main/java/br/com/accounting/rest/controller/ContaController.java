@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/conta")
@@ -52,6 +52,15 @@ public class ContaController extends GenericController {
                 .build();
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dto = business.buscarPorCodigo(codigo);
+        ContaVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
     private ContaDTO createDTO(ContaVO vo) {
         return new ContaDTO()
                 .codigo(vo.codigo())
@@ -66,5 +75,16 @@ public class ContaController extends GenericController {
     private ContaDTO createDTO(Long codigo) {
         return new ContaDTO()
                 .codigo(valueOf(codigo));
+    }
+
+    private ContaVO createVO(ContaDTO dto) {
+        return new ContaVO()
+                .codigo(dto.codigo())
+                .nome(dto.nome())
+                .descricao(dto.descricao())
+                .valorDefault(dto.valorDefault())
+                .saldo(dto.saldo())
+                .cumulativo(dto.cumulativo())
+                .dataAtualizacao(dto.dataAtualizacao());
     }
 }
