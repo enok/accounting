@@ -8,7 +8,9 @@ import lombok.experimental.Accessors;
 public class ContabilidadeVO {
     private String codigo;
     private String dataLancamento;
+    private String dataAtualizacao;
     private String dataVencimento;
+    private String dataPagamento;
     private String recorrente;
     private String grupo;
     private String subGrupo;
@@ -23,6 +25,87 @@ public class ContabilidadeVO {
     private String tipo;
     private String valor;
     private String codigoPai;
+    private String proximoLancamento;
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public String getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public String getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public String getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public String getRecorrente() {
+        return recorrente;
+    }
+
+    public String getGrupo() {
+        return grupo;
+    }
+
+    public String getSubGrupo() {
+        return subGrupo;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getUsouCartao() {
+        return usouCartao;
+    }
+
+    public String getCartao() {
+        return cartao;
+    }
+
+    public String getParcelado() {
+        return parcelado;
+    }
+
+    public String getParcela() {
+        return parcela;
+    }
+
+    public String getParcelas() {
+        return parcelas;
+    }
+
+    public String getConta() {
+        return conta;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public String getCodigoPai() {
+        return codigoPai;
+    }
+
+    public String getProximoLancamento() {
+        return proximoLancamento;
+    }
 
     public ContabilidadeVO setCodigo(String codigo) {
         this.codigo = codigo;
@@ -34,8 +117,18 @@ public class ContabilidadeVO {
         return this;
     }
 
+    public ContabilidadeVO setDataAtualizacao(String dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+        return this;
+    }
+
     public ContabilidadeVO setDataVencimento(String dataVencimento) {
         this.dataVencimento = dataVencimento;
+        return this;
+    }
+
+    public ContabilidadeVO setDataPagamento(String dataPagamento) {
+        this.dataPagamento = dataPagamento;
         return this;
     }
 
@@ -106,6 +199,11 @@ public class ContabilidadeVO {
 
     public ContabilidadeVO setCodigoPai(String codigoPai) {
         this.codigoPai = codigoPai;
+        return this;
+    }
+
+    public ContabilidadeVO setProximoLancamento(String proximoLancamento) {
+        this.proximoLancamento = proximoLancamento;
         return this;
     }
 }

@@ -19,8 +19,7 @@ import java.io.IOException;
 
 import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -840,22 +839,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemCartao() throws Exception {
-        ContabilidadeVO vo = getVO()
-                .recorrente("N")
-                .parcelado("N")
-                .usouCartao("N");
-        String json = gson.toJson(vo);
-
-        mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigos", hasSize(1)))
-                .andExpect(jsonPath("$.codigos[0]", is(0)));
+        criarContabilidadeSemCartao();
     }
 
     @Test
@@ -865,29 +849,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarRecorrente() throws Exception {
-        ContabilidadeVO vo = getVO()
-                .recorrente("S")
-                .parcelado("N");
-        String json = gson.toJson(vo);
-
-        mvc.perform(post("/contabilidade")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigos", hasSize(9)))
-                .andExpect(jsonPath("$.codigos[0]", is(0)))
-                .andExpect(jsonPath("$.codigos[1]", is(1)))
-                .andExpect(jsonPath("$.codigos[2]", is(2)))
-                .andExpect(jsonPath("$.codigos[3]", is(3)))
-                .andExpect(jsonPath("$.codigos[4]", is(4)))
-                .andExpect(jsonPath("$.codigos[5]", is(5)))
-                .andExpect(jsonPath("$.codigos[6]", is(6)))
-                .andExpect(jsonPath("$.codigos[7]", is(7)))
-                .andExpect(jsonPath("$.codigos[8]", is(8)));
+        criarContabilidadeRecorrente();
     }
 
     @Test
@@ -1895,6 +1857,240 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content().string(""));
     }
 
+
+    @Test
+    public void buscarPorCodigoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        String codigo = "0";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar por código.")));
+    }
+
+    @Test
+    public void buscarPorCodigoSemCodigo() throws Exception {
+        String codigo = null;
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoComCodigoIncorreto() throws Exception {
+        String codigo = "a";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoInexistente() throws Exception {
+        String codigo = "0";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void buscarPorCodigoContabilidadeSemCartao() throws Exception {
+        criarContabilidadeSemCartao();
+
+        String codigo = "0";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataVencimento", is("27/04/2018")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.recorrente", is("N")))
+                .andExpect(jsonPath("$.grupo", is("Saúde")))
+                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$.local", is("Site")))
+                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$.usouCartao", is("N")))
+                .andExpect(jsonPath("$.cartao", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.parcelado", is("N")))
+                .andExpect(jsonPath("$.parcela", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.parcelas", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.conta", is("CAROL")))
+                .andExpect(jsonPath("$.tipo", is("DEBITO")))
+                .andExpect(jsonPath("$.valor", is("24,04")))
+                .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.proximoLancamento", isEmptyOrNullString()));
+    }
+
+    @Test
+    public void buscarPorCodigoContabilidadeParcelada() throws Exception {
+        criarContabilidadeParcelada();
+
+        String codigo = "0";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataVencimento", is("27/04/2018")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.recorrente", is("N")))
+                .andExpect(jsonPath("$.grupo", is("Saúde")))
+                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$.local", is("Site")))
+                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$.usouCartao", is("S")))
+                .andExpect(jsonPath("$.cartao", is("0744")))
+                .andExpect(jsonPath("$.parcelado", is("S")))
+                .andExpect(jsonPath("$.parcela", is("1")))
+                .andExpect(jsonPath("$.parcelas", is("7")))
+                .andExpect(jsonPath("$.conta", is("CAROL")))
+                .andExpect(jsonPath("$.tipo", is("DEBITO")))
+                .andExpect(jsonPath("$.valor", is("24,04")))
+                .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.proximoLancamento", isEmptyOrNullString()));
+    }
+
+    @Test
+    public void buscarPorCodigoContabilidadeParcelada1() throws Exception {
+        criarContabilidadeParcelada();
+
+        String codigo = "1";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("1")))
+                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataVencimento", is("27/05/2018")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.recorrente", is("N")))
+                .andExpect(jsonPath("$.grupo", is("Saúde")))
+                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$.local", is("Site")))
+                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$.usouCartao", is("S")))
+                .andExpect(jsonPath("$.cartao", is("0744")))
+                .andExpect(jsonPath("$.parcelado", is("S")))
+                .andExpect(jsonPath("$.parcela", is("2")))
+                .andExpect(jsonPath("$.parcelas", is("7")))
+                .andExpect(jsonPath("$.conta", is("CAROL")))
+                .andExpect(jsonPath("$.tipo", is("DEBITO")))
+                .andExpect(jsonPath("$.valor", is("24,04")))
+                .andExpect(jsonPath("$.codigoPai", is("0")))
+                .andExpect(jsonPath("$.proximoLancamento", isEmptyOrNullString()));
+    }
+
+    @Test
+    public void buscarPorCodigoContabilidadeRecorrente() throws Exception {
+        criarContabilidadeRecorrente();
+
+        String codigo = "0";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataVencimento", is("27/04/2018")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.recorrente", is("S")))
+                .andExpect(jsonPath("$.grupo", is("Saúde")))
+                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$.local", is("Site")))
+                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$.usouCartao", is("S")))
+                .andExpect(jsonPath("$.cartao", is("0744")))
+                .andExpect(jsonPath("$.parcelado", is("N")))
+                .andExpect(jsonPath("$.parcela", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.parcelas", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.conta", is("CAROL")))
+                .andExpect(jsonPath("$.tipo", is("DEBITO")))
+                .andExpect(jsonPath("$.valor", is("24,04")))
+                .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.proximoLancamento", is("1")));
+    }
+
+    @Test
+    public void buscarPorCodigoContabilidadeRecorrente1() throws Exception {
+        criarContabilidadeRecorrente();
+
+        String codigo = "1";
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("1")))
+                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$.dataVencimento", is("27/05/2018")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.recorrente", is("S")))
+                .andExpect(jsonPath("$.grupo", is("Saúde")))
+                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$.local", is("Site")))
+                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$.usouCartao", is("S")))
+                .andExpect(jsonPath("$.cartao", is("0744")))
+                .andExpect(jsonPath("$.parcelado", is("N")))
+                .andExpect(jsonPath("$.parcela", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.parcelas", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.conta", is("CAROL")))
+                .andExpect(jsonPath("$.tipo", is("DEBITO")))
+                .andExpect(jsonPath("$.valor", is("24,04")))
+                .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
+                .andExpect(jsonPath("$.proximoLancamento", is("2")));
+    }
+
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
         GrupoVO vo = new GrupoVO()
                 .nome("Saúde")
@@ -1943,6 +2139,25 @@ public class ContabilidadeControllerTest extends GenericTest {
         contaController.criar(vo);
     }
 
+    private void criarContabilidadeSemCartao() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .recorrente("N")
+                .parcelado("N")
+                .usouCartao("N");
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(1)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)));
+    }
+
     private void criarContabilidadeParcelada() throws Exception {
         ContabilidadeVO vo = getVO();
         String json = gson.toJson(vo);
@@ -1963,6 +2178,32 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[4]", is(4)))
                 .andExpect(jsonPath("$.codigos[5]", is(5)))
                 .andExpect(jsonPath("$.codigos[6]", is(6)));
+    }
+
+    private void criarContabilidadeRecorrente() throws Exception {
+        ContabilidadeVO vo = getVO()
+                .recorrente("S")
+                .parcelado("N");
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(9)))
+                .andExpect(jsonPath("$.codigos[0]", is(0)))
+                .andExpect(jsonPath("$.codigos[1]", is(1)))
+                .andExpect(jsonPath("$.codigos[2]", is(2)))
+                .andExpect(jsonPath("$.codigos[3]", is(3)))
+                .andExpect(jsonPath("$.codigos[4]", is(4)))
+                .andExpect(jsonPath("$.codigos[5]", is(5)))
+                .andExpect(jsonPath("$.codigos[6]", is(6)))
+                .andExpect(jsonPath("$.codigos[7]", is(7)))
+                .andExpect(jsonPath("$.codigos[8]", is(8)));
     }
 
     private ContabilidadeVO getVO() {

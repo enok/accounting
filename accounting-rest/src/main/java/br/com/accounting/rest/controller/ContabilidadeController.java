@@ -1,10 +1,12 @@
 package br.com.accounting.rest.controller;
 
+import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.vo.CartaoVO;
 import br.com.accounting.rest.vo.CodigosVO;
 import br.com.accounting.rest.vo.ContabilidadeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,15 @@ public class ContabilidadeController extends GenericController {
                 .build();
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
+        ContabilidadeVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
     private ContabilidadeDTO createDTO(ContabilidadeVO vo) {
         return new ContabilidadeDTO()
                 .codigo(vo.codigo())
@@ -75,5 +86,29 @@ public class ContabilidadeController extends GenericController {
     private ContabilidadeDTO createDTO(Long codigo) {
         return new ContabilidadeDTO()
                 .codigo(valueOf(codigo));
+    }
+
+    private ContabilidadeVO createVO(ContabilidadeDTO dto) {
+        return new ContabilidadeVO()
+                .codigo(dto.codigo())
+                .dataLancamento(dto.dataLancamento())
+                .dataAtualizacao(dto.dataAtualizacao())
+                .dataVencimento(dto.dataVencimento())
+                .dataPagamento(dto.dataPagamento())
+                .recorrente(dto.recorrente())
+                .grupo(dto.grupo())
+                .subGrupo(dto.subGrupo())
+                .local(dto.local())
+                .descricao(dto.descricao())
+                .usouCartao(dto.usouCartao())
+                .cartao(dto.cartao())
+                .parcelado(dto.parcelado())
+                .parcela(dto.parcela())
+                .parcelas(dto.parcelas())
+                .conta(dto.conta())
+                .tipo(dto.tipo())
+                .valor(dto.valor())
+                .codigoPai(dto.codigoPai())
+                .proximoLancamento(dto.proximoLancamento());
     }
 }
