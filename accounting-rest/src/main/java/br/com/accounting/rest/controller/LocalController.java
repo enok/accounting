@@ -52,6 +52,15 @@ public class LocalController extends GenericController {
                 .build();
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        LocalDTO dto = business.buscarPorCodigo(codigo);
+        LocalVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
     private LocalDTO createDTO(LocalVO vo) {
         return new LocalDTO()
                 .codigo(vo.codigo())
@@ -61,5 +70,11 @@ public class LocalController extends GenericController {
     private LocalDTO createDTO(Long codigo) {
         return new LocalDTO()
                 .codigo(valueOf(codigo));
+    }
+
+    private LocalVO createVO(LocalDTO dto) {
+        return new LocalVO()
+                .codigo(dto.codigo())
+                .nome(dto.nome());
     }
 }
