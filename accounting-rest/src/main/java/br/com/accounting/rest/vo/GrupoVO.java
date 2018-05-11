@@ -14,6 +14,22 @@ public class GrupoVO {
     private String descricao;
     private List<String> subGrupos = new ArrayList<>();
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public List<String> getSubGrupos() {
+        return subGrupos;
+    }
+
     public GrupoVO setCodigo(String codigo) {
         this.codigo = codigo;
         return this;

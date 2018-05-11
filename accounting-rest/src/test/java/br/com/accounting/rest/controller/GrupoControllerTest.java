@@ -360,6 +360,84 @@ public class GrupoControllerTest extends GenericTest {
                 .andExpect(content().string(""));
     }
 
+    @Test
+    public void buscarPorCodigoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        String codigo = "0";
+
+        mvc.perform(get("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar por código.")));
+    }
+
+    @Test
+    public void buscarPorCodigoSemCodigo() throws Exception {
+        String codigo = null;
+
+        mvc.perform(get("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoComCodigoIncorreto() throws Exception {
+        String codigo = "a";
+
+        mvc.perform(get("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoInexistente() throws Exception {
+        String codigo = "0";
+
+        mvc.perform(get("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void buscarPorCodigo() throws Exception {
+        criarGrupo();
+
+        String codigo = "0";
+
+        mvc.perform(get("/grupo/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.nome", is("Saúde")))
+                .andExpect(jsonPath("$.descricao", is("Gastos gerais com saúde")))
+                .andExpect(jsonPath("$.subGrupos", hasSize(1)))
+                .andExpect(jsonPath("$.subGrupos[0]", is("Suplementos")));
+    }
+
     private GrupoVO getVO() {
         return new GrupoVO()
                 .nome("Saúde")

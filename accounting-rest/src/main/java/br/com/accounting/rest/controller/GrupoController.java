@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/grupo")
@@ -52,6 +52,15 @@ public class GrupoController extends GenericController {
                 .build();
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
+        GrupoVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
     private GrupoDTO createDTO(GrupoVO vo) {
         return new GrupoDTO()
                 .codigo(vo.codigo())
@@ -63,5 +72,13 @@ public class GrupoController extends GenericController {
     private GrupoDTO createDTO(Long codigo) {
         return new GrupoDTO()
                 .codigo(valueOf(codigo));
+    }
+
+    private GrupoVO createVO(GrupoDTO dto) {
+        return new GrupoVO()
+                .codigo(dto.codigo())
+                .nome(dto.nome())
+                .descricao(dto.descricao())
+                .subGrupos(dto.subGrupos());
     }
 }
