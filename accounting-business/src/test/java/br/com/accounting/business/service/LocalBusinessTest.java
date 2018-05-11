@@ -168,7 +168,7 @@ public class LocalBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarLocaisException() throws IOException, StoreException, BusinessException {
+    public void buscarLocaisException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

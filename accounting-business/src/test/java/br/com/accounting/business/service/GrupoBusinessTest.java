@@ -252,7 +252,7 @@ public class GrupoBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarTodosException() throws IOException, StoreException, BusinessException {
+    public void buscarTodosException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

@@ -5,20 +5,23 @@ import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.CartaoBusiness;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
 import br.com.accounting.rest.vo.CartaoVO;
 import br.com.accounting.rest.vo.CodigosVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/cartao")
-public class CartaoController extends GenericController {
+public class CartaoController extends AbstractExceptionHandler {
     @Autowired
     private CartaoBusiness business;
 
@@ -60,6 +63,22 @@ public class CartaoController extends GenericController {
                 .body(vo);
     }
 
+    @GetMapping
+    public ResponseEntity buscarTudo() throws StoreException, GenericException {
+        List<CartaoDTO> dtos = business.buscarTodas();
+        List<CartaoVO> vos = createVOList(dtos);
+        if (CollectionUtils.isEmpty(vos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(vos);
+        }
+    }
+
     private CartaoDTO createDTO(CartaoVO vo) {
         return new CartaoDTO()
                 .codigo(vo.codigo())
@@ -85,5 +104,13 @@ public class CartaoController extends GenericController {
                 .portador(dto.portador())
                 .tipo(dto.tipo())
                 .limite(dto.limite());
+    }
+
+    private List<CartaoVO> createVOList(List<CartaoDTO> dtos) {
+        List<CartaoVO> vos = new ArrayList<>();
+        for (CartaoDTO dto : dtos) {
+            vos.add(createVO(dto));
+        }
+        return vos;
     }
 }

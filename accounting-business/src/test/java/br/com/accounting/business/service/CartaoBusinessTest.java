@@ -430,7 +430,7 @@ public class CartaoBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarCartoesException() throws StoreException, BusinessException, IOException {
+    public void buscarCartoesException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

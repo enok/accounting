@@ -137,20 +137,17 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    public List<D> buscarTodas() throws StoreException, BusinessException {
-        List<D> entitiesDTO;
+    public List<D> buscarTodas() throws StoreException, GenericException {
         try {
             List<E> entities = service.buscarTodas();
-            entitiesDTO = criarListaDTO(dtoFactory, entities);
+            return criarListaDTO(dtoFactory, entities);
         }
         catch (StoreException e) {
-            throw e;
+            throw new StoreException("Erro de persistência ao buscar tudo.", e);
         }
         catch (Exception e) {
-            String message = "Não foi possível buscar todas.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
-        return entitiesDTO;
     }
 
     public D criarDTO(final GenericDTOFactory genericDTOFactory, final E entity) {

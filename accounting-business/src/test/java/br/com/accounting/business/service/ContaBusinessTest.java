@@ -461,7 +461,7 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarContasException() throws IOException, StoreException, BusinessException {
+    public void buscarContasException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

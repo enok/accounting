@@ -304,8 +304,6 @@ public class CartaoControllerTest extends GenericTest {
         criarCartao();
     }
 
-    // enok
-
     @Test
     public void atualizarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
@@ -713,7 +711,7 @@ public class CartaoControllerTest extends GenericTest {
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
 
@@ -765,6 +763,53 @@ public class CartaoControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.portador", is("Enok")))
                 .andExpect(jsonPath("$.tipo", is("FISICO")))
                 .andExpect(jsonPath("$.limite", is("2.000,00")));
+    }
+
+    @Test
+    public void buscarTudoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        mvc.perform(get("/cartao")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar tudo.")));
+    }
+
+    @Test
+    public void buscarTudoInexistente() throws Exception {
+        mvc.perform(get("/cartao")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarTudo() throws Exception {
+        criarCartao();
+
+        mvc.perform(get("/cartao")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].codigo", is("0")))
+                .andExpect(jsonPath("$[0].numero", is("7660")))
+                .andExpect(jsonPath("$[0].vencimento", is("27/03/2018")))
+                .andExpect(jsonPath("$[0].diaMelhorCompra", is("17/04/2018")))
+                .andExpect(jsonPath("$[0].portador", is("Enok")))
+                .andExpect(jsonPath("$[0].tipo", is("FISICO")))
+                .andExpect(jsonPath("$[0].limite", is("2.000,00")));
     }
 
     private void criarCartao() throws Exception {

@@ -1143,7 +1143,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void buscarContabilidadesException() throws IOException, StoreException, BusinessException {
+    public void buscarContabilidadesException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

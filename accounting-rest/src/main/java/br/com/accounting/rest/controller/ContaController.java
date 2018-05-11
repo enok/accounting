@@ -5,6 +5,7 @@ import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
 import br.com.accounting.rest.vo.CodigosVO;
 import br.com.accounting.rest.vo.ContaVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/conta")
-public class ContaController extends GenericController {
+public class ContaController extends AbstractExceptionHandler {
     @Autowired
     private ContaBusiness business;
 

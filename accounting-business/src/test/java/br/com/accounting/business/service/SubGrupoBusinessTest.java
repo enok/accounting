@@ -236,9 +236,8 @@ public class SubGrupoBusinessTest extends GenericTest {
         business.buscarPorCodigo(null);
     }
 
-
     @Test(expected = StoreException.class)
-    public void buscarTodosException() throws IOException, StoreException, BusinessException {
+    public void buscarTodosException() throws IOException, StoreException, GenericException {
         deletarDiretorioEArquivos();
         business.buscarTodas();
     }

@@ -5,6 +5,7 @@ import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.SubGrupoBusiness;
 import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
 import br.com.accounting.rest.vo.CodigosVO;
 import br.com.accounting.rest.vo.SubGrupoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/subgrupo")
-public class SubGrupoController extends GenericController {
+public class SubGrupoController extends AbstractExceptionHandler {
     @Autowired
     private SubGrupoBusiness business;
 

@@ -16,5 +16,5 @@ public interface GenericBusiness<D> {
 
     D buscarPorCodigo(Long codigo) throws StoreException, BusinessException, GenericException;
 
-    List<D> buscarTodas() throws StoreException, BusinessException;
+    List<D> buscarTodas() throws StoreException, GenericException;
 }
