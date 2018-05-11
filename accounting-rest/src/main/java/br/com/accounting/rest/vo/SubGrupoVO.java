@@ -10,6 +10,18 @@ public class SubGrupoVO {
     private String nome;
     private String descricao;
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
     public SubGrupoVO setCodigo(String codigo) {
         this.codigo = codigo;
         return this;

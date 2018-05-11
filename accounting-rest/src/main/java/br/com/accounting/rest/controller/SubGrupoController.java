@@ -50,6 +50,15 @@ public class SubGrupoController extends GenericController {
                 .build();
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
+        SubGrupoVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
     private SubGrupoDTO createDTO(SubGrupoVO vo) {
         return new SubGrupoDTO()
                 .codigo(vo.codigo())
@@ -60,5 +69,12 @@ public class SubGrupoController extends GenericController {
     private SubGrupoDTO createDTO(Long codigo) {
         return new SubGrupoDTO()
                 .codigo(valueOf(codigo));
+    }
+
+    private SubGrupoVO createVO(SubGrupoDTO dto) {
+        return new SubGrupoVO()
+                .codigo(dto.codigo())
+                .nome(dto.nome())
+                .descricao(dto.descricao());
     }
 }
