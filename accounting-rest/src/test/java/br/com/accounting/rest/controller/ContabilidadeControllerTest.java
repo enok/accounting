@@ -1987,41 +1987,6 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void buscarPorCodigoContabilidadeParcelada1() throws Exception {
-        criarContabilidadeParcelada();
-
-        String codigo = "1";
-
-        mvc.perform(get("/contabilidade/{codigo}", codigo)
-                .characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is("1")))
-                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
-                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
-                .andExpect(jsonPath("$.dataVencimento", is("27/05/2018")))
-                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
-                .andExpect(jsonPath("$.recorrente", is("N")))
-                .andExpect(jsonPath("$.grupo", is("Saúde")))
-                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
-                .andExpect(jsonPath("$.local", is("Site")))
-                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
-                .andExpect(jsonPath("$.usouCartao", is("S")))
-                .andExpect(jsonPath("$.cartao", is("0744")))
-                .andExpect(jsonPath("$.parcelado", is("S")))
-                .andExpect(jsonPath("$.parcela", is("2")))
-                .andExpect(jsonPath("$.parcelas", is("7")))
-                .andExpect(jsonPath("$.conta", is("CAROL")))
-                .andExpect(jsonPath("$.tipo", is("DEBITO")))
-                .andExpect(jsonPath("$.valor", is("24,04")))
-                .andExpect(jsonPath("$.codigoPai", is("0")))
-                .andExpect(jsonPath("$.proximoLancamento", isEmptyOrNullString()));
-    }
-
-    @Test
     public void buscarPorCodigoContabilidadeRecorrente() throws Exception {
         criarContabilidadeRecorrente();
 
@@ -2054,41 +2019,6 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.valor", is("24,04")))
                 .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
                 .andExpect(jsonPath("$.proximoLancamento", is("1")));
-    }
-
-    @Test
-    public void buscarPorCodigoContabilidadeRecorrente1() throws Exception {
-        criarContabilidadeRecorrente();
-
-        String codigo = "1";
-
-        mvc.perform(get("/contabilidade/{codigo}", codigo)
-                .characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is("1")))
-                .andExpect(jsonPath("$.dataLancamento", is(getStringFromCurrentDate())))
-                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())))
-                .andExpect(jsonPath("$.dataVencimento", is("27/05/2018")))
-                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()))
-                .andExpect(jsonPath("$.recorrente", is("S")))
-                .andExpect(jsonPath("$.grupo", is("Saúde")))
-                .andExpect(jsonPath("$.subGrupo", is("Suplementos")))
-                .andExpect(jsonPath("$.local", is("Site")))
-                .andExpect(jsonPath("$.descricao", is("Suplementos comprados pela Carol")))
-                .andExpect(jsonPath("$.usouCartao", is("S")))
-                .andExpect(jsonPath("$.cartao", is("0744")))
-                .andExpect(jsonPath("$.parcelado", is("N")))
-                .andExpect(jsonPath("$.parcela", isEmptyOrNullString()))
-                .andExpect(jsonPath("$.parcelas", isEmptyOrNullString()))
-                .andExpect(jsonPath("$.conta", is("CAROL")))
-                .andExpect(jsonPath("$.tipo", is("DEBITO")))
-                .andExpect(jsonPath("$.valor", is("24,04")))
-                .andExpect(jsonPath("$.codigoPai", isEmptyOrNullString()))
-                .andExpect(jsonPath("$.proximoLancamento", is("2")));
     }
 
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
