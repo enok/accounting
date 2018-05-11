@@ -1,6 +1,7 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.business.dto.SubGrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.SubGrupoBusiness;
@@ -39,10 +40,24 @@ public class SubGrupoController extends GenericController {
                 .build();
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = createDTO(codigo);
+        business.excluir(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     private SubGrupoDTO createDTO(SubGrupoVO vo) {
         return new SubGrupoDTO()
                 .codigo(vo.codigo())
                 .nome(vo.nome())
                 .descricao(vo.descricao());
+    }
+
+    private SubGrupoDTO createDTO(Integer codigo) {
+        return new SubGrupoDTO()
+                .codigo(String.valueOf(codigo));
     }
 }
