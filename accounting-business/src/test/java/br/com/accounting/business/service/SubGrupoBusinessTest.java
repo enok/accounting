@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
 public class SubGrupoBusinessTest extends GenericTest {
@@ -100,7 +101,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            SubGrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.codigo("");
             business.atualizar(dto);
         }
@@ -113,7 +114,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     public void alterarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            SubGrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.nome("");
             business.atualizar(dto);
         }
@@ -126,7 +127,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarSubGrupoAluguel();
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            SubGrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.descricao("");
             business.atualizar(dto);
         }
@@ -141,7 +142,7 @@ public class SubGrupoBusinessTest extends GenericTest {
             Long codigo = criarSubGrupoAluguel();
             String codigoAnterior = String.valueOf(codigo);
             String codigoNovo = "10";
-            SubGrupoDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            SubGrupoDTO dtoBuscado = business.buscarPorCodigo(Long.parseLong(codigoAnterior));
             assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
             dtoBuscado.codigo(codigoNovo);
             business.atualizar(dtoBuscado);
@@ -156,11 +157,11 @@ public class SubGrupoBusinessTest extends GenericTest {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.nome("Internet");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Internet"));
         assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
     }
@@ -170,11 +171,11 @@ public class SubGrupoBusinessTest extends GenericTest {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Aluguel"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
     }
@@ -184,12 +185,12 @@ public class SubGrupoBusinessTest extends GenericTest {
         Long codigo = criarSubGrupoAluguel();
         assertSubGrupoAluguel(codigo);
 
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.nome("Internet");
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Internet"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
     }
@@ -203,7 +204,7 @@ public class SubGrupoBusinessTest extends GenericTest {
     public void excluirStoreException() throws IOException, BusinessException, GenericException, StoreException {
         try {
             Long codigo = criarSubGrupoAluguel();
-            SubGrupoDTO dto = business.buscarPorId(codigo);
+            SubGrupoDTO dto = business.buscarPorCodigo(codigo);
             deletarDiretorioEArquivos();
             business.excluir(dto);
         }
@@ -213,21 +214,26 @@ public class SubGrupoBusinessTest extends GenericTest {
         }
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void excluir() throws StoreException, BusinessException, GenericException {
         Long codigo = criarSubGrupoAluguel();
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
 
         business.excluir(dto);
 
-        dto = business.buscarPorId(codigo);
-        assertThat(dto, nullValue());
+        try {
+            business.buscarPorCodigo(codigo);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
+        }
     }
 
     @Test(expected = StoreException.class)
-    public void buscarPorIdException() throws IOException, StoreException, BusinessException {
+    public void buscarPorIdException() throws IOException, StoreException, BusinessException, GenericException {
         deletarDiretorioEArquivos();
-        business.buscarPorId(null);
+        business.buscarPorCodigo(null);
     }
 
 
@@ -269,8 +275,8 @@ public class SubGrupoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertSubGrupoAluguel(Long codigo) throws StoreException, BusinessException {
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+    private void assertSubGrupoAluguel(Long codigo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
         assertSubGrupoAluguel(dto);
     }
 
@@ -279,8 +285,8 @@ public class SubGrupoBusinessTest extends GenericTest {
         assertThat(dto.descricao(), equalTo("Aluguel pago todo mês, incluindo no valor iptu, seguro e condomínio"));
     }
 
-    private void assertSubGrupoInternet(Long codigo) throws StoreException, BusinessException {
-        SubGrupoDTO dto = business.buscarPorId(codigo);
+    private void assertSubGrupoInternet(Long codigo) throws StoreException, BusinessException, GenericException {
+        SubGrupoDTO dto = business.buscarPorCodigo(codigo);
         assertSubGrupoInternet(dto);
     }
 

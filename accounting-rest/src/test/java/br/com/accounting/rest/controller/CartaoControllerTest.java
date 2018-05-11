@@ -13,9 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -687,6 +685,86 @@ public class CartaoControllerTest extends GenericTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        String codigo = "0";
+
+        mvc.perform(get("/cartao/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar por código.")));
+    }
+
+    @Test
+    public void buscarPorCodigoSemCodigo() throws Exception {
+        String codigo = null;
+
+        mvc.perform(get("/cartao/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoComCodigoIncorreto() throws Exception {
+        String codigo = "a";
+
+        mvc.perform(get("/cartao/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarPorCodigoInexistente() throws Exception {
+        String codigo = "0";
+
+        mvc.perform(get("/cartao/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void buscarPorCodigo() throws Exception {
+        criarCartao();
+
+        String codigo = "0";
+
+        mvc.perform(get("/cartao/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.numero", is("7660")))
+                .andExpect(jsonPath("$.vencimento", is("27/03/2018")))
+                .andExpect(jsonPath("$.diaMelhorCompra", is("17/04/2018")))
+                .andExpect(jsonPath("$.portador", is("Enok")))
+                .andExpect(jsonPath("$.tipo", is("FISICO")))
+                .andExpect(jsonPath("$.limite", is("2.000,00")));
     }
 
     private void criarCartao() throws Exception {

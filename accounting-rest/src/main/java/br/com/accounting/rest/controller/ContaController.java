@@ -1,7 +1,6 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContaBusiness;
@@ -14,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static java.lang.String.*;
 
 @RestController
 @RequestMapping("/conta")
@@ -43,7 +44,7 @@ public class ContaController extends GenericController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+    public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContaDTO dto = createDTO(codigo);
         business.excluir(dto);
         return ResponseEntity
@@ -62,8 +63,8 @@ public class ContaController extends GenericController {
                 .dataAtualizacao(vo.dataAtualizacao());
     }
 
-    private ContaDTO createDTO(Integer codigo) {
+    private ContaDTO createDTO(Long codigo) {
         return new ContaDTO()
-                .codigo(String.valueOf(codigo));
+                .codigo(valueOf(codigo));
     }
 }

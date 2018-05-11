@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static br.com.accounting.core.util.Utils.*;
+import static java.lang.Long.parseLong;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -82,7 +83,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void criarUmaContabilidadeSemDataPagamento() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemDataPagamento();
         Long codigo = business.criar(dto).get(0);
-        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
+        ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.dataPagamento(), nullValue());
     }
 
@@ -123,7 +124,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void criarUmaContabilidadeSemLocal() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemLocal();
         Long codigo = business.criar(dto).get(0);
-        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
+        ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.local(), nullValue());
     }
 
@@ -142,7 +143,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void criarUmaContabilidadeSemUsouCartao() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTOSemUsouCartao();
         Long codigo = business.criar(dto).get(0);
-        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
+        ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.usouCartao(), equalTo("N"));
     }
 
@@ -150,7 +151,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void criarUmaContabilidadeNaoUsouCartao() throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTONaoUsouCartao();
         Long codigo = business.criar(dto).get(0);
-        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigo);
+        ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigo);
         assertNaoParcelado(dtoBuscado);
     }
 
@@ -244,7 +245,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidadeNaoParcelada();
 
         Long codigo = codigos.get(0);
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
     }
@@ -275,7 +276,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         List<Long> codigos = business.criar(dto);
         assertCodigos(codigos, 1);
-        dto = business.buscarPorId(codigos.get(0));
+        dto = business.buscarPorCodigo(codigos.get(0));
 
         assertRecorrente(dto, "27/12/2018", "Aluguel mensal do apartamento", null);
     }
@@ -284,7 +285,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.codigo(null);
             business.atualizar(dtoBuscado);
         }
@@ -297,7 +298,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemDataLancamento() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.dataLancamento(null);
             business.atualizar(dtoBuscado);
         }
@@ -310,7 +311,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemDataVencimento() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.dataVencimento(null);
             business.atualizar(dtoBuscado);
         }
@@ -323,7 +324,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemRecorrente() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.recorrente(null);
             business.atualizar(dtoBuscado);
         }
@@ -336,7 +337,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemGrupo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.grupo(null);
             business.atualizar(dtoBuscado);
         }
@@ -349,7 +350,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemSubGrupo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.subGrupo(null);
             business.atualizar(dtoBuscado);
         }
@@ -362,7 +363,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.descricao(null);
             business.atualizar(dtoBuscado);
         }
@@ -375,7 +376,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemUsouCartao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.usouCartao(null);
             business.atualizar(dtoBuscado);
         }
@@ -388,7 +389,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemCartao() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.cartao(null);
             business.atualizar(dtoBuscado);
         }
@@ -401,7 +402,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemParcelado() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.parcelado(null);
             business.atualizar(dtoBuscado);
         }
@@ -414,7 +415,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemParcela() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.parcela(null);
             business.atualizar(dtoBuscado);
         }
@@ -427,7 +428,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemParcelas() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.parcelas(null);
             business.atualizar(dtoBuscado);
         }
@@ -440,7 +441,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemConta() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.conta(null);
             business.atualizar(dtoBuscado);
         }
@@ -453,7 +454,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemTipo() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.tipo(null);
             business.atualizar(dtoBuscado);
         }
@@ -466,7 +467,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemValor() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
             dtoBuscado.valor(null);
             business.atualizar(dtoBuscado);
         }
@@ -478,7 +479,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void alterarSemCodigoPaiTestandoPai() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
-        ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(0));
+        ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(0));
         dtoBuscado.codigoPai(null);
         business.atualizar(dtoBuscado);
     }
@@ -487,7 +488,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void alterarSemCodigoPaiTestandoFilho() throws StoreException, BusinessException, GenericException {
         try {
             List<Long> codigos = criarContabilidades();
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(codigos.get(1));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(codigos.get(1));
             dtoBuscado.codigoPai(null);
             business.atualizar(dtoBuscado);
         }
@@ -503,7 +504,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigoAnterior = String.valueOf(codigos.get(0));
             String codigoNovo = "10";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigoAnterior));
             assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
             dtoBuscado.codigo(codigoNovo);
             business.atualizar(dtoBuscado);
@@ -520,7 +521,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(0));
             String dataLancamentoNova = getStringNextMonth();
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.dataLancamento(dataLancamentoNova);
             business.atualizar(dtoBuscado);
         }
@@ -535,7 +536,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             List<Long> codigos = criarContabilidades();
             Long codigo = codigos.get(0);
 
-            ContabilidadeDTO dto = business.buscarPorId(codigo);
+            ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
             assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
@@ -555,7 +556,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(1));
             String parcelasNova = "20";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.parcelas(parcelasNova);
             business.atualizar(dtoBuscado);
         }
@@ -571,7 +572,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(0));
             String parcelaNova = "20";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.parcela(parcelaNova);
             business.atualizar(dtoBuscado);
         }
@@ -587,7 +588,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(1));
             String parcelaNova = "20";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.parcela(parcelaNova);
             business.atualizar(dtoBuscado);
         }
@@ -603,7 +604,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(0));
             String codigoPaiNovo = "20";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.codigoPai(codigoPaiNovo);
             business.atualizar(dtoBuscado);
         }
@@ -619,7 +620,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
             String codigo = String.valueOf(codigos.get(1));
             String codigoPaiNovo = "20";
 
-            ContabilidadeDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigo));
+            ContabilidadeDTO dtoBuscado = business.buscarPorCodigo(parseLong(codigo));
             dtoBuscado.codigoPai(codigoPaiNovo);
             business.atualizar(dtoBuscado);
         }
@@ -633,14 +634,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.dataVencimento("27/05/2018");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/05/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -652,14 +653,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.dataPagamento(getStringFromCurrentDate());
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", getStringFromCurrentDate(), "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -671,14 +672,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.grupo("Um grupo");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Um grupo",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -690,14 +691,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.subGrupo("Um subGrupo");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Um subGrupo", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -709,14 +710,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.local("Outro local");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Outro local", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -728,14 +729,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.descricao("Nova descrição");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Nova descrição", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -747,14 +748,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.usouCartao("N");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "N", null,
                 "N", null, null, "CAROL", "DEBITO", "24,04", null,
@@ -766,14 +767,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.cartao("1234");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "1234",
                 "S", "1", "7", "CAROL", "DEBITO", "24,04", null,
@@ -785,14 +786,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.conta("OUTRA");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "OUTRA", "DEBITO", "24,04", null,
@@ -804,14 +805,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.tipo("CREDITO");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "CREDITO", "24,04", null,
@@ -823,14 +824,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.valor("1000,00");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "S", "1", "7", "CAROL", "DEBITO", "1.000,00", null,
@@ -842,14 +843,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.parcelado("N");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertEntityDTO(dto, "27/04/2018", null, "N", "Saúde",
                 "Suplementos", "Site", "Suplementos comprados pela Carol", "S", "0744",
                 "N", null, null, "CAROL", "DEBITO", "24,04", null,
@@ -872,7 +873,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
@@ -902,7 +903,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertRecorrente(dto, "27/04/2018", "Aluguel mensal do apartamento", "1");
 
@@ -919,14 +920,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(1);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertParcelado(dto, "27/05/2018", "Suplementos comprados pela Carol", "2", "0");
 
         dto.descricao("Outra descrição");
         business.atualizarSubsequentes(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(Long.parseLong(dto.codigoPai()));
+        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(parseLong(dto.codigoPai()));
 
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = null;
@@ -954,7 +955,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(1);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertRecorrente(dto, "27/05/2018", "Aluguel mensal do apartamento", "2");
 
@@ -971,14 +972,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidadeNaoParcelada();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
 
         dto.descricao("Outra descrição");
         business.atualizarSubsequentes(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
 
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Outra descrição");
     }
@@ -999,7 +1000,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void excluirStoreException() throws GenericException, BusinessException, IOException, StoreException {
         try {
             Long codigo = criarContabilidades().get(0);
-            ContabilidadeDTO dto = business.buscarPorId(codigo);
+            ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
             deletarDiretorioEArquivos();
             business.excluir(dto);
         }
@@ -1009,16 +1010,21 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void excluirUmaContabilidade() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         business.excluir(dto);
 
-        dto = business.buscarPorId(codigo);
-        assertThat(dto, nullValue());
+        try {
+            business.buscarPorCodigo(codigo);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
+        }
     }
 
     @Test(expected = BusinessException.class)
@@ -1060,7 +1066,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void excluirSubsequentesParceladas() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         business.excluirSubsequentes(dto);
 
@@ -1071,7 +1077,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void excluirSubsequentesParceladasParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
-        ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 
         business.excluirSubsequentes(dto);
 
@@ -1085,7 +1091,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void excluirSubsequentesRecorrentes() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(0);
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
         business.excluirSubsequentes(dto);
 
@@ -1096,7 +1102,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     @Test
     public void excluirSubsequentesRecorrentesParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
-        ContabilidadeDTO dto = business.buscarPorId(codigos.get(1));
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 
         business.excluirSubsequentes(dto);
 
@@ -1122,18 +1128,18 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
 
-        ContabilidadeDTO dto = business.buscarPorId(codigo);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
         assertThat(dto.dataPagamento(), nullValue());
 
         business.realizarPagamento(codigo);
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.dataPagamento(), equalTo(getStringFromCurrentDate()));
     }
 
     @Test(expected = StoreException.class)
-    public void buscarContabilidadePorIdException() throws IOException, StoreException, BusinessException {
+    public void buscarContabilidadePorIdException() throws IOException, StoreException, BusinessException, GenericException {
         deletarDiretorioEArquivos();
-        business.buscarPorId(null);
+        business.buscarPorCodigo(null);
     }
 
     @Test(expected = StoreException.class)
@@ -1149,7 +1155,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         dtos.sort(Comparator
-                .comparing((ContabilidadeDTO c) -> Long.parseLong(c.codigo())));
+                .comparing((ContabilidadeDTO c) -> parseLong(c.codigo())));
 
         assertThat(dtos.size(), equalTo(16));
 
@@ -1236,10 +1242,10 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, BusinessException {
+    private void assertEntitiesRecorrentes(List<ContabilidadeDTO> dtos) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = new ArrayList<>();
         for (ContabilidadeDTO dto : dtos) {
-            long codigo = Long.parseLong(dto.codigo());
+            long codigo = parseLong(dto.codigo());
             codigos.add(codigo);
         }
         assertCodigosRecorrentes(codigos);
@@ -1250,7 +1256,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         int teto = dtos.size();
         for (int i = 0; i < teto; i++) {
             ContabilidadeDTO dto = dtos.get(i);
-            Long codigo = Long.parseLong(dto.codigo());
+            Long codigo = parseLong(dto.codigo());
 
             if (i == (teto - 1)) {
                 assertRecorrente(dto, dataVencimentoLocal, descricao, null);
@@ -1262,12 +1268,12 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    private void assertCodigosRecorrentes(List<Long> codigos) throws StoreException, BusinessException {
+    private void assertCodigosRecorrentes(List<Long> codigos) throws StoreException, BusinessException, GenericException {
         String dataVencimento = "27/04/2018";
         int teto = 9;
         for (int i = 0; i < teto; i++) {
             Long codigo = codigos.get(i);
-            ContabilidadeDTO dto = business.buscarPorId(codigo);
+            ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
             if (i == (teto - 1)) {
                 assertRecorrente(dto, dataVencimento, "Aluguel mensal do apartamento", null);
@@ -1280,12 +1286,12 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     private void assertRecorrentesTotais(String dataVencimento, List<Long> codigosAtualizados, int totalDeRegistros,
-                                         int passoProximoRegistro) throws StoreException, BusinessException {
+                                         int passoProximoRegistro) throws StoreException, BusinessException, GenericException {
         String dataVencimentoLocal = dataVencimento;
         ContabilidadeDTO dto;
         for (int i = 0; i < totalDeRegistros; i++) {
             Long codigo = codigosAtualizados.get(i);
-            dto = business.buscarPorId(codigo);
+            dto = business.buscarPorCodigo(codigo);
             String proximoLancamento;
             if (i == (totalDeRegistros - 1)) {
                 proximoLancamento = null;

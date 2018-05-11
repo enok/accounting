@@ -1,7 +1,10 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.ConfigBusiness;
-import br.com.accounting.business.exception.*;
+import br.com.accounting.business.exception.BusinessException;
+import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.business.exception.MissingFieldException;
+import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.core.exception.StoreException;
 import org.junit.After;
 import org.junit.Before;

@@ -169,7 +169,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     @Override
     public void realizarPagamento(final Long codigo) throws StoreException, BusinessException {
         try {
-            ContabilidadeDTO dto = buscarPorId(codigo);
+            ContabilidadeDTO dto = buscarPorCodigo(codigo);
             dto.dataPagamento(getStringFromCurrentDate());
             atualizar(dto);
         }

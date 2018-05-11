@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.lang.String.valueOf;
+
 @RestController
 @RequestMapping("/cartao")
 public class CartaoController extends GenericController {
@@ -41,12 +43,21 @@ public class CartaoController extends GenericController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+    public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(codigo);
         business.excluir(dto);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping("/{codigo}")
+    public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        CartaoDTO dto = business.buscarPorCodigo(codigo);
+        CartaoVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
     }
 
     private CartaoDTO createDTO(CartaoVO vo) {
@@ -60,8 +71,19 @@ public class CartaoController extends GenericController {
                 .limite(vo.limite());
     }
 
-    private CartaoDTO createDTO(Integer codigo) {
+    private CartaoDTO createDTO(Long codigo) {
         return new CartaoDTO()
-                .codigo(String.valueOf(codigo));
+                .codigo(valueOf(codigo));
+    }
+
+    private CartaoVO createVO(CartaoDTO dto) {
+        return new CartaoVO()
+                .codigo(dto.codigo())
+                .numero(dto.numero())
+                .vencimento(dto.vencimento())
+                .diaMelhorCompra(dto.diaMelhorCompra())
+                .portador(dto.portador())
+                .tipo(dto.tipo())
+                .limite(dto.limite());
     }
 }

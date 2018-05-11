@@ -118,17 +118,22 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    public D buscarPorId(final Long codigo) throws StoreException, BusinessException {
+    public D buscarPorCodigo(final Long codigo) throws StoreException, BusinessException, GenericException {
         try {
             E entity = (E) service.buscarPorCodigo(codigo);
+            if (entity == null) {
+                throw new BusinessException("Registro inexistente.");
+            }
             return criarDTO(dtoFactory, entity);
         }
         catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao buscar por código.", e);
+        }
+        catch (BusinessException e) {
             throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível buscar por id.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 

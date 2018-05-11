@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.lang.String.*;
+
 @RestController
 @RequestMapping("/contabilidade")
 public class ContabilidadeController extends GenericController {
@@ -41,7 +43,7 @@ public class ContabilidadeController extends GenericController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+    public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = createDTO(codigo);
         business.excluir(dto);
         return ResponseEntity
@@ -70,8 +72,8 @@ public class ContabilidadeController extends GenericController {
                 .codigoPai(vo.codigoPai());
     }
 
-    private ContabilidadeDTO createDTO(Integer codigo) {
+    private ContabilidadeDTO createDTO(Long codigo) {
         return new ContabilidadeDTO()
-                .codigo(String.valueOf(codigo));
+                .codigo(valueOf(codigo));
     }
 }

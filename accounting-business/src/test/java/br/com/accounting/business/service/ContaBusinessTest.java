@@ -12,7 +12,8 @@ import java.util.List;
 
 import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
 public class ContaBusinessTest extends GenericTest {
@@ -123,7 +124,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
-            ContaDTO dtoBuscado = business.buscarPorId(codigo);
+            ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
             dtoBuscado.codigo(null);
             business.atualizar(dtoBuscado);
         }
@@ -136,7 +137,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
-            ContaDTO dtoBuscado = business.buscarPorId(codigo);
+            ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
             dtoBuscado.nome(null);
             business.atualizar(dtoBuscado);
         }
@@ -149,7 +150,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
-            ContaDTO dtoBuscado = business.buscarPorId(codigo);
+            ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
             dtoBuscado.descricao(null);
             business.atualizar(dtoBuscado);
         }
@@ -162,7 +163,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemValorDefault() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarContaEnok();
-            ContaDTO dtoBuscado = business.buscarPorId(codigo);
+            ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
             dtoBuscado.valorDefault(null);
             business.atualizar(dtoBuscado);
         }
@@ -175,7 +176,7 @@ public class ContaBusinessTest extends GenericTest {
     public void alterarSemCumulativo() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaEnok();
 
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
         dtoBuscado.cumulativo(null);
 
         business.atualizar(dtoBuscado);
@@ -187,7 +188,7 @@ public class ContaBusinessTest extends GenericTest {
             Long codigo = criarContaEnok();
             String codigoAnterior = String.valueOf(codigo);
             String codigoNovo = "10";
-            ContaDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            ContaDTO dtoBuscado = business.buscarPorCodigo(Long.parseLong(codigoAnterior));
             assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
             dtoBuscado.codigo(codigoNovo);
             business.atualizar(dtoBuscado);
@@ -206,7 +207,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.nome("Carol");
         business.atualizar(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Carol"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
@@ -223,7 +224,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.descricao("Valor separado para a Carol");
         business.atualizar(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Enok"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
@@ -240,7 +241,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.valorDefault("600,00");
         business.atualizar(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Enok"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(dtoBuscado.valorDefault(), equalTo("600,00"));
@@ -257,7 +258,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.cumulativo("N");
         business.atualizar(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Enok"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para o Enok"));
         assertThat(dtoBuscado.valorDefault(), equalTo("500,00"));
@@ -277,7 +278,7 @@ public class ContaBusinessTest extends GenericTest {
         dtoBuscado.valorDefault("150,00");
         business.atualizar(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
         assertThat(dtoBuscado.nome(), equalTo("Carol"));
         assertThat(dtoBuscado.descricao(), equalTo("Valor separado para a Carol"));
         assertThat(dtoBuscado.valorDefault(), equalTo("150,00"));
@@ -288,7 +289,7 @@ public class ContaBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void adicionarCreditoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         deletarDiretorioEArquivos();
 
@@ -304,10 +305,10 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarCreditoEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarCredito(dtoBuscado, "500,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("1.500,00"));
     }
@@ -315,13 +316,13 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarVariosCreditosEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarCredito(dtoBuscado, "500,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarCredito(dtoBuscado, "500,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("2.000,00"));
     }
@@ -329,7 +330,7 @@ public class ContaBusinessTest extends GenericTest {
     @Test(expected = BusinessException.class)
     public void adicionarDebitoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         deletarDiretorioEArquivos();
 
@@ -345,10 +346,10 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarDebitoEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarDebito(dtoBuscado, "100,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("900,00"));
     }
@@ -356,13 +357,13 @@ public class ContaBusinessTest extends GenericTest {
     @Test
     public void adicionarVariosDebitosEmUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarDebito(dtoBuscado, "100,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.adicionarDebito(dtoBuscado, "900,00");
-        dtoBuscado = business.buscarPorId(codigo);
+        dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("0,00"));
     }
@@ -382,11 +383,11 @@ public class ContaBusinessTest extends GenericTest {
     public void transferirSaldoDeUmaContaParaOutraSaldoInsuficiente() throws StoreException, BusinessException, GenericException {
         ContaDTO dto1 = ContaDTOMockFactory.contaSalario();
         Long codigo1 = business.criar(dto1).get(0);
-        dto1 = business.buscarPorId(codigo1);
+        dto1 = business.buscarPorCodigo(codigo1);
 
         ContaDTO dto2 = ContaDTOMockFactory.contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
-        dto2 = business.buscarPorId(codigo2);
+        dto2 = business.buscarPorCodigo(codigo2);
 
         try {
             business.transferir(dto1, dto2, "1500,00");
@@ -401,20 +402,20 @@ public class ContaBusinessTest extends GenericTest {
     public void transferirSaldoDeUmaContaParaOutra() throws StoreException, BusinessException, GenericException {
         ContaDTO dto1 = ContaDTOMockFactory.contaSalario();
         Long codigo1 = business.criar(dto1).get(0);
-        dto1 = business.buscarPorId(codigo1);
+        dto1 = business.buscarPorCodigo(codigo1);
         business.adicionarCredito(dto1, "1.000,00");
-        dto1 = business.buscarPorId(codigo1);
+        dto1 = business.buscarPorCodigo(codigo1);
 
         ContaDTO dto2 = ContaDTOMockFactory.contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
-        dto2 = business.buscarPorId(codigo2);
+        dto2 = business.buscarPorCodigo(codigo2);
 
         business.transferir(dto1, dto2, "600,00");
 
-        dto1 = business.buscarPorId(codigo1);
+        dto1 = business.buscarPorCodigo(codigo1);
         assertThat(dto1.saldo(), equalTo("1.400,00"));
 
-        dto2 = business.buscarPorId(codigo2);
+        dto2 = business.buscarPorCodigo(codigo2);
         assertThat(dto2.saldo(), equalTo("1.100,00"));
     }
 
@@ -427,7 +428,7 @@ public class ContaBusinessTest extends GenericTest {
     public void excluirStoreException() throws IOException, BusinessException, GenericException, StoreException {
         try {
             Long codigo = criarContaSalario();
-            ContaDTO dto = business.buscarPorId(codigo);
+            ContaDTO dto = business.buscarPorCodigo(codigo);
             deletarDiretorioEArquivos();
             business.excluir(dto);
         }
@@ -437,21 +438,26 @@ public class ContaBusinessTest extends GenericTest {
         }
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void excluirUmaConta() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContaSalario();
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
         business.excluir(dtoBuscado);
 
-        dtoBuscado = business.buscarPorId(codigo);
-        assertThat(dtoBuscado, nullValue());
+        try {
+            business.buscarPorCodigo(codigo);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
+        }
     }
 
     @Test(expected = StoreException.class)
-    public void buscarContaPorIdException() throws IOException, StoreException, BusinessException {
+    public void buscarContaPorIdException() throws IOException, StoreException, BusinessException, GenericException {
         deletarDiretorioEArquivos();
-        business.buscarPorId(null);
+        business.buscarPorCodigo(null);
     }
 
     @Test(expected = StoreException.class)
@@ -501,8 +507,8 @@ public class ContaBusinessTest extends GenericTest {
         Long codigoEnok = criarContaEnok();
         Long codigoSalario = criarContaSalario();
         business.atualizarContas();
-        ContaDTO dtoEnok = business.buscarPorId(codigoEnok);
-        ContaDTO dtoSalario = business.buscarPorId(codigoSalario);
+        ContaDTO dtoEnok = business.buscarPorCodigo(codigoEnok);
+        ContaDTO dtoSalario = business.buscarPorCodigo(codigoSalario);
 
         assertContaEnok(dtoEnok, "1.000,00", getStringFromCurrentDate());
         assertContaSalario(dtoSalario);
@@ -526,8 +532,8 @@ public class ContaBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertContaSalario(Long codigo) throws StoreException, BusinessException {
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+    private void assertContaSalario(Long codigo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
         assertContaSalario(dtoBuscado);
     }
 
@@ -540,8 +546,8 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dto.dataAtualizacao(), equalTo("15/03/2018"));
     }
 
-    private ContaDTO assertContaEnok(Long codigo) throws StoreException, BusinessException {
-        ContaDTO dtoBuscado = business.buscarPorId(codigo);
+    private ContaDTO assertContaEnok(Long codigo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
         return assertContaEnok(dtoBuscado, "500,00", "10/03/2018");
     }
 

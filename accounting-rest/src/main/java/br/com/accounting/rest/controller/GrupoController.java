@@ -1,7 +1,6 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.GrupoDTO;
-import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.GrupoBusiness;
@@ -14,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static java.lang.String.*;
 
 @RestController
 @RequestMapping("/grupo")
@@ -43,7 +44,7 @@ public class GrupoController extends GenericController {
     }
 
     @DeleteMapping("/{codigo}")
-    public ResponseEntity excluir(@PathVariable Integer codigo) throws StoreException, BusinessException, GenericException {
+    public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         GrupoDTO dto = createDTO(codigo);
         business.excluir(dto);
         return ResponseEntity
@@ -59,8 +60,8 @@ public class GrupoController extends GenericController {
                 .subGrupos(vo.subGrupos());
     }
 
-    private GrupoDTO createDTO(Integer codigo) {
+    private GrupoDTO createDTO(Long codigo) {
         return new GrupoDTO()
-                .codigo(String.valueOf(codigo));
+                .codigo(valueOf(codigo));
     }
 }

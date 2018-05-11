@@ -14,6 +14,34 @@ public class CartaoVO {
     private String tipo;
     private String limite;
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getVencimento() {
+        return vencimento;
+    }
+
+    public String getDiaMelhorCompra() {
+        return diaMelhorCompra;
+    }
+
+    public String getPortador() {
+        return portador;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getLimite() {
+        return limite;
+    }
+
     public CartaoVO setCodigo(String codigo) {
         this.codigo = codigo;
         return this;

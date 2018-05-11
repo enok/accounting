@@ -13,7 +13,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertTrue;
 
 public class GrupoBusinessTest extends GenericTest {
@@ -114,7 +113,7 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemCodigo() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
-            GrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.codigo("");
             business.atualizar(dto);
         }
@@ -127,7 +126,7 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemNome() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
-            GrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.nome("");
             business.atualizar(dto);
         }
@@ -140,7 +139,7 @@ public class GrupoBusinessTest extends GenericTest {
     public void alterarSemDescricao() throws StoreException, BusinessException, GenericException {
         try {
             Long codigo = criarGrupoMoradia();
-            GrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorCodigo(codigo);
             dto.descricao("");
             business.atualizar(dto);
         }
@@ -155,7 +154,7 @@ public class GrupoBusinessTest extends GenericTest {
             Long codigo = criarGrupoMoradia();
             String codigoAnterior = String.valueOf(codigo);
             String codigoNovo = "10";
-            GrupoDTO dtoBuscado = business.buscarPorId(Long.parseLong(codigoAnterior));
+            GrupoDTO dtoBuscado = business.buscarPorCodigo(Long.parseLong(codigoAnterior));
             assertThat(dtoBuscado.codigo(), not(equalTo(codigoNovo)));
             dtoBuscado.codigo(codigoNovo);
             business.atualizar(dtoBuscado);
@@ -170,11 +169,11 @@ public class GrupoBusinessTest extends GenericTest {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
-        GrupoDTO dto = business.buscarPorId(codigo);
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.nome("Transporte");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Transporte"));
         assertThat(dto.descricao(), equalTo("Gastos gerais com moradia"));
         assertGrupoMoradiaSubGrupos(dto);
@@ -185,11 +184,11 @@ public class GrupoBusinessTest extends GenericTest {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
-        GrupoDTO dto = business.buscarPorId(codigo);
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Moradia"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
         assertGrupoMoradiaSubGrupos(dto);
@@ -200,12 +199,12 @@ public class GrupoBusinessTest extends GenericTest {
         Long codigo = criarGrupoMoradia();
         assertGrupoMoradia(codigo);
 
-        GrupoDTO dto = business.buscarPorId(codigo);
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
         dto.nome("Transporte");
         dto.descricao("Outra descrição");
         business.atualizar(dto);
 
-        dto = business.buscarPorId(codigo);
+        dto = business.buscarPorCodigo(codigo);
         assertThat(dto.nome(), equalTo("Transporte"));
         assertThat(dto.descricao(), equalTo("Outra descrição"));
         assertGrupoMoradiaSubGrupos(dto);
@@ -220,7 +219,7 @@ public class GrupoBusinessTest extends GenericTest {
     public void excluirStoreException() throws IOException, BusinessException, GenericException, StoreException {
         try {
             Long codigo = criarGrupoMoradia();
-            GrupoDTO dto = business.buscarPorId(codigo);
+            GrupoDTO dto = business.buscarPorCodigo(codigo);
             deletarDiretorioEArquivos();
             business.excluir(dto);
         }
@@ -230,21 +229,26 @@ public class GrupoBusinessTest extends GenericTest {
         }
     }
 
-    @Test
+    @Test(expected = BusinessException.class)
     public void excluir() throws StoreException, BusinessException, GenericException {
         Long codigo = criarGrupoMoradia();
-        GrupoDTO dto = business.buscarPorId(codigo);
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
 
         business.excluir(dto);
 
-        dto = business.buscarPorId(codigo);
-        assertThat(dto, nullValue());
+        try {
+            business.buscarPorCodigo(codigo);
+        }
+        catch (BusinessException e) {
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
+        }
     }
 
     @Test(expected = StoreException.class)
-    public void buscarPorIdException() throws IOException, StoreException, BusinessException {
+    public void buscarPorIdException() throws IOException, StoreException, BusinessException, GenericException {
         deletarDiretorioEArquivos();
-        business.buscarPorId(null);
+        business.buscarPorCodigo(null);
     }
 
     @Test(expected = StoreException.class)
@@ -283,13 +287,13 @@ public class GrupoBusinessTest extends GenericTest {
         return codigo;
     }
 
-    private void assertGrupoMoradia(Long codigo) throws StoreException, BusinessException {
-        GrupoDTO dto = business.buscarPorId(codigo);
+    private void assertGrupoMoradia(Long codigo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
         assertGrupoMoradia(dto);
     }
 
-    private void assertGrupoTransporte(Long codigo) throws StoreException, BusinessException {
-        GrupoDTO dto = business.buscarPorId(codigo);
+    private void assertGrupoTransporte(Long codigo) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = business.buscarPorCodigo(codigo);
         assertGrupoTransporte(dto);
     }
 
