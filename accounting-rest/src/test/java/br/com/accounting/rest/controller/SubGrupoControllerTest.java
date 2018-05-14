@@ -339,7 +339,7 @@ public class SubGrupoControllerTest extends GenericTest {
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
 
@@ -387,6 +387,49 @@ public class SubGrupoControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigo", is("0")))
                 .andExpect(jsonPath("$.nome", is("Suplementos")))
                 .andExpect(jsonPath("$.descricao", is("Sumplementos comprados")));
+    }
+
+    @Test
+    public void buscarTudoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        mvc.perform(get("/subgrupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar tudo.")));
+    }
+
+    @Test
+    public void buscarTudoInexistente() throws Exception {
+        mvc.perform(get("/subgrupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarTudo() throws Exception {
+        criarSubGrupo();
+
+        mvc.perform(get("/subgrupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].codigo", is("0")))
+                .andExpect(jsonPath("$[0].nome", is("Suplementos")))
+                .andExpect(jsonPath("$[0].descricao", is("Sumplementos comprados")));
     }
 
     private SubGrupoVO getVO() {
