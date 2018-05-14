@@ -1,13 +1,11 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.dto.CartaoDTO;
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
-import br.com.accounting.rest.vo.CartaoVO;
 import br.com.accounting.rest.vo.CodigosVO;
 import br.com.accounting.rest.vo.ContabilidadeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/contabilidade")

@@ -11,8 +11,10 @@ import br.com.accounting.rest.vo.LocalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.valueOf;
@@ -62,6 +64,22 @@ public class LocalController extends AbstractExceptionHandler {
                 .body(vo);
     }
 
+    @GetMapping
+    public ResponseEntity buscarTudo() throws StoreException, GenericException {
+        List<LocalDTO> dtos = business.buscarTodas();
+        List<LocalVO> vos = createVOList(dtos);
+        if (CollectionUtils.isEmpty(vos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(vos);
+        }
+    }
+
     private LocalDTO createDTO(LocalVO vo) {
         return new LocalDTO()
                 .codigo(vo.codigo())
@@ -77,5 +95,13 @@ public class LocalController extends AbstractExceptionHandler {
         return new LocalVO()
                 .codigo(dto.codigo())
                 .nome(dto.nome());
+    }
+
+    private List<LocalVO> createVOList(List<LocalDTO> dtos) {
+        List<LocalVO> vos = new ArrayList<>();
+        for (LocalDTO dto : dtos) {
+            vos.add(createVO(dto));
+        }
+        return vos;
     }
 }
