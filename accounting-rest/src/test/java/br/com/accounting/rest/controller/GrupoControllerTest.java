@@ -386,7 +386,7 @@ public class GrupoControllerTest extends GenericTest {
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
 
@@ -436,6 +436,51 @@ public class GrupoControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.descricao", is("Gastos gerais com saúde")))
                 .andExpect(jsonPath("$.subGrupos", hasSize(1)))
                 .andExpect(jsonPath("$.subGrupos[0]", is("Suplementos")));
+    }
+
+    @Test
+    public void buscarTudoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        mvc.perform(get("/grupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar tudo.")));
+    }
+
+    @Test
+    public void buscarTudoInexistente() throws Exception {
+        mvc.perform(get("/grupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarTudo() throws Exception {
+        criarGrupo();
+
+        mvc.perform(get("/grupo")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].codigo", is("0")))
+                .andExpect(jsonPath("$[0].nome", is("Saúde")))
+                .andExpect(jsonPath("$[0].descricao", is("Gastos gerais com saúde")))
+                .andExpect(jsonPath("$[0].subGrupos", hasSize(1)))
+                .andExpect(jsonPath("$[0].subGrupos[0]", is("Suplementos")));
     }
 
     private GrupoVO getVO() {
