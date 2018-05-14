@@ -1,18 +1,22 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
+import br.com.accounting.rest.vo.ContaVO;
 import br.com.accounting.rest.vo.CodigosVO;
 import br.com.accounting.rest.vo.ContaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.valueOf;
@@ -62,6 +66,22 @@ public class ContaController extends AbstractExceptionHandler {
                 .body(vo);
     }
 
+    @GetMapping
+    public ResponseEntity buscarTudo() throws StoreException, GenericException {
+        List<ContaDTO> dtos = business.buscarTodas();
+        List<ContaVO> vos = createVOList(dtos);
+        if (CollectionUtils.isEmpty(vos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(vos);
+        }
+    }
+
     private ContaDTO createDTO(ContaVO vo) {
         return new ContaDTO()
                 .codigo(vo.codigo())
@@ -87,5 +107,13 @@ public class ContaController extends AbstractExceptionHandler {
                 .saldo(dto.saldo())
                 .cumulativo(dto.cumulativo())
                 .dataAtualizacao(dto.dataAtualizacao());
+    }
+
+    private List<ContaVO> createVOList(List<ContaDTO> dtos) {
+        List<ContaVO> vos = new ArrayList<>();
+        for (ContaDTO dto : dtos) {
+            vos.add(createVO(dto));
+        }
+        return vos;
     }
 }

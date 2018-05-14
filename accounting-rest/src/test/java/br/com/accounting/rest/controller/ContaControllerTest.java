@@ -556,7 +556,7 @@ public class ContaControllerTest extends GenericTest {
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
 
@@ -608,6 +608,54 @@ public class ContaControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.saldo", is("500,00")))
                 .andExpect(jsonPath("$.cumulativo", is("S")))
                 .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
+    }
+
+    @Test
+    public void buscarTudoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        mvc.perform(get("/conta")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar tudo.")));
+    }
+
+    @Test
+    public void buscarTudoInexistente() throws Exception {
+        mvc.perform(get("/conta")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarTudo() throws Exception {
+        criarConta();
+
+        mvc.perform(get("/conta")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].codigo", is("0")))
+                .andExpect(jsonPath("$[0].nome", is("CAROL")))
+                .andExpect(jsonPath("$[0].descricao", is("Valores passados para a Carol")))
+                .andExpect(jsonPath("$[0].valorDefault", is("500,00")))
+                .andExpect(jsonPath("$[0].saldo", is("500,00")))
+                .andExpect(jsonPath("$[0].cumulativo", is("S")))
+                .andExpect(jsonPath("$[0].dataAtualizacao", is(getStringFromCurrentDate())));
     }
 
     private ContaVO getVO() {
