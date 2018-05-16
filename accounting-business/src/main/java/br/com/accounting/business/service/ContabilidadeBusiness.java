@@ -14,7 +14,7 @@ public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO>
 
     List<Long> incrementarRecorrentes(Integer anos) throws StoreException, BusinessException, GenericException;
 
-    void realizarPagamento(Long codigo) throws StoreException, BusinessException;
+    void realizarPagamento(Long codigo) throws StoreException, BusinessException, GenericException;
 
     List<ContabilidadeDTO> buscarTodasAsParcelas(Long codigo) throws BusinessException;
 

@@ -1100,12 +1100,12 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = BusinessException.class)
-    public void realizarPagamentoException() throws BusinessException, StoreException {
+    public void realizarPagamentoException() throws StoreException, BusinessException, GenericException {
         try {
             business.realizarPagamento(null);
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível realizar o pagamento."));
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
             throw e;
         }
     }

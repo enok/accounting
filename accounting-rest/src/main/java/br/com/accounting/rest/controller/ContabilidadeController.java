@@ -71,6 +71,14 @@ public class ContabilidadeController extends AbstractExceptionHandler {
         }
     }
 
+    @PutMapping("/pagamento/{codigo}")
+    public ResponseEntity realizarPagamento(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
+        business.realizarPagamento(codigo);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     @DeleteMapping("/recursivo")
     public ResponseEntity excluirRecursivamente(@RequestBody ContabilidadeVO vo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = createDTO(vo);

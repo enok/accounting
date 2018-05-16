@@ -188,18 +188,20 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void realizarPagamento(final Long codigo) throws StoreException, BusinessException {
+    public void realizarPagamento(final Long codigo) throws BusinessException, StoreException, GenericException {
         try {
             ContabilidadeDTO dto = buscarPorCodigo(codigo);
             dto.dataPagamento(getStringFromCurrentDate());
             atualizar(dto);
         }
         catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao realizar pagamento.", e);
+        }
+        catch (BusinessException e) {
             throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível realizar o pagamento.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 

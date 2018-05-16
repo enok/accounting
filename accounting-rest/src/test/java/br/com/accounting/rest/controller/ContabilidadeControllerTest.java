@@ -3015,6 +3015,101 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
+    public void realizarPagamentoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        Long codigo = 0L;
+
+        mvc.perform(put("/contabilidade/pagamento/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao realizar pagamento.")));
+    }
+
+
+    @Test
+    public void realizarPagamentoSemCodigo() throws Exception {
+        Long codigo = null;
+
+        mvc.perform(put("/contabilidade/pagamento/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void realizarPagamentoComCodigoIncorreto() throws Exception {
+        String codigo = "a";
+
+        mvc.perform(put("/contabilidade/pagamento/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void realizarPagamentoSemRegistro() throws Exception {
+        String codigo = "0";
+
+        mvc.perform(put("/contabilidade/pagamento/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void realizarPagamento() throws Exception {
+        criarContabilidadeParcelada();
+
+        Integer codigo = 0;
+
+        mvc.perform(put("/contabilidade/pagamento/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.dataPagamento", is(getStringFromCurrentDate())));
+
+        codigo = 1;
+
+        mvc.perform(get("/contabilidade/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("1")))
+                .andExpect(jsonPath("$.dataPagamento", isEmptyOrNullString()));
+    }
+
+    @Test
     public void excluirSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
@@ -3319,7 +3414,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void buscarPorCodigoContabilidadeParcelada() throws Exception {
+    public void buscarPorCodigoParcelada() throws Exception {
         criarContabilidadeParcelada();
 
         String codigo = "0";
@@ -3354,7 +3449,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
-    public void buscarPorCodigoContabilidadeRecorrente() throws Exception {
+    public void buscarPorCodigoRecorrente() throws Exception {
         criarContabilidadeRecorrente();
 
         String codigo = "0";
