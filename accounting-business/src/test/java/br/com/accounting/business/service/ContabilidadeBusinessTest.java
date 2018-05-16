@@ -904,7 +904,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         dto.descricao("Outra descrição");
         business.atualizarRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarRecorrentesRelacionadas(codigo);
 
         assertRecorrentes(dtos, "27/04/2018", "Outra descrição");
     }
@@ -956,7 +956,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         dto.descricao("Outra descrição");
         business.atualizarRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarRecorrentesRelacionadas(codigo);
 
         assertRecorrentes(dtos, "27/05/2018", "Outra descrição");
     }
@@ -1082,7 +1082,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         business.excluirRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarRecorrentesRelacionadas(codigo);
         assertThat(dtos.size(), equalTo(0));
     }
 
@@ -1093,7 +1093,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         business.excluirRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigos.get(0));
+        List<ContabilidadeDTO> dtos = business.buscarRecorrentesRelacionadas(codigos.get(0));
         assertThat(dtos.size(), equalTo(1));
 
         assertRecorrente(dtos.get(0), "27/04/2018", "Aluguel mensal do apartamento", null);
@@ -1162,14 +1162,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarTodasAsRecorrentesException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarRecorrentesRelacionadasException() throws IOException, ValidationException, GenericException, StoreException {
         deletarDiretorioEArquivos();
         try {
-            business.buscarTodasAsRecorrentes(null);
+            business.buscarRecorrentesRelacionadas(null);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscas todas as recorrentes."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao buscar recorrentes relacionadas."));
             throw e;
         }
     }

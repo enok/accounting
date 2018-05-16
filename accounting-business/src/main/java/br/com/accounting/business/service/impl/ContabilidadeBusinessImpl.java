@@ -211,9 +211,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
             List<Contabilidade> entitiesFiltradas = service.buscarTodasAsParcelas(codigoPai);
             return criarListaDTO(entitiesFiltradas);
         }
-        catch (ParseException e) {
-            throw new ValidationException(e);
-        }
         catch (StoreException e) {
             throw new StoreException("Erro de persistência ao buscar parcelas relacionadas.", e);
         }
@@ -223,17 +220,17 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public List<ContabilidadeDTO> buscarTodasAsRecorrentes(Long codigo) throws BusinessException {
-        List<ContabilidadeDTO> entitiesDTO;
+    public List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException {
         try {
             List<Contabilidade> entitiesFiltradas = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
-            entitiesDTO = criarListaDTO(entitiesFiltradas);
+            return criarListaDTO(entitiesFiltradas);
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao buscar recorrentes relacionadas.", e);
         }
         catch (Exception e) {
-            String message = "Não foi possível buscas todas as recorrentes.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
-        return entitiesDTO;
     }
 
     @Override

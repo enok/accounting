@@ -142,6 +142,23 @@ public class ContabilidadeController extends AbstractExceptionHandler {
         }
     }
 
+    @GetMapping("/recorrente/{codigo}")
+    @ResponseBody
+    public ResponseEntity buscarRecorrentesRelacionadas(@PathVariable Long codigo) throws ValidationException, StoreException, GenericException {
+        List<ContabilidadeDTO> dtos = business.buscarRecorrentesRelacionadas(codigo);
+        List<ContabilidadeVO> vos = createVOList(dtos);
+        if (isEmpty(vos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(vos);
+        }
+    }
+
     private ContabilidadeDTO createDTO(ContabilidadeVO vo) {
         return new ContabilidadeDTO()
                 .codigo(vo.codigo())

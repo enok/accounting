@@ -19,5 +19,5 @@ public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO>
 
     List<ContabilidadeDTO> buscarParcelasRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException;
 
-    List<ContabilidadeDTO> buscarTodasAsRecorrentes(Long codigo) throws BusinessException;
+    List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException;
 }
