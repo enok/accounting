@@ -19,7 +19,8 @@ import java.io.IOException;
 
 import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -62,7 +63,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void criarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContabilidadeVO vo = getVO();
+        ContabilidadeVO vo = getVOParcelado();
         String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
@@ -81,7 +82,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimento() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null);
         String json = gson.toJson(vo);
 
@@ -100,7 +101,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrente() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null);
         String json = gson.toJson(vo);
@@ -121,7 +122,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null);
@@ -144,7 +145,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -169,7 +170,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocal() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -195,7 +196,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -223,7 +224,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -253,7 +254,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -284,7 +285,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoECartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -314,7 +315,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -347,7 +348,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelas() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -381,7 +382,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelas() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -413,7 +414,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEConta() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -449,7 +450,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEContaETipo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -487,7 +488,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemCampos() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -527,7 +528,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComDataVencimentoIncorreta() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento("27-04/2018");
         String json = gson.toJson(vo);
 
@@ -546,7 +547,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteIncorreto() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS");
         String json = gson.toJson(vo);
 
@@ -565,7 +566,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteEUsouCartaoIncorretos() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
                 .usouCartao("NS");
         String json = gson.toJson(vo);
@@ -586,7 +587,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
                 .usouCartao("NS")
                 .parcelado("NS");
@@ -609,7 +610,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComParcelasIncorretas() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .parcelas("uma");
         String json = gson.toJson(vo);
 
@@ -628,7 +629,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComTipoIncorreto() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .tipo("DEBITOS");
         String json = gson.toJson(vo);
 
@@ -647,7 +648,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarComValorIncorreto() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .valor("a24,04");
         String json = gson.toJson(vo);
 
@@ -666,7 +667,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarRecorrenteEParcelado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("S")
                 .parcelado("S");
         String json = gson.toJson(vo);
@@ -686,7 +687,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarGrupoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .grupo("Um grupo");
         String json = gson.toJson(vo);
 
@@ -705,7 +706,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSubGrupoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .subGrupo("Um subgrupo");
         String json = gson.toJson(vo);
 
@@ -725,7 +726,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarLocalNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .local("Um outro local");
         String json = gson.toJson(vo);
 
@@ -744,7 +745,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarCartaoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .cartao("1324");
         String json = gson.toJson(vo);
 
@@ -763,7 +764,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarContaNaoCadastrada() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .conta("Uma conta");
         String json = gson.toJson(vo);
 
@@ -784,7 +785,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void criarGrupoESubGrupoNaoAssociados() throws Exception {
         criarSubGrupoAluguel();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .grupo("Saúde")
                 .subGrupo("Aluguel");
 
@@ -805,7 +806,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarDuplicado() throws Exception {
-        ContabilidadeVO vo = getVO();
+        ContabilidadeVO vo = getVOParcelado();
         String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
@@ -857,7 +858,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContabilidadeVO vo = getVO();
+        ContabilidadeVO vo = getVOParcelado();
         String json = gson.toJson(vo);
 
         mvc.perform(put("/contabilidade")
@@ -871,12 +872,11 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar.")));
-
     }
 
     @Test
     public void atualizarSemDataVencimento() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null);
         String json = gson.toJson(vo);
 
@@ -894,8 +894,29 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
+    public void atualizarSemDataVencimentoERecorrente() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")));
+    }
+
+    @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null);
@@ -918,7 +939,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -943,7 +964,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocal() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -969,7 +990,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -997,7 +1018,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1027,7 +1048,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1058,7 +1079,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoECartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1088,7 +1109,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1121,7 +1142,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelas() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1155,7 +1176,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelas() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1187,7 +1208,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEConta() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1223,7 +1244,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEContaETipo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1261,7 +1282,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCampos() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .dataVencimento(null)
                 .recorrente(null)
                 .grupo(null)
@@ -1301,7 +1322,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigo() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo(null);
         String json = gson.toJson(vo);
 
@@ -1320,7 +1341,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigoEDataLancamento() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo(null)
                 .dataLancamento(null);
         String json = gson.toJson(vo);
@@ -1341,7 +1362,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigoEDataLancamentoEParcela() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo(null)
                 .dataLancamento(null)
                 .parcela(null);
@@ -1366,7 +1387,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarSemCodigoPai() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("1");
         String json = gson.toJson(vo);
 
@@ -1387,7 +1408,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComDataVencimentoIncorreta() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .dataVencimento("27-04/2018");
         String json = gson.toJson(vo);
@@ -1409,7 +1430,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComRecorrenteIncorreto() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS");
         String json = gson.toJson(vo);
 
@@ -1430,7 +1451,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComRecorrenteEUsouCartaoIncorretos() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
                 .usouCartao("NS");
         String json = gson.toJson(vo);
@@ -1453,7 +1474,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
                 .usouCartao("NS")
                 .parcelado("NS");
@@ -1478,7 +1499,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComTipoIncorreto() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .tipo("DEBITOS");
         String json = gson.toJson(vo);
@@ -1500,7 +1521,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarComValorIncorreto() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .valor("a24,04");
         String json = gson.toJson(vo);
@@ -1522,7 +1543,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarRecorrenteEParcelado() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .recorrente("S")
                 .parcelado("S");
@@ -1545,7 +1566,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarProibidoAlterarCodigo() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("20");
         String json = gson.toJson(vo);
 
@@ -1566,7 +1587,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarProibidoAlterarDataLancamento() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .dataLancamento("01/01/2000");
         String json = gson.toJson(vo);
@@ -1588,7 +1609,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarProibidoAlterarParcelas() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .parcelas("10");
         String json = gson.toJson(vo);
@@ -1610,7 +1631,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarProibidoAlterarParcela() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .parcela("2");
         String json = gson.toJson(vo);
@@ -1632,7 +1653,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarProibidoAlterarCodigoPai() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
                 .codigoPai("1");
         String json = gson.toJson(vo);
@@ -1652,7 +1673,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarGrupoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .grupo("Um grupo");
         String json = gson.toJson(vo);
 
@@ -1671,7 +1692,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSubGrupoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .subGrupo("Um subgrupo");
         String json = gson.toJson(vo);
 
@@ -1691,7 +1712,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarLocalNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .local("Um outro local");
         String json = gson.toJson(vo);
 
@@ -1710,7 +1731,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarCartaoNaoCadastrado() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .cartao("1324");
         String json = gson.toJson(vo);
 
@@ -1729,7 +1750,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarContaNaoCadastrada() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .conta("Uma conta");
         String json = gson.toJson(vo);
 
@@ -1750,7 +1771,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizarGrupoESubGrupoNaoAssociados() throws Exception {
         criarSubGrupoAluguel();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .grupo("Saúde")
                 .subGrupo("Aluguel");
 
@@ -1773,11 +1794,1115 @@ public class ContabilidadeControllerTest extends GenericTest {
     public void atualizar() throws Exception {
         criarContabilidadeParcelada();
 
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .codigo("0");
         String json = gson.toJson(vo);
 
         mvc.perform(put("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCartaoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVOSemCartao();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteParceladoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVOParcelado();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteRecorrenteSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVORecorrente();
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimento() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrente() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupo() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupo() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(4)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocal() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(4)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricao() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(5)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartao() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartao() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoECartao() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .cartao(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo cartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(7)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelas() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(7)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParcelas() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelas(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(6)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEConta() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(8)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemDataVencimentoERecorrenteEGrupoESubGrupoELocalEDescricaoEUsouCartaoECartaoEParceladoEParcelasEContaETipo() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null)
+                .tipo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(9)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[8]", is("O campo tipo é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteParceladoSemCampos() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelas(null)
+                .conta(null)
+                .tipo(null)
+                .valor(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(9)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo conta é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo tipo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[8]", is("O campo valor é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCampos() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .dataVencimento(null)
+                .recorrente(null)
+                .grupo(null)
+                .subGrupo(null)
+                .local(null)
+                .descricao(null)
+                .usouCartao(null)
+                .cartao(null)
+                .parcelado(null)
+                .parcelas(null)
+                .conta(null)
+                .tipo(null)
+                .valor(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(10)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataVencimento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo recorrente é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo grupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[3]", is("O campo subGrupo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[4]", is("O campo descrição é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[5]", is("O campo usouCartão é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[6]", is("O campo parcelado é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[7]", is("O campo conta é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[8]", is("O campo tipo é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[9]", is("O campo valor é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCodigo() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteRecorrenteSemCodigo() throws Exception {
+        ContabilidadeVO vo = getVORecorrente()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Não foi possível buscar os registros recorrentes relacionados.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCartaoSemCodigo() throws Exception {
+        ContabilidadeVO vo = getVOSemCartao()
+                .codigo(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCodigoEDataLancamento() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo(null)
+                .dataLancamento(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCodigoEDataLancamentoEParcela() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo(null)
+                .dataLancamento(null)
+                .parcela(null);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O campo parcela é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCodigoPai() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo códigoPai é obrigatório.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComDataVencimentoIncorreta() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .dataVencimento("27-04/2018");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.time.format.DateTimeParseException: Text '27-04/2018' could not be parsed at index 2")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComRecorrenteIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .recorrente("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComRecorrenteEUsouCartaoIncorretos() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .recorrente("NS")
+                .usouCartao("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O valor do campo usouCartao é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .recorrente("NS")
+                .usouCartao("NS")
+                .parcelado("NS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(3)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor do campo recorrente é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O valor do campo usouCartao é diferente de 'S' ou 'N'.")))
+                .andExpect(jsonPath("$.mensagens[2]", is("O valor do campo parcelado é diferente de 'S' ou 'N'.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComTipoIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .tipo("DEBITOS");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.lang.IllegalArgumentException: No enum constant TipoContabilidade.DEBITOS")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteComValorIncorreto() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .valor("a24,04");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.text.ParseException: Unparseable number: \"a24,04\"")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteRecorrenteEParcelado() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .recorrente("S")
+                .parcelado("S");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Uma contabilidade não pode ser recorrente e parcelada.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteProibidoAlterarCodigo() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("20");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteProibidoAlterarDataLancamento() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .dataLancamento("01/01/2000");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteProibidoAlterarParcelas() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .parcelas("10");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo parcelas não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteProibidoAlterarParcela() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .parcela("2");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo parcela não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteProibidoAlterarCodigoPai() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0")
+                .codigoPai("1");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo parcela não pode ser alterado.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo códigoPai não pode ser alterado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteGrupoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .grupo("Um grupo");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Grupo não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSubGrupoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .subGrupo("Um subgrupo");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("SubGrupo não cadastrado.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("Grupo e SubGrupo não estão associados.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteLocalNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .local("Um outro local");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Local não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteCartaoNaoCadastrado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .cartao("1324");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Cartão não cadastrado.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteContaNaoCadastrada() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .conta("Uma conta");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Conta não cadastrada.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteGrupoESubGrupoNaoAssociados() throws Exception {
+        criarSubGrupoAluguel();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .grupo("Saúde")
+                .subGrupo("Aluguel");
+
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Grupo e SubGrupo não estão associados.")));
+    }
+
+    @Test
+    public void atualizarRecursivamenteSemCartao() throws Exception {
+        criarContabilidadeSemCartao();
+
+        ContabilidadeVO vo = getVOSemCartao()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void atualizarRecursivamenteRecorrente() throws Exception {
+        criarContabilidadeRecorrente();
+
+        ContabilidadeVO vo = getVORecorrente()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void atualizarRecursivamenteParcelada() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/contabilidade/recursivo")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -2027,12 +3152,12 @@ public class ContabilidadeControllerTest extends GenericTest {
         deletarDiretorioEArquivos();
 
         mvc.perform(get("/contabilidade")
-                            .characterEncoding("UTF-8")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInsufficientStorage())
                 .andExpect(content()
-                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar tudo.")));
@@ -2041,9 +3166,9 @@ public class ContabilidadeControllerTest extends GenericTest {
     @Test
     public void buscarTudoInexistente() throws Exception {
         mvc.perform(get("/contabilidade")
-                            .characterEncoding("UTF-8")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
     }
@@ -2053,12 +3178,12 @@ public class ContabilidadeControllerTest extends GenericTest {
         criarContabilidadeSemCartao();
 
         mvc.perform(get("/contabilidade")
-                            .characterEncoding("UTF-8")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].codigo", is("0")))
                 .andExpect(jsonPath("$[0].dataLancamento", is(getStringFromCurrentDate())))
@@ -2087,12 +3212,12 @@ public class ContabilidadeControllerTest extends GenericTest {
         criarContabilidadeParcelada();
 
         mvc.perform(get("/contabilidade")
-                            .characterEncoding("UTF-8")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(7)))
 
                 .andExpect(jsonPath("$[0].codigo", is("0")))
@@ -2248,12 +3373,12 @@ public class ContabilidadeControllerTest extends GenericTest {
         criarContabilidadeRecorrente();
 
         mvc.perform(get("/contabilidade")
-                            .characterEncoding("UTF-8")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON))
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                                   .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(9)))
 
                 .andExpect(jsonPath("$[0].codigo", is("0")))
@@ -2495,7 +3620,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarContabilidadeSemCartao() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("N")
                 .parcelado("N")
                 .usouCartao("N");
@@ -2514,7 +3639,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarContabilidadeParcelada() throws Exception {
-        ContabilidadeVO vo = getVO();
+        ContabilidadeVO vo = getVOParcelado();
         String json = gson.toJson(vo);
 
         mvc.perform(post("/contabilidade")
@@ -2536,7 +3661,7 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     private void criarContabilidadeRecorrente() throws Exception {
-        ContabilidadeVO vo = getVO()
+        ContabilidadeVO vo = getVOParcelado()
                 .recorrente("S")
                 .parcelado("N");
         String json = gson.toJson(vo);
@@ -2561,7 +3686,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[8]", is(8)));
     }
 
-    private ContabilidadeVO getVO() {
+    private ContabilidadeVO getVOParcelado() {
         return new ContabilidadeVO()
                 .dataLancamento(getStringFromCurrentDate())
                 .dataVencimento("27/04/2018")
@@ -2578,5 +3703,18 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .conta("CAROL")
                 .tipo("DEBITO")
                 .valor("24,04");
+    }
+
+    private ContabilidadeVO getVOSemCartao() {
+        return getVOParcelado()
+                .recorrente("N")
+                .parcelado("N")
+                .usouCartao("N");
+    }
+
+    private ContabilidadeVO getVORecorrente() {
+        return getVOParcelado()
+                .recorrente("S")
+                .parcelado("N");
     }
 }

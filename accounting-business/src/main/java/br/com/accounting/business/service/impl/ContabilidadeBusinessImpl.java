@@ -13,6 +13,7 @@ import br.com.accounting.core.service.*;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -21,7 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.accounting.core.util.Utils.*;
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -95,27 +99,34 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizarSubsequentes(final ContabilidadeDTO dto) throws StoreException, BusinessException {
+    public void atualizarRecursivamente(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
         try {
-            if (dto.parcelado().equals("S")) {
-                atualizarParcelas(dto);
-            }
-            if (dto.recorrente().equals("S")) {
-                atualizarRecorrentes(dto);
-            }
-            else {
+            if (!ehParcelado(dto) && !ehRecorrente(dto)) {
                 atualizar(dto);
             }
-        }
-        catch (StoreException e) {
-            throw e;
+            else {
+                if (ehParcelado(dto)) {
+                    atualizarParcelas(dto);
+                }
+                else {
+                    atualizarRecorrentes(dto);
+                }
+            }
         }
         catch (DateTimeParseException | ParseException e) {
             throw new ValidationException(e);
         }
+        catch (ValidationException e) {
+            throw e;
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao atualizar recursivamente.", e);
+        }
+        catch (BusinessException e) {
+            throw e;
+        }
         catch (Exception e) {
-            String message = "Não foi possível atualizar recursivamente.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
@@ -417,26 +428,28 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     private String buscarCodigoPai(ContabilidadeDTO dto) {
         String codigoPai = dto.codigoPai();
-        if (ehPai(dto)) {
+        if (ehPai(dto) && isBlankOrNull(codigoPai)) {
             codigoPai = dto.codigo();
         }
         return codigoPai;
     }
 
     private int primeiraParcela(ContabilidadeDTO dto) {
-        return Integer.parseInt(dto.parcela()) - 1;
+        return !isBlankOrNull(dto.parcela()) ? parseInt(dto.parcela()) - 1 : -1;
     }
 
     private void gravarCodigo(ContabilidadeDTO dto, String codigoPai, int i) {
         String codigo = dto.codigo();
         if (!ehPai(dto)) {
-            codigo = String.valueOf(Integer.parseInt(codigoPai) + i);
+            if (!isBlankOrNull(codigoPai)) {
+                codigo = valueOf(parseInt(codigoPai) + i);
+            }
         }
         dto.codigo(codigo);
     }
 
     private void gravarCodigoPai(ContabilidadeDTO dto, String codigoPai, String parcela) {
-        if (parcela.equals("1")) {
+        if (ehPai(dto)) {
             dto.codigoPai(null);
         }
         else {
@@ -445,7 +458,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private boolean ehPai(ContabilidadeDTO dto) {
-        return dto.parcela().equals("1");
+        return !isBlankOrNull(dto.parcela()) && dto.parcela().equals("1");
     }
 
     private void excluirParcelas(ContabilidadeDTO dto) throws StoreException, ParseException, ServiceException {
@@ -458,14 +471,14 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private List<Contabilidade> buscarParcelasSeguintes(ContabilidadeDTO dto) throws StoreException, ParseException {
-        Long codigoPai = Long.parseLong(buscarCodigoPai(dto));
-        int parcelaAtual = Integer.parseInt(dto.parcela());
+        Long codigoPai = parseLong(buscarCodigoPai(dto));
+        int parcelaAtual = parseInt(dto.parcela());
         return service.buscarParcelasSeguintesInclusivo(codigoPai, parcelaAtual);
     }
 
     private void excluirRecorrentes(ContabilidadeDTO dto) throws StoreException, ServiceException, ParseException {
         if (dto.recorrente().equals("S")) {
-            long codigo = Long.parseLong(dto.codigo());
+            long codigo = parseLong(dto.codigo());
             List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
             for (Contabilidade entity : entities) {
                 service.deletar(entity);
@@ -555,7 +568,11 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private boolean ehParcelado(ContabilidadeDTO dto) {
-        return !isBlank(dto.parcelado()) && getBooleanFromString(dto.parcelado());
+        return !isBlankOrNull(dto.parcelado()) && getBooleanFromString(dto.parcelado());
+    }
+
+    private boolean ehRecorrente(ContabilidadeDTO dto) {
+        return !isBlankOrNull(dto.recorrente()) && getBooleanFromString(dto.recorrente());
     }
 
     private boolean naoTemParcela(ContabilidadeDTO dto) {
@@ -566,14 +583,16 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return isBlank(dto.parcelas());
     }
 
-    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
+    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, GenericException, ValidationException {
         String dataVencimento = dto.dataVencimento();
-        int parcelas = Integer.parseInt(dto.parcelas());
+        String parcelasString = isBlankOrNull(dto.parcelas()) ? dto.parcela() : dto.parcelas();
+        int parcelas = isBlankOrNull(parcelasString) ? 0 : parseInt(parcelasString);
+
         String codigoPai = buscarCodigoPai(dto);
 
         for (int i = primeiraParcela(dto); i < parcelas; i++) {
             dto.dataVencimento(dataVencimento);
-            String parcela = String.valueOf(i + 1);
+            String parcela = isBlankOrNull(dto.parcela()) ? null : valueOf(i + 1);
             dto.parcela(parcela);
 
             gravarCodigo(dto, codigoPai, i);
@@ -584,32 +603,38 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         }
     }
 
-    private void atualizarRecorrentes(ContabilidadeDTO dto) throws StoreException, ParseException, ServiceException {
-        Long codigo = Long.parseLong(dto.codigo());
+    private void atualizarRecorrentes(ContabilidadeDTO dto) throws StoreException, ParseException, BusinessException, GenericException {
+        Long codigo = isBlankOrNull(dto.codigo()) ? null : parseLong(dto.codigo());
         List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
 
-        String dataVencimento = dto.dataVencimento();
-        for (int i = 0; i < entities.size(); i++) {
-            Contabilidade entity = entities.get(i);
+        if (CollectionUtils.isEmpty(entities)) {
+            throw new BusinessException("Não foi possível buscar os registros recorrentes relacionados.");
+        }
 
-            Contabilidade entityCreated = ContabilidadeFactory
-                    .begin()
-                    .withCodigo(entity.codigo())
-                    .withDataLancamento(entity.dataLancamento())
+        List<ContabilidadeDTO> entitiesDTOS = criarListaDTO(entities);
+
+        String dataVencimento = dto.dataVencimento();
+        for (int i = 0; i < entitiesDTOS.size(); i++) {
+            ContabilidadeDTO entityDTO = entitiesDTOS.get(i);
+
+            ContabilidadeDTO dtoCreated = ContabilidadeDTOFactory
+                    .create()
+                    .withCodigo(entityDTO.codigo())
+                    .withDataLancamento(entityDTO.dataLancamento())
                     .withDataAtualizacao(LocalDate.now())
                     .withDataVencimento(dataVencimento)
-                    .withDataPagamento(entity.dataPagamento())
-                    .withRecorrente(entity.recorrente())
+                    .withDataPagamento(entityDTO.dataPagamento())
+                    .withRecorrente(entityDTO.recorrente())
                     .withGrupo(dto.grupo(), dto.subGrupo())
                     .withLocal(dto.local())
                     .withDescricao(dto.descricao())
                     .withConta(dto.conta())
-                    .withTipo(entity.tipo())
+                    .withTipo(entityDTO.tipo())
                     .withValor(dto.valor())
-                    .withProximoLancamento(entity.proximoLancamento())
+                    .withProximoLancamento(entityDTO.proximoLancamento())
                     .build();
 
-            service.atualizar(entityCreated);
+            atualizar(dtoCreated);
 
             dataVencimento = getStringNextMonth(dataVencimento);
         }

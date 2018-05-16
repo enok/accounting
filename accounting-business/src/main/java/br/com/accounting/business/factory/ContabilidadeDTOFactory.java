@@ -77,16 +77,30 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
         return dto;
     }
 
+    public ContabilidadeDTOFactory withCodigo(String codigo) {
+        if (!isBlankOrNull(codigo)) {
+            dto.codigo(codigo);
+        }
+        return this;
+    }
+
     public ContabilidadeDTOFactory withCodigo(Long codigo) {
         if (codigo != null) {
-            dto.codigo(codigo.toString());
+            withCodigo(codigo.toString());
+        }
+        return this;
+    }
+
+    public ContabilidadeDTOFactory withDataLancamento(String dataLancamento) {
+        if (!isBlankOrNull(dataLancamento)) {
+            dto.dataLancamento(dataLancamento);
         }
         return this;
     }
 
     public ContabilidadeDTOFactory withDataLancamento(LocalDate dataLancamento) {
         if (dataLancamento != null) {
-            dto.dataLancamento(getStringFromDate(dataLancamento));
+            withDataLancamento(getStringFromDate(dataLancamento));
         }
         return this;
     }

@@ -857,15 +857,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
                 null);
     }
 
-    @Test(expected = BusinessException.class)
-    public void alterarContabilidadesSubsequentesException() throws BusinessException, StoreException {
-        try {
-            business.atualizarSubsequentes(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recursivamente."));
-            throw e;
-        }
+    @Test(expected = GenericException.class)
+    public void alterarContabilidadesSubsequentesException() throws StoreException, BusinessException, GenericException {
+        business.atualizarRecursivamente(null);
     }
 
     @Test
@@ -878,7 +872,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertParcelado(dto, "27/04/2018", "Suplementos comprados pela Carol", "1", null);
 
         dto.descricao("Outra descrição");
-        business.atualizarSubsequentes(dto);
+        business.atualizarRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
 
@@ -908,7 +902,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertRecorrente(dto, "27/04/2018", "Aluguel mensal do apartamento", "1");
 
         dto.descricao("Outra descrição");
-        business.atualizarSubsequentes(dto);
+        business.atualizarRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
 
@@ -925,7 +919,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertParcelado(dto, "27/05/2018", "Suplementos comprados pela Carol", "2", "0");
 
         dto.descricao("Outra descrição");
-        business.atualizarSubsequentes(dto);
+        business.atualizarRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(parseLong(dto.codigoPai()));
 
@@ -960,7 +954,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertRecorrente(dto, "27/05/2018", "Aluguel mensal do apartamento", "2");
 
         dto.descricao("Outra descrição");
-        business.atualizarSubsequentes(dto);
+        business.atualizarRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
 
@@ -977,7 +971,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertNaoRecorrenteNaoParceladoNaoCartao(dto, "Aluguel mensal do apartamento");
 
         dto.descricao("Outra descrição");
-        business.atualizarSubsequentes(dto);
+        business.atualizarRecursivamente(dto);
 
         dto = business.buscarPorCodigo(codigo);
 

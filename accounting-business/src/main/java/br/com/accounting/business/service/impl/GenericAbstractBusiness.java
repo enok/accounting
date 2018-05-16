@@ -212,7 +212,7 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     protected void conferirValorBooleano(List<String> errosCreate, String valorBooleano, String campo) {
-        if (!("S" .equals(valorBooleano) || "N" .equals(valorBooleano))) {
+        if (!("S".equals(valorBooleano) || "N".equals(valorBooleano))) {
             errosCreate.add(String.format("O valor do campo %s é diferente de 'S' ou 'N'.", campo));
         }
     }
