@@ -55,6 +55,7 @@ public class ContabilidadeController extends AbstractExceptionHandler {
     }
 
     @PutMapping("/recorrente/{anos}")
+    @ResponseBody
     public ResponseEntity incrementarRecorrentes(@PathVariable Integer anos) throws StoreException, BusinessException, GenericException {
         List<Long> codigos = business.incrementarRecorrentes(anos);
         if (isEmpty(codigos)) {
@@ -70,6 +71,15 @@ public class ContabilidadeController extends AbstractExceptionHandler {
         }
     }
 
+    @DeleteMapping("/recursivo")
+    public ResponseEntity excluirRecursivamente(@RequestBody ContabilidadeVO vo) throws StoreException, BusinessException, GenericException {
+        ContabilidadeDTO dto = createDTO(vo);
+        business.excluirRecursivamente(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = createDTO(codigo);
@@ -80,6 +90,7 @@ public class ContabilidadeController extends AbstractExceptionHandler {
     }
 
     @GetMapping("/{codigo}")
+    @ResponseBody
     public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
         ContabilidadeVO vo = createVO(dto);
@@ -89,6 +100,7 @@ public class ContabilidadeController extends AbstractExceptionHandler {
     }
 
     @GetMapping
+    @ResponseBody
     public ResponseEntity buscarTudo() throws StoreException, GenericException {
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         List<ContabilidadeVO> vos = createVOList(dtos);

@@ -161,17 +161,28 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void excluirSubsequentes(final ContabilidadeDTO dto) throws StoreException, BusinessException {
+    public void excluirRecursivamente(final ContabilidadeDTO dto) throws ValidationException, StoreException, GenericException {
         try {
-            excluirParcelas(dto);
-            excluirRecorrentes(dto);
+            if (!ehParcelado(dto) && !ehRecorrente(dto)) {
+                excluir(dto);
+            }
+            else {
+                if (ehParcelado(dto)) {
+                    excluirParcelas(dto);
+                }
+                else {
+                    excluirRecorrentes(dto);
+                }
+            }
+        }
+        catch (ParseException | NumberFormatException e) {
+            throw new ValidationException(e);
         }
         catch (StoreException e) {
-            throw e;
+            throw new StoreException("Erro de persistência ao excluir recursivamente.", e);
         }
         catch (Exception e) {
-            String message = "Não foi possível excluir subsequentes.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
@@ -461,11 +472,9 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private void excluirParcelas(ContabilidadeDTO dto) throws StoreException, ParseException, ServiceException {
-        if (dto.parcelado().equals("S")) {
-            List<Contabilidade> entities = buscarParcelasSeguintes(dto);
-            for (Contabilidade entity : entities) {
-                service.deletar(entity);
-            }
+        List<Contabilidade> entities = buscarParcelasSeguintes(dto);
+        for (Contabilidade entity : entities) {
+            service.deletar(entity);
         }
     }
 
@@ -476,14 +485,12 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     private void excluirRecorrentes(ContabilidadeDTO dto) throws StoreException, ServiceException, ParseException {
-        if (dto.recorrente().equals("S")) {
-            long codigo = parseLong(dto.codigo());
-            List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
-            for (Contabilidade entity : entities) {
-                service.deletar(entity);
-            }
-            service.normalizarProximosLancamentos();
+        long codigo = parseLong(dto.codigo());
+        List<Contabilidade> entities = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
+        for (Contabilidade entity : entities) {
+            service.deletar(entity);
         }
+        service.normalizarProximosLancamentos();
     }
 
     private List<ContabilidadeDTO> criarListaDTO(List<Contabilidade> entities) {

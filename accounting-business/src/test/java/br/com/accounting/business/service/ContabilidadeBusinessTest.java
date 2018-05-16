@@ -1044,15 +1044,9 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertRecorrentesTotais("27/12/2018", codigosAtualizados, 13, 1);
     }
 
-    @Test(expected = BusinessException.class)
-    public void excluirSubsequentesException() throws BusinessException, StoreException {
-        try {
-            business.excluirSubsequentes(null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível excluir subsequentes."));
-            throw e;
-        }
+    @Test(expected = GenericException.class)
+    public void excluirSubsequentesException() throws BusinessException, StoreException, GenericException {
+        business.excluirRecursivamente(null);
     }
 
     @Test
@@ -1061,7 +1055,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
-        business.excluirSubsequentes(dto);
+        business.excluirRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
         assertThat(dtos.size(), equalTo(0));
@@ -1072,7 +1066,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidades();
         ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 
-        business.excluirSubsequentes(dto);
+        business.excluirRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
         assertThat(dtos.size(), equalTo(1));
@@ -1086,7 +1080,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
 
-        business.excluirSubsequentes(dto);
+        business.excluirRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigo);
         assertThat(dtos.size(), equalTo(0));
@@ -1097,7 +1091,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         List<Long> codigos = criarContabilidadeRecorrente();
         ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 
-        business.excluirSubsequentes(dto);
+        business.excluirRecursivamente(dto);
 
         List<ContabilidadeDTO> dtos = business.buscarTodasAsRecorrentes(codigos.get(0));
         assertThat(dtos.size(), equalTo(1));

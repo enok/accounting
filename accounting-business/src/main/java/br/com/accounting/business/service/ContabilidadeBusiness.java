@@ -10,7 +10,7 @@ import java.util.List;
 public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO> {
     void atualizarRecursivamente(ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException;
 
-    void excluirSubsequentes(ContabilidadeDTO dto) throws StoreException, BusinessException;
+    void excluirRecursivamente(ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException;
 
     List<Long> incrementarRecorrentes(Integer anos) throws StoreException, BusinessException, GenericException;
 

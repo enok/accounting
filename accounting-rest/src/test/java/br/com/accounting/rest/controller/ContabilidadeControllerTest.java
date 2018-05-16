@@ -3086,6 +3086,144 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content().string(""));
     }
 
+    @Test
+    public void excluirRecursivamenteParceladoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao excluir recursivamente.")));
+    }
+
+    @Test
+    public void excluirRecursivamenteRecorrenteSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContabilidadeVO vo = getVORecorrente()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao excluir recursivamente.")));
+    }
+
+    @Test
+    public void excluirRecursivamenteComCodigoErrado() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("a");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("java.lang.NumberFormatException: For input string: \"a\"")));
+    }
+
+    @Test
+    public void excluirRecursivamenteParceladoSemRegistros() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirRecursivamenteRecorrenteSemRegistros() throws Exception {
+        ContabilidadeVO vo = getVORecorrente()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirRecursivamenteParcelado() throws Exception {
+        criarContabilidadeParcelada();
+
+        ContabilidadeVO vo = getVOParcelado()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        mvc.perform(get("/contabilidade")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void excluirRecursivamenteRecorrente() throws Exception {
+        criarContabilidadeRecorrente();
+
+        ContabilidadeVO vo = getVORecorrente()
+                .codigo("0");
+        String json = gson.toJson(vo);
+
+        mvc.perform(delete("/contabilidade/recursivo")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        mvc.perform(get("/contabilidade")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
 
     @Test
     public void buscarPorCodigoSemDiretorio() throws Exception {
