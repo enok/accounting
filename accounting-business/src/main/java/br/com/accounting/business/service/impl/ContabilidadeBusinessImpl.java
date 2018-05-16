@@ -129,7 +129,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public List<Long> incrementarRecorrentes(final Integer anos) throws BusinessException, StoreException, GenericException {
+    public List<Long> incrementarRecorrentes(final Integer anos) throws StoreException, BusinessException, GenericException {
         try {
             if (anos < 1) {
                 throw new ValidationException("O valor de anos deve ser maior ou igual a 1.");
@@ -188,7 +188,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void realizarPagamento(final Long codigo) throws BusinessException, StoreException, GenericException {
+    public void realizarPagamento(final Long codigo) throws StoreException, BusinessException, GenericException {
         try {
             ContabilidadeDTO dto = buscarPorCodigo(codigo);
             dto.dataPagamento(getStringFromCurrentDate());
@@ -206,17 +206,20 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public List<ContabilidadeDTO> buscarTodasAsParcelas(final Long codigoPai) throws BusinessException {
-        List<ContabilidadeDTO> entitiesDTO;
+    public List<ContabilidadeDTO> buscarParcelasRelacionadas(final Long codigoPai) throws ValidationException, StoreException, GenericException {
         try {
             List<Contabilidade> entitiesFiltradas = service.buscarTodasAsParcelas(codigoPai);
-            entitiesDTO = criarListaDTO(entitiesFiltradas);
+            return criarListaDTO(entitiesFiltradas);
+        }
+        catch (ParseException e) {
+            throw new ValidationException(e);
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao buscar parcelas relacionadas.", e);
         }
         catch (Exception e) {
-            String message = "Não foi possível buscas todas as parcelas.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
-        return entitiesDTO;
     }
 
     @Override

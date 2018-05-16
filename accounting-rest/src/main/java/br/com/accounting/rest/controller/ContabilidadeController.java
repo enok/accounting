@@ -3,6 +3,7 @@ package br.com.accounting.rest.controller;
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.business.exception.BusinessException;
 import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.service.ContabilidadeBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
@@ -111,6 +112,23 @@ public class ContabilidadeController extends AbstractExceptionHandler {
     @ResponseBody
     public ResponseEntity buscarTudo() throws StoreException, GenericException {
         List<ContabilidadeDTO> dtos = business.buscarTodas();
+        List<ContabilidadeVO> vos = createVOList(dtos);
+        if (isEmpty(vos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(vos);
+        }
+    }
+
+    @GetMapping("/parcelado/{codigoPai}")
+    @ResponseBody
+    public ResponseEntity buscarParcelasRelacionadas(@PathVariable Long codigoPai) throws ValidationException, StoreException, GenericException {
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigoPai);
         List<ContabilidadeVO> vos = createVOList(dtos);
         if (isEmpty(vos)) {
             return ResponseEntity

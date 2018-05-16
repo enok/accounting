@@ -840,17 +840,17 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void criarSemCartao() throws Exception {
-        criarContabilidadeSemCartao();
+        criarContabilidadeSemCartaoComAssert();
     }
 
     @Test
     public void criarParcelada() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
     }
 
     @Test
     public void criarRecorrente() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
     }
 
     @Test
@@ -1384,7 +1384,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigoPai() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("1");
@@ -1405,7 +1405,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComDataVencimentoIncorreta() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1427,7 +1427,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComRecorrenteIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS");
@@ -1448,7 +1448,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComRecorrenteEUsouCartaoIncorretos() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
@@ -1471,7 +1471,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
@@ -1496,7 +1496,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComTipoIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1518,7 +1518,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarComValorIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1540,7 +1540,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecorrenteEParcelado() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1563,7 +1563,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarCodigo() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("20");
@@ -1584,7 +1584,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarDataLancamento() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1606,7 +1606,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarParcelas() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1628,7 +1628,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarParcela() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1650,7 +1650,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarCodigoPai() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -1791,7 +1791,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizar() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0");
@@ -2453,7 +2453,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteSemCodigoPai() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("1");
@@ -2474,7 +2474,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComDataVencimentoIncorreta() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2496,7 +2496,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComRecorrenteIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS");
@@ -2517,7 +2517,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComRecorrenteEUsouCartaoIncorretos() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
@@ -2540,7 +2540,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComRecorrenteEUsouCartaoEParceladoIncorretos() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("NS")
@@ -2565,7 +2565,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComTipoIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2587,7 +2587,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteComValorIncorreto() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2609,7 +2609,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteRecorrenteEParcelado() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2632,7 +2632,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteProibidoAlterarCodigo() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("20");
@@ -2653,7 +2653,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteProibidoAlterarDataLancamento() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2675,7 +2675,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteProibidoAlterarParcelas() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2697,7 +2697,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteProibidoAlterarParcela() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2719,7 +2719,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteProibidoAlterarCodigoPai() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0")
@@ -2861,7 +2861,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteSemCartao() throws Exception {
-        criarContabilidadeSemCartao();
+        criarContabilidadeSemCartaoComAssert();
 
         ContabilidadeVO vo = getVOSemCartao()
                 .codigo("0");
@@ -2878,7 +2878,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteRecorrente() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         ContabilidadeVO vo = getVORecorrente()
                 .codigo("0");
@@ -2895,7 +2895,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteParcelada() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0");
@@ -2970,7 +2970,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void incrementarRecorrente1Ano() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         Integer anos = 1;
 
@@ -2987,7 +2987,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void incrementarRecorrente2Anos() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         Integer anos = 2;
 
@@ -3032,7 +3032,6 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao realizar pagamento.")));
     }
 
-
     @Test
     public void realizarPagamentoSemCodigo() throws Exception {
         Long codigo = null;
@@ -3075,7 +3074,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void realizarPagamento() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         Integer codigo = 0;
 
@@ -3169,7 +3168,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void excluir() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         String codigo = "0";
 
@@ -3274,7 +3273,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void excluirRecursivamenteParcelado() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         ContabilidadeVO vo = getVOParcelado()
                 .codigo("0");
@@ -3298,7 +3297,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void excluirRecursivamenteRecorrente() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         ContabilidadeVO vo = getVORecorrente()
                 .codigo("0");
@@ -3380,7 +3379,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarPorCodigoContabilidadeSemCartao() throws Exception {
-        criarContabilidadeSemCartao();
+        criarContabilidadeSemCartaoComAssert();
 
         String codigo = "0";
 
@@ -3415,7 +3414,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarPorCodigoParcelada() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         String codigo = "0";
 
@@ -3450,7 +3449,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarPorCodigoRecorrente() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         String codigo = "0";
 
@@ -3511,7 +3510,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarTudoSemCartao() throws Exception {
-        criarContabilidadeSemCartao();
+        criarContabilidadeSemCartaoComAssert();
 
         mvc.perform(get("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -3545,7 +3544,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarTudoParcelado() throws Exception {
-        criarContabilidadeParcelada();
+        criarContabilidadeParceladaComAssert();
 
         mvc.perform(get("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -3706,7 +3705,7 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void buscarTudoRecorrente() throws Exception {
-        criarContabilidadeRecorrente();
+        criarContabilidadeRecorrenteComAssert();
 
         mvc.perform(get("/contabilidade")
                 .characterEncoding("UTF-8")
@@ -3907,6 +3906,231 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$[8].proximoLancamento", isEmptyOrNullString()));
     }
 
+    // enok - copy
+
+    @Test
+    public void buscarParcelasRelacionadasSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        Long codigoPai = 0L;
+
+        mvc.perform(get("/contabilidade/parcelado/{codigoPai}", codigoPai)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar parcelas relacionadas.")));
+    }
+
+    @Test
+    public void buscarParcelasRelacionadasSemCodigo() throws Exception {
+        Long codigoPai = null;
+
+        mvc.perform(get("/contabilidade/parcelado/{codigoPai}", codigoPai)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarParcelasRelacionadasComCodigoIncorreto() throws Exception {
+        String codigoPai = "a";
+
+        mvc.perform(get("/contabilidade/parcelado/{codigoPai}", codigoPai)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarParcelasRelacionadasSemRegistros() throws Exception {
+        Long codigoPai = 0L;
+
+        mvc.perform(get("/contabilidade/parcelado/{codigoPai}", codigoPai)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void buscarParcelasRelacionadas() throws Exception {
+        criarContabilidadeParcelada();
+        criarContabilidadeSemCartao();
+        criarContabilidadeRecorrente();
+
+        Long codigoPai = 0L;
+
+        mvc.perform(get("/contabilidade/parcelado/{codigoPai}", codigoPai)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(7)))
+
+                .andExpect(jsonPath("$[0].codigo", is("0")))
+                .andExpect(jsonPath("$[0].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[0].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[0].dataVencimento", is("27/04/2018")))
+                .andExpect(jsonPath("$[0].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[0].recorrente", is("N")))
+                .andExpect(jsonPath("$[0].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[0].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[0].local", is("Site")))
+                .andExpect(jsonPath("$[0].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[0].usouCartao", is("S")))
+                .andExpect(jsonPath("$[0].cartao", is("0744")))
+                .andExpect(jsonPath("$[0].parcelado", is("S")))
+                .andExpect(jsonPath("$[0].parcela", is("1")))
+                .andExpect(jsonPath("$[0].parcelas", is("7")))
+                .andExpect(jsonPath("$[0].conta", is("CAROL")))
+                .andExpect(jsonPath("$[0].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[0].valor", is("24,04")))
+                .andExpect(jsonPath("$[0].codigoPai", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[0].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[1].codigo", is("1")))
+                .andExpect(jsonPath("$[1].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[1].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[1].dataVencimento", is("27/05/2018")))
+                .andExpect(jsonPath("$[1].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[1].recorrente", is("N")))
+                .andExpect(jsonPath("$[1].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[1].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[1].local", is("Site")))
+                .andExpect(jsonPath("$[1].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[1].usouCartao", is("S")))
+                .andExpect(jsonPath("$[1].cartao", is("0744")))
+                .andExpect(jsonPath("$[1].parcelado", is("S")))
+                .andExpect(jsonPath("$[1].parcela", is("2")))
+                .andExpect(jsonPath("$[1].parcelas", is("7")))
+                .andExpect(jsonPath("$[1].conta", is("CAROL")))
+                .andExpect(jsonPath("$[1].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[1].valor", is("24,04")))
+                .andExpect(jsonPath("$[1].codigoPai", is("0")))
+                .andExpect(jsonPath("$[1].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[2].codigo", is("2")))
+                .andExpect(jsonPath("$[2].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[2].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[2].dataVencimento", is("27/06/2018")))
+                .andExpect(jsonPath("$[2].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[2].recorrente", is("N")))
+                .andExpect(jsonPath("$[2].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[2].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[2].local", is("Site")))
+                .andExpect(jsonPath("$[2].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[2].usouCartao", is("S")))
+                .andExpect(jsonPath("$[2].cartao", is("0744")))
+                .andExpect(jsonPath("$[2].parcelado", is("S")))
+                .andExpect(jsonPath("$[2].parcela", is("3")))
+                .andExpect(jsonPath("$[2].parcelas", is("7")))
+                .andExpect(jsonPath("$[2].conta", is("CAROL")))
+                .andExpect(jsonPath("$[2].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[2].valor", is("24,04")))
+                .andExpect(jsonPath("$[2].codigoPai", is("0")))
+                .andExpect(jsonPath("$[2].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[3].codigo", is("3")))
+                .andExpect(jsonPath("$[3].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[3].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[3].dataVencimento", is("27/07/2018")))
+                .andExpect(jsonPath("$[3].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[3].recorrente", is("N")))
+                .andExpect(jsonPath("$[3].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[3].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[3].local", is("Site")))
+                .andExpect(jsonPath("$[3].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[3].usouCartao", is("S")))
+                .andExpect(jsonPath("$[3].cartao", is("0744")))
+                .andExpect(jsonPath("$[3].parcelado", is("S")))
+                .andExpect(jsonPath("$[3].parcela", is("4")))
+                .andExpect(jsonPath("$[3].parcelas", is("7")))
+                .andExpect(jsonPath("$[3].conta", is("CAROL")))
+                .andExpect(jsonPath("$[3].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[3].valor", is("24,04")))
+                .andExpect(jsonPath("$[3].codigoPai", is("0")))
+                .andExpect(jsonPath("$[3].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[4].codigo", is("4")))
+                .andExpect(jsonPath("$[4].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[4].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[4].dataVencimento", is("27/08/2018")))
+                .andExpect(jsonPath("$[4].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[4].recorrente", is("N")))
+                .andExpect(jsonPath("$[4].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[4].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[4].local", is("Site")))
+                .andExpect(jsonPath("$[4].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[4].usouCartao", is("S")))
+                .andExpect(jsonPath("$[4].cartao", is("0744")))
+                .andExpect(jsonPath("$[4].parcelado", is("S")))
+                .andExpect(jsonPath("$[4].parcela", is("5")))
+                .andExpect(jsonPath("$[4].parcelas", is("7")))
+                .andExpect(jsonPath("$[4].conta", is("CAROL")))
+                .andExpect(jsonPath("$[4].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[4].valor", is("24,04")))
+                .andExpect(jsonPath("$[4].codigoPai", is("0")))
+                .andExpect(jsonPath("$[4].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[5].codigo", is("5")))
+                .andExpect(jsonPath("$[5].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[5].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[5].dataVencimento", is("27/09/2018")))
+                .andExpect(jsonPath("$[5].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[5].recorrente", is("N")))
+                .andExpect(jsonPath("$[5].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[5].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[5].local", is("Site")))
+                .andExpect(jsonPath("$[5].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[5].usouCartao", is("S")))
+                .andExpect(jsonPath("$[5].cartao", is("0744")))
+                .andExpect(jsonPath("$[5].parcelado", is("S")))
+                .andExpect(jsonPath("$[5].parcela", is("6")))
+                .andExpect(jsonPath("$[5].parcelas", is("7")))
+                .andExpect(jsonPath("$[5].conta", is("CAROL")))
+                .andExpect(jsonPath("$[5].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[5].valor", is("24,04")))
+                .andExpect(jsonPath("$[5].codigoPai", is("0")))
+                .andExpect(jsonPath("$[5].proximoLancamento", isEmptyOrNullString()))
+
+                .andExpect(jsonPath("$[6].codigo", is("6")))
+                .andExpect(jsonPath("$[6].dataLancamento", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[6].dataAtualizacao", is(getStringFromCurrentDate())))
+                .andExpect(jsonPath("$[6].dataVencimento", is("27/10/2018")))
+                .andExpect(jsonPath("$[6].dataPagamento", isEmptyOrNullString()))
+                .andExpect(jsonPath("$[6].recorrente", is("N")))
+                .andExpect(jsonPath("$[6].grupo", is("Saúde")))
+                .andExpect(jsonPath("$[6].subGrupo", is("Suplementos")))
+                .andExpect(jsonPath("$[6].local", is("Site")))
+                .andExpect(jsonPath("$[6].descricao", is("Suplementos comprados pela Carol")))
+                .andExpect(jsonPath("$[6].usouCartao", is("S")))
+                .andExpect(jsonPath("$[6].cartao", is("0744")))
+                .andExpect(jsonPath("$[6].parcelado", is("S")))
+                .andExpect(jsonPath("$[6].parcela", is("7")))
+                .andExpect(jsonPath("$[6].parcelas", is("7")))
+                .andExpect(jsonPath("$[6].conta", is("CAROL")))
+                .andExpect(jsonPath("$[6].tipo", is("DEBITO")))
+                .andExpect(jsonPath("$[6].valor", is("24,04")))
+                .andExpect(jsonPath("$[6].codigoPai", is("0")))
+                .andExpect(jsonPath("$[6].proximoLancamento", isEmptyOrNullString()));
+    }
+
+    // enok - inicio
+
+    // enok - fim
+
     private void criarGrupo() throws StoreException, BusinessException, GenericException {
         GrupoVO vo = new GrupoVO()
                 .nome("Saúde")
@@ -3955,7 +4179,7 @@ public class ContabilidadeControllerTest extends GenericTest {
         contaController.criar(vo);
     }
 
-    private void criarContabilidadeSemCartao() throws Exception {
+    private void criarContabilidadeSemCartaoComAssert() throws Exception {
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("N")
                 .parcelado("N")
@@ -3974,7 +4198,25 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[0]", is(0)));
     }
 
-    private void criarContabilidadeParcelada() throws Exception {
+    private void criarContabilidadeSemCartao() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .recorrente("N")
+                .parcelado("N")
+                .usouCartao("N");
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(1)));
+    }
+
+    private void criarContabilidadeParceladaComAssert() throws Exception {
         ContabilidadeVO vo = getVOParcelado();
         String json = gson.toJson(vo);
 
@@ -3996,7 +4238,22 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[6]", is(6)));
     }
 
-    private void criarContabilidadeRecorrente() throws Exception {
+    private void criarContabilidadeParcelada() throws Exception {
+        ContabilidadeVO vo = getVOParcelado();
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(7)));
+    }
+
+    private void criarContabilidadeRecorrenteComAssert() throws Exception {
         ContabilidadeVO vo = getVOParcelado()
                 .recorrente("S")
                 .parcelado("N");
@@ -4020,6 +4277,23 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.codigos[6]", is(6)))
                 .andExpect(jsonPath("$.codigos[7]", is(7)))
                 .andExpect(jsonPath("$.codigos[8]", is(8)));
+    }
+
+    private void criarContabilidadeRecorrente() throws Exception {
+        ContabilidadeVO vo = getVOParcelado()
+                .recorrente("S")
+                .parcelado("N");
+        String json = gson.toJson(vo);
+
+        mvc.perform(post("/contabilidade")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(9)));
     }
 
     private ContabilidadeVO getVOParcelado() {

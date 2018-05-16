@@ -874,7 +874,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         dto.descricao("Outra descrição");
         business.atualizarRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigo);
 
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = null;
@@ -921,7 +921,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
         dto.descricao("Outra descrição");
         business.atualizarRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(parseLong(dto.codigoPai()));
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(parseLong(dto.codigoPai()));
 
         int parcelas = Integer.parseInt(dto.parcelas());
         String codigoPai = null;
@@ -1057,7 +1057,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         business.excluirRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigo);
         assertThat(dtos.size(), equalTo(0));
     }
 
@@ -1068,7 +1068,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
 
         business.excluirRecursivamente(dto);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigos.get(0));
         assertThat(dtos.size(), equalTo(1));
 
         assertParcelado(dtos.get(0), "27/04/2018", "Suplementos comprados pela Carol", "1", null);
@@ -1150,14 +1150,14 @@ public class ContabilidadeBusinessTest extends GenericTest {
         assertEntitiesRecorrentes(dtos.subList(7, 16));
     }
 
-    @Test(expected = BusinessException.class)
-    public void buscarTodasAsParcelasException() throws BusinessException, IOException {
+    @Test(expected = StoreException.class)
+    public void buscarParcelasRelacionadasException() throws IOException, ValidationException, GenericException, StoreException {
         deletarDiretorioEArquivos();
         try {
-            business.buscarTodasAsParcelas(null);
+            business.buscarParcelasRelacionadas(null);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscas todas as parcelas."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao buscar parcelas relacionadas."));
             throw e;
         }
     }
@@ -1178,7 +1178,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     public void buscarTodasAsParcelas() throws StoreException, BusinessException, GenericException {
         Long codigo = criarContabilidades().get(0);
 
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigo);
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigo);
         assertThat(dtos.size(), equalTo(7));
         assertEntitiesParceladas(dtos);
     }
@@ -1209,8 +1209,8 @@ public class ContabilidadeBusinessTest extends GenericTest {
         return codigos;
     }
 
-    private void assertCodigos(List<Long> codigos) throws BusinessException {
-        List<ContabilidadeDTO> dtos = business.buscarTodasAsParcelas(codigos.get(0));
+    private void assertCodigos(List<Long> codigos) throws StoreException, GenericException, ValidationException {
+        List<ContabilidadeDTO> dtos = business.buscarParcelasRelacionadas(codigos.get(0));
         assertEntitiesParceladas(dtos);
     }
 
