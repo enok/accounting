@@ -11,13 +11,13 @@ import br.com.accounting.rest.vo.ContabilidadeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.valueOf;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @RestController
 @RequestMapping("/contabilidade")
@@ -54,6 +54,22 @@ public class ContabilidadeController extends AbstractExceptionHandler {
                 .build();
     }
 
+    @PutMapping("/recorrente/{anos}")
+    public ResponseEntity incrementarRecorrentes(@PathVariable Integer anos) throws StoreException, BusinessException, GenericException {
+        List<Long> codigos = business.incrementarRecorrentes(anos);
+        if (isEmpty(codigos)) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+        else {
+            CodigosVO codigosVO = new CodigosVO(codigos);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(codigosVO);
+        }
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContabilidadeDTO dto = createDTO(codigo);
@@ -76,7 +92,7 @@ public class ContabilidadeController extends AbstractExceptionHandler {
     public ResponseEntity buscarTudo() throws StoreException, GenericException {
         List<ContabilidadeDTO> dtos = business.buscarTodas();
         List<ContabilidadeVO> vos = createVOList(dtos);
-        if (CollectionUtils.isEmpty(vos)) {
+        if (isEmpty(vos)) {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .build();

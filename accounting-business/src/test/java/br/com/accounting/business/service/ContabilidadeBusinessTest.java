@@ -1021,17 +1021,16 @@ public class ContabilidadeBusinessTest extends GenericTest {
         }
     }
 
-    @Test(expected = BusinessException.class)
-    public void incrementarContabilidadesRecorrentesComMenosDe1Ano() throws StoreException, BusinessException, GenericException {
+    @Test(expected = ValidationException.class)
+    public void incrementarContabilidadesRecorrentesComMenosDe1Ano() throws StoreException, GenericException, BusinessException {
         try {
             ContabilidadeDTO dto = ContabilidadeDTOMockFactory.contabilidadeDTORecorrente();
             business.criar(dto);
 
             business.incrementarRecorrentes(0);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar recorrentes."));
-            assertThat(e.getCause().getMessage(), equalTo("O valor de anos deve ser maior ou igual a 1."));
+        catch (ValidationException e) {
+            assertThat(e.getMessage(), equalTo("O valor de anos deve ser maior ou igual a 1."));
             throw e;
         }
 

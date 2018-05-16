@@ -113,9 +113,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
                 }
             }
         }
-        catch (DateTimeParseException | ParseException e) {
-            throw new ValidationException(e);
-        }
         catch (ValidationException e) {
             throw e;
         }
@@ -132,10 +129,10 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public List<Long> incrementarRecorrentes(final Integer anos) throws StoreException, BusinessException {
+    public List<Long> incrementarRecorrentes(final Integer anos) throws BusinessException, StoreException, GenericException {
         try {
             if (anos < 1) {
-                throw new BusinessException("O valor de anos deve ser maior ou igual a 1.");
+                throw new ValidationException("O valor de anos deve ser maior ou igual a 1.");
             }
             List<Contabilidade> entities = service.buscarTodasRecorrentesNaoLancadas();
 
@@ -151,12 +148,14 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
             return codigos;
         }
-        catch (StoreException e) {
+        catch (ValidationException e) {
             throw e;
         }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao incrementar recorrentes.", e);
+        }
         catch (Exception e) {
-            String message = "Não foi possível atualizar recorrentes.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 

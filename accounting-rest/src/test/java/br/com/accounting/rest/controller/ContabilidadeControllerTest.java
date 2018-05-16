@@ -5,7 +5,6 @@ import br.com.accounting.business.exception.GenericException;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.vo.*;
 import com.google.gson.Gson;
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -835,7 +834,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Contabilidade duplicada.")));
     }
 
@@ -870,7 +869,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar.")));
     }
 
@@ -1823,7 +1822,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
     }
 
@@ -1843,7 +1842,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
     }
 
@@ -1863,7 +1862,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar recursivamente.")));
     }
 
@@ -2912,6 +2911,110 @@ public class ContabilidadeControllerTest extends GenericTest {
     }
 
     @Test
+    public void incrementarRecorrenteSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        Integer anos = 1;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao incrementar recorrentes.")));
+    }
+
+    @Test
+    public void incrementarRecorrenteSemAno() throws Exception {
+        Integer anos = null;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void incrementarRecorrenteComAnoNegativo() throws Exception {
+        Integer anos = -1;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor de anos deve ser maior ou igual a 1.")));
+    }
+
+    @Test
+    public void incrementarRecorrenteSemRegistros() throws Exception {
+        Integer anos = 1;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void incrementarRecorrente1Ano() throws Exception {
+        criarContabilidadeRecorrente();
+
+        Integer anos = 1;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(1)))
+                .andExpect(jsonPath("$.codigos[0]", is(8)));
+    }
+
+    @Test
+    public void incrementarRecorrente2Anos() throws Exception {
+        criarContabilidadeRecorrente();
+
+        Integer anos = 2;
+
+        mvc.perform(put("/contabilidade/recorrente/{anos}", anos)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(13)))
+                .andExpect(jsonPath("$.codigos[0]", is(8)))
+                .andExpect(jsonPath("$.codigos[1]", is(9)))
+                .andExpect(jsonPath("$.codigos[2]", is(10)))
+                .andExpect(jsonPath("$.codigos[3]", is(11)))
+                .andExpect(jsonPath("$.codigos[4]", is(12)))
+                .andExpect(jsonPath("$.codigos[5]", is(13)))
+                .andExpect(jsonPath("$.codigos[6]", is(14)))
+                .andExpect(jsonPath("$.codigos[7]", is(15)))
+                .andExpect(jsonPath("$.codigos[8]", is(16)))
+                .andExpect(jsonPath("$.codigos[9]", is(17)))
+                .andExpect(jsonPath("$.codigos[10]", is(18)))
+                .andExpect(jsonPath("$.codigos[11]", is(19)))
+                .andExpect(jsonPath("$.codigos[12]", is(20)));
+    }
+
+    @Test
     public void excluirSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
@@ -2925,7 +3028,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao excluir.")));
     }
 
@@ -2965,7 +3068,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(417)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
@@ -2998,7 +3101,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao buscar por código.")));
     }
 
@@ -3038,7 +3141,7 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(417)))
-                .andExpect(jsonPath("$.mensagens", IsCollectionWithSize.hasSize(1)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
                 .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 

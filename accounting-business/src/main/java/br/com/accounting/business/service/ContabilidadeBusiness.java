@@ -12,7 +12,7 @@ public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO>
 
     void excluirSubsequentes(ContabilidadeDTO dto) throws StoreException, BusinessException;
 
-    List<Long> incrementarRecorrentes(Integer anos) throws StoreException, BusinessException;
+    List<Long> incrementarRecorrentes(Integer anos) throws StoreException, BusinessException, GenericException;
 
     void realizarPagamento(Long codigo) throws StoreException, BusinessException;
 
