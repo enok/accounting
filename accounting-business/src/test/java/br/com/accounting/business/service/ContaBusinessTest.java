@@ -474,34 +474,34 @@ public class ContaBusinessTest extends GenericTest {
     }
 
     @Test(expected = StoreException.class)
-    public void atualizarContasException() throws BusinessException, IOException, StoreException {
+    public void atualizarCumulativasSemDiretorio() throws IOException, StoreException, GenericException, BusinessException {
         deletarDiretorioEArquivos();
         try {
-            business.atualizarContas();
+            business.atualizarCumulativas();
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível buscar os registros."));
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao atualizar as contas cumulativas."));
             throw e;
         }
     }
 
     @Test(expected = BusinessException.class)
-    public void atualizarContasSemCumulativos() throws StoreException, BusinessException, GenericException {
+    public void atualizarCumulativasSemCumulativos() throws StoreException, BusinessException, GenericException {
+        criarContaSalario();
         try {
-            criarContaSalario();
-            business.atualizarContas();
+            business.atualizarCumulativas();
         }
         catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível atualizar as contas."));
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
             throw e;
         }
     }
 
     @Test
-    public void atualizarContas() throws StoreException, BusinessException, GenericException {
+    public void atualizarCumulativas() throws StoreException, BusinessException, GenericException {
         Long codigoEnok = criarContaEnok();
         Long codigoSalario = criarContaSalario();
-        business.atualizarContas();
+        business.atualizarCumulativas();
         ContaDTO dtoEnok = business.buscarPorCodigo(codigoEnok);
         ContaDTO dtoSalario = business.buscarPorCodigo(codigoSalario);
 

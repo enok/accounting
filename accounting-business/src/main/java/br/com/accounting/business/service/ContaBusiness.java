@@ -12,5 +12,5 @@ public interface ContaBusiness extends GenericBusiness<ContaDTO> {
 
     void transferir(ContaDTO origemDTO, ContaDTO destinoDTO, Double valor) throws StoreException, BusinessException, GenericException;
 
-    void atualizarContas() throws StoreException, BusinessException;
+    void atualizarCumulativas() throws StoreException, BusinessException, GenericException;
 }

@@ -22,6 +22,7 @@ import static br.com.accounting.core.util.Utils.getDoubleFromString;
 import static br.com.accounting.core.util.Utils.isMonthChanged;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.util.CollectionUtils.*;
 
 @Service
 public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> implements ContaBusiness {
@@ -37,21 +38,12 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarCredito(final ContaDTO dto, final Double credito) throws StoreException, BusinessException, GenericException {
         try {
-            if ((credito == null) || (credito <= 0)) {
-                throw new ValidationException("O crédito deve ser maior que 0.");
-            }
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, credito);
         }
         catch (StoreException e) {
             throw new StoreException("Erro de persistência ao adicionar crédito.", e);
-        }
-        catch (ValidationException e) {
-            throw e;
-        }
-        catch (BusinessException e) {
-            throw e;
         }
         catch (Exception e) {
             throw new GenericException(e);
@@ -62,21 +54,12 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     @Override
     public void adicionarDebito(final ContaDTO dto, final Double debito) throws StoreException, BusinessException, GenericException {
         try {
-            if ((debito == null) || (debito <= 0)) {
-                throw new ValidationException("O débito deve ser maior que 0.");
-            }
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
             service.atualizarSaldo(entity, -debito);
         }
         catch (StoreException e) {
             throw new StoreException("Erro de persistência ao adicionar débito.", e);
-        }
-        catch (ValidationException e) {
-            throw e;
-        }
-        catch (BusinessException e) {
-            throw e;
         }
         catch (Exception e) {
             throw new GenericException(e);
@@ -117,9 +100,12 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
     }
 
     @Override
-    public void atualizarContas() throws StoreException, BusinessException {
+    public void atualizarCumulativas() throws StoreException, BusinessException, GenericException {
         try {
             List<Conta> entitiesBuscadas = service.buscarCumulativas();
+            if (isEmpty(entitiesBuscadas)) {
+                throw new BusinessException("Registro inexistente.");
+            }
             for (Conta entity : entitiesBuscadas) {
                 LocalDate dataAtualizacao = entity.dataAtualizacao();
                 if (isMonthChanged(dataAtualizacao)) {
@@ -131,11 +117,13 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
             }
         }
         catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao atualizar as contas cumulativas.", e);
+        }
+        catch (BusinessException e) {
             throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível atualizar as contas.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 

@@ -56,6 +56,14 @@ public class ContaController extends AbstractExceptionHandler {
                 .build();
     }
 
+    @PutMapping("/cumulativas")
+    public ResponseEntity atualizarCumulativas() throws StoreException, BusinessException, GenericException {
+        business.atualizarCumulativas();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContaDTO dto = createDTO(codigo);

@@ -807,6 +807,48 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
+    public void atualizarCumulativasSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        mvc.perform(put("/conta/cumulativas")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao atualizar as contas cumulativas.")));
+    }
+
+    @Test
+    public void atualizarCumulativasSemRegistros() throws Exception {
+        mvc.perform(put("/conta/cumulativas")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void atualizarCumulativas() throws Exception {
+        criarContaCarol();
+
+        mvc.perform(put("/conta/cumulativas")
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+    }
+
+    @Test
     public void excluirSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
