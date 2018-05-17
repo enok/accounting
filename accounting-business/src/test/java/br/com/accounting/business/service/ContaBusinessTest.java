@@ -328,7 +328,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dtoBuscado.saldo(), equalTo("2.000,00"));
     }
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void adicionarDebitoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
@@ -338,8 +338,8 @@ public class ContaBusinessTest extends GenericTest {
         try {
             business.adicionarDebito(dtoBuscado, 100.00);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível adicionar débito à conta."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao adicionar débito."));
             throw e;
         }
     }

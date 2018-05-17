@@ -54,6 +54,15 @@ public class ContaController extends AbstractExceptionHandler {
                 .build();
     }
 
+    @PutMapping("/debito")
+    public ResponseEntity adicionarDebito(@RequestBody ContaVO vo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dto = createDTO(vo);
+        business.adicionarDebito(dto, vo.debito());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         ContaDTO dto = createDTO(codigo);

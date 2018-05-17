@@ -551,7 +551,7 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoSemCredito() throws Exception {
+    public void adicionarCreditoSemValor() throws Exception {
         ContaVO dto = getVO()
                 .credito(null);
         String json = gson.toJson(dto);
@@ -570,7 +570,7 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoComCreditoZero() throws Exception {
+    public void adicionarCreditoComValorZero() throws Exception {
         ContaVO dto = getVO()
                 .credito(0.0);
         String json = gson.toJson(dto);
@@ -589,7 +589,7 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoComCreditoNegativo() throws Exception {
+    public void adicionarCreditoComValorNegativo() throws Exception {
         ContaVO dto = getVO()
                 .credito(-1.0);
         String json = gson.toJson(dto);
@@ -638,6 +638,184 @@ public class ContaControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.descricao", is("Valores passados para a Carol")))
                 .andExpect(jsonPath("$.valorDefault", is("500,00")))
                 .andExpect(jsonPath("$.saldo", is("1.000,00")))
+                .andExpect(jsonPath("$.cumulativo", is("S")))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
+    }
+
+    @Test
+    public void adicionarDebitoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContaVO dto = getVO()
+                .debito(100.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao adicionar débito.")));
+    }
+
+    @Test
+    public void adicionarDebitoSemConta() throws Exception {
+        ContaVO vo = getVO()
+                .codigo("0")
+                .debito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void adicionarDebitoSemCodigo() throws Exception {
+        criarConta();
+
+        ContaVO vo = getVO()
+                .codigo(null)
+                .debito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void adicionarDebitoSemSaldo() throws Exception {
+        criarConta();
+
+        ContaVO vo = getVO()
+                .codigo("0")
+                .saldo(null)
+                .debito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo saldo é obrigatório.")));
+    }
+
+    @Test
+    public void adicionarDebitoSemValor() throws Exception {
+        ContaVO dto = getVO()
+                .debito(null);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarDebitoComValorZero() throws Exception {
+        ContaVO dto = getVO()
+                .debito(0.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarDebitoComValorNegativo() throws Exception {
+        ContaVO dto = getVO()
+                .debito(-1.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarDebito() throws Exception {
+        criarConta();
+
+        String codigo = "0";
+
+        ContaVO vo = getVO()
+                .codigo(codigo)
+                .debito(500.00);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/debito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        mvc.perform(get("/conta/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.nome", is("CAROL")))
+                .andExpect(jsonPath("$.descricao", is("Valores passados para a Carol")))
+                .andExpect(jsonPath("$.valorDefault", is("500,00")))
+                .andExpect(jsonPath("$.saldo", is("0,00")))
                 .andExpect(jsonPath("$.cumulativo", is("S")))
                 .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
     }

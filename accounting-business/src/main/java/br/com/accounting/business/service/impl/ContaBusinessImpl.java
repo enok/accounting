@@ -63,15 +63,29 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void adicionarDebito(final ContaDTO dto, final Double debito) throws BusinessException {
+    public void adicionarDebito(final ContaDTO dto, final Double debito) throws StoreException, BusinessException, GenericException {
         try {
+            if ((debito == null) || (debito <= 0)) {
+                throw new ValidationException("O débito deve ser maior que 0.");
+            }
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
+
+            validarUpdate(dto);
+
             service.atualizarSaldo(entity, -debito);
         }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao adicionar débito.", e);
+        }
+        catch (ValidationException e) {
+            throw e;
+        }
+        catch (BusinessException e) {
+            throw e;
+        }
         catch (Exception e) {
-            String message = "Não foi possível adicionar débito à conta.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
