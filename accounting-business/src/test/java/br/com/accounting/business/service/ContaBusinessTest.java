@@ -194,7 +194,8 @@ public class ContaBusinessTest extends GenericTest {
             business.atualizar(dtoBuscado);
         }
         catch (BusinessException e) {
-            assertUpdateNotModifiebleFields(e, "código");
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
         }
     }
 
@@ -286,7 +287,7 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dtoBuscado.cumulativo(), equalTo("N"));
     }
 
-    @Test(expected = BusinessException.class)
+    @Test(expected = StoreException.class)
     public void adicionarCreditoEmUmaContaSemDiretorio() throws StoreException, BusinessException, GenericException, IOException {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
@@ -294,10 +295,10 @@ public class ContaBusinessTest extends GenericTest {
         deletarDiretorioEArquivos();
 
         try {
-            business.adicionarCredito(dtoBuscado, "500,00");
+            business.adicionarCredito(dtoBuscado, 500.00);
         }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível adicionar crédito à conta."));
+        catch (StoreException e) {
+            assertThat(e.getMessage(), equalTo("Erro de persistência ao adicionar crédito."));
             throw e;
         }
     }
@@ -307,7 +308,7 @@ public class ContaBusinessTest extends GenericTest {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarCredito(dtoBuscado, "500,00");
+        business.adicionarCredito(dtoBuscado, 500.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("1.500,00"));
@@ -318,10 +319,10 @@ public class ContaBusinessTest extends GenericTest {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarCredito(dtoBuscado, "500,00");
+        business.adicionarCredito(dtoBuscado, 500.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarCredito(dtoBuscado, "500,00");
+        business.adicionarCredito(dtoBuscado, 500.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("2.000,00"));
@@ -335,7 +336,7 @@ public class ContaBusinessTest extends GenericTest {
         deletarDiretorioEArquivos();
 
         try {
-            business.adicionarDebito(dtoBuscado, "100,00");
+            business.adicionarDebito(dtoBuscado, 100.00);
         }
         catch (BusinessException e) {
             assertThat(e.getMessage(), equalTo("Não foi possível adicionar débito à conta."));
@@ -348,7 +349,7 @@ public class ContaBusinessTest extends GenericTest {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarDebito(dtoBuscado, "100,00");
+        business.adicionarDebito(dtoBuscado, 100.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("900,00"));
@@ -359,10 +360,10 @@ public class ContaBusinessTest extends GenericTest {
         Long codigo = criarContaSalario();
         ContaDTO dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarDebito(dtoBuscado, "100,00");
+        business.adicionarDebito(dtoBuscado, 100.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
-        business.adicionarDebito(dtoBuscado, "900,00");
+        business.adicionarDebito(dtoBuscado, 900.00);
         dtoBuscado = business.buscarPorCodigo(codigo);
 
         assertThat(dtoBuscado.saldo(), equalTo("0,00"));
@@ -390,7 +391,7 @@ public class ContaBusinessTest extends GenericTest {
         dto2 = business.buscarPorCodigo(codigo2);
 
         try {
-            business.transferir(dto1, dto2, "1500,00");
+            business.transferir(dto1, dto2, 1500.00);
         }
         catch (BusinessException e) {
             assertThat(e.getCause().getMessage(), equalTo("Saldo insuficiente."));
@@ -403,14 +404,14 @@ public class ContaBusinessTest extends GenericTest {
         ContaDTO dto1 = ContaDTOMockFactory.contaSalario();
         Long codigo1 = business.criar(dto1).get(0);
         dto1 = business.buscarPorCodigo(codigo1);
-        business.adicionarCredito(dto1, "1.000,00");
+        business.adicionarCredito(dto1, 1000.00);
         dto1 = business.buscarPorCodigo(codigo1);
 
         ContaDTO dto2 = ContaDTOMockFactory.contaEnok();
         Long codigo2 = business.criar(dto2).get(0);
         dto2 = business.buscarPorCodigo(codigo2);
 
-        business.transferir(dto1, dto2, "600,00");
+        business.transferir(dto1, dto2, 600.00);
 
         dto1 = business.buscarPorCodigo(codigo1);
         assertThat(dto1.saldo(), equalTo("1.400,00"));

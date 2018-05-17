@@ -26,10 +26,6 @@ public final class SubGrupoDTOFactory extends GenericDTOFactory<SubGrupoDTO, Sub
 
     @Override
     public GenericDTOFactory preencherCampos(SubGrupo entity) {
-        if (entity == null) {
-            dto = null;
-            return this;
-        }
         withCodigo(entity.codigo());
         withNome(entity.nome());
         withDescricao(entity.descricao());

@@ -144,6 +144,8 @@ public class LocalControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigo() throws Exception {
+        criarLocal();
+
         LocalVO vo = getVO()
                 .codigo(null);
         String json = gson.toJson(vo);
@@ -153,12 +155,12 @@ public class LocalControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
@@ -174,12 +176,12 @@ public class LocalControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test

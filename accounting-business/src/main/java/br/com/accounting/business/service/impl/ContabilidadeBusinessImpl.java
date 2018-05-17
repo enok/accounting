@@ -92,7 +92,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @History
     @Override
-    public void atualizar(final ContabilidadeDTO dto) throws ValidationException, StoreException, GenericException {
+    public void atualizar(final ContabilidadeDTO dto) throws StoreException, BusinessException, GenericException {
         dto.dataAtualizacao(getStringFromCurrentDate());
         super.atualizar(dto);
     }
@@ -206,7 +206,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public List<ContabilidadeDTO> buscarParcelasRelacionadas(final Long codigoPai) throws ValidationException, StoreException, GenericException {
+    public List<ContabilidadeDTO> buscarParcelasRelacionadas(final Long codigoPai) throws StoreException, GenericException {
         try {
             List<Contabilidade> entitiesFiltradas = service.buscarTodasAsParcelas(codigoPai);
             return criarListaDTO(entitiesFiltradas);
@@ -220,7 +220,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     }
 
     @Override
-    public List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException {
+    public List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws StoreException, GenericException {
         try {
             List<Contabilidade> entitiesFiltradas = service.buscarTodasRecorrentesSeguintesInclusivo(codigo);
             return criarListaDTO(entitiesFiltradas);
@@ -300,7 +300,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
     @Override
     public void validarEntradaUpdate(final ContabilidadeDTO dto, final Contabilidade entity, final List<String> erros) throws ValidationException {
-        conferirCodigo(dto, erros);
         if (isBlank(dto.dataLancamento())) {
             erros.add(format(msg, "dataLançamento"));
         }
@@ -316,7 +315,6 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
 
         List<String> errosUpdate = new ArrayList<>();
 
-        conferirCodigoAlterado(dto, entity, errosUpdate);
         conferirDataLancamentoAlterada(dto, entity, errosUpdate);
         conferirParcelasAlteradas(dto, entity, errosUpdate);
         conferirParcelaAlterada(dto, entity, errosUpdate);
@@ -591,7 +589,7 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
         return isBlank(dto.parcelas());
     }
 
-    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, GenericException, ValidationException {
+    private void atualizarParcelas(ContabilidadeDTO dto) throws StoreException, GenericException, BusinessException {
         String dataVencimento = dto.dataVencimento();
         String parcelasString = isBlankOrNull(dto.parcelas()) ? dto.parcela() : dto.parcelas();
         int parcelas = isBlankOrNull(parcelasString) ? 0 : parseInt(parcelasString);

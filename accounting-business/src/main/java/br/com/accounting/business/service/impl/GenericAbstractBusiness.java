@@ -64,29 +64,21 @@ public abstract class GenericAbstractBusiness<D, E> {
     }
 
     @History
-    public void atualizar(final D dto) throws ValidationException, StoreException, GenericException {
+    public void atualizar(final D dto) throws StoreException, BusinessException, GenericException {
         try {
-            final List<String> erros = new ArrayList<>();
-
-            validarEntrada(dto, erros);
-
-            String codigoString = ((EntityDTO) dto).getCodigo();
-            Long codigo = null;
-            if (!isBlank(codigoString)) {
-                codigo = Long.parseLong(codigoString);
-            }
-            E entityBuscado = (E) service.buscarPorCodigo(codigo);
-
-            validarEntradaUpdate(dto, entityBuscado, erros);
+            E entityBuscado = validarUpdate(dto);
 
             E entity = criarEntity(dto, entityBuscado);
             service.atualizar(entity);
         }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao atualizar.", e);
+        }
         catch (ValidationException e) {
             throw e;
         }
-        catch (StoreException e) {
-            throw new StoreException("Erro de persistência ao atualizar.", e);
+        catch (BusinessException e) {
+            throw e;
         }
         catch (Exception e) {
             throw new GenericException(e);
@@ -195,25 +187,30 @@ public abstract class GenericAbstractBusiness<D, E> {
         }
     }
 
-    protected boolean codigosDiferentes(final String codigoDTO, final Long codigoEntity) {
-        return !codigoDTO.equals(codigoEntity.toString());
-    }
-
-    protected void conferirCodigo(D dto, List<String> erros) {
-        if (isBlank(((EntityDTO) dto).getCodigo())) {
-            erros.add(format(msg, "código"));
-        }
-    }
-
-    protected void conferirCodigoAlterado(D dto, E entity, List<String> errosUpdate) {
-        if (entity == null || codigosDiferentes(((EntityDTO) dto).getCodigo(), ((Entity) entity).getCodigo())) {
-            errosUpdate.add("O campo código não pode ser alterado.");
-        }
-    }
-
     protected void conferirValorBooleano(List<String> errosCreate, String valorBooleano, String campo) {
         if (!("S".equals(valorBooleano) || "N".equals(valorBooleano))) {
             errosCreate.add(String.format("O valor do campo %s é diferente de 'S' ou 'N'.", campo));
         }
+    }
+
+    protected E validarUpdate(D dto) throws StoreException, ParseException, BusinessException {
+        final List<String> erros = new ArrayList<>();
+
+        validarEntrada(dto, erros);
+
+        String codigoString = ((EntityDTO) dto).getCodigo();
+        Long codigo = null;
+        if (!isBlank(codigoString)) {
+            codigo = Long.parseLong(codigoString);
+        }
+        E entityBuscado = (E) service.buscarPorCodigo(codigo);
+
+        if (entityBuscado == null) {
+            throw new BusinessException("Registro inexistente.");
+        }
+
+        validarEntradaUpdate(dto, entityBuscado, erros);
+
+        return entityBuscado;
     }
 }

@@ -57,11 +57,9 @@ public class CartaoBusinessImpl extends GenericAbstractBusiness<CartaoDTO, Carta
 
     @Override
     public void validarEntradaUpdate(final CartaoDTO dto, final Cartao entity, final List<String> erros) throws ValidationException {
-        conferirCodigo(dto, erros);
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
-        conferirCodigoAlterado(dto, entity, errosUpdate);
         conferirErrosUpdate(errosUpdate);
     }
 

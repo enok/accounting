@@ -29,10 +29,6 @@ public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
 
     @Override
     public ContaDTOFactory preencherCampos(Conta conta) {
-        if (conta == null) {
-            dto = null;
-            return this;
-        }
         withCodigo(conta.codigo());
         withNome(conta.nome());
         withDescricao(conta.descricao());

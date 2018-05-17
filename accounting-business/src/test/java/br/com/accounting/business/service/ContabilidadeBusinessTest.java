@@ -510,7 +510,8 @@ public class ContabilidadeBusinessTest extends GenericTest {
             business.atualizar(dtoBuscado);
         }
         catch (BusinessException e) {
-            assertUpdateNotModifiebleFields(e, "código");
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
         }
     }
 
@@ -1045,12 +1046,24 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test(expected = GenericException.class)
-    public void excluirSubsequentesException() throws BusinessException, StoreException, GenericException {
+    public void excluirRecursivamenteException() throws BusinessException, StoreException, GenericException {
         business.excluirRecursivamente(null);
     }
 
     @Test
-    public void excluirSubsequentesParceladas() throws StoreException, BusinessException, GenericException {
+    public void excluirRecursivamenteNaoParcelada() throws StoreException, BusinessException, GenericException {
+        List<Long> codigos = criarContabilidadeNaoParcelada();
+        Long codigo = codigos.get(0);
+        ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
+
+        business.excluirRecursivamente(dto);
+
+        List<ContabilidadeDTO> dtos = business.buscarTodas();
+        assertThat(dtos.size(), equalTo(0));
+    }
+
+    @Test
+    public void excluirRecursivamenteParceladas() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
@@ -1062,7 +1075,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesParceladasParcial() throws StoreException, BusinessException, GenericException {
+    public void excluirRecursivamenteParceladasParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidades();
         ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 
@@ -1075,7 +1088,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesRecorrentes() throws StoreException, BusinessException, GenericException {
+    public void excluirRecursivamenteRecorrentes() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         Long codigo = codigos.get(0);
         ContabilidadeDTO dto = business.buscarPorCodigo(codigo);
@@ -1087,7 +1100,7 @@ public class ContabilidadeBusinessTest extends GenericTest {
     }
 
     @Test
-    public void excluirSubsequentesRecorrentesParcial() throws StoreException, BusinessException, GenericException {
+    public void excluirRecursivamenteRecorrentesParcial() throws StoreException, BusinessException, GenericException {
         List<Long> codigos = criarContabilidadeRecorrente();
         ContabilidadeDTO dto = business.buscarPorCodigo(codigos.get(1));
 

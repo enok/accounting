@@ -45,12 +45,9 @@ public class SubGrupoBusinessImpl extends GenericAbstractBusiness<SubGrupoDTO, S
 
     @Override
     public void validarEntradaUpdate(final SubGrupoDTO dto, final SubGrupo entity, final List<String> erros) throws ValidationException {
-        conferirCodigo(dto, erros);
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
-        conferirCodigoAlterado(dto, entity, errosUpdate);
-
         conferirErrosUpdate(errosUpdate);
     }
 

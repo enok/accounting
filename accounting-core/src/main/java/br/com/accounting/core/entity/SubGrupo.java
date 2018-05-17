@@ -37,9 +37,4 @@ public class SubGrupo implements Entity, Serializable {
                 .append(nome, subGrupo.nome)
                 .isEquals();
     }
-
-    @Override
-    public String toString() {
-        return nome;
-    }
 }

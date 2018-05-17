@@ -17,7 +17,7 @@ public interface ContabilidadeBusiness extends GenericBusiness<ContabilidadeDTO>
 
     void realizarPagamento(Long codigo) throws StoreException, BusinessException, GenericException;
 
-    List<ContabilidadeDTO> buscarParcelasRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException;
+    List<ContabilidadeDTO> buscarParcelasRelacionadas(Long codigo) throws StoreException, GenericException;
 
-    List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws ValidationException, StoreException, GenericException;
+    List<ContabilidadeDTO> buscarRecorrentesRelacionadas(Long codigo) throws StoreException, GenericException;
 }

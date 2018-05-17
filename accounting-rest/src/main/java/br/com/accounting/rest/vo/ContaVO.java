@@ -13,6 +13,8 @@ public class ContaVO {
     private String saldo;
     private String cumulativo;
     private String dataAtualizacao;
+    private Double credito;
+    private Double debito;
 
     public String getCodigo() {
         return codigo;
@@ -40,6 +42,14 @@ public class ContaVO {
 
     public String getDataAtualizacao() {
         return dataAtualizacao;
+    }
+
+    public Double getCredito() {
+        return credito;
+    }
+
+    public Double getDebito() {
+        return debito;
     }
 
     public ContaVO setCodigo(String codigo) {
@@ -74,6 +84,16 @@ public class ContaVO {
 
     public ContaVO setDataAtualizacao(String dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
+        return this;
+    }
+
+    public ContaVO setCredito(Double credito) {
+        this.credito = credito;
+        return this;
+    }
+
+    public ContaVO setDebito(Double debito) {
+        this.debito = debito;
         return this;
     }
 }

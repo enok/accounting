@@ -148,7 +148,8 @@ public class SubGrupoBusinessTest extends GenericTest {
             business.atualizar(dtoBuscado);
         }
         catch (BusinessException e) {
-            assertUpdateNotModifiebleFields(e, "código");
+            assertThat(e.getMessage(), equalTo("Registro inexistente."));
+            throw e;
         }
     }
 

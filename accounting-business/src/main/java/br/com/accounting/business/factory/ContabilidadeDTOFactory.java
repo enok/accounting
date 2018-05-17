@@ -29,10 +29,6 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
 
     @Override
     public GenericDTOFactory preencherCampos(Contabilidade entity) {
-        if (entity == null) {
-            dto = null;
-            return this;
-        }
         withCodigo(entity.codigo());
         withDataLancamento(entity.dataLancamento());
         withDataAtualizacao(entity.dataAtualizacao());
@@ -56,9 +52,6 @@ public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO,
 
     @Override
     public ContabilidadeDTO build() {
-        if (dto == null) {
-            return dto;
-        }
         if (isBlank(dto.dataLancamento())) {
             dto.dataLancamento(getStringFromCurrentDate());
         }

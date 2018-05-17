@@ -1321,6 +1321,8 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigo() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
                 .codigo(null);
         String json = gson.toJson(vo);
@@ -1330,18 +1332,20 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
-    public void atualizarSemCodigoEDataLancamento() throws Exception {
+    public void atualizarDataLancamento() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
-                .codigo(null)
+                .codigo("0")
                 .dataLancamento(null);
         String json = gson.toJson(vo);
 
@@ -1354,15 +1358,16 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(2)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento é obrigatório.")));
     }
 
     @Test
-    public void atualizarSemCodigoEDataLancamentoEParcela() throws Exception {
+    public void atualizarDataLancamentoEParcela() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
-                .codigo(null)
+                .codigo("0")
                 .dataLancamento(null)
                 .parcela(null);
         String json = gson.toJson(vo);
@@ -1376,10 +1381,9 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(3)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[2]", is("O campo parcela é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo parcela é obrigatório.")));
     }
 
     @Test
@@ -1574,12 +1578,12 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
@@ -2352,6 +2356,8 @@ public class ContabilidadeControllerTest extends GenericTest {
 
     @Test
     public void atualizarRecursivamenteSemCodigo() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
                 .codigo(null);
         String json = gson.toJson(vo);
@@ -2361,12 +2367,12 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
@@ -2399,18 +2405,20 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
-    public void atualizarRecursivamenteSemCodigoEDataLancamento() throws Exception {
+    public void atualizarRecursivamenteDataLancamento() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
-                .codigo(null)
+                .codigo("0")
                 .dataLancamento(null);
         String json = gson.toJson(vo);
 
@@ -2423,15 +2431,16 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(2)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento é obrigatório.")));
     }
 
     @Test
-    public void atualizarRecursivamenteSemCodigoEDataLancamentoEParcela() throws Exception {
+    public void atualizarRecursivamenteDataLancamentoEParcela() throws Exception {
+        criarContabilidadeParceladaComAssert();
+
         ContabilidadeVO vo = getVOParcelado()
-                .codigo(null)
+                .codigo("0")
                 .dataLancamento(null)
                 .parcela(null);
         String json = gson.toJson(vo);
@@ -2445,10 +2454,9 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(3)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[1]", is("O campo dataLançamento é obrigatório.")))
-                .andExpect(jsonPath("$.mensagens[2]", is("O campo parcela é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens", hasSize(2)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo dataLançamento é obrigatório.")))
+                .andExpect(jsonPath("$.mensagens[1]", is("O campo parcela é obrigatório.")));
     }
 
     @Test
@@ -2643,12 +2651,12 @@ public class ContabilidadeControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test

@@ -2,12 +2,10 @@ package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.annotation.History;
 import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.dto.EntityDTO;
 import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOFactory;
 import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.entity.Entity;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.factory.ContaFactory;
 import br.com.accounting.core.service.ContaService;
@@ -37,27 +35,39 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void adicionarCredito(final ContaDTO dto, final String credito) throws BusinessException {
+    public void adicionarCredito(final ContaDTO dto, final Double credito) throws StoreException, BusinessException, GenericException {
         try {
+            if ((credito == null) || (credito <= 0)) {
+                throw new ValidationException("O crédito deve ser maior que 0.");
+            }
             Conta entity = criarEntity(dto);
-            Double saldo = getDoubleFromString(credito);
             entity.dataAtualizacao(LocalDate.now());
-            service.atualizarSaldo(entity, saldo);
+
+            validarUpdate(dto);
+
+            service.atualizarSaldo(entity, credito);
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao adicionar crédito.", e);
+        }
+        catch (ValidationException e) {
+            throw e;
+        }
+        catch (BusinessException e) {
+            throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível adicionar crédito à conta.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 
     @History
     @Override
-    public void adicionarDebito(final ContaDTO dto, final String debito) throws BusinessException {
+    public void adicionarDebito(final ContaDTO dto, final Double debito) throws BusinessException {
         try {
             Conta entity = criarEntity(dto);
-            Double saldo = getDoubleFromString(debito);
             entity.dataAtualizacao(LocalDate.now());
-            service.atualizarSaldo(entity, -saldo);
+            service.atualizarSaldo(entity, -debito);
         }
         catch (Exception e) {
             String message = "Não foi possível adicionar débito à conta.";
@@ -67,12 +77,11 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void transferir(final ContaDTO origemDTO, final ContaDTO destinoDTO, final String valor) throws BusinessException {
+    public void transferir(final ContaDTO origemDTO, final ContaDTO destinoDTO, final Double valor) throws BusinessException {
         try {
             Double saldoOrigem = getDoubleFromString(origemDTO.saldo());
-            Double valorTransferencia = getDoubleFromString(valor);
 
-            if (saldoOrigem < valorTransferencia) {
+            if (saldoOrigem < valor) {
                 throw new InsufficientFundsException("Saldo insuficiente.");
             }
 
@@ -133,7 +142,6 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @Override
     public void validarEntradaUpdate(final ContaDTO dto, final Conta entity, final List<String> erros) throws ValidationException {
-        conferirCodigo(dto, erros);
         if (isBlank(dto.saldo())) {
             erros.add(format(msg, "saldo"));
         }
@@ -143,8 +151,6 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
         conferirErrosCamposObrigatorios(erros);
 
         List<String> errosUpdate = new ArrayList<>();
-        conferirCodigoAlterado(dto, entity, errosUpdate);
-
         conferirErrosUpdate(errosUpdate);
     }
 

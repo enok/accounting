@@ -37,10 +37,18 @@ public class ContaController extends AbstractExceptionHandler {
     }
 
     @PutMapping
-    @ResponseBody
     public ResponseEntity atualizar(@RequestBody ContaVO vo) throws StoreException, BusinessException, GenericException {
         ContaDTO dto = createDTO(vo);
         business.atualizar(dto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PutMapping("/credito")
+    public ResponseEntity adicionarCredito(@RequestBody ContaVO vo) throws StoreException, BusinessException, GenericException {
+        ContaDTO dto = createDTO(vo);
+        business.adicionarCredito(dto, vo.credito());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

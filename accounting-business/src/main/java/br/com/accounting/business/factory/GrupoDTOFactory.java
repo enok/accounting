@@ -30,10 +30,6 @@ public class GrupoDTOFactory extends GenericDTOFactory<GrupoDTO, Grupo> {
 
     @Override
     public GenericDTOFactory preencherCampos(Grupo entity) {
-        if (entity == null) {
-            dto = null;
-            return this;
-        }
         withCodigo(entity.codigo());
         withNome(entity.nome());
         withDescricao(entity.descricao());

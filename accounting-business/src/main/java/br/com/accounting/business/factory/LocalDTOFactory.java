@@ -26,10 +26,6 @@ public final class LocalDTOFactory extends GenericDTOFactory<LocalDTO, Local> {
 
     @Override
     public LocalDTOFactory preencherCampos(Local local) {
-        if (local == null) {
-            dto = null;
-            return this;
-        }
         withCodigo(local.codigo());
         withNome(local.nome());
         return this;

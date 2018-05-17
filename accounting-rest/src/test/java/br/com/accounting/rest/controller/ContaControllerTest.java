@@ -322,6 +322,8 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigo() throws Exception {
+        criarConta();
+
         ContaVO vo = getVO()
                 .codigo(null);
         String json = gson.toJson(vo);
@@ -331,16 +333,18 @@ public class ContaControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código é obrigatório.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
     public void atualizarSemSaldo() throws Exception {
+        criarConta();
+
         ContaVO dto = getVO()
                 .codigo("0")
                 .saldo(null);
@@ -361,6 +365,8 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataAtualizacao() throws Exception {
+        criarConta();
+
         ContaVO dto = getVO()
                 .codigo("0")
                 .dataAtualizacao(null);
@@ -433,12 +439,12 @@ public class ContaControllerTest extends GenericTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isExpectationFailed())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.codigo", is(417)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O campo código não pode ser alterado.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
     }
 
     @Test
@@ -456,6 +462,184 @@ public class ContaControllerTest extends GenericTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    public void adicionarCreditoSemDiretorio() throws Exception {
+        deletarDiretorioEArquivos();
+
+        ContaVO dto = getVO()
+                .credito(100.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInsufficientStorage())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(507)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao adicionar crédito.")));
+    }
+
+    @Test
+    public void adicionarCreditoSemConta() throws Exception {
+        ContaVO vo = getVO()
+                .codigo("0")
+                .credito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void adicionarCreditoSemCodigo() throws Exception {
+        criarConta();
+
+        ContaVO vo = getVO()
+                .codigo(null)
+                .credito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void adicionarCreditoSemSaldo() throws Exception {
+        criarConta();
+
+        ContaVO vo = getVO()
+                .codigo("0")
+                .saldo(null)
+                .credito(100.0);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O campo saldo é obrigatório.")));
+    }
+
+    @Test
+    public void adicionarCreditoSemCredito() throws Exception {
+        ContaVO dto = getVO()
+                .credito(null);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarCreditoComCreditoZero() throws Exception {
+        ContaVO dto = getVO()
+                .credito(0.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarCreditoComCreditoNegativo() throws Exception {
+        ContaVO dto = getVO()
+                .credito(-1.0);
+        String json = gson.toJson(dto);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(400)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
+    }
+
+    @Test
+    public void adicionarCredito() throws Exception {
+        criarConta();
+
+        String codigo = "0";
+
+        ContaVO vo = getVO()
+                .codigo(codigo)
+                .credito(500.00);
+        String json = gson.toJson(vo);
+
+        mvc.perform(put("/conta/credito")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        mvc.perform(get("/conta/{codigo}", codigo)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("0")))
+                .andExpect(jsonPath("$.nome", is("CAROL")))
+                .andExpect(jsonPath("$.descricao", is("Valores passados para a Carol")))
+                .andExpect(jsonPath("$.valorDefault", is("500,00")))
+                .andExpect(jsonPath("$.saldo", is("1.000,00")))
+                .andExpect(jsonPath("$.cumulativo", is("S")))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
     }
 
     @Test

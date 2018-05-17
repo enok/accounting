@@ -6,7 +6,7 @@
     <logger name="org.springframework.security" level="ERROR"/>
     <logger name="weblogic.security.services" level="ERROR"/>
 
-    <logger name="br.com.accounting" level="TRACE"/>
+    <logger name="br.com.accounting" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
