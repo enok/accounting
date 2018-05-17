@@ -36,7 +36,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void adicionarCredito(final ContaDTO dto, final Double credito) throws StoreException, BusinessException, GenericException {
+    public void adicionarCredito(final ContaDTO dto, final Double credito) throws StoreException, GenericException {
         try {
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
@@ -52,7 +52,7 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void adicionarDebito(final ContaDTO dto, final Double debito) throws StoreException, BusinessException, GenericException {
+    public void adicionarDebito(final ContaDTO dto, final Double debito) throws StoreException, GenericException {
         try {
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
