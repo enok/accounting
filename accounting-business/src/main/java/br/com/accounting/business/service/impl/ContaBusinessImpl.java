@@ -42,9 +42,6 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
             }
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
-
-            validarUpdate(dto);
-
             service.atualizarSaldo(entity, credito);
         }
         catch (StoreException e) {
@@ -70,9 +67,6 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
             }
             Conta entity = criarEntity(dto);
             entity.dataAtualizacao(LocalDate.now());
-
-            validarUpdate(dto);
-
             service.atualizarSaldo(entity, -debito);
         }
         catch (StoreException e) {
@@ -91,20 +85,34 @@ public class ContaBusinessImpl extends GenericAbstractBusiness<ContaDTO, Conta> 
 
     @History
     @Override
-    public void transferir(final ContaDTO origemDTO, final ContaDTO destinoDTO, final Double valor) throws BusinessException {
+    public void transferir(final ContaDTO origem, final ContaDTO destino, final Double valor) throws StoreException, BusinessException, GenericException {
         try {
-            Double saldoOrigem = getDoubleFromString(origemDTO.saldo());
+            validarUpdate(origem);
+            validarUpdate(destino);
 
+            Double saldoOrigem = getDoubleFromString(origem.saldo());
+
+            if ((valor == null) || (valor <= 0)) {
+                throw new ValidationException("O valor deve ser maior do que 0.");
+            }
             if (saldoOrigem < valor) {
-                throw new InsufficientFundsException("Saldo insuficiente.");
+                throw new BusinessException("Saldo insuficiente.");
             }
 
-            adicionarDebito(origemDTO, valor);
-            adicionarCredito(destinoDTO, valor);
+            adicionarDebito(origem, valor);
+            adicionarCredito(destino, valor);
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao transferir saldos entre contas.", e);
+        }
+        catch (ValidationException e) {
+            throw e;
+        }
+        catch (BusinessException e) {
+            throw e;
         }
         catch (Exception e) {
-            String message = "Não foi possível tranferir o valor entre as contas.";
-            throw new BusinessException(message, e);
+            throw new GenericException(e);
         }
     }
 

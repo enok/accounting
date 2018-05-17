@@ -10,7 +10,7 @@ public interface ContaBusiness extends GenericBusiness<ContaDTO> {
 
     void adicionarDebito(ContaDTO dto, Double debito) throws StoreException, BusinessException, GenericException;
 
-    void transferir(ContaDTO origemDTO, ContaDTO destinoDTO, Double valor) throws BusinessException;
+    void transferir(ContaDTO origemDTO, ContaDTO destinoDTO, Double valor) throws StoreException, BusinessException, GenericException;
 
     void atualizarContas() throws StoreException, BusinessException;
 }

@@ -1,5 +1,6 @@
 package br.com.accounting.rest.controller;
 
+import br.com.accounting.rest.vo.ContaTransferenciaVO;
 import br.com.accounting.rest.vo.ContaVO;
 import com.google.gson.Gson;
 import org.hamcrest.Matchers;
@@ -36,7 +37,7 @@ public class ContaControllerTest extends GenericTest {
     public void criarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContaVO dto = getVO();
+        ContaVO dto = getVOCarol();
         String json = gson.toJson(dto);
 
         mvc.perform(post("/conta")
@@ -54,7 +55,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarSemNome() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null);
         String json = gson.toJson(dto);
 
@@ -73,7 +74,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarSemNomeEDescricao() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null);
         String json = gson.toJson(dto);
@@ -94,7 +95,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarSemNomeEDescricaoEValorDefault() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null)
                 .valorDefault(null);
@@ -117,7 +118,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarSemCampos() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null)
                 .valorDefault(null)
@@ -142,7 +143,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarComValorDefaultIncorreto() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .valorDefault("#500,00");
         String json = gson.toJson(dto);
 
@@ -161,7 +162,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarComRecorrenteIncorreto() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .cumulativo("SN");
         String json = gson.toJson(dto);
 
@@ -180,7 +181,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criarDuplicado() throws Exception {
-        ContaVO dto = getVO();
+        ContaVO dto = getVOCarol();
         String json = gson.toJson(dto);
 
         mvc.perform(post("/conta")
@@ -209,14 +210,14 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void criar() throws Exception {
-        criarConta();
+        criarContaCarol();
     }
 
     @Test
     public void atualizarSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContaVO vo = getVO();
+        ContaVO vo = getVOCarol();
         String json = gson.toJson(vo);
 
         mvc.perform(put("/conta")
@@ -234,7 +235,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemNome() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null);
         String json = gson.toJson(dto);
 
@@ -253,7 +254,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemNomeEDescricao() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null);
         String json = gson.toJson(dto);
@@ -274,7 +275,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemNomeEDescricaoEValorDefault() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null)
                 .valorDefault(null);
@@ -297,7 +298,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCampos() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .nome(null)
                 .descricao(null)
                 .valorDefault(null)
@@ -322,9 +323,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemCodigo() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO vo = getVO()
+        ContaVO vo = getVOCarol()
                 .codigo(null);
         String json = gson.toJson(vo);
 
@@ -343,9 +344,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemSaldo() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .codigo("0")
                 .saldo(null);
         String json = gson.toJson(dto);
@@ -365,9 +366,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarSemDataAtualizacao() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .codigo("0")
                 .dataAtualizacao(null);
         String json = gson.toJson(dto);
@@ -387,9 +388,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarComValorDefaultIncorreto() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .codigo("0")
                 .valorDefault("#500,00");
         String json = gson.toJson(dto);
@@ -409,7 +410,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarComRecorrenteIncorreto() throws Exception {
-        ContaVO dto = getVO()
+        ContaVO dto = getVOCarol()
                 .cumulativo("SN");
         String json = gson.toJson(dto);
 
@@ -428,9 +429,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarProibidoAlterarCodigo() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO vo = getVO()
+        ContaVO vo = getVOCarol()
                 .codigo("1");
         String json = gson.toJson(vo);
 
@@ -449,9 +450,9 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizar() throws Exception {
-        criarConta();
+        criarContaCarol();
 
-        ContaVO vo = getVO()
+        ContaVO vo = getVOCarol()
                 .codigo("0");
         String json = gson.toJson(vo);
 
@@ -465,14 +466,19 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoSemDiretorio() throws Exception {
+    public void transferirSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        ContaVO dto = getVO()
-                .credito(100.0);
-        String json = gson.toJson(dto);
+        ContaVO origem = getVOCarol();
+        ContaVO destino = getVOEnok();
 
-        mvc.perform(put("/conta/credito")
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.00);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -482,17 +488,21 @@ public class ContaControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(507)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao adicionar crédito.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao transferir saldos entre contas.")));
     }
 
     @Test
-    public void adicionarCreditoSemConta() throws Exception {
-        ContaVO vo = getVO()
-                .codigo("0")
-                .credito(100.0);
-        String json = gson.toJson(vo);
+    public void transferirSemConta() throws Exception {
+        ContaVO origem = getVOCarol();
+        ContaVO destino = getVOEnok();
 
-        mvc.perform(put("/conta/credito")
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.00);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -506,15 +516,21 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoSemCodigo() throws Exception {
-        criarConta();
+    public void transferirSemCodigoNaOrigem() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        ContaVO vo = getVO()
-                .codigo(null)
-                .credito(100.0);
-        String json = gson.toJson(vo);
+        ContaVO origem = getVOCarol()
+                .codigo(null);
+        ContaVO destino = getVOEnok();
 
-        mvc.perform(put("/conta/credito")
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.00);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -528,16 +544,52 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoSemSaldo() throws Exception {
-        criarConta();
+    public void transferirSemCodigoNoDestino() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        ContaVO vo = getVO()
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo(null);
+
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.00);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
+    }
+
+    @Test
+    public void transferirSemSaldoOrigem() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
+
+        ContaVO origem = getVOCarol()
                 .codigo("0")
-                .saldo(null)
-                .credito(100.0);
-        String json = gson.toJson(vo);
+                .saldo(null);
+        ContaVO destino = getVOEnok()
+                .codigo("1");
 
-        mvc.perform(put("/conta/credito")
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.0);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -551,171 +603,23 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarCreditoSemValor() throws Exception {
-        ContaVO dto = getVO()
-                .credito(null);
-        String json = gson.toJson(dto);
+    public void transferirSemSaldoDestino() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        mvc.perform(put("/conta/credito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
-    }
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo("1")
+                .saldo(null);
 
-    @Test
-    public void adicionarCreditoComValorZero() throws Exception {
-        ContaVO dto = getVO()
-                .credito(0.0);
-        String json = gson.toJson(dto);
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(100.0);
+        String json = gson.toJson(transferencia);
 
-        mvc.perform(put("/conta/credito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
-    }
-
-    @Test
-    public void adicionarCreditoComValorNegativo() throws Exception {
-        ContaVO dto = getVO()
-                .credito(-1.0);
-        String json = gson.toJson(dto);
-
-        mvc.perform(put("/conta/credito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(400)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O crédito deve ser maior que 0.")));
-    }
-
-    @Test
-    public void adicionarCredito() throws Exception {
-        criarConta();
-
-        String codigo = "0";
-
-        ContaVO vo = getVO()
-                .codigo(codigo)
-                .credito(500.00);
-        String json = gson.toJson(vo);
-
-        mvc.perform(put("/conta/credito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent())
-                .andExpect(content().string(""));
-
-        mvc.perform(get("/conta/{codigo}", codigo)
-                .characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is("0")))
-                .andExpect(jsonPath("$.nome", is("CAROL")))
-                .andExpect(jsonPath("$.descricao", is("Valores passados para a Carol")))
-                .andExpect(jsonPath("$.valorDefault", is("500,00")))
-                .andExpect(jsonPath("$.saldo", is("1.000,00")))
-                .andExpect(jsonPath("$.cumulativo", is("S")))
-                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
-    }
-
-    @Test
-    public void adicionarDebitoSemDiretorio() throws Exception {
-        deletarDiretorioEArquivos();
-
-        ContaVO dto = getVO()
-                .debito(100.0);
-        String json = gson.toJson(dto);
-
-        mvc.perform(put("/conta/debito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInsufficientStorage())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(507)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Erro de persistência ao adicionar débito.")));
-    }
-
-    @Test
-    public void adicionarDebitoSemConta() throws Exception {
-        ContaVO vo = getVO()
-                .codigo("0")
-                .debito(100.0);
-        String json = gson.toJson(vo);
-
-        mvc.perform(put("/conta/debito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isExpectationFailed())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(417)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
-    }
-
-    @Test
-    public void adicionarDebitoSemCodigo() throws Exception {
-        criarConta();
-
-        ContaVO vo = getVO()
-                .codigo(null)
-                .debito(100.0);
-        String json = gson.toJson(vo);
-
-        mvc.perform(put("/conta/debito")
-                .characterEncoding("UTF-8")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isExpectationFailed())
-                .andExpect(content()
-                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo", is(417)))
-                .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("Registro inexistente.")));
-    }
-
-    @Test
-    public void adicionarDebitoSemSaldo() throws Exception {
-        criarConta();
-
-        ContaVO vo = getVO()
-                .codigo("0")
-                .saldo(null)
-                .debito(100.0);
-        String json = gson.toJson(vo);
-
-        mvc.perform(put("/conta/debito")
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -729,12 +633,22 @@ public class ContaControllerTest extends GenericTest {
     }
 
     @Test
-    public void adicionarDebitoSemValor() throws Exception {
-        ContaVO dto = getVO()
-                .debito(null);
-        String json = gson.toJson(dto);
+    public void transferirSemValor() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        mvc.perform(put("/conta/debito")
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo("1");
+
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(null);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -744,16 +658,26 @@ public class ContaControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor deve ser maior do que 0.")));
     }
 
     @Test
-    public void adicionarDebitoComValorZero() throws Exception {
-        ContaVO dto = getVO()
-                .debito(0.0);
-        String json = gson.toJson(dto);
+    public void transferirComValorZero() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        mvc.perform(put("/conta/debito")
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo("1");
+
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(0.0);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -763,16 +687,26 @@ public class ContaControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor deve ser maior do que 0.")));
     }
 
     @Test
-    public void adicionarDebitoComValorNegativo() throws Exception {
-        ContaVO dto = getVO()
-                .debito(-1.0);
-        String json = gson.toJson(dto);
+    public void transferirComValorNegativo() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        mvc.perform(put("/conta/debito")
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo("1");
+
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(-1.0);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -782,21 +716,58 @@ public class ContaControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo", is(400)))
                 .andExpect(jsonPath("$.mensagens", hasSize(1)))
-                .andExpect(jsonPath("$.mensagens[0]", is("O débito deve ser maior que 0.")));
+                .andExpect(jsonPath("$.mensagens[0]", is("O valor deve ser maior do que 0.")));
     }
 
     @Test
-    public void adicionarDebito() throws Exception {
-        criarConta();
+    public void transferirComValorMaiorQueSaldoOrigem() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
 
-        String codigo = "0";
+        ContaVO origem = getVOCarol()
+                .codigo("0");
+        ContaVO destino = getVOEnok()
+                .codigo("1");
 
-        ContaVO vo = getVO()
-                .codigo(codigo)
-                .debito(500.00);
-        String json = gson.toJson(vo);
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(1000.00);
+        String json = gson.toJson(transferencia);
 
-        mvc.perform(put("/conta/debito")
+        mvc.perform(put("/conta/transferencia")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isExpectationFailed())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is(417)))
+                .andExpect(jsonPath("$.mensagens", hasSize(1)))
+                .andExpect(jsonPath("$.mensagens[0]", is("Saldo insuficiente.")));
+    }
+
+    @Test
+    public void transferir() throws Exception {
+        criarContaCarol();
+        criarContaEnok();
+
+        String codigoOrigem = "0";
+        ContaVO origem = getVOCarol()
+                .codigo(codigoOrigem);
+
+        String codigoDestino = "1";
+        ContaVO destino = getVOEnok()
+                .codigo(codigoDestino);
+
+        ContaTransferenciaVO transferencia = new ContaTransferenciaVO()
+                .origem(origem)
+                .destino(destino)
+                .valor(500.00);
+        String json = gson.toJson(transferencia);
+
+        mvc.perform(put("/conta/transferencia")
                 .characterEncoding("UTF-8")
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
@@ -804,7 +775,7 @@ public class ContaControllerTest extends GenericTest {
                 .andExpect(status().isNoContent())
                 .andExpect(content().string(""));
 
-        mvc.perform(get("/conta/{codigo}", codigo)
+        mvc.perform(get("/conta/{codigo}", codigoOrigem)
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -816,6 +787,21 @@ public class ContaControllerTest extends GenericTest {
                 .andExpect(jsonPath("$.descricao", is("Valores passados para a Carol")))
                 .andExpect(jsonPath("$.valorDefault", is("500,00")))
                 .andExpect(jsonPath("$.saldo", is("0,00")))
+                .andExpect(jsonPath("$.cumulativo", is("S")))
+                .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
+
+        mvc.perform(get("/conta/{codigo}", codigoDestino)
+                .characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo", is("1")))
+                .andExpect(jsonPath("$.nome", is("ENOK")))
+                .andExpect(jsonPath("$.descricao", is("Valores passados para o Enok")))
+                .andExpect(jsonPath("$.valorDefault", is("500,00")))
+                .andExpect(jsonPath("$.saldo", is("1.000,00")))
                 .andExpect(jsonPath("$.cumulativo", is("S")))
                 .andExpect(jsonPath("$.dataAtualizacao", is(getStringFromCurrentDate())));
     }
@@ -880,7 +866,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void excluir() throws Exception {
-        criarConta();
+        criarContaCarol();
 
         String codigo = "0";
 
@@ -952,7 +938,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void buscarPorCodigo() throws Exception {
-        criarConta();
+        criarContaCarol();
 
         String codigo = "0";
 
@@ -1000,7 +986,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void buscarTudo() throws Exception {
-        criarConta();
+        criarContaCarol();
 
         mvc.perform(get("/conta")
                 .characterEncoding("UTF-8")
@@ -1020,7 +1006,7 @@ public class ContaControllerTest extends GenericTest {
                 .andExpect(jsonPath("$[0].dataAtualizacao", is(getStringFromCurrentDate())));
     }
 
-    private ContaVO getVO() {
+    private ContaVO getVOCarol() {
         return new ContaVO()
                 .nome("CAROL")
                 .descricao("Valores passados para a Carol")
@@ -1030,8 +1016,18 @@ public class ContaControllerTest extends GenericTest {
                 .dataAtualizacao(getStringFromCurrentDate());
     }
 
-    private void criarConta() throws Exception {
-        ContaVO dto = getVO();
+    private ContaVO getVOEnok() {
+        return new ContaVO()
+                .nome("ENOK")
+                .descricao("Valores passados para o Enok")
+                .valorDefault("500,00")
+                .saldo("500,00")
+                .cumulativo("S")
+                .dataAtualizacao(getStringFromCurrentDate());
+    }
+
+    private void criarContaCarol() throws Exception {
+        ContaVO dto = getVOCarol();
         String json = gson.toJson(dto);
 
         mvc.perform(post("/conta")
@@ -1044,5 +1040,21 @@ public class ContaControllerTest extends GenericTest {
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigos", hasSize(1)))
                 .andExpect(jsonPath("$.codigos[0]", is(0)));
+    }
+
+    private void criarContaEnok() throws Exception {
+        ContaVO dto = getVOEnok();
+        String json = gson.toJson(dto);
+
+        mvc.perform(post("/conta")
+                .characterEncoding("UTF-8")
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigos", hasSize(1)))
+                .andExpect(jsonPath("$.codigos[0]", is(1)));
     }
 }

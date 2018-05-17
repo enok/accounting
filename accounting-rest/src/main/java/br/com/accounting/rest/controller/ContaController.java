@@ -7,6 +7,7 @@ import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
 import br.com.accounting.rest.vo.CodigosVO;
+import br.com.accounting.rest.vo.ContaTransferenciaVO;
 import br.com.accounting.rest.vo.ContaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,19 +46,11 @@ public class ContaController extends AbstractExceptionHandler {
                 .build();
     }
 
-    @PutMapping("/credito")
-    public ResponseEntity adicionarCredito(@RequestBody ContaVO vo) throws StoreException, BusinessException, GenericException {
-        ContaDTO dto = createDTO(vo);
-        business.adicionarCredito(dto, vo.credito());
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
-    }
-
-    @PutMapping("/debito")
-    public ResponseEntity adicionarDebito(@RequestBody ContaVO vo) throws StoreException, BusinessException, GenericException {
-        ContaDTO dto = createDTO(vo);
-        business.adicionarDebito(dto, vo.debito());
+    @PutMapping("/transferencia")
+    public ResponseEntity transferir(@RequestBody ContaTransferenciaVO transferencia) throws StoreException, BusinessException, GenericException {
+        ContaDTO dtoOrigem = createDTO(transferencia.origem());
+        ContaDTO dtoDestino = createDTO(transferencia.destino());
+        business.transferir(dtoOrigem, dtoDestino, transferencia.valor());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

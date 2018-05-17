@@ -369,15 +369,9 @@ public class ContaBusinessTest extends GenericTest {
         assertThat(dtoBuscado.saldo(), equalTo("0,00"));
     }
 
-    @Test(expected = BusinessException.class)
-    public void transferirSaldoDeUmaContaParaOutraException() throws BusinessException {
-        try {
-            business.transferir(null, null, null);
-        }
-        catch (BusinessException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível tranferir o valor entre as contas."));
-            throw e;
-        }
+    @Test(expected = GenericException.class)
+    public void transferirSaldoDeUmaContaParaOutraException() throws BusinessException, StoreException, GenericException {
+        business.transferir(null, null, null);
     }
 
     @Test(expected = BusinessException.class)
@@ -394,7 +388,7 @@ public class ContaBusinessTest extends GenericTest {
             business.transferir(dto1, dto2, 1500.00);
         }
         catch (BusinessException e) {
-            assertThat(e.getCause().getMessage(), equalTo("Saldo insuficiente."));
+            assertThat(e.getMessage(), equalTo("Saldo insuficiente."));
             throw e;
         }
     }
