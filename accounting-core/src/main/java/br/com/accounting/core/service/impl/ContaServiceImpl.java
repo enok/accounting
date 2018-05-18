@@ -1,8 +1,9 @@
 package br.com.accounting.core.service.impl;
 
+import br.com.accounting.commons.exception.ServiceException;
+import br.com.accounting.commons.exception.StoreException;
+import br.com.accounting.commons.service.impl.GenericAbstractService;
 import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.exception.ServiceException;
-import br.com.accounting.core.exception.StoreException;
 import br.com.accounting.core.repository.ContaRepository;
 import br.com.accounting.core.service.ContaService;
 import org.apache.commons.lang3.SerializationUtils;

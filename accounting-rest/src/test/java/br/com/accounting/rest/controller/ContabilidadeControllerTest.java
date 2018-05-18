@@ -1,8 +1,11 @@
 package br.com.accounting.rest.controller;
 
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.cartao.controller.CartaoController;
+import br.com.accounting.cartao.vo.CartaoVO;
+import br.com.accounting.commons.exception.BusinessException;
+import br.com.accounting.commons.exception.GenericException;
+import br.com.accounting.commons.exception.StoreException;
+import br.com.accounting.commons.test.GenericTest;
 import br.com.accounting.rest.vo.*;
 import com.google.gson.Gson;
 import org.junit.Before;
@@ -16,7 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.IOException;
 
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static br.com.accounting.commons.util.Utils.getStringFromCurrentDate;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;

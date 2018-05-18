@@ -1,12 +1,12 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.*;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.GenericException;
-import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.ValidationException;
 import br.com.accounting.business.factory.*;
-import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.cartao.business.CartaoBusiness;
+import br.com.accounting.cartao.dto.CartaoDTO;
+import br.com.accounting.cartao.factory.CartaoDTOFactory;
+import br.com.accounting.commons.exception.*;
+import br.com.accounting.commons.test.GenericTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.commons.util.Utils.*;
 import static java.lang.Long.parseLong;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

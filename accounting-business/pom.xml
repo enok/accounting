@@ -13,10 +13,15 @@
     <name>Accouting Business</name>
 
     <dependencies>
-        <!-- financial -->
+        <!-- accounting -->
         <dependency>
             <groupId>br.com.financial</groupId>
             <artifactId>accounting-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.financial</groupId>
+            <artifactId>accounting-cartao</artifactId>
             <version>${project.version}</version>
         </dependency>
 

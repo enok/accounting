@@ -5,7 +5,7 @@ import br.com.accounting.core.entity.Conta;
 import java.text.ParseException;
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.commons.util.Utils.*;
 
 public final class ContaFactory {
     private static ContaFactory factory;

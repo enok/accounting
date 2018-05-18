@@ -1,11 +1,12 @@
 package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Conta;
 
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.commons.util.Utils.*;
 
 public final class ContaDTOFactory extends GenericDTOFactory<ContaDTO, Conta> {
     private static ContaDTOFactory factory;

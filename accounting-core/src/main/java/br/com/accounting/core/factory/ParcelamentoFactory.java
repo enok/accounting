@@ -2,7 +2,7 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.core.entity.Parcelamento;
 
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
+import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 
 public final class ParcelamentoFactory {
     private static ParcelamentoFactory factory;

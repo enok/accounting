@@ -1,9 +1,10 @@
 package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.SubGrupo;
 
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
+import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 
 public final class SubGrupoDTOFactory extends GenericDTOFactory<SubGrupoDTO, SubGrupo> {
     private static SubGrupoDTOFactory factory;

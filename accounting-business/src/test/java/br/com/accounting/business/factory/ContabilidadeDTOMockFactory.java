@@ -2,7 +2,7 @@ package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
 
-import static br.com.accounting.core.util.Utils.getStringFromBoolean;
+import static br.com.accounting.commons.util.Utils.getStringFromBoolean;
 
 public final class ContabilidadeDTOMockFactory {
     private ContabilidadeDTOMockFactory() {

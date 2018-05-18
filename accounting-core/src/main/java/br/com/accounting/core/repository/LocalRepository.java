@@ -1,5 +1,6 @@
 package br.com.accounting.core.repository;
 
+import br.com.accounting.commons.repository.GenericRepository;
 import br.com.accounting.core.entity.Local;
 
 import java.util.List;

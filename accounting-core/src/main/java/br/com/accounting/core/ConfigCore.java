@@ -8,7 +8,6 @@ import org.springframework.core.env.Environment;
 @ComponentScan("br.com.accounting.core")
 @PropertySource(value = {"classpath:application.properties"}, ignoreResourceNotFound = true)
 @Lazy
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ConfigCore {
     @Autowired
     private Environment env;

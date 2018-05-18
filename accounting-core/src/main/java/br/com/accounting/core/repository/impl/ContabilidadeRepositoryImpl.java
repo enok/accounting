@@ -1,11 +1,11 @@
 package br.com.accounting.core.repository.impl;
 
+import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
 import br.com.accounting.core.entity.*;
 import br.com.accounting.core.factory.ContabilidadeFactory;
 import br.com.accounting.core.repository.ContabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static br.com.accounting.core.util.Utils.*;
-import static org.springframework.util.CollectionUtils.*;
+import static br.com.accounting.commons.util.Utils.*;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository
 public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Contabilidade> implements ContabilidadeRepository {
@@ -27,9 +27,9 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
     @Override
     public void ordenarPorDataVencimentoGrupoSubGrupo(final List<Contabilidade> entities) {
         entities.sort(Comparator
-                              .comparing((Contabilidade c) -> c.dataVencimento())
-                              .thenComparing(c -> c.grupo().nome())
-                              .thenComparing(c -> c.grupo().subGrupos().get(0).nome()));
+                .comparing((Contabilidade c) -> c.dataVencimento())
+                .thenComparing(c -> c.grupo().nome())
+                .thenComparing(c -> c.grupo().subGrupos().get(0).nome()));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ContabilidadeRepositoryImpl extends GenericAbstractRepository<Conta
         return entities
                 .stream()
                 .filter(c ->
-                                dentroDasParcelas(codigoPai, c)
+                        dentroDasParcelas(codigoPai, c)
                 )
                 .collect(Collectors.toList());
     }

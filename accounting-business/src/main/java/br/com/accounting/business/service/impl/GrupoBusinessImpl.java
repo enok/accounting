@@ -1,14 +1,14 @@
 package br.com.accounting.business.service.impl;
 
 import br.com.accounting.business.dto.GrupoDTO;
-import br.com.accounting.business.exception.CreateException;
-import br.com.accounting.business.exception.DuplicatedRegistryException;
-import br.com.accounting.business.exception.MissingFieldException;
-import br.com.accounting.business.exception.ValidationException;
+import br.com.accounting.commons.exception.DuplicatedRegistryException;
+import br.com.accounting.commons.exception.MissingFieldException;
+import br.com.accounting.commons.exception.ValidationException;
 import br.com.accounting.business.factory.GrupoDTOFactory;
 import br.com.accounting.business.service.GrupoBusiness;
+import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
 import br.com.accounting.core.entity.Grupo;
-import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;

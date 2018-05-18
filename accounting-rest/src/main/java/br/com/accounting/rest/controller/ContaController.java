@@ -1,12 +1,12 @@
 package br.com.accounting.rest.controller;
 
 import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.exception.BusinessException;
-import br.com.accounting.business.exception.GenericException;
+import br.com.accounting.commons.exception.BusinessException;
+import br.com.accounting.commons.exception.GenericException;
 import br.com.accounting.business.service.ContaBusiness;
-import br.com.accounting.core.exception.StoreException;
-import br.com.accounting.rest.controller.exception.AbstractExceptionHandler;
-import br.com.accounting.rest.vo.CodigosVO;
+import br.com.accounting.commons.exception.StoreException;
+import br.com.accounting.commons.exception.AbstractExceptionHandler;
+import br.com.accounting.commons.vo.CodigosVO;
 import br.com.accounting.rest.vo.ContaTransferenciaVO;
 import br.com.accounting.rest.vo.ContaVO;
 import org.springframework.beans.factory.annotation.Autowired;

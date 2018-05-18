@@ -1,5 +1,6 @@
 package br.com.accounting.core.repository.impl;
 
+import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
 import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.factory.SubGrupoFactory;
 import br.com.accounting.core.repository.SubGrupoRepository;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static br.com.accounting.core.util.Utils.SEPARADOR;
+import static br.com.accounting.commons.util.Utils.SEPARADOR;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Repository

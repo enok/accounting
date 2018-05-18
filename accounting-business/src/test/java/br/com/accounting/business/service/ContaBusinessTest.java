@@ -1,16 +1,16 @@
 package br.com.accounting.business.service;
 
 import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.exception.*;
 import br.com.accounting.business.factory.ContaDTOMockFactory;
-import br.com.accounting.core.exception.StoreException;
+import br.com.accounting.commons.exception.*;
+import br.com.accounting.commons.test.GenericTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static br.com.accounting.commons.util.Utils.getStringFromCurrentDate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;

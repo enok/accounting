@@ -1,11 +1,12 @@
 package br.com.accounting.core.factory;
 
+import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.core.entity.*;
 
 import java.text.ParseException;
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.commons.util.Utils.*;
 
 public final class ContabilidadeFactory {
     private static ContabilidadeFactory factory;
@@ -157,10 +158,8 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withCartao(String cartao) {
         if (!isBlankOrNull(cartao)) {
-            Cartao cartaoObj = CartaoFactory
-                    .begin()
-                    .withNumero(cartao)
-                    .build();
+            Cartao cartaoObj = new Cartao()
+                    .numero(cartao);
             entity.cartao(cartaoObj);
         }
         return this;

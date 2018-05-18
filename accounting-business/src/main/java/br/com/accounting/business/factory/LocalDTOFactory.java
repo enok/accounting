@@ -1,9 +1,10 @@
 package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Local;
 
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
+import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 
 public final class LocalDTOFactory extends GenericDTOFactory<LocalDTO, Local> {
     private static LocalDTOFactory factory;

@@ -4,7 +4,7 @@ import br.com.accounting.core.entity.Grupo;
 
 import java.util.List;
 
-import static br.com.accounting.core.util.Utils.isBlankOrNull;
+import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public final class GrupoFactory {

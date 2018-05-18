@@ -1,10 +1,11 @@
 package br.com.accounting.core.entity;
 
+import br.com.accounting.commons.entity.Cartao;
+import br.com.accounting.commons.entity.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDate;

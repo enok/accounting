@@ -1,11 +1,13 @@
 package br.com.accounting.business.factory;
 
 import br.com.accounting.business.dto.ContabilidadeDTO;
+import br.com.accounting.commons.entity.Cartao;
+import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.*;
 
 import java.time.LocalDate;
 
-import static br.com.accounting.core.util.Utils.*;
+import static br.com.accounting.commons.util.Utils.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class ContabilidadeDTOFactory extends GenericDTOFactory<ContabilidadeDTO, Contabilidade> {

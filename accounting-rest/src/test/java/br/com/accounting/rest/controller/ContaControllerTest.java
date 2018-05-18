@@ -1,5 +1,6 @@
 package br.com.accounting.rest.controller;
 
+import br.com.accounting.commons.test.GenericTest;
 import br.com.accounting.rest.vo.ContaTransferenciaVO;
 import br.com.accounting.rest.vo.ContaVO;
 import com.google.gson.Gson;
@@ -13,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static br.com.accounting.core.util.Utils.getStringFromCurrentDate;
+import static br.com.accounting.commons.util.Utils.getStringFromCurrentDate;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

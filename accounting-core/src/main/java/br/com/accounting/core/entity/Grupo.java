@@ -1,5 +1,6 @@
 package br.com.accounting.core.entity;
 
+import br.com.accounting.commons.entity.Entity;
 import br.com.accounting.core.factory.SubGrupoFactory;
 import lombok.Data;
 import lombok.NoArgsConstructor;

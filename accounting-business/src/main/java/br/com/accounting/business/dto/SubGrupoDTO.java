@@ -1,7 +1,7 @@
 package br.com.accounting.business.dto;
 
+import br.com.accounting.commons.dto.EntityDTO;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.*;
 
 @EnableAutoConfiguration
 @Configuration
-@ComponentScan("br.com.accounting.rest")
+@ComponentScan("br.com.accounting.controller")
 @PropertySource(value = {"file:application.properties", "classpath:application.properties"}, ignoreResourceNotFound = true)
 @Import({ConfigBusiness.class})
 @Lazy
