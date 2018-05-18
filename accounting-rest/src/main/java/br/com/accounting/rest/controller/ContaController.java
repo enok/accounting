@@ -56,7 +56,7 @@ public class ContaController extends AbstractExceptionHandler {
                 .build();
     }
 
-    @PutMapping("/cumulativas")
+    @PutMapping("/cumulativa")
     public ResponseEntity atualizarCumulativas() throws StoreException, BusinessException, GenericException {
         business.atualizarCumulativas();
         return ResponseEntity

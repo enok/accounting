@@ -810,7 +810,7 @@ public class ContaControllerTest extends GenericTest {
     public void atualizarCumulativasSemDiretorio() throws Exception {
         deletarDiretorioEArquivos();
 
-        mvc.perform(put("/conta/cumulativas")
+        mvc.perform(put("/conta/cumulativa")
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -824,7 +824,7 @@ public class ContaControllerTest extends GenericTest {
 
     @Test
     public void atualizarCumulativasSemRegistros() throws Exception {
-        mvc.perform(put("/conta/cumulativas")
+        mvc.perform(put("/conta/cumulativa")
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -840,7 +840,7 @@ public class ContaControllerTest extends GenericTest {
     public void atualizarCumulativas() throws Exception {
         criarContaCarol();
 
-        mvc.perform(put("/conta/cumulativas")
+        mvc.perform(put("/conta/cumulativa")
                 .characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
