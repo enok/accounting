@@ -1,8 +1,8 @@
 package br.com.accounting.cartao.service.impl;
 
-import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.cartao.repository.CartaoRepository;
 import br.com.accounting.cartao.service.CartaoService;
+import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.impl.GenericAbstractService;
 import org.springframework.beans.factory.annotation.Autowired;

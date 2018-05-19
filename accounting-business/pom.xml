@@ -9,20 +9,22 @@
         <artifactId>accounting</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>accounting-business</artifactId>
-    <name>Accouting Business</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Business</name>
 
     <dependencies>
         <!-- accounting -->
         <dependency>
             <groupId>br.com.financial</groupId>
             <artifactId>accounting-core</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>br.com.financial</groupId>
             <artifactId>accounting-cartao</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- apache -->

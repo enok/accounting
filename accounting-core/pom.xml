@@ -9,8 +9,10 @@
         <artifactId>accounting</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>accounting-core</artifactId>
-    <name>Accouting Core</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Core</name>
 
     <dependencies>
         <!-- accounting -->

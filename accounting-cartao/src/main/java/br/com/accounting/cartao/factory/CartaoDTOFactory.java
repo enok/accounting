@@ -3,15 +3,12 @@ package br.com.accounting.cartao.factory;
 import br.com.accounting.cartao.dto.CartaoDTO;
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.TipoCartao;
+import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.factory.GenericDTOFactory;
 
 import java.time.LocalDate;
 
-import br.com.accounting.commons.exception.*;
-
-import static br.com.accounting.commons.util.Utils.getStringFromDate;
-import static br.com.accounting.commons.util.Utils.getStringFromDouble;
-import static br.com.accounting.commons.util.Utils.isBlankOrNull;
+import static br.com.accounting.commons.util.Utils.*;
 
 public final class CartaoDTOFactory extends GenericDTOFactory<CartaoDTO, Cartao> {
     private static CartaoDTOFactory factory;

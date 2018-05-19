@@ -2,10 +2,10 @@ package br.com.accounting.cartao.business.impl;
 
 import br.com.accounting.cartao.business.CartaoBusiness;
 import br.com.accounting.cartao.dto.CartaoDTO;
-import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.cartao.factory.CartaoDTOFactory;
 import br.com.accounting.cartao.factory.CartaoFactory;
 import br.com.accounting.cartao.service.CartaoService;
+import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.exception.DuplicatedRegistryException;
 import br.com.accounting.commons.exception.MissingFieldException;
 import br.com.accounting.commons.exception.StoreException;
