@@ -1,8 +1,8 @@
-package br.com.accounting.rest.controller;
+package br.com.accounting.conta.controller;
 
 import br.com.accounting.commons.test.GenericTest;
-import br.com.accounting.rest.vo.ContaTransferenciaVO;
-import br.com.accounting.rest.vo.ContaVO;
+import br.com.accounting.conta.vo.ContaTransferenciaVO;
+import br.com.accounting.conta.vo.ContaVO;
 import com.google.gson.Gson;
 import org.hamcrest.Matchers;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package br.com.accounting.business.dto;
+package br.com.accounting.conta.dto;
 
 import br.com.accounting.commons.dto.EntityDTO;
 import lombok.Data;

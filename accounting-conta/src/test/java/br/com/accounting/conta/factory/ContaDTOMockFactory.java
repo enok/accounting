@@ -1,6 +1,6 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.conta.factory;
 
-import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.conta.dto.ContaDTO;
 
 public final class ContaDTOMockFactory {
     private ContaDTOMockFactory() {

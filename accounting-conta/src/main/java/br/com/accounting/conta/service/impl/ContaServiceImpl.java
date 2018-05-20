@@ -1,11 +1,11 @@
-package br.com.accounting.core.service.impl;
+package br.com.accounting.conta.service.impl;
 
 import br.com.accounting.commons.exception.ServiceException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.impl.GenericAbstractService;
-import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.repository.ContaRepository;
-import br.com.accounting.core.service.ContaService;
+import br.com.accounting.commons.entity.Conta;
+import br.com.accounting.conta.repository.ContaRepository;
+import br.com.accounting.conta.service.ContaService;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

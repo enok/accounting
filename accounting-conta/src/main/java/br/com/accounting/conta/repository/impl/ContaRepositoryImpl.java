@@ -1,9 +1,9 @@
-package br.com.accounting.core.repository.impl;
+package br.com.accounting.conta.repository.impl;
 
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
-import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.factory.ContaFactory;
-import br.com.accounting.core.repository.ContaRepository;
+import br.com.accounting.conta.factory.ContaFactory;
+import br.com.accounting.conta.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

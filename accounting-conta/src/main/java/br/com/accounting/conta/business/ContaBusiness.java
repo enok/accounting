@@ -1,10 +1,10 @@
-package br.com.accounting.business.service;
+package br.com.accounting.conta.business;
 
-import br.com.accounting.business.dto.ContaDTO;
 import br.com.accounting.commons.business.GenericBusiness;
 import br.com.accounting.commons.exception.BusinessException;
 import br.com.accounting.commons.exception.GenericException;
 import br.com.accounting.commons.exception.StoreException;
+import br.com.accounting.conta.dto.ContaDTO;
 
 public interface ContaBusiness extends GenericBusiness<ContaDTO> {
     void adicionarCredito(ContaDTO contaDTO, Double credito) throws StoreException, GenericException;

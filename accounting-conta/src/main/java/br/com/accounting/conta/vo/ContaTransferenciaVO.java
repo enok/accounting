@@ -1,4 +1,4 @@
-package br.com.accounting.rest.vo;
+package br.com.accounting.conta.vo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

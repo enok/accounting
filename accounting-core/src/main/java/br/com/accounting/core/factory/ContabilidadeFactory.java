@@ -1,6 +1,7 @@
 package br.com.accounting.core.factory;
 
 import br.com.accounting.commons.entity.Cartao;
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.core.entity.*;
 
 import java.text.ParseException;
@@ -186,10 +187,8 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withConta(String conta) {
         if (!isBlankOrNull(conta)) {
-            Conta contaObj = ContaFactory
-                    .begin()
-                    .withNome(conta)
-                    .build();
+            Conta contaObj = new Conta()
+                    .nome(conta);
             entity.conta(contaObj);
         }
         return this;

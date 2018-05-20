@@ -1,9 +1,9 @@
-package br.com.accounting.core.service;
+package br.com.accounting.conta.service;
 
 import br.com.accounting.commons.exception.ServiceException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.GenericService;
-import br.com.accounting.core.entity.Conta;
+import br.com.accounting.commons.entity.Conta;
 
 import java.text.ParseException;
 import java.util.List;

@@ -1,8 +1,8 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.conta.factory;
 
-import br.com.accounting.business.dto.ContaDTO;
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.factory.GenericDTOFactory;
-import br.com.accounting.core.entity.Conta;
+import br.com.accounting.conta.dto.ContaDTO;
 
 import java.time.LocalDate;
 

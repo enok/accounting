@@ -1,9 +1,9 @@
-package br.com.accounting.business.service;
+package br.com.accounting.conta.business;
 
-import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.factory.ContaDTOMockFactory;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.test.GenericTest;
+import br.com.accounting.conta.dto.ContaDTO;
+import br.com.accounting.conta.factory.ContaDTOMockFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

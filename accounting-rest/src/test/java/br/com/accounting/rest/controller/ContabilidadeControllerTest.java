@@ -6,6 +6,8 @@ import br.com.accounting.commons.exception.BusinessException;
 import br.com.accounting.commons.exception.GenericException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.test.GenericTest;
+import br.com.accounting.conta.controller.ContaController;
+import br.com.accounting.conta.vo.ContaVO;
 import br.com.accounting.rest.vo.*;
 import com.google.gson.Gson;
 import org.junit.Before;

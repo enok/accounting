@@ -1,5 +1,6 @@
 package br.com.accounting.core.service.impl;
 
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.exception.ServiceException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.impl.GenericAbstractService;

@@ -1,15 +1,15 @@
-package br.com.accounting.business.service.impl;
+package br.com.accounting.conta.business.impl;
 
-import br.com.accounting.business.dto.ContaDTO;
-import br.com.accounting.business.factory.ContaDTOFactory;
-import br.com.accounting.business.service.ContaBusiness;
 import br.com.accounting.commons.annotation.History;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.exception.StoreException;
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
-import br.com.accounting.core.entity.Conta;
-import br.com.accounting.core.factory.ContaFactory;
-import br.com.accounting.core.service.ContaService;
+import br.com.accounting.conta.business.ContaBusiness;
+import br.com.accounting.conta.dto.ContaDTO;
+import br.com.accounting.conta.factory.ContaDTOFactory;
+import br.com.accounting.conta.factory.ContaFactory;
+import br.com.accounting.conta.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

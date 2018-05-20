@@ -1,6 +1,7 @@
 package br.com.accounting.core.entity;
 
 import br.com.accounting.commons.entity.Cartao;
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.entity.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package br.com.accounting.core.factory;
+package br.com.accounting.conta.factory;
 
-import br.com.accounting.core.entity.Conta;
+import br.com.accounting.commons.entity.Conta;
 
 import java.text.ParseException;
 import java.time.LocalDate;

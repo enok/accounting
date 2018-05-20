@@ -1,7 +1,7 @@
-package br.com.accounting.core.repository;
+package br.com.accounting.conta.repository;
 
+import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.repository.GenericRepository;
-import br.com.accounting.core.entity.Conta;
 
 import java.util.List;
 
