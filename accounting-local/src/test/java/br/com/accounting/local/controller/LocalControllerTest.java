@@ -1,7 +1,8 @@
-package br.com.accounting.rest.controller;
+package br.com.accounting.local.controller;
 
 import br.com.accounting.commons.test.GenericTest;
-import br.com.accounting.rest.vo.LocalVO;
+import br.com.accounting.local.controller.LocalController;
+import br.com.accounting.local.vo.LocalVO;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;

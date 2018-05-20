@@ -1,8 +1,8 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.local.factory;
 
-import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.local.dto.LocalDTO;
 import br.com.accounting.commons.factory.GenericDTOFactory;
-import br.com.accounting.core.entity.Local;
+import br.com.accounting.commons.entity.Local;
 
 import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 

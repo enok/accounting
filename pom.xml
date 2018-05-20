@@ -19,6 +19,7 @@
         <module>accounting-commons</module>
         <module>accounting-cartao</module>
         <module>accounting-conta</module>
+        <module>accounting-local</module>
 
         <module>accounting-core</module>
         <module>accounting-business</module>

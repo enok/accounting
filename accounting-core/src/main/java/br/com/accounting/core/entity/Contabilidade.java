@@ -3,6 +3,7 @@ package br.com.accounting.core.entity;
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.Conta;
 import br.com.accounting.commons.entity.Entity;
+import br.com.accounting.commons.entity.Local;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

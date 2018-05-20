@@ -1,9 +1,9 @@
-package br.com.accounting.business.service;
+package br.com.accounting.local.business;
 
-import br.com.accounting.business.dto.LocalDTO;
-import br.com.accounting.business.factory.LocalDTOMockFactory;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.test.GenericTest;
+import br.com.accounting.local.dto.LocalDTO;
+import br.com.accounting.local.factory.LocalDTOMockFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

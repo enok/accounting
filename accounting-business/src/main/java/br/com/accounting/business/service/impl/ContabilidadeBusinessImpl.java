@@ -7,12 +7,18 @@ import br.com.accounting.cartao.service.CartaoService;
 import br.com.accounting.commons.annotation.History;
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.Conta;
+import br.com.accounting.commons.entity.Local;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
 import br.com.accounting.conta.service.ContaService;
-import br.com.accounting.core.entity.*;
+import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Grupo;
+import br.com.accounting.core.entity.SubGrupo;
 import br.com.accounting.core.factory.ContabilidadeFactory;
-import br.com.accounting.core.service.*;
+import br.com.accounting.core.service.ContabilidadeService;
+import br.com.accounting.core.service.GrupoService;
+import br.com.accounting.core.service.SubGrupoService;
+import br.com.accounting.local.service.LocalService;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -329,8 +335,8 @@ public class ContabilidadeBusinessImpl extends GenericAbstractBusiness<Contabili
     @Override
     public void validaRegistroDuplicado(final Contabilidade entity) throws StoreException, ParseException, DuplicatedRegistryException {
         Contabilidade entityBuscada = service.buscar(entity.dataVencimento(), entity.recorrente(), entity.grupo(), entity.local(),
-                entity.descricao(), entity.usouCartao(), entity.parcelado(), entity.parcelamento(),
-                entity.conta(), entity.tipo(), entity.valor());
+                                                     entity.descricao(), entity.usouCartao(), entity.parcelado(), entity.parcelamento(),
+                                                     entity.conta(), entity.tipo(), entity.valor());
         if (entity.equals(entityBuscada)) {
             throw new DuplicatedRegistryException("Contabilidade duplicada.");
         }

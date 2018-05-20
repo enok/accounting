@@ -1,16 +1,16 @@
-package br.com.accounting.business.service.impl;
+package br.com.accounting.local.business.impl;
 
-import br.com.accounting.business.dto.LocalDTO;
-import br.com.accounting.business.factory.LocalDTOFactory;
-import br.com.accounting.business.service.LocalBusiness;
+import br.com.accounting.commons.entity.Local;
 import br.com.accounting.commons.exception.DuplicatedRegistryException;
 import br.com.accounting.commons.exception.MissingFieldException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.exception.ValidationException;
 import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
-import br.com.accounting.core.entity.Local;
-import br.com.accounting.core.factory.LocalFactory;
-import br.com.accounting.core.service.LocalService;
+import br.com.accounting.local.business.LocalBusiness;
+import br.com.accounting.local.dto.LocalDTO;
+import br.com.accounting.local.factory.LocalDTOFactory;
+import br.com.accounting.local.factory.LocalFactory;
+import br.com.accounting.local.service.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

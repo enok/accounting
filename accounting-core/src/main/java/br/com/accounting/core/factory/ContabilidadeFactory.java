@@ -2,7 +2,11 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.Conta;
-import br.com.accounting.core.entity.*;
+import br.com.accounting.commons.entity.Local;
+import br.com.accounting.core.entity.Contabilidade;
+import br.com.accounting.core.entity.Grupo;
+import br.com.accounting.core.entity.Parcelamento;
+import br.com.accounting.core.entity.TipoContabilidade;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -134,10 +138,8 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withLocal(String local) {
         if (!isBlankOrNull(local)) {
-            Local localObj = LocalFactory
-                    .begin()
-                    .withNome(local)
-                    .build();
+            Local localObj = new Local()
+                    .nome(local);
             entity.local(localObj);
         }
         return this;

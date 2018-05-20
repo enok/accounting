@@ -1,9 +1,9 @@
-package br.com.accounting.core.repository.impl;
+package br.com.accounting.local.repository.impl;
 
+import br.com.accounting.commons.entity.Local;
 import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
-import br.com.accounting.core.entity.Local;
-import br.com.accounting.core.factory.LocalFactory;
-import br.com.accounting.core.repository.LocalRepository;
+import br.com.accounting.local.factory.LocalFactory;
+import br.com.accounting.local.repository.LocalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,13 @@
-package br.com.accounting.rest.controller;
+package br.com.accounting.local.controller;
 
-import br.com.accounting.business.dto.LocalDTO;
-import br.com.accounting.business.service.LocalBusiness;
 import br.com.accounting.commons.exception.AbstractExceptionHandler;
 import br.com.accounting.commons.exception.BusinessException;
 import br.com.accounting.commons.exception.GenericException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.vo.CodigosVO;
-import br.com.accounting.rest.vo.LocalVO;
+import br.com.accounting.local.business.LocalBusiness;
+import br.com.accounting.local.dto.LocalDTO;
+import br.com.accounting.local.vo.LocalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.local.factory;
 
-import br.com.accounting.business.dto.LocalDTO;
+import br.com.accounting.local.dto.LocalDTO;
 
 public final class LocalDTOMockFactory {
     private LocalDTOMockFactory() {

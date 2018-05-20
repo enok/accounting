@@ -1,10 +1,10 @@
-package br.com.accounting.core.service.impl;
+package br.com.accounting.local.service.impl;
 
+import br.com.accounting.commons.entity.Local;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.impl.GenericAbstractService;
-import br.com.accounting.core.entity.Local;
-import br.com.accounting.core.repository.LocalRepository;
-import br.com.accounting.core.service.LocalService;
+import br.com.accounting.local.repository.LocalRepository;
+import br.com.accounting.local.service.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
