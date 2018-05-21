@@ -21,11 +21,11 @@
         <module>accounting-conta</module>
         <module>accounting-local</module>
         <module>accounting-subgrupo</module>
+        <module>accounting-grupo</module>
 
         <module>accounting-core</module>
         <module>accounting-business</module>
         <module>accounting-rest</module>
-        <module>accounting-grupo</module>
     </modules>
 
     <properties>
