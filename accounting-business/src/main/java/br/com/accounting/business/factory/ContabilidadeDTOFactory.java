@@ -3,6 +3,7 @@ package br.com.accounting.business.factory;
 import br.com.accounting.business.dto.ContabilidadeDTO;
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.Conta;
+import br.com.accounting.commons.entity.Grupo;
 import br.com.accounting.commons.entity.Local;
 import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.*;

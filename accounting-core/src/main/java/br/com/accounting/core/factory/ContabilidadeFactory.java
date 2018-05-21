@@ -2,9 +2,9 @@ package br.com.accounting.core.factory;
 
 import br.com.accounting.commons.entity.Cartao;
 import br.com.accounting.commons.entity.Conta;
+import br.com.accounting.commons.entity.Grupo;
 import br.com.accounting.commons.entity.Local;
 import br.com.accounting.core.entity.Contabilidade;
-import br.com.accounting.core.entity.Grupo;
 import br.com.accounting.core.entity.Parcelamento;
 import br.com.accounting.core.entity.TipoContabilidade;
 
@@ -126,11 +126,9 @@ public final class ContabilidadeFactory {
 
     public ContabilidadeFactory withGrupo(String grupo, String subGrupo) {
         if (!isBlankOrNull(grupo)) {
-            Grupo grupoObj = GrupoFactory
-                    .begin()
-                    .withNome(grupo)
-                    .withSubGrupo(subGrupo)
-                    .build();
+            Grupo grupoObj = new Grupo()
+                    .nome(grupo)
+                    .addSubGrupo(subGrupo);
             entity.grupo(grupoObj);
         }
         return this;
