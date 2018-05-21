@@ -1,9 +1,9 @@
-package br.com.accounting.core.repository.impl;
+package br.com.accounting.subgrupo.repository.impl;
 
 import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
-import br.com.accounting.core.entity.SubGrupo;
-import br.com.accounting.core.factory.SubGrupoFactory;
-import br.com.accounting.core.repository.SubGrupoRepository;
+import br.com.accounting.commons.entity.SubGrupo;
+import br.com.accounting.subgrupo.factory.SubGrupoFactory;
+import br.com.accounting.subgrupo.repository.SubGrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

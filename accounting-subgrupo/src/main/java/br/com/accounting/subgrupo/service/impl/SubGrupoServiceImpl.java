@@ -1,10 +1,10 @@
-package br.com.accounting.core.service.impl;
+package br.com.accounting.subgrupo.service.impl;
 
+import br.com.accounting.commons.entity.SubGrupo;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.impl.GenericAbstractService;
-import br.com.accounting.core.entity.SubGrupo;
-import br.com.accounting.core.repository.SubGrupoRepository;
-import br.com.accounting.core.service.SubGrupoService;
+import br.com.accounting.subgrupo.repository.SubGrupoRepository;
+import br.com.accounting.subgrupo.service.SubGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

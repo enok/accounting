@@ -10,9 +10,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>accounting-conta</artifactId>
+    <artifactId>accounting-subgrupo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Conta</name>
+    <name>SubGrupo</name>
 
     <dependencies>
         <!-- accounting -->
@@ -74,7 +74,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>br.com.accounting.conta.ApplicationConta</mainClass>
+                            <mainClass>br.com.accounting.subgrupo.ApplicationSubGrupo</mainClass>
                             <classpathPrefix>dependency-jars/</classpathPrefix>
                         </manifest>
                     </archive>

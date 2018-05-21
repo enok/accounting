@@ -1,8 +1,8 @@
-package br.com.accounting.core.service;
+package br.com.accounting.subgrupo.service;
 
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.service.GenericService;
-import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.commons.entity.SubGrupo;
 
 import java.text.ParseException;
 

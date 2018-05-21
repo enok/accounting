@@ -2,7 +2,7 @@ package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
 import br.com.accounting.core.entity.Grupo;
-import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.commons.entity.SubGrupo;
 import br.com.accounting.core.factory.GrupoFactory;
 import br.com.accounting.core.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

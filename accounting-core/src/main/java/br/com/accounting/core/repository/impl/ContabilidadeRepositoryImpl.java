@@ -1,6 +1,7 @@
 package br.com.accounting.core.repository.impl;
 
 import br.com.accounting.commons.entity.Conta;
+import br.com.accounting.commons.entity.SubGrupo;
 import br.com.accounting.commons.repository.impl.GenericAbstractRepository;
 import br.com.accounting.core.entity.*;
 import br.com.accounting.core.factory.ContabilidadeFactory;

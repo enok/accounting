@@ -1,6 +1,6 @@
-package br.com.accounting.core.factory;
+package br.com.accounting.subgrupo.factory;
 
-import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.commons.entity.SubGrupo;
 
 import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 

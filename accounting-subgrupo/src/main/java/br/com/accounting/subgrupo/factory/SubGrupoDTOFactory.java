@@ -1,8 +1,8 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.subgrupo.factory;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.subgrupo.dto.SubGrupoDTO;
 import br.com.accounting.commons.factory.GenericDTOFactory;
-import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.commons.entity.SubGrupo;
 
 import static br.com.accounting.commons.util.Utils.isBlankOrNull;
 

@@ -1,6 +1,7 @@
-package br.com.accounting.business.factory;
+package br.com.accounting.subgrupo.factory;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
+import br.com.accounting.subgrupo.dto.SubGrupoDTO;
+import br.com.accounting.subgrupo.factory.SubGrupoDTOFactory;
 
 public final class SubGrupoDTOMockFactory {
     private SubGrupoDTOMockFactory() {

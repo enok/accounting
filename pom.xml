@@ -20,6 +20,7 @@
         <module>accounting-cartao</module>
         <module>accounting-conta</module>
         <module>accounting-local</module>
+        <module>accounting-subgrupo</module>
 
         <module>accounting-core</module>
         <module>accounting-business</module>

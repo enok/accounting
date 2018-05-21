@@ -1,9 +1,9 @@
-package br.com.accounting.business.service;
+package br.com.accounting.subgrupo.business;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
-import br.com.accounting.business.factory.SubGrupoDTOMockFactory;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.test.GenericTest;
+import br.com.accounting.subgrupo.dto.SubGrupoDTO;
+import br.com.accounting.subgrupo.factory.SubGrupoDTOMockFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

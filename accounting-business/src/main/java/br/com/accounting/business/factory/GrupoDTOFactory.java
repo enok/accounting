@@ -3,7 +3,7 @@ package br.com.accounting.business.factory;
 import br.com.accounting.business.dto.GrupoDTO;
 import br.com.accounting.commons.factory.GenericDTOFactory;
 import br.com.accounting.core.entity.Grupo;
-import br.com.accounting.core.entity.SubGrupo;
+import br.com.accounting.commons.entity.SubGrupo;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package br.com.accounting.core.entity;
 
 import br.com.accounting.commons.entity.Entity;
-import br.com.accounting.core.factory.SubGrupoFactory;
+import br.com.accounting.commons.entity.SubGrupo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -48,9 +48,7 @@ public class Grupo implements Entity, Serializable {
     }
 
     private SubGrupo criarSubGrupo(String nomeSubGrupo) {
-        return SubGrupoFactory
-                .begin()
-                .withNome(nomeSubGrupo)
-                .build();
+        return new SubGrupo()
+                .nome(nomeSubGrupo);
     }
 }

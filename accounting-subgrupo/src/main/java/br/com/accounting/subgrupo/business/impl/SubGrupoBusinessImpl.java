@@ -1,13 +1,13 @@
-package br.com.accounting.business.service.impl;
+package br.com.accounting.subgrupo.business.impl;
 
-import br.com.accounting.business.dto.SubGrupoDTO;
-import br.com.accounting.business.factory.SubGrupoDTOFactory;
-import br.com.accounting.business.service.SubGrupoBusiness;
+import br.com.accounting.commons.entity.SubGrupo;
 import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
-import br.com.accounting.core.entity.SubGrupo;
-import br.com.accounting.core.factory.SubGrupoFactory;
-import br.com.accounting.core.service.SubGrupoService;
+import br.com.accounting.subgrupo.business.SubGrupoBusiness;
+import br.com.accounting.subgrupo.dto.SubGrupoDTO;
+import br.com.accounting.subgrupo.factory.SubGrupoDTOFactory;
+import br.com.accounting.subgrupo.factory.SubGrupoFactory;
+import br.com.accounting.subgrupo.service.SubGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

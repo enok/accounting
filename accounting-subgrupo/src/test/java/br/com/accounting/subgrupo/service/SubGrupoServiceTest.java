@@ -1,4 +1,4 @@
-package br.com.accounting.core.service;
+package br.com.accounting.subgrupo.service;
 
 import br.com.accounting.commons.exception.ServiceException;
 import br.com.accounting.commons.exception.StoreException;

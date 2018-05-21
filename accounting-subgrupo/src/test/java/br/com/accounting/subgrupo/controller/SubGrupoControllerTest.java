@@ -1,7 +1,7 @@
-package br.com.accounting.rest.controller;
+package br.com.accounting.subgrupo.controller;
 
 import br.com.accounting.commons.test.GenericTest;
-import br.com.accounting.rest.vo.SubGrupoVO;
+import br.com.accounting.subgrupo.vo.SubGrupoVO;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
