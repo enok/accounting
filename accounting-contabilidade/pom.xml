@@ -10,9 +10,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>accounting-grupo</artifactId>
+    <artifactId>accounting-contabilidade</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Grupo</name>
+    <name>Contabilidade</name>
 
     <dependencies>
         <!-- accounting -->
@@ -36,6 +36,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
         <!-- lombok -->

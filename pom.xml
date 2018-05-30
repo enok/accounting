@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1.RELEASE</version>
+        <version>2.0.2.RELEASE</version>
     </parent>
 
     <groupId>br.com.financial</groupId>
@@ -17,15 +17,13 @@
 
     <modules>
         <module>accounting-commons</module>
-        <module>accounting-cartao</module>
-        <module>accounting-conta</module>
-        <module>accounting-local</module>
-        <module>accounting-subgrupo</module>
-        <module>accounting-grupo</module>
 
-        <module>accounting-core</module>
-        <module>accounting-business</module>
-        <module>accounting-rest</module>
+        <module>accounting-cartao</module><!-- 9090 -->
+        <module>accounting-conta</module><!-- 9091 -->
+        <module>accounting-local</module><!-- 9092 -->
+        <module>accounting-subgrupo</module><!-- 9093 -->
+        <module>accounting-grupo</module><!-- 9094 -->
+        <!--<module>accounting-contabilidade</module>--><!-- 9095 -->
     </modules>
 
     <properties>
@@ -111,6 +109,16 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-surefire-plugin</artifactId>-->
+                <!--<version>2.21.0</version>-->
+                <!--<configuration>-->
+                    <!--<parallel>methods</parallel>-->
+                    <!--<threadCount>10</threadCount>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

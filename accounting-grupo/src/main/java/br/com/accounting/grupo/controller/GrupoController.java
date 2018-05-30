@@ -6,7 +6,7 @@ import br.com.accounting.commons.exception.GenericException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.vo.CodigosVO;
 import br.com.accounting.grupo.business.GrupoBusiness;
-import br.com.accounting.grupo.dto.GrupoDTO;
+import br.com.accounting.commons.dto.GrupoDTO;
 import br.com.accounting.grupo.vo.GrupoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,6 +58,15 @@ public class GrupoController extends AbstractExceptionHandler {
     @GetMapping("/{codigo}")
     public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         GrupoDTO dto = business.buscarPorCodigo(codigo);
+        GrupoVO vo = createVO(dto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(vo);
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity buscarPorNome(@PathVariable String nome) throws StoreException, BusinessException, GenericException {
+        GrupoDTO dto = business.buscarPorNome(nome);
         GrupoVO vo = createVO(dto);
         return ResponseEntity
                 .status(HttpStatus.OK)

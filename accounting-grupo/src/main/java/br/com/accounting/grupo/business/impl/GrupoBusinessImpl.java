@@ -1,13 +1,10 @@
 package br.com.accounting.grupo.business.impl;
 
 import br.com.accounting.commons.entity.Grupo;
-import br.com.accounting.commons.exception.DuplicatedRegistryException;
-import br.com.accounting.commons.exception.MissingFieldException;
-import br.com.accounting.commons.exception.StoreException;
-import br.com.accounting.commons.exception.ValidationException;
+import br.com.accounting.commons.exception.*;
 import br.com.accounting.commons.service.impl.GenericAbstractBusiness;
 import br.com.accounting.grupo.business.GrupoBusiness;
-import br.com.accounting.grupo.dto.GrupoDTO;
+import br.com.accounting.commons.dto.GrupoDTO;
 import br.com.accounting.grupo.factory.GrupoDTOFactory;
 import br.com.accounting.grupo.factory.GrupoFactory;
 import br.com.accounting.grupo.service.GrupoService;
@@ -77,5 +74,25 @@ public class GrupoBusinessImpl extends GenericAbstractBusiness<GrupoDTO, Grupo> 
     @Override
     protected Grupo criarEntity(GrupoDTO dto, Grupo entityBuscado) {
         return criarEntity(dto);
+    }
+
+    @Override
+    public GrupoDTO buscarPorNome(final String nome) throws StoreException, BusinessException, GenericException {
+        try {
+            Grupo entity = service.buscarPorNome(nome);
+            if (entity == null) {
+                throw new BusinessException("Registro inexistente.");
+            }
+            return criarDTO(dtoFactory, entity);
+        }
+        catch (StoreException e) {
+            throw new StoreException("Erro de persistência ao buscar por nome.", e);
+        }
+        catch (BusinessException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new GenericException(e);
+        }
     }
 }

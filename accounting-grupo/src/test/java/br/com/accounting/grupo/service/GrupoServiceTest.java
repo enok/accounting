@@ -3,6 +3,7 @@ package br.com.accounting.grupo.service;
 import br.com.accounting.commons.exception.ServiceException;
 import br.com.accounting.commons.exception.StoreException;
 import br.com.accounting.commons.test.GenericTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+@Ignore
 public class GrupoServiceTest extends GenericTest {
     @Autowired
     private GrupoService service;
