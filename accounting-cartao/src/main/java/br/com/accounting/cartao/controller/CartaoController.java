@@ -3,6 +3,7 @@ package br.com.accounting.cartao.controller;
 import br.com.accounting.cartao.business.CartaoBusiness;
 import br.com.accounting.cartao.dto.CartaoDTO;
 import br.com.accounting.cartao.vo.CartaoVO;
+import br.com.accounting.commons.annotation.Log;
 import br.com.accounting.commons.exception.AbstractExceptionHandler;
 import br.com.accounting.commons.exception.BusinessException;
 import br.com.accounting.commons.exception.GenericException;
@@ -25,6 +26,7 @@ public class CartaoController extends AbstractExceptionHandler {
     @Autowired
     private CartaoBusiness business;
 
+    @Log
     @PostMapping
     @ResponseBody
     public ResponseEntity<CodigosVO> criar(@RequestBody CartaoVO vo) throws StoreException, BusinessException, GenericException {
@@ -36,6 +38,7 @@ public class CartaoController extends AbstractExceptionHandler {
                 .body(codigosVO);
     }
 
+    @Log
     @PutMapping
     public ResponseEntity atualizar(@RequestBody CartaoVO vo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(vo);
@@ -45,6 +48,7 @@ public class CartaoController extends AbstractExceptionHandler {
                 .build();
     }
 
+    @Log
     @DeleteMapping("/{codigo}")
     public ResponseEntity excluir(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = createDTO(codigo);
@@ -54,6 +58,7 @@ public class CartaoController extends AbstractExceptionHandler {
                 .build();
     }
 
+    @Log
     @GetMapping("/{codigo}")
     public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) throws StoreException, BusinessException, GenericException {
         CartaoDTO dto = business.buscarPorCodigo(codigo);
@@ -63,6 +68,7 @@ public class CartaoController extends AbstractExceptionHandler {
                 .body(vo);
     }
 
+    @Log
     @GetMapping
     public ResponseEntity buscarTudo() throws StoreException, GenericException {
         List<CartaoDTO> dtos = business.buscarTodas();

@@ -22,7 +22,8 @@ public class HistoricoServiceTest extends GenericTest {
             historicoService.salvar(null, null);
         }
         catch (StoreException e) {
-            assertThat(e.getMessage(), equalTo("Não foi possível ler as linhas do arquivo: D:\\tmp\\arquivos\\historico-contagem.txt"));
+//            assertThat(e.getMessage(), equalTo("Não foi possível ler as linhas do arquivo: D:\\tmp\\arquivos\\historico-contagem.txt"));
+            assertThat(e.getMessage(), equalTo("Não foi possível ler as linhas do arquivo: /tmp/arquivos/historico-contagem.txt"));
             throw e;
         }
     }

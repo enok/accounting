@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 @ComponentScan("br.com.accounting.cartao")
-@PropertySource(value = {"classpath:application.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value = {"file:/cartao/config/application.properties", "classpath:application.properties"}, ignoreResourceNotFound = true)
 @Import({ConfigCommons.class})
 @Lazy
 public class ConfigCartao {

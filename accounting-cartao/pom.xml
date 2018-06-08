@@ -54,6 +54,7 @@
     </dependencies>
 
     <build>
+        <finalName>accounting-cartao</finalName>
         <plugins>
             <!-- SPRING BOOT -->
             <plugin>
